@@ -44,9 +44,9 @@ export const useProducts = () => {
       const categoriesActive = categories.filter(category => category.section.id === idSection);
 
       if (categoriesActive.length > 0) {
-        setMenu({...menu, idCategory: categoriesActive[0].id! })
+        changeCategory(categoriesActive[0].id)
       }
-
+      console.log('Cargando categorias')
       setCategoriasSeccion(categoriesActive);
 
     }
@@ -78,9 +78,12 @@ export const useProducts = () => {
 
 
   useEffect(() => {
-    cargarCategoriasBySeccion(sections[0].id);
+    if(sections.length > 0 ){
+     
+     changeSection(sections[0].id)
+    }
 
-  }, [])
+  }, [sections])
 
 
 

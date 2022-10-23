@@ -11,6 +11,7 @@ import { selectAuth, startLogin } from '../../redux/slices/auth';
 
 import { Copyright } from '../../components/ui';
 import { IFormLogin } from '../../models/';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -23,6 +24,8 @@ export const LoginPage = () => {
 
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+
   const { register, handleSubmit, formState: { errors } } = useForm<IFormLogin>({
     defaultValues: initialForm
   });
@@ -33,6 +36,7 @@ export const LoginPage = () => {
 
     dispatch(startLogin(form));
 
+    navigate('/', {replace: true})
   }
  
 

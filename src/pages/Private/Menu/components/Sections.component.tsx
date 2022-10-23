@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Tabs, Tab, Box, Card, CardContent } from '@mui/material/';
 
 import { ISection } from '../../../../models';
 
 import { useProducts } from '../../../../hooks/';
+import { MenuContext } from '../../../../context/MenuContext';
 
 
 interface Props {
@@ -14,17 +15,17 @@ interface Props {
 
 export const Sections: FC<Props> = ({  }) => {
 
-  const {sections, idSection, changeSection} = useProducts();
+  const {sections, activeSection, changeSection} = useContext(MenuContext);
 
   return (
     <>
       <Box >
         <Card>
           <CardContent>
-            <Tabs
-              value={idSection}
+           { activeSection && <Tabs
+              value={activeSection!.id}
               onChange={(e, value) => changeSection(value)}
-              variant="scrollable"
+              variant="scrollable" 
               textColor='primary'
               scrollButtons="auto"
               indicatorColor='primary'
@@ -41,7 +42,7 @@ export const Sections: FC<Props> = ({  }) => {
                 ))
               }
 
-            </Tabs>
+            </Tabs>}
 
           </CardContent>
         </Card>

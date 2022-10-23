@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Grid, Select, MenuItem } from '@mui/material';
 
 import { useProducts } from '../../../../hooks';
+import { MenuContext } from '../../../../context/MenuContext';
 
 interface Props {
   /*   categorias: ICategoria[];
@@ -12,37 +13,39 @@ interface Props {
 export const Categories: FC<Props> = ({ }) => {
 
 
-  const { idCategory, categoriasSeccion: categories, changeCategory} = useProducts();
+  const { activeCategory,  categories, changeCategory } = useContext(MenuContext);
 
   return (
     <>
       <Grid container>
         <Grid item xs={12} md={6} lg={3}>
-          <Select
-            labelId="label-select-categoria"
-            id="select-categoria"
-            value={idCategory}
-            label="Categoria"
-            margin='dense'
-            onChange={(e) => changeCategory(e.target.value)}
-            fullWidth
-          >
-            {
-              categories.length > 0 && (
-                categories.map(categoria => (
-                  <MenuItem
-                    key={categoria.id!}
-                    value={categoria.id!}
-                  >
-                    {categoria.name}
-                  </MenuItem>
+          {
+            activeCategory && <Select
+              labelId="label-select-categoria"
+              id="select-categoria"
+              value={activeCategory!.id}
+              label="Categoria"
+              margin='dense'
+              onChange={(e) => changeCategory(e.target.value)}
+              fullWidth
+            >
+              {
+                categories.length > 0 && (
+                  categories.map(categoria => (
+                    <MenuItem
+                      key={categoria.id}
+                      value={categoria.id}
+                    >
+                      {categoria.name}
+                    </MenuItem>
 
+                  )
+                  )
                 )
-                )
-              )
 
-            }
-          </Select>
+              }
+            </Select>
+          }
 
         </Grid>
 

@@ -13,7 +13,7 @@ export const seccionStartCreated = (seccion: ISection): AppThunk => async (
   getState) => {
 
   try {
-    const {data} = await restauranteApi.post<{seccion: ISection}>(`menu/secciones/crear`, {seccion});
+    const { data } = await restauranteApi.post<{ seccion: ISection }>(`menu/secciones/crear`, { seccion });
 
     dispatch(seccionAddNew(data.seccion));
 
@@ -26,7 +26,7 @@ export const seccionStartCreated = (seccion: ISection): AppThunk => async (
 };
 
 // Actualizar una seccion
-export const seccionStartUpdate = (seccion: ISection): AppThunk => async (
+/* export const seccionStartUpdate = (seccion: ISection): AppThunk => async (
   dispatch,
   getState) => {
 
@@ -48,10 +48,10 @@ export const seccionStartUpdate = (seccion: ISection): AppThunk => async (
   }
 
 
-};
+}; */
 
 // Eliminar una seccion
-export const seccionStartDelete = (idSeccion: number): AppThunk => async (
+/* export const seccionStartDelete = (idSeccion: number): AppThunk => async (
   dispatch,
   getState) => {
 
@@ -73,7 +73,11 @@ export const seccionStartDelete = (idSeccion: number): AppThunk => async (
     console.log(error);
   }
 
-};
+}; */
+
+
+
+
 
 // Cargar todas las secciones
 export const seccionStartLoad = (): AppThunk => async (
@@ -82,17 +86,12 @@ export const seccionStartLoad = (): AppThunk => async (
 
   try {
 
-    const resp = await fetchConToken('menu/secciones');
-    const body = await resp.json();
+    const { data } = await restauranteApi.get<ISection[]>('menu/secciones');
 
-    if (resp.ok) {
-      const secciones = body.secciones;
-
-      dispatch(seccionLoaded(secciones));
-
-    } else {
-      Swal.fire('Error', body.msg, 'error')
-    }
+    dispatch(seccionLoaded([{
+      id: '1',
+      name: 'Seccion 1'
+    }]));
 
 
   } catch (e) {

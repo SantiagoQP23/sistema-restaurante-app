@@ -20,7 +20,7 @@ export const AppRouter = () => {
 
 
   useEffect(() => {
-    //dispatch(checkAuthToken());
+    dispatch(checkAuthToken());
   }, [])
 
 

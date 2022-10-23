@@ -68,15 +68,15 @@ const UserBoxDescription = styled(Typography)(
 
 export const Userbox = () => {
 
-  const { user: usuario } = useAppSelector(selectAuth);
+  const { user: userState } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
 
   const user =
   {
-    name: "usuario?.nombres",
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: "usuario?.cargo.nombreCargo"
+    name: userState?.fullName,
+    avatar: '/static/images/avatars/2.jpg',
+    jobtitle: userState?.role.name
   };
 
   const ref = useRef<any>(null);

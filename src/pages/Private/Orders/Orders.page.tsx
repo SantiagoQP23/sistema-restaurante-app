@@ -42,9 +42,9 @@ export const Orders = () => {
   }, [fechaPedidos]);
 
 
-  const { socket } = useContext(SocketContext);
+  //const { socket } = useContext(SocketContext);
 
-  useEffect(() => {
+ /*  useEffect(() => {
 
     socket?.on('nuevoPedido', ({ pedido }: { pedido: IPedido }) => {
 
@@ -74,7 +74,7 @@ export const Orders = () => {
     }
 
   }, [socket]);
-
+ */
   // Establecer la fecha de los pedidos a mostrar
   useEffect(() => {
     /*  fecha

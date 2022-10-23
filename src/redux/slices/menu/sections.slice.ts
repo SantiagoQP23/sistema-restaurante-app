@@ -8,50 +8,51 @@ import { RootState } from "../../store";
 
 export interface SectionsState {
   sections: ISection[],
-  seccionActiva: ISection | null,
+  activeSection: ISection | null,
 }
 
 const initialState: SectionsState = {
   sections: [],
-  seccionActiva: null
+  activeSection: null
 };
 
 export const sectionsSlice = createSlice({
   name: 'sections',
   initialState,
   reducers: {
-    seccionAddNew: (state, action: PayloadAction<ISection>) => {
+    addSection: (state, action: PayloadAction<ISection>) => {
       state.sections = [...state.sections, action.payload]
     },
-    seccionUpdated: (state, action: PayloadAction<ISection>) =>{
+    updateSection: (state, action: PayloadAction<ISection>) =>{
       state.sections = state.sections.map(
         p => (p.id === action.payload.id) 
         ? action.payload
         : p 
       )
     },
-    seccionDeleted: (state, action: PayloadAction<string>) => {
+    deleteSection: (state, action: PayloadAction<string>) => {
       state.sections = state.sections.filter(
         p => p.id !== action.payload
       )
     },
-    seccionLoaded: (state, action: PayloadAction<ISection[]>) => {
+    loadSections: (state, action: PayloadAction<ISection[]>) => {
       state.sections = action.payload
     },
-    seccionSetActive: (state, action: PayloadAction<ISection>) => {
-      state.seccionActiva = action.payload
-    }
+    setActiveSection: (state, action: PayloadAction<ISection>) => {
+      state.activeSection = action.payload
+    },
+    reset: () => ({ ...initialState }),
   }
 
 });
 
 
 export const {
-  seccionDeleted, 
-  seccionLoaded, 
-  seccionUpdated, 
-  seccionAddNew,
-  seccionSetActive
+  addSection,
+  deleteSection, 
+  loadSections, 
+  setActiveSection,
+  updateSection, 
 } = sectionsSlice.actions;
 
 export const selectSections = (state: RootState) => state.sections;

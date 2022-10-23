@@ -1,18 +1,19 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
 import { Grid, Box } from '@mui/material/';
 
 import { Product } from './Product.component';
 import { IProduct } from '../../../../models';
 import { useProducts } from '../../../../hooks';
+import { MenuContext } from '../../../../context/MenuContext';
 
 interface Props {
   // products: IProduct[]
 }
 
-export const ListProductos: FC<Props> = () => {
+export const ListProducts: FC<Props> = () => {
 
-  const { productosCategoria: products} = useProducts();
+  const { products } = useContext(MenuContext);
 
   return (
 

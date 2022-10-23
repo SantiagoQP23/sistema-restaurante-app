@@ -24,7 +24,7 @@ export const SocketProvider:FC<Props> = ({children}) => {
   const { socket, online, conectarSocket, desconectarSocket} = useSocket('http://192.168.1.45:5000');
 
 
-  const {usuario, status} = useAppSelector(selectAuth);
+  //const {usuario, status} = useAppSelector(selectAuth);
 
   useEffect(() => {
 

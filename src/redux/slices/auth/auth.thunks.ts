@@ -24,7 +24,7 @@ export const startLogin = ({username, password}: IFormLogin): AppThunk => async 
     localStorage.setItem('token', data.token);
     localStorage.setItem('token-init-date', String(new Date().getTime()));
 
-    dispatch(onLogin(data.usuario));
+    dispatch(onLogin(data.user));
 
   } catch (error) {
     dispatch(onLogout('Credenciales incorrectas'));
@@ -84,11 +84,11 @@ export const checkAuthToken = (): AppThunk => async (
       return dispatch(onLogout(''));
 
     try {
-      const {data} = await restauranteApi.get('auth-renew')
+      const {data} = await restauranteApi.get('auth/auth-renew')
       localStorage.setItem('token', data.token );
       localStorage.setItem('token-init-date', String(new Date().getTime()) );
   
-      dispatch(onLogin(data.usuario));
+      dispatch(onLogin(data.user));
 
     } catch (error) {
       localStorage.clear();

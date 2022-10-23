@@ -21,25 +21,25 @@ export const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    productoAddNew: (state, action: PayloadAction<IProduct>) => {
+    addProduct: (state, action: PayloadAction<IProduct>) => {
       state.products = [...state.products, action.payload]
     },
-    productoUpdated: (state, action: PayloadAction<IProduct>) =>{
+    updateProduct: (state, action: PayloadAction<IProduct>) =>{
       state.products = state.products.map(
         p => (p.id === action.payload.id) 
         ? action.payload
         : p 
       )
     },
-    productoDeleted: (state, action: PayloadAction<string>) => {
+    deleteProduct: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(
         p => p.id !== action.payload
       )
     },
-    productoLoaded: (state, action: PayloadAction<IProduct[]>) => {
+    loadProducts: (state, action: PayloadAction<IProduct[]>) => {
       state.products = action.payload
     },
-    productsetActive: (state, action: PayloadAction<IProduct>) => {
+    setActiveProduct: (state, action: PayloadAction<IProduct>) => {
       state.productoActivo = action.payload
     }
 
@@ -47,8 +47,11 @@ export const productsSlice = createSlice({
 
 });
 
-export const {productoAddNew, productoDeleted, productoLoaded,
-  productoUpdated
+export const {
+  addProduct, 
+  deleteProduct, 
+  loadProducts,
+  updateProduct
 } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products;

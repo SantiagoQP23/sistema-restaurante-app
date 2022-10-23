@@ -23,7 +23,7 @@ usuario:  idUsuario: 1,
  }} */
 
 const initialState: AuthState = {
-  status: 'authenticated',
+  status: 'checking',
   user: null
 };
 

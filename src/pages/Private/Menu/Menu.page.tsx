@@ -1,65 +1,44 @@
 
-import { Card, CardContent, Container, Divider } from '@mui/material';
+import { Card, Container, Divider } from '@mui/material';
 import { PageTitle, PageTitleWrapper } from '../../../components/ui';
-import { useProducts } from '../../../hooks';
+import { MenuProvider } from '../../../context/MenuContext';
+
 
 // Componentes
-import { ListProductos, Categories, Sections } from './components/';
+import { ListProducts, Categories, Sections } from './components/';
+
 
 
 export const Menu = () => {
 
-  /* const {
-    sections,
-
-    changeSection,
-    idSection,
-  } = useProducts(); */
-
   return (
     < >
+      <MenuProvider>
 
-      <PageTitleWrapper>
-        <PageTitle
-          heading='Menu'
-          subHeading='Navege por los platos que ofrece el restaurante'
-        />
-      </PageTitleWrapper>
+        <PageTitleWrapper>
+          <PageTitle
+            heading='Menu'
+            subHeading='Navege por los platos que ofrece el restaurante'
+          />
+        </PageTitleWrapper>
 
-      <Container maxWidth="lg">
+        <Container maxWidth="lg">
 
-       {/*  {
-          sections.length === 0 && (
-            <h6>No se encontraron sections</h6>
-          )
-        }
- */}
+          <Card>
 
-        <Card>
+            <Sections />
 
+            <Divider />
 
-          {/* sections */}
-          {/* <Sections /> */}
+            <Categories />
 
-          <Divider />
-          {/* <CardContent>
+            <Divider />
+            <ListProducts />
+           
+          </Card>
+        </Container>
 
-         
-
-            <Categorias
-              categorias={categoriasSeccion}
-              categoria={categoria}
-              cambiarCategoria={cambiarCategoria}
-            />
-
-            <ListProductos
-              productos={productosCategoria}
-            /> 
-          </CardContent>
-            */}
-        </Card>
-      </Container>
-
+      </MenuProvider>
     </>
   )
 }

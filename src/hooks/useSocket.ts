@@ -12,7 +12,7 @@ export const useSocket = (serverPath: string) => {
 
 
   const conectarSocket = useCallback( () => {
-
+/* 
     const token = localStorage.getItem('token');
 
      const socketTemp = io(serverPath, {
@@ -25,13 +25,13 @@ export const useSocket = (serverPath: string) => {
     
     });
 
-    setSocket(socketTemp);
+    setSocket(socketTemp); */
 
   }, [serverPath]);
 
   const desconectarSocket = useCallback( () => {
 
-    socket?.disconnect();
+    //socket?.disconnect();
   }, [socket]);
 
 
