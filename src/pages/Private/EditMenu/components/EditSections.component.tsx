@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useContext } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 
 //Material UI
 import { Typography, Box, Button, Grid } from '@mui/material/'
@@ -7,45 +8,60 @@ import { Typography, Box, Button, Grid } from '@mui/material/'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
 
+import { MenuContext } from '../../../../context/MenuContext';
+import { ISection } from '../../../../models';
+
+/* 
 import { useModal } from '../../hooks/useModal'
-
+ */
 // Modal
+/* 
+import { Modal, Seccion, ModalEliminarSeccion, ModalEditarSeccion } from '.'; */
+import { Section } from './Section.component';
 
-import { Modal, Seccion, ModalEliminarSeccion, ModalEditarSeccion } from '.';
 
-import { ISeccion } from '../../interfaces';
-import { selectSecciones } from '../../reducers/seccionesSlice';
 
 
 export const EditSections = () => {
 
-  const [seccion, setSeccion] = useState<ISeccion | null>();
-  const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-  const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
+  const navigate = useNavigate();
+  //const [seccion, setSeccion] = useState<ISection | null>();
+  /*  const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
+   const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
+  */
 
+  const { sections } = useContext(MenuContext);
 
-  const { secciones } = useSelector(selectSecciones);
+  const editarSeccion = (seccion: ISection | null) => {
 
-  const editarSeccion = (seccion: ISeccion | null) => {
-    setSeccion(seccion);
-    openModalEditar();
+    navigate('seccion')
+    console.log('Editar seccion')
+    /*  setSeccion(seccion);
+     openModalEditar(); */
   }
 
-  const eliminarSeccion = (seccion: ISeccion) => {
-    setSeccion(seccion);
-    openModalEliminar();
+  const eliminarSeccion = (seccion: ISection) => {
+    console.log('Eliminar seccion')
+    /* setSeccion(seccion);
+    openModalEliminar(); */
   }
 
   return (
     <>
       <Box mb={2} display='flex' justifyContent='space-between' alignItems='center'>
 
-        <Button variant="outlined" disabled startIcon={<ArrowBackIcon />} >
+        <Button
+          variant="outlined"
+          disabled
+          startIcon={<ArrowBackIcon />} >
         </Button>
 
-        <Typography align='center' variant="h6" color="initial">Secciones</Typography>
+        <Typography align='center' variant="h3" color="initial">Secciones</Typography>
 
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => editarSeccion(null)} >
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => editarSeccion(null)} >
           Añadir
         </Button>
 
@@ -56,16 +72,16 @@ export const EditSections = () => {
         <Grid container rowSpacing={1} spacing={1}>
 
           {
-            secciones.length === 0 && (
-              <Typography variant='h6'>Aún no se han ingresado secciones</Typography>
+            sections.length === 0 && (
+              <Typography variant='h6'>Aún no se han ingresado sections</Typography>
             )
           }
           {
-            secciones.length > 0 && secciones.map(seccion => (
+            sections.length > 0 && sections.map(seccion => (
 
-              <Seccion
+              <Section
                 seccion={seccion}
-                key={seccion.idSeccion}
+                key={seccion.id}
                 editarSeccion={editarSeccion}
                 eliminarSeccion={eliminarSeccion}
               />
@@ -75,7 +91,7 @@ export const EditSections = () => {
         </Grid>
       </Box>
 
-
+      {/* 
 
       <Modal open={isOpenEditar} closeModal={closeModalEditar}>
         <ModalEditarSeccion seccion={seccion!} closeModal={closeModalEditar} />
@@ -83,7 +99,7 @@ export const EditSections = () => {
 
       <Modal open={isOpenEliminar} closeModal={closeModalEliminar}>
         <ModalEliminarSeccion seccion={seccion!} closeModal={closeModalEliminar} />
-      </Modal>
+      </Modal> */}
 
 
     </>

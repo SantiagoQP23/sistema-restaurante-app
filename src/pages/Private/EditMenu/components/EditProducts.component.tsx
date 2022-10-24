@@ -1,8 +1,8 @@
-import { useState, useEffect, FC } from 'react'
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect, FC, useContext } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { useModal } from '../../hooks/useModal';
+// import { useModal } from '../../hooks/useModal';
 
 // Material UI
 import { Typography, Grid, Box, Button } from '@mui/material/'
@@ -11,15 +11,18 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 
 // servicios
-import { getCategoriasByIdSeccion } from '../../selectors/getCategoriasByIdSeccion';
+/* import { getCategoriasByIdSeccion } from '../../selectors/getCategoriasByIdSeccion';
 import { getProductosByIdCategoria } from '../../selectors/getProductosByIdCategoria';
 
 // Components
 import { Modal, ModalEliminarProducto, ModalEditarProducto, Producto } from '.';
 import { CategoriasState, ProductosState, SeccionesState, selectCategorias } from '../../reducers';
-import { ICategoria, IProducto, ISeccion } from '../../interfaces';
+import { ICategoria, IProduct, ISeccion } from '../../interfaces';
 import { useProductos } from '../../hooks';
-import { selectSecciones } from '../../reducers/seccionesSlice';
+import { selectSecciones } from '../../reducers/seccionesSlice'; */
+import { MenuContext } from '../../../../context/MenuContext';
+import { IProduct, PrivateRoutes } from '../../../../models';
+import { Product } from './Product.component';
 
 interface Props {
 
@@ -27,50 +30,55 @@ interface Props {
 
 export const EditProducts: FC<Props> = () => {
 
-  let { nombreSeccion, nombreCategoria } = useParams();
+  const navigate = useNavigate();
+
+  /* let { nombreSeccion, nombreCategoria } = useParams(); */
 
   // TODO Valiaar si el nombre de la seccion y la categoria son validos
 
-  let rutaAtras = `/menu/editar/${nombreSeccion}`;
-  const { categorias, categoriaActiva } = useSelector(selectCategorias);
-  const { seccionActiva } = useSelector(selectSecciones);
+
+  const { products, activeCategory } = useContext(MenuContext)
+
+ 
+
+  /*  const { categorias, categoriaActiva } = useSelector(selectCategorias);
+   const { seccionActiva } = useSelector(selectSecciones); */
 
   // El producto que se va a mostrar en el modal
-  const [producto, setProducto] = useState<IProducto | null>(null);
-
-  const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-  const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
-
-  const {
+  const [producto, setProducto] = useState<IProduct | null>(null);
+  /* 
+    const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
+    const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
+   */
+  /* const {
     categoriasSeccion,
     productosCategoria,
     cambiarCategoria,
-    categoria } = useProductos(seccionActiva?.idSeccion!, categoriaActiva?.idCategoria!);
+    categoria
+  } = useProductos(seccionActiva?.idSeccion!, categoriaActiva?.idCategoria!); */
 
   // Abrir el modal de editar
-  const editarProducto = (producto: IProducto | null) => {
-    setProducto(producto);
-    openModalEditar();
+  const editarProducto = (producto: IProduct | null) => {
+    /*  setProducto(producto);
+     openModalEditar(); */
   }
 
   // Abrir el modal de eliminar
-  const eliminarProducto = (producto: IProducto) => {
-    setProducto(producto);
-    openModalEliminar();
+  const eliminarProducto = (producto: IProduct) => {
+    /*  setProducto(producto);
+     openModalEliminar(); */
   }
 
-  const cargarProductos = () => {
-    cambiarCategoria(categoriaActiva?.idCategoria!);
+  const backRoute = () => {
+    navigate(-1);
   }
-
 
   useEffect(() => {
 
-    cargarProductos();
+    if(!activeCategory)
+      navigate(`/${PrivateRoutes.MENU_EDIT}` )
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
 
   return (
@@ -79,13 +87,15 @@ export const EditProducts: FC<Props> = () => {
 
       <Box mb={2} display='flex' justifyContent='space-between'>
 
-        <Link to={rutaAtras}>
-          <Button variant="outlined" startIcon={<ArrowBackIcon />} >
 
-          </Button>
-        </Link>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />} 
+          onClick={backRoute}
+          >
+        </Button>
 
-        <Typography align="center" variant="h6" color="initial">{nombreCategoria}</Typography>
+        <Typography align="center" variant="h6" color="initial">{activeCategory && activeCategory!.name}</Typography>
 
 
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => editarProducto(null)} >
@@ -98,16 +108,16 @@ export const EditProducts: FC<Props> = () => {
 
         <Grid container rowSpacing={1} spacing={1}>
           {
-            productosCategoria.length === 0 && (
+            products.length === 0 && (
               <Typography align="center" variant='subtitle1'>No se han registrado productos</Typography>
             )
           }
 
           {
-            productosCategoria.length > 0 && productosCategoria.map(producto => (
+            products.length > 0 && products.map(producto => (
 
-              <Producto
-                key={producto.idProducto!}
+              <Product
+                key={producto.id!}
                 producto={producto}
                 editarProducto={editarProducto}
                 eliminarProducto={eliminarProducto}
@@ -121,12 +131,12 @@ export const EditProducts: FC<Props> = () => {
         </Grid>
       </Box>
 
-      <Link to={rutaAtras}>
+  {/*     <Link to={rutaAtras}>
         <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
         </Button>
-      </Link>
+      </Link> */}
 
-      <Modal open={isOpenEditar} closeModal={closeModalEditar}>
+      {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
         <ModalEditarProducto
           producto={producto}
           closeModal={closeModalEditar}
@@ -142,7 +152,7 @@ export const EditProducts: FC<Props> = () => {
           producto={producto!}
           closeModal={closeModalEliminar}
         />
-      </Modal>
+      </Modal> */}
 
     </>
   )

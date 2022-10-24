@@ -25,10 +25,6 @@ interface IMenuContext {
 
 }
 
-interface IMenuState {
-  idSection: string;
-  idCategory: string;
-}
 
 interface Props {
   children: React.ReactNode;

@@ -2,7 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import { Provider } from 'react-redux'
+
+import 'nprogress/nprogress.css';
+
 import App from './App'
+
 import { SocketProvider } from './context'
 import { store } from './redux';
 

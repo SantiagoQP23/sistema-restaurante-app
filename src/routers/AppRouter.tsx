@@ -5,7 +5,6 @@ import { checkAuthToken, selectAuth } from '../redux/slices/auth';
 import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
 import { RoutesWithNotFound } from '../helpers';
 import { PublicRoutes } from '../models';
-import { Layout } from '../pages/Private/components/Layout.component';
 
 
 const Login = lazy(() => import('../pages/Login/Login.page'))

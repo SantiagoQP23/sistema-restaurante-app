@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams, Navigate } from 'react-router-dom';
+import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 // Material UI
@@ -9,75 +9,56 @@ import { Typography, Box, Grid, Button } from '@mui/material/'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
 
-// Servicios
-import { getCategoriasByIdSeccion } from '../../selectors/';
+import { useContext } from 'react';
+import { MenuContext } from '../../../../context/MenuContext';
 
 // Component
-import { Categoria, Modal, ModalEditarCategoria, ModalEliminarCategoria } from '.';
+import { Category } from './Category.component';
 
-import { useModal } from '../../hooks/useModal';
-import { ICategoria } from '../../interfaces';
-import { selectCategorias, selectSecciones } from '../../reducers';
+
+import { ICategory } from '../../../../models/menu.model';
+import { PrivateRoutes } from '../../../../models';
 
 
 export function EditCategories() {
 
-  // Se busca por nombre en el URL
-  let { nombreSeccion } = useParams();
 
-  const { seccionActiva } = useSelector(selectSecciones);
+  const navigate = useNavigate();
 
-
-  //TODO Sino se envia el nombre de la seccion redireccionar a menu
-
-  const { categorias } = useSelector(selectCategorias);
-  const { secciones } = useSelector(selectSecciones);
-
-  const [categoriasSeccion, setCategoriasSeccion] = useState<ICategoria[]>([]);
-
-  const [idSeccion, setIdSeccion] = useState<number>(0);
+  const { activeSection, categories } = useContext(MenuContext);
+ 
   // La categoria que se va a editar en el modal
-  const [categoria, setCategoria] = useState<ICategoria | null>(null);
+  const [categoria, setCategoria] = useState<ICategory | null>(null);
+  /* 
+    const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
+    const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
+   */
 
-  const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-  const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
 
 
-  let rutaAtras = "/menu/editar";
+  const editarCategoria = (categoria: ICategory | null) => {
 
-  const establecerCategorias = () => {
-
-    setCategoriasSeccion(getCategoriasByIdSeccion(secciones, seccionActiva!.idSeccion!, categorias));
-
-    setIdSeccion(seccionActiva!.idSeccion!);
-
+    /*   setCategoria(categoria);
+      openModalEditar(); */
   }
 
-  // Abrir el modal de editar
-  const editarCategoria = (categoria: ICategoria | null) => {
 
-    setCategoria(categoria);
-    openModalEditar();
+  const eliminarCategoria = (categoria: ICategory) => {
+    /*  setCategoria(categoria);
+     openModalEliminar(); */
   }
 
-  // Abrir el modal de eliminar
-  const eliminarCategoria = (categoria: ICategoria) => {
-    setCategoria(categoria);
-    openModalEliminar();
+  const backRoute = () => {
+    navigate(-1);
   }
 
-  // Si se añade una categoria hacer el filtrado de categorias de la seccion
-  useEffect(() => {
-    establecerCategorias();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorias])
 
   useEffect(() => {
 
-    establecerCategorias();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if(!activeSection)
+      navigate(`/${PrivateRoutes.MENU_EDIT}` )
+
+  }, [])
 
 
 
@@ -87,12 +68,16 @@ export function EditCategories() {
       <Box mb={2} display='flex' justifyContent='space-between'>
 
 
-        <Link to={rutaAtras}>
-          <Button variant="outlined" startIcon={<ArrowBackIcon />} >
-          </Button>
-        </Link>
 
-        <Typography align="center" variant="h6" color="initial">{seccionActiva?.nombreSeccion}</Typography>
+        <Button 
+        variant="outlined" 
+        startIcon={<ArrowBackIcon />} 
+        onClick={backRoute}
+        >
+        </Button>
+
+
+        <Typography align="center" variant="h6" color="initial">{activeSection?.name}</Typography>
 
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => editarCategoria(null)}>
           Añadir
@@ -100,7 +85,7 @@ export function EditCategories() {
 
       </Box>
       {
-        categorias.length === 0 && (
+        categories.length === 0 && (
           <Typography variant='subtitle1'>No se encontraron categorias de la sección.</Typography>
         )
       }
@@ -108,11 +93,11 @@ export function EditCategories() {
       <Box minHeight={"70vh"}>
         <Grid container rowSpacing={1} spacing={1}>
           {
-            categoriasSeccion.length > 0 && categoriasSeccion.map(categoria => (
-              <Categoria
-                key={categoria.idCategoria}
+            categories.length > 0 && categories.map(categoria => (
+              <Category
+                key={categoria.id}
                 categoria={categoria}
-                nombreSeccion={nombreSeccion!}
+                nombreSeccion={categoria.section.name!}
                 editarCategoria={editarCategoria}
                 eliminarCategoria={eliminarCategoria}
               />
@@ -123,13 +108,13 @@ export function EditCategories() {
 
       </Box>
 
-      <Link to={rutaAtras}>
-        <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
-        </Button>
-      </Link>
+{/* 
+      <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
+      </Button>
+ */}
 
 
-      <Modal open={isOpenEditar} closeModal={closeModalEditar}>
+      {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
         <ModalEditarCategoria
           categoria={categoria}
           closeModal={closeModalEditar}
@@ -142,7 +127,7 @@ export function EditCategories() {
           closeModal={closeModalEliminar}
 
         />
-      </Modal>
+      </Modal> */}
 
 
 
@@ -152,4 +137,4 @@ export function EditCategories() {
   )
 }
 
-export default EditarCategorias
+

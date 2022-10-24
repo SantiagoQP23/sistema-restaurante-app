@@ -1,25 +1,25 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { ThemeProvider, CssBaseline } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 
-import { themeCreator } from './themes/base';
 
 import { AppRouter } from './routers';
+import { SuspenseLoader } from './components/ui/';
+import ThemeProvider from './theme/ThemeProvider';
 
 
 
 
 function App() {
-  const theme = themeCreator("NebulaFighterTheme");
 
   return (
 
 
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeProvider >
 
-      <Suspense fallback={<>Loading...</>}>
+      <Suspense fallback={<SuspenseLoader />}>
+        <CssBaseline />
 
         <BrowserRouter>
           <AppRouter />

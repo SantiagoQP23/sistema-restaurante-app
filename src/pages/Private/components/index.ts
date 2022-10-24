@@ -1,6 +1,4 @@
-export * from './Layout.component';
-export * from './SidebarMenu.component';
 export * from './Logo.component';
-export * from './Header.component';
-export * from './Sidebar.component';
+export { default as LogoSign } from './LogoSign';
+export * from './Scrollbar.component';
 export * from './Userbox';

@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import { Layout } from '../pages/Private/components/Layout.component';
 import Status404 from '../pages/Status/Status404/index';
 
 interface Props {
