@@ -7,17 +7,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 
-import { IProduct } from '../../../../models';
+import { IProduct } from '../../../../../models';
+import { setActiveProduct } from '../../../../../redux';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 
 interface Props {
   producto: IProduct;
-  editarProducto: (producto: IProduct) => void;
+ 
   eliminarProducto: (producto: IProduct) => void;
 }
 
-export const Product: FC<Props> = ({ producto, editarProducto, eliminarProducto }) => {
+export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const editProduct = () =>{
+    dispatch(setActiveProduct(producto))
+    navigate('../product')
+
+  }
+
+
+
   return (
     <>
 
@@ -41,7 +57,7 @@ export const Product: FC<Props> = ({ producto, editarProducto, eliminarProducto 
 
               <Button
                 color='primary'
-                onClick={() => editarProducto(producto)}
+                onClick={() => editProduct()}
                 variant='text'
               >
                 <EditOutlined />

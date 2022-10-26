@@ -1,9 +1,10 @@
 import { FC, ReactNode } from 'react';
-import { Box, alpha, lighten, useTheme } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Box, alpha, lighten, useTheme, Breadcrumbs, Link} from '@mui/material';
+import { Outlet} from 'react-router-dom';
 
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { BreadcrumbsRouter } from './BreadcrumbsRouter.component';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
@@ -56,6 +57,9 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
           }}
         >
           <Box display="block">
+            
+            <BreadcrumbsRouter />
+
             <Outlet />
           </Box>
         </Box>

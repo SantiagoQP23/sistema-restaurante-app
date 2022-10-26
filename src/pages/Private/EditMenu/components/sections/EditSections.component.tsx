@@ -8,16 +8,13 @@ import { Typography, Box, Button, Grid } from '@mui/material/'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
 
-import { MenuContext } from '../../../../context/MenuContext';
-import { ISection } from '../../../../models';
+import { MenuContext } from '../../../../../context/MenuContext';
+import { ISection } from '../../../../../models';
 
-/* 
-import { useModal } from '../../hooks/useModal'
- */
-// Modal
-/* 
-import { Modal, Seccion, ModalEliminarSeccion, ModalEditarSeccion } from '.'; */
+
 import { Section } from './Section.component';
+import { useDispatch } from 'react-redux';
+import { resetActiveSection } from '../../../../../redux';
 
 
 
@@ -25,19 +22,17 @@ import { Section } from './Section.component';
 export const EditSections = () => {
 
   const navigate = useNavigate();
-  //const [seccion, setSeccion] = useState<ISection | null>();
-  /*  const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-   const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
-  */
+
+
+   const dispatch = useDispatch();
 
   const { sections } = useContext(MenuContext);
 
-  const editarSeccion = (seccion: ISection | null) => {
+  const createSection = () => {
+
+    dispatch(resetActiveSection())
 
     navigate('seccion')
-    console.log('Editar seccion')
-    /*  setSeccion(seccion);
-     openModalEditar(); */
   }
 
   const eliminarSeccion = (seccion: ISection) => {
@@ -61,7 +56,7 @@ export const EditSections = () => {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => editarSeccion(null)} >
+          onClick={() => createSection()} >
           Añadir
         </Button>
 
@@ -82,7 +77,7 @@ export const EditSections = () => {
               <Section
                 seccion={seccion}
                 key={seccion.id}
-                editarSeccion={editarSeccion}
+               
                 eliminarSeccion={eliminarSeccion}
               />
             ))
@@ -91,15 +86,7 @@ export const EditSections = () => {
         </Grid>
       </Box>
 
-      {/* 
-
-      <Modal open={isOpenEditar} closeModal={closeModalEditar}>
-        <ModalEditarSeccion seccion={seccion!} closeModal={closeModalEditar} />
-      </Modal>
-
-      <Modal open={isOpenEliminar} closeModal={closeModalEliminar}>
-        <ModalEliminarSeccion seccion={seccion!} closeModal={closeModalEliminar} />
-      </Modal> */}
+     
 
 
     </>

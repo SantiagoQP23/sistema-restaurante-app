@@ -10,30 +10,32 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
-import { ICategory } from '../../../../models';
-import { useAppDispatch } from '../../../../hooks';
-import { setActiveCategory } from '../../../../redux';
+import { ICategory } from '../../../../../models';
+import { useAppDispatch } from '../../../../../hooks';
+import { setActiveCategory } from '../../../../../redux';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   categoria: ICategory;
-  nombreSeccion: string;
-  editarCategoria: (categoria: ICategory) => void;
   eliminarCategoria: (categoria: ICategory) => void;
-
-
 }
 
 
-export const Category: FC<Props> = ({ categoria, editarCategoria, eliminarCategoria }) => {
+export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
   const navigate = useNavigate();
 
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   const establecerCategoria = () => {
     navigate(`${categoria.name.toLowerCase()}`, );
     dispatch(setActiveCategory(categoria));
 
+  }
+
+  const editarCategoria = () => {
+    dispatch(setActiveCategory(categoria))
+    navigate('../category');
   }
 
   return (
@@ -63,7 +65,7 @@ export const Category: FC<Props> = ({ categoria, editarCategoria, eliminarCatego
                 Eliminar
               </Button>
               <Button variant='text' size='small'
-                onClick={() => editarCategoria(categoria)}
+                onClick={() => editarCategoria()}
               >
 
                 <EditOutlined />

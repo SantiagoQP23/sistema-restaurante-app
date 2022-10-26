@@ -23,12 +23,13 @@ export const sectionsSlice = createSlice({
     addSection: (state, action: PayloadAction<ISection>) => {
       state.sections = [...state.sections, action.payload]
     },
-    updateSection: (state, action: PayloadAction<ISection>) =>{
+    updateSection: (state, {payload}: PayloadAction<ISection>) =>{
       state.sections = state.sections.map(
-        p => (p.id === action.payload.id) 
-        ? action.payload
+        p => (p.id === payload.id) 
+        ? payload
         : p 
       )
+      setActiveSection(payload)
     },
     deleteSection: (state, action: PayloadAction<string>) => {
       state.sections = state.sections.filter(
@@ -41,7 +42,10 @@ export const sectionsSlice = createSlice({
     setActiveSection: (state, action: PayloadAction<ISection>) => {
       state.activeSection = action.payload
     },
-    reset: () => ({ ...initialState }),
+    resetSections: () => ({ ...initialState }),
+    resetActiveSection: (state) => {
+      state.activeSection = null
+    },
   }
 
 });
@@ -53,6 +57,8 @@ export const {
   loadSections, 
   setActiveSection,
   updateSection, 
+  resetActiveSection,
+  resetSections
 } = sectionsSlice.actions;
 
 export const selectSections = (state: RootState) => state.sections;

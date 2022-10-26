@@ -120,7 +120,7 @@ export const MenuProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
 
-    if (sections.length > 0) {
+    if (sections.length > 0 && !activeSection) {
       changeSection(sections[0].id)
     }
 

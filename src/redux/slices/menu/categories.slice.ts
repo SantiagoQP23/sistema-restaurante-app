@@ -22,7 +22,7 @@ export const categoriesSlice = createSlice({
     addCategory: (state, action: PayloadAction<ICategory>) => {
       state.categories = [...state.categories, action.payload]
     },
-    updatedCategory: (state, action: PayloadAction<ICategory>) =>{
+    updateCategory: (state, action: PayloadAction<ICategory>) =>{
       state.categories = state.categories.map(
         c => (c.id === action.payload.id) 
         ? action.payload
@@ -39,7 +39,11 @@ export const categoriesSlice = createSlice({
     },
     setActiveCategory: (state, action: PayloadAction<ICategory>) => {
       state.activeCategory = action.payload
-    }
+    },
+    resetCategories: () => ({ ...initialState }),
+    resetActiveCategory: (state) => {
+      state.activeCategory = null
+    },
 
   }
 
@@ -50,8 +54,10 @@ export const {
   addCategory, 
   deleteCategory, 
   loadCategories, 
-  updatedCategory,
-  setActiveCategory
+  updateCategory,
+  setActiveCategory,
+  resetActiveCategory,
+  resetCategories
 } = categoriesSlice.actions;
 
 export const selectCategories = (state: RootState) => state.categories;

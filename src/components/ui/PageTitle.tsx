@@ -24,7 +24,9 @@ export const PageTitle: FC<PageTitleProps> = ({
           {subHeading}
         </Typography>
       </Grid>
-     {/*  <Grid item>
+
+
+     {/* docs &&  <Grid item>
         <Button
           href={docs}
           target="_blank"
@@ -35,7 +37,7 @@ export const PageTitle: FC<PageTitleProps> = ({
         >
           {heading} Documentation
         </Button>
-      </Grid> */}
+      </Grid>  */}
     </Grid>
   );
 };

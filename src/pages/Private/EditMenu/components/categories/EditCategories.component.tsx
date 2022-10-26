@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Material UI
 import { Typography, Box, Grid, Button } from '@mui/material/'
@@ -10,14 +10,15 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
 
 import { useContext } from 'react';
-import { MenuContext } from '../../../../context/MenuContext';
+import { MenuContext } from '../../../../../context/MenuContext';
 
 // Component
 import { Category } from './Category.component';
 
 
-import { ICategory } from '../../../../models/menu.model';
-import { PrivateRoutes } from '../../../../models';
+import { ICategory } from '../../../../../models/menu.model';
+import { PrivateRoutes } from '../../../../../models';
+import { resetActiveCategory } from '../../../../../redux';
 
 
 export function EditCategories() {
@@ -26,7 +27,7 @@ export function EditCategories() {
   const navigate = useNavigate();
 
   const { activeSection, categories } = useContext(MenuContext);
- 
+
   // La categoria que se va a editar en el modal
   const [categoria, setCategoria] = useState<ICategory | null>(null);
   /* 
@@ -34,9 +35,13 @@ export function EditCategories() {
     const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
    */
 
+  const dispatch = useDispatch();
 
+  const createCategory = () => {
 
-  const editarCategoria = (categoria: ICategory | null) => {
+    dispatch(resetActiveCategory());
+
+    navigate('../category')
 
     /*   setCategoria(categoria);
       openModalEditar(); */
@@ -51,12 +56,12 @@ export function EditCategories() {
   const backRoute = () => {
     navigate(-1);
   }
-
-
+  
   useEffect(() => {
-
-    if(!activeSection)
-      navigate(`/${PrivateRoutes.MENU_EDIT}` )
+    
+    
+    if (!activeSection)
+    navigate(`/${PrivateRoutes.MENU_EDIT}`)
 
   }, [])
 
@@ -69,17 +74,17 @@ export function EditCategories() {
 
 
 
-        <Button 
-        variant="outlined" 
-        startIcon={<ArrowBackIcon />} 
-        onClick={backRoute}
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={backRoute}
         >
         </Button>
 
 
-        <Typography align="center" variant="h6" color="initial">{activeSection?.name}</Typography>
+        <Typography align="center" variant="h3" color="initial">Categorías de {activeSection?.name}</Typography>
 
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => editarCategoria(null)}>
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => createCategory()}>
           Añadir
         </Button>
 
@@ -97,8 +102,6 @@ export function EditCategories() {
               <Category
                 key={categoria.id}
                 categoria={categoria}
-                nombreSeccion={categoria.section.name!}
-                editarCategoria={editarCategoria}
                 eliminarCategoria={eliminarCategoria}
               />
 
@@ -108,14 +111,14 @@ export function EditCategories() {
 
       </Box>
 
-{/* 
+      {/* 
       <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
       </Button>
  */}
 
 
       {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
-        <ModalEditarCategoria
+        <ModalcreateCategory
           categoria={categoria}
           closeModal={closeModalEditar}
         />

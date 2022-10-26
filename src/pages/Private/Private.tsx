@@ -16,10 +16,8 @@ import BaseLayout from "./layouts/BaseLayout"
 import { routes } from "./router"
 import { SidebarProvider } from "./contexts/SidebarContext"
 
-
-const Menu = lazy(() => import('./Menu/Menu.page'))
-const EditMenu = lazy(() => import('./EditMenu/EditMenu.page'))
-const Orders = lazy(() => import('./Orders/Orders.page'))
+import { SnackbarProvider } from 'notistack'
+import { CircularProgress } from "@mui/material"
 
 
 export const Private = () => {
@@ -29,10 +27,12 @@ export const Private = () => {
   const dispatch = useDispatch();
 
   const { loading, callEndpoint } = useFetchAndLoad();
+  const { loading: loadingS, callEndpoint: callEndpointS } = useFetchAndLoad();
+  const { loading: loadingC, callEndpoint: callEndpointC } = useFetchAndLoad();
 
-  const getSectionsCall = async () => await callEndpoint(getSections())
+  const getSectionsCall = async () => await callEndpointS(getSections())
 
-  const getCategoriesCall = async () => await callEndpoint(getCategories())
+  const getCategoriesCall = async () => await callEndpointC(getCategories())
 
   const getProductsCall = async () => await callEndpoint(getProducts())
 
@@ -49,14 +49,26 @@ export const Private = () => {
 
 
   return (
+    <SnackbarProvider maxSnack={3}>
 
-    <SidebarProvider>
-      
-        <>
-        {content}
-        </>
-    
-    </ SidebarProvider>
+      <SidebarProvider>
+
+        {
+          loading
+            ? <CircularProgress />
+              : loadingC 
+                ?  <CircularProgress />
+                : loadingS 
+                ? <CircularProgress />
+            
+            :
+            <>
+              {content}
+            </>
+        }
+
+      </ SidebarProvider>
+    </SnackbarProvider>
   )
 }
 

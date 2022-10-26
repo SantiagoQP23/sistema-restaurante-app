@@ -4,19 +4,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, Typography, Box, Button, Grid } from '@mui/material';
 
 import { EditOutlined, DeleteOutlined } from '@mui/icons-material';
-import { ISection } from '../../../../models';
+import { ISection } from '../../../../../models';
 
-import { setActiveSection } from '../../../../redux';
+import { setActiveSection } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
 
 interface Props {
   seccion: ISection,
   eliminarSeccion: (seccion: ISection) => void;
-  editarSeccion: (seccion: ISection) => void;
+  editarSeccion?: (seccion: ISection) => void;
 }
 
 
-export const Section: FC<Props> = ({ seccion, eliminarSeccion, editarSeccion }) => {
+export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
   const navigate = useNavigate();
 
@@ -25,6 +25,11 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, editarSeccion }) 
   const editarCategorias = () => {
     dispatch(setActiveSection(seccion));
     navigate(`${seccion.name.toLowerCase()}`);
+  }
+  
+  const editarSeccion = () => {
+    dispatch(setActiveSection(seccion));
+    navigate(`seccion`);
   }
 
 
@@ -51,7 +56,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, editarSeccion }) 
               <Button
                 variant='text'
                 onClick={() => {
-                  editarSeccion(seccion);
+                  editarSeccion();
                 }}>
 
                 <EditOutlined />

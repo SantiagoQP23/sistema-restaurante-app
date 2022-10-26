@@ -4,13 +4,19 @@ import { RouteObject } from "react-router-dom";
 import SidebarLayout from '../layouts/SidebarLayout/index';
 import Status404 from '../../Status/Status404/index';
 import { PrivateRoutes } from "../../../models";
-import { EditSections } from '../EditMenu/components/EditSections.component';
+import { EditSections } from '../EditMenu/components/sections/EditSections.component';
+import { ClientsList } from '../Clients/components';
+import { EditClient } from '../Clients/components/EditClient/EditClient.component';
+import { EditCategories, EditCategory, EditProducts, EditSection } from '../EditMenu/components';
+import { EditProduct } from '../EditMenu/components/products/EditProduct.component';
 
 
 
 const Menu = lazy(() => import('../Menu/Menu.page'))
 const EditMenu = lazy(() => import('../EditMenu/EditMenu.page'))
 const Orders = lazy(() => import('../Orders/Orders.page'))
+const Clients = lazy(() => import('../Clients/Clients.page'))
+
 
 
 export const routes: RouteObject[] = [
@@ -53,9 +59,30 @@ export const routes: RouteObject[] = [
           },
           {
             path:'seccion',
-            element: <h1>Editar seccion</h1>,
+            element: <EditSection/>,
             
           },
+          {
+            path:':nameSection',
+            element: <EditCategories/>,
+            
+          },
+          {
+            path:'category',
+            element: <EditCategory />,
+            
+          },
+          {
+            path: ':nameSection/:nameCategory',
+            element: <EditProducts />
+          },
+          {
+            path:'product',
+            element: <EditProduct />,
+            
+          },
+
+
         ]
         
       },
@@ -72,6 +99,29 @@ export const routes: RouteObject[] = [
         path: '',
         element: <Orders />
       },
+    ]
+  },
+  {
+    path: PrivateRoutes.CLIENTS,
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: '',
+        element: <Clients/>,
+        children: [
+          {
+            path: '',
+            element: <ClientsList />
+          },
+          
+          {
+            path: 'edit/:clientId',
+            element: <EditClient />
+          },
+
+
+        ]
+       },
     ]
   },
   {

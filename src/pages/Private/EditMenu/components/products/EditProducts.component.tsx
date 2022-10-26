@@ -1,6 +1,6 @@
 import { useState, useEffect, FC, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // import { useModal } from '../../hooks/useModal';
 
@@ -15,14 +15,15 @@ import AddIcon from '@mui/icons-material/Add';
 import { getProductosByIdCategoria } from '../../selectors/getProductosByIdCategoria';
 
 // Components
-import { Modal, ModalEliminarProducto, ModalEditarProducto, Producto } from '.';
+import { Modal, ModalEliminarProducto, ModalcreateProduct, Producto } from '.';
 import { CategoriasState, ProductosState, SeccionesState, selectCategorias } from '../../reducers';
 import { ICategoria, IProduct, ISeccion } from '../../interfaces';
 import { useProductos } from '../../hooks';
 import { selectSecciones } from '../../reducers/seccionesSlice'; */
-import { MenuContext } from '../../../../context/MenuContext';
-import { IProduct, PrivateRoutes } from '../../../../models';
+import { MenuContext } from '../../../../../context/MenuContext';
+import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
+import { resetActiveProduct } from '../../../../../redux';
 
 interface Props {
 
@@ -39,6 +40,7 @@ export const EditProducts: FC<Props> = () => {
 
   const { products, activeCategory } = useContext(MenuContext)
 
+  const dispatch = useDispatch()
  
 
   /*  const { categorias, categoriaActiva } = useSelector(selectCategorias);
@@ -58,7 +60,10 @@ export const EditProducts: FC<Props> = () => {
   } = useProductos(seccionActiva?.idSeccion!, categoriaActiva?.idCategoria!); */
 
   // Abrir el modal de editar
-  const editarProducto = (producto: IProduct | null) => {
+  const createProduct = (producto: IProduct | null) => {
+
+    dispatch(resetActiveProduct())
+    navigate('../product');
     /*  setProducto(producto);
      openModalEditar(); */
   }
@@ -98,7 +103,7 @@ export const EditProducts: FC<Props> = () => {
         <Typography align="center" variant="h6" color="initial">{activeCategory && activeCategory!.name}</Typography>
 
 
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => editarProducto(null)} >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => createProduct(null)} >
           Añadir
         </Button>
 
@@ -119,7 +124,7 @@ export const EditProducts: FC<Props> = () => {
               <Product
                 key={producto.id!}
                 producto={producto}
-                editarProducto={editarProducto}
+               
                 eliminarProducto={eliminarProducto}
               />
 
@@ -137,7 +142,7 @@ export const EditProducts: FC<Props> = () => {
       </Link> */}
 
       {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
-        <ModalEditarProducto
+        <ModalcreateProduct
           producto={producto}
           closeModal={closeModalEditar}
           categorias={categoriasSeccion}

@@ -9,12 +9,12 @@ import { RootState } from "../../store";
 
 export interface ProductsState {
   products: IProduct[];
-  productoActivo: IProduct | null;
+  activeProduct: IProduct | null;
 }
 
 const initialState: ProductsState = {
   products: [],
-  productoActivo: null
+  activeProduct: null
 };
 
 export const productsSlice = createSlice({
@@ -40,8 +40,13 @@ export const productsSlice = createSlice({
       state.products = action.payload
     },
     setActiveProduct: (state, action: PayloadAction<IProduct>) => {
-      state.productoActivo = action.payload
-    }
+      state.activeProduct = action.payload
+    },
+    resetProducts: () => ({ ...initialState }),
+    resetActiveProduct: (state) => {
+      state.activeProduct = null
+    },
+
 
   }
 
@@ -51,7 +56,10 @@ export const {
   addProduct, 
   deleteProduct, 
   loadProducts,
-  updateProduct
+  updateProduct,
+  setActiveProduct,
+  resetActiveProduct,
+  resetProducts
 } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products;

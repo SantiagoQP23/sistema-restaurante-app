@@ -32,6 +32,6 @@ export const useFetchAndLoad = () => {
     };
   }, []);
 
-  return { loading, callEndpoint };
+  return { loading, callEndpoint, cancelEndpoint };
 };
 
