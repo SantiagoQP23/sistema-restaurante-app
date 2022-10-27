@@ -4,17 +4,20 @@ import { useNavigate } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
 
-import { DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Button, Select, MenuItem, Typography, InputLabel } from '@mui/material/';
+import { DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Button, Select, MenuItem, Typography, InputLabel, Grid } from '@mui/material/';
 // MOdal
 
 import { Controller, useForm } from 'react-hook-form';
-import { selectSections, selectCategories, resetActiveCategory, addCategory, setActiveCategory,updateCategory } from '../../../../../redux';
+import { selectSections, selectCategories, resetActiveCategory, addCategory, setActiveCategory, updateCategory } from '../../../../../redux';
 import { ICreateCategory } from '../../../../../models/menu.model';
 import { BtnCancel } from '../../../components';
 import { LoadingButton } from '@mui/lab';
 import { useFetchAndLoad } from '../../../../../hooks';
-import { createCategory, 
-  updateCategory as updateCategoryS } from '../../services/sections.service';
+import {
+  createCategory,
+  updateCategory as updateCategoryS
+} from '../../services/sections.service';
+import { ArrowBack } from '@mui/icons-material';
 
 
 
@@ -33,6 +36,8 @@ interface Props {
 
 
 export const EditCategory: FC<Props> = ({ }) => {
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -81,23 +86,23 @@ export const EditCategory: FC<Props> = ({ }) => {
           enqueueSnackbar('Ya existe', { variant: 'error' })
 
         });
-        
-      } else {
-       
-        await callEndpoint(createCategory( form))
-          .then((resp) => {
-            const { data } = resp;
 
-            dispatch(addCategory(data.category))
-            dispatch(setActiveCategory(data.category))
+    } else {
 
-            enqueueSnackbar('La categoría ha sido añadida', { variant: 'success' })
-  
-          })
-          .catch((err) => {
-            enqueueSnackbar(err, { variant: 'error' })
-  
-          });
+      await callEndpoint(createCategory(form))
+        .then((resp) => {
+          const { data } = resp;
+
+          dispatch(addCategory(data.category))
+          dispatch(setActiveCategory(data.category))
+
+          enqueueSnackbar('La categoría ha sido añadida', { variant: 'success' })
+
+        })
+        .catch((err) => {
+          enqueueSnackbar(err, { variant: 'error' })
+
+        });
     }
 
     /*  if (!form.idCategoria) {
@@ -122,9 +127,20 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   return (
     <>
+
+
+      <Grid container display='flex' justifyContent='space-between'>
+        <Grid item display='flex' justifyContent='left' alignItems='center'>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </Button>
+          <Typography variant='h3'> {activeCategory ? activeCategory.name : "Añadir Categoria"}</Typography>
+
+        </Grid>
+
+      </Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        <Typography variant='h3'> {activeCategory ? activeCategory.name : "Añadir Categoria"}</Typography>
 
 
         <TextField
@@ -205,7 +221,15 @@ export const EditCategory: FC<Props> = ({ }) => {
         </LoadingButton>
 
 
-        <BtnCancel actionClick={cancel} />
+        {
+          loading && <Button
+            color='error'
+            variant='outlined'
+            onClick={() => cancelEndpoint()}
+          >
+            Cancelar
+          </Button>
+        }
 
 
 

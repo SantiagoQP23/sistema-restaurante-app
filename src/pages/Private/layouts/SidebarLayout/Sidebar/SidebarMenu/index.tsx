@@ -31,6 +31,10 @@ import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwo
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
+import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
+import TableRestaurantOutlinedIcon from '@mui/icons-material/TableRestaurantOutlined';
+import DeliveryDiningOutlinedIcon from '@mui/icons-material/DeliveryDiningOutlined';
+import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -189,7 +193,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/menu"
-                  startIcon={<DesignServicesTwoToneIcon />}
+                  startIcon={<RestaurantOutlinedIcon />}
                 >
                   Menu
                 </Button>
@@ -197,11 +201,48 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
+
         <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Dashboards
+              Pedidos
+            </ListSubheader>
+          }
+        >
+          <SubMenuWrapper>
+            <List component="div">
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/orders"
+                  startIcon={<TableChartTwoToneIcon />}
+                >
+                  Pedidos
+                </Button>
+              </ListItem>
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/management/transactions"
+                  startIcon={<DeliveryDiningOutlinedIcon />}
+                >
+                  Pedidos Activos
+                </Button>
+              </ListItem>
+            </List>
+          </SubMenuWrapper>
+          
+        </List>
+        <List
+          component="div"
+          subheader={
+            <ListSubheader component="div" disableSticky>
+              Administración
             </ListSubheader>
           }
         >
@@ -215,7 +256,7 @@ function SidebarMenu() {
                   to="/menu/edit"
                   startIcon={<BrightnessLowTwoToneIcon />}
                 >
-                  Manage Tasks
+                  Administrar menú
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -223,44 +264,32 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/dashboards/messenger"
-                  startIcon={<MmsTwoToneIcon />}
+                  to="/tables"
+                  startIcon={<TableRestaurantOutlinedIcon />}
                 >
-                  Messenger
+                  Mesas
                 </Button>
               </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-        <List
-          component="div"
-          subheader={
-            <ListSubheader component="div" disableSticky>
-              Management
-            </ListSubheader>
-          }
-        >
-          <SubMenuWrapper>
-            <List component="div">
               <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/transactions"
-                  startIcon={<TableChartTwoToneIcon />}
+                  to="/clients"
+                  startIcon={<Groups3OutlinedIcon />}
                 >
-                  Transactions List
+                  Clientes
                 </Button>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
+       
         <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Accounts
+              Cuenta
             </ListSubheader>
           }
         >
@@ -274,7 +303,7 @@ function SidebarMenu() {
                   to="/management/profile/details"
                   startIcon={<AccountCircleTwoToneIcon />}
                 >
-                  User Profile
+                  Perfil de usuario
                 </Button>
               </ListItem>
               <ListItem component="div">
@@ -285,13 +314,13 @@ function SidebarMenu() {
                   to="/management/profile/settings"
                   startIcon={<DisplaySettingsTwoToneIcon />}
                 >
-                  Account Settings
+                  Configuración de cuenta
                 </Button>
               </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
-        <List
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -402,7 +431,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
         <List
           component="div"
           subheader={

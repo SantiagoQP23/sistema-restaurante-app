@@ -23,7 +23,9 @@ import { selectSecciones } from '../../reducers/seccionesSlice'; */
 import { MenuContext } from '../../../../../context/MenuContext';
 import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
-import { resetActiveProduct } from '../../../../../redux';
+import { resetActiveProduct, setActiveProduct } from '../../../../../redux';
+import { DeleteProduct } from './DeleteProduct.component';
+import { useModal } from '../../../../../hooks';
 
 interface Props {
 
@@ -42,6 +44,8 @@ export const EditProducts: FC<Props> = () => {
 
   const dispatch = useDispatch()
  
+  const { isOpen, handleOpen, handleClose } = useModal();
+
 
   /*  const { categorias, categoriaActiva } = useSelector(selectCategorias);
    const { seccionActiva } = useSelector(selectSecciones); */
@@ -69,9 +73,10 @@ export const EditProducts: FC<Props> = () => {
   }
 
   // Abrir el modal de eliminar
-  const eliminarProducto = (producto: IProduct) => {
-    /*  setProducto(producto);
-     openModalEliminar(); */
+  const eliminarProducto = (product: IProduct) => {
+    dispatch(setActiveProduct(product))
+    handleOpen();
+
   }
 
   const backRoute = () => {
@@ -135,6 +140,8 @@ export const EditProducts: FC<Props> = () => {
 
         </Grid>
       </Box>
+
+      <DeleteProduct  isOpen={isOpen} closeModal={handleClose}/>
 
   {/*     <Link to={rutaAtras}>
         <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras

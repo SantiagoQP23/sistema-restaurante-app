@@ -34,6 +34,23 @@ export const updateSection = (id: string,data: ICreateSection) => {
 
 
 }
+
+export const deleteSection = (id: string) => {
+
+  const controller = loadAbort();
+
+  return {
+    call: restauranteApi.delete(`/sections/${id}`,
+    { signal: controller.signal }),
+    controller
+  }
+
+
+}
+
+
+
+
 export const createCategory = (data: ICreateCategory) => {
 
   const controller = loadAbort();
@@ -61,6 +78,20 @@ export const updateCategory = (id: string,data: ICreateCategory) => {
 
 
 }
+
+export const deleteCategory = (id: string) => {
+
+  const controller = loadAbort();
+
+  return {
+    call: restauranteApi.delete(`/categories/${id}`,
+    { signal: controller.signal }),
+    controller
+  }
+}
+
+
+
 export const createProduct = (data: ICreateProduct) => {
 
   const controller = loadAbort();
@@ -82,6 +113,18 @@ export const updateProduct = (id: string,data: ICreateProduct) => {
   return {
     call: restauranteApi.patch<ISection>(`/products/${id}`,
     data,
+    { signal: controller.signal }),
+    controller
+  }
+
+
+}
+export const deleteProduct = (id: string) => {
+
+  const controller = loadAbort();
+
+  return {
+    call: restauranteApi.delete(`/products/${id}`,
     { signal: controller.signal }),
     controller
   }

@@ -18,22 +18,19 @@ import { Category } from './Category.component';
 
 import { ICategory } from '../../../../../models/menu.model';
 import { PrivateRoutes } from '../../../../../models';
-import { resetActiveCategory } from '../../../../../redux';
+import { resetActiveCategory, setActiveCategory } from '../../../../../redux';
+import { useModal } from '../../../../../hooks';
+import { DeleteCategory } from './DeleteCategory.component';
 
 
 export function EditCategories() {
-
 
   const navigate = useNavigate();
 
   const { activeSection, categories } = useContext(MenuContext);
 
-  // La categoria que se va a editar en el modal
-  const [categoria, setCategoria] = useState<ICategory | null>(null);
-  /* 
-    const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-    const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
-   */
+  
+  const { isOpen, handleOpen, handleClose } = useModal();
 
   const dispatch = useDispatch();
 
@@ -43,14 +40,11 @@ export function EditCategories() {
 
     navigate('../category')
 
-    /*   setCategoria(categoria);
-      openModalEditar(); */
   }
 
-
   const eliminarCategoria = (categoria: ICategory) => {
-    /*  setCategoria(categoria);
-     openModalEliminar(); */
+    dispatch(setActiveCategory(categoria))
+    handleOpen();
   }
 
   const backRoute = () => {
@@ -111,29 +105,7 @@ export function EditCategories() {
 
       </Box>
 
-      {/* 
-      <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
-      </Button>
- */}
-
-
-      {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
-        <ModalcreateCategory
-          categoria={categoria}
-          closeModal={closeModalEditar}
-        />
-      </Modal>
-
-      <Modal open={isOpenEliminar} closeModal={closeModalEliminar}>
-        <ModalEliminarCategoria
-          categoria={categoria!}
-          closeModal={closeModalEliminar}
-
-        />
-      </Modal> */}
-
-
-
+      <DeleteCategory isOpen={isOpen} closeModal={handleClose} />
 
 
     </>

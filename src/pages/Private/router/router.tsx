@@ -9,6 +9,7 @@ import { ClientsList } from '../Clients/components';
 import { EditClient } from '../Clients/components/EditClient/EditClient.component';
 import { EditCategories, EditCategory, EditProducts, EditSection } from '../EditMenu/components';
 import { EditProduct } from '../EditMenu/components/products/EditProduct.component';
+import { ListTables } from '../Tables/components';
 
 
 
@@ -16,6 +17,7 @@ const Menu = lazy(() => import('../Menu/Menu.page'))
 const EditMenu = lazy(() => import('../EditMenu/EditMenu.page'))
 const Orders = lazy(() => import('../Orders/Orders.page'))
 const Clients = lazy(() => import('../Clients/Clients.page'))
+const Tables = lazy(() => import('../Tables/Tables.page'))
 
 
 
@@ -118,6 +120,24 @@ export const routes: RouteObject[] = [
             path: 'edit/:clientId',
             element: <EditClient />
           },
+
+
+        ]
+       },
+    ]
+  },
+  {
+    path: PrivateRoutes.TABLES,
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: '',
+        element: <Tables />,
+        children: [
+         {
+          path: '',
+          element: <ListTables />
+         }
 
 
         ]

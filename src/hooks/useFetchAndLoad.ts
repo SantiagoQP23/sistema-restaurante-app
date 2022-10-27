@@ -22,8 +22,9 @@ export const useFetchAndLoad = () => {
   };
 
   const cancelEndpoint = () => {
-    setLoading(false);
+
     controller && controller.abort();
+    setLoading(false);
   };
 
   useEffect(() => {

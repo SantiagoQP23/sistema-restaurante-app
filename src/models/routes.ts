@@ -9,7 +9,8 @@ export const PrivateRoutes = {
   MENU_EDIT: 'menu/edit/',
   ORDERS: 'orders',
   DASHBOARD: 'dashboard',
-  CLIENTS: 'clients'
+  CLIENTS: 'clients',
+  TABLES: 'tables'
 
 }
 

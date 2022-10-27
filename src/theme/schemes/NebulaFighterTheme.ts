@@ -1168,11 +1168,11 @@ export const NebulaFighterTheme = createTheme({
     },
     h4: {
       fontWeight: 700,
-      fontSize: 16
+      fontSize: 22
     },
     h5: {
       fontWeight: 700,
-      fontSize: 14
+      fontSize: 18
     },
     h6: {
       fontSize: 15

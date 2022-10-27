@@ -14,7 +14,9 @@ import { ISection } from '../../../../../models';
 
 import { Section } from './Section.component';
 import { useDispatch } from 'react-redux';
-import { resetActiveSection } from '../../../../../redux';
+import { resetActiveSection, setActiveSection } from '../../../../../redux';
+import { useModal } from '../../../../../hooks';
+import { DeleteSection } from './DeleteSection.component';
 
 
 
@@ -22,9 +24,9 @@ import { resetActiveSection } from '../../../../../redux';
 export const EditSections = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isOpen, handleOpen, handleClose } = useModal();
 
-
-   const dispatch = useDispatch();
 
   const { sections } = useContext(MenuContext);
 
@@ -36,9 +38,8 @@ export const EditSections = () => {
   }
 
   const eliminarSeccion = (seccion: ISection) => {
-    console.log('Eliminar seccion')
-    /* setSeccion(seccion);
-    openModalEliminar(); */
+    dispatch(setActiveSection(seccion))
+    handleOpen();
   }
 
   return (
@@ -73,20 +74,23 @@ export const EditSections = () => {
           }
           {
             sections.length > 0 && sections.map(seccion => (
+              <Grid item xs={12} sm={6} lg={4}>
 
-              <Section
-                seccion={seccion}
-                key={seccion.id}
-               
-                eliminarSeccion={eliminarSeccion}
-              />
+                <Section
+                  seccion={seccion}
+                  key={seccion.id}
+                  eliminarSeccion={eliminarSeccion}
+                />
+              </Grid>
             ))
           }
 
         </Grid>
       </Box>
 
-     
+      <DeleteSection isOpen={isOpen} closeModal={handleClose} />
+
+
 
 
     </>

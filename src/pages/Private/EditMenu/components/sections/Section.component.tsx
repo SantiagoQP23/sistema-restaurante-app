@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Card, CardContent, Typography, Box, Button, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, Tooltip } from '@mui/material';
 
 import { EditOutlined, DeleteOutlined } from '@mui/icons-material';
 import { ISection } from '../../../../../models';
@@ -26,7 +26,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
     dispatch(setActiveSection(seccion));
     navigate(`${seccion.name.toLowerCase()}`);
   }
-  
+
   const editarSeccion = () => {
     dispatch(setActiveSection(seccion));
     navigate(`seccion`);
@@ -35,51 +35,88 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
   return (
     <>
-      <Grid item xs={12} sm={6} lg={4}>
-        <Card >
-          <CardContent>
-            <Typography variant="h6" color="white" align='center'>{seccion.name}</Typography>
-            <Box display='flex' justifyContent='center'>
 
-              <Button
-                size='small'
-                variant="text"
-                onClick={() => editarCategorias()}
-              >
-                Editar  Categorias
-              </Button>
+      <Card >
+        <CardContent>
+          <Typography variant="h6" color="white">{seccion.name}</Typography>
+        </CardContent>
 
-            </Box>
+        <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
-            <Box mt={1} display='flex' justifyContent='space-between' >
 
-              <Button
-                variant='text'
+
+          <Box >
+
+            <Button
+              size='small'
+              variant="outlined"
+              onClick={() => editarCategorias()}
+            >
+              Categorías
+            </Button>
+
+          </Box>
+          <Box >
+
+            <Tooltip
+              title='Editar'
+            >
+
+              <IconButton
                 onClick={() => {
                   editarSeccion();
-                }}>
+                }}
+                color='primary'
+              >
 
                 <EditOutlined />
-                Editar
-              </Button>
 
-              <Button
-                variant='text'
-                size='small'
-                color='error'
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip
+              title='Eliminar'
+            >
+
+              <IconButton
                 onClick={() => { eliminarSeccion(seccion) }}
+                color='error'
               >
+
                 <DeleteOutlined />
-                Eliminar
-              </Button>
+              </IconButton>
+            </Tooltip>
 
 
-            </Box>
-          </CardContent>
-        </Card>
-      </Grid>
+          </Box>
+
+        </CardActions>
+      </Card>
+
     </>
   )
 }
+
+
+{/*  <Button
+              variant='text'
+              
+              onClick={() => {
+                editarSeccion();
+              }}>
+              <EditOutlined />
+
+            </Button>
+
+            <Button
+              variant='text'
+              size='small'
+              color='error'
+              onClick={() => { eliminarSeccion(seccion) }}
+            >
+              <DeleteOutlined />
+
+            </Button>
+          </Box> */}
 
 

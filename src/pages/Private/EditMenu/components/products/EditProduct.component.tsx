@@ -2,13 +2,13 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  
+
   DialogTitle, Button, TextField, Select, MenuItem,
   InputAdornment, Typography, CircularProgress, Grid, InputLabel,
 
 } from '@mui/material/';
 
-import { AttachMoney } from '@mui/icons-material';
+import { ArrowBack, AttachMoney } from '@mui/icons-material';
 
 
 import { Controller, useForm } from 'react-hook-form';
@@ -19,9 +19,12 @@ import { ICreateProduct, IProduct } from '../../../../../models/menu.model';
 import { LoadingButton } from '@mui/lab';
 import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { createProduct,
-   updateProduct as updateProductS} from '../../services/sections.service';
+import {
+  createProduct,
+  updateProduct as updateProductS
+} from '../../services/sections.service';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -44,25 +47,26 @@ interface Props {
 
 export const EditProduct: FC<Props> = ({ }) => {
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const {loading, callEndpoint, cancelEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
 
   const { activeCategory, categories } = useSelector(selectCategories);
   const { activeProduct } = useSelector(selectProducts);
 
   let product: ICreateProduct;
 
-  if(activeProduct){
+  if (activeProduct) {
 
-    const {id, category, images, ...restProduct} = activeProduct!;
-    product = {...restProduct, categoryId: activeProduct.category.id};
+    const { id, category, images, ...restProduct } = activeProduct!;
+    product = { ...restProduct, categoryId: activeProduct.category.id };
 
-  }else{ 
-    product =  {...initialProduct, categoryId: activeCategory!.id };
-   }
+  } else {
+    product = { ...initialProduct, categoryId: activeCategory!.id };
+  }
 
   //  activeProduct ? { ...activeProduct, categoryId: activeProduct.category.id } : initialForm(activeCategory!.id!);
 
@@ -75,51 +79,63 @@ export const EditProduct: FC<Props> = ({ }) => {
 
     console.log(form);
 
-    if(activeProduct){
+    if (activeProduct) {
       await callEndpoint(updateProductS(activeProduct.id, form))
-      .then((resp) =>{
-        const {data} = resp;
-        console.log(data.product);
-        dispatch(updateProduct(data.product))
-        enqueueSnackbar('El producto ha sido actualizada',{variant: 'success'})
-        
-      })
-      .catch((err)=> {
-        console.log(err)
-        enqueueSnackbar('Ya existe',{variant: 'error'})
-        
-      });
-      
-    }else{
+        .then((resp) => {
+          const { data } = resp;
+          console.log(data.product);
+          dispatch(updateProduct(data.product))
+          enqueueSnackbar('El producto ha sido actualizada', { variant: 'success' })
+
+        })
+        .catch((err) => {
+          console.log(err)
+          enqueueSnackbar('Ya existe', { variant: 'error' })
+
+        });
+
+    } else {
       console.log('añadir')
       await callEndpoint(createProduct(form))
-      .then((resp) =>{
-        const {data} = resp;
-        console.log(data.product);
-        dispatch(addProduct(data.product))
-        enqueueSnackbar('El producto ha sido añadido',{variant: 'success'})
-        
-      })
-      .catch((err)=> {
-        console.log(err)
-        enqueueSnackbar('Ya existe',{variant: 'error'})
-        
-      });
+        .then((resp) => {
+          const { data } = resp;
+          console.log(data.product);
+          dispatch(addProduct(data.product))
+          enqueueSnackbar('El producto ha sido añadido', { variant: 'success' })
+
+        })
+        .catch((err) => {
+          console.log(err)
+          enqueueSnackbar('Ya existe', { variant: 'error' })
+
+        });
     }
 
   }
   const cancel = () => {
-    dispatch(resetActiveProduct())
+    //dispatch(resetActiveProduct())
   }
- 
+
 
   return (
     <>
 
+
+      <Grid container display='flex' justifyContent='space-between'>
+        <Grid item display='flex' justifyContent='left' alignItems='center'>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </Button>
+          <Typography variant='h3'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
+
+        </Grid>
+
+      </Grid>
+
+
       <form onSubmit={handleSubmit(onSubmit)}>
 
 
-        <Typography variant='h3'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
 
 
 
@@ -129,7 +145,7 @@ export const EditProduct: FC<Props> = ({ }) => {
           label="Nombre del producto"
           type="text"
           fullWidth
-          
+
           {
           ...register('name', {
             required: 'Este campo es requerido',
@@ -156,7 +172,7 @@ export const EditProduct: FC<Props> = ({ }) => {
           inputProps={{
             step: 0.25,
           }}
-         
+
           {
           ...register('price', {
             required: 'Este campo es requerido',
@@ -241,7 +257,15 @@ export const EditProduct: FC<Props> = ({ }) => {
         </LoadingButton>
 
 
-        <BtnCancel actionClick={cancel} />
+        {
+          loading && <Button
+            color='error'
+            variant='outlined'
+            onClick={() => cancelEndpoint()}
+          >
+            Cancelar
+          </Button>
+        }
 
 
 

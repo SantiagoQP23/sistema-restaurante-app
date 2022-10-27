@@ -15,7 +15,7 @@ export const BtnCancel: FC<Props> = ({actionClick}) => {
   
   
   const cancel = () => {
-    navigate(-1)
+     //navigate(-1)
     actionClick && actionClick()
    
   }
@@ -26,7 +26,7 @@ export const BtnCancel: FC<Props> = ({actionClick}) => {
     <Button
     color='error'
     variant='outlined'
-    onClick={cancel}
+    onClick={() => cancel()}
   >
     Cancelar
   </Button>
