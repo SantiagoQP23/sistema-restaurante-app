@@ -18,7 +18,7 @@ export const Categories: FC<Props> = ({ }) => {
   return (
     <>
       <Grid container>
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid item xs={12} md={6} lg={4}>
           {
             activeCategory && <Select
               labelId="label-select-categoria"

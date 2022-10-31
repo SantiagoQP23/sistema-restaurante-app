@@ -1,4 +1,5 @@
 import { IUser, IClient, IProduct } from '.';
+import { ITable } from './table.model';
 
 
 export interface IOrder {
@@ -14,6 +15,7 @@ export interface IOrder {
   user: IUser;
 
   client: IClient;
+  table: ITable;
 
   createdAt: Date;
 

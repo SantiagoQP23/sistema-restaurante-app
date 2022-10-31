@@ -22,12 +22,13 @@ export const categoriesSlice = createSlice({
     addCategory: (state, action: PayloadAction<ICategory>) => {
       state.categories = [...state.categories, action.payload]
     },
-    updateCategory: (state, action: PayloadAction<ICategory>) =>{
+    updateCategory: (state, {payload}: PayloadAction<ICategory>) =>{
       state.categories = state.categories.map(
-        c => (c.id === action.payload.id) 
-        ? action.payload
+        c => (c.id === payload.id) 
+        ? payload
         : c 
       )
+      state.activeCategory = payload
     },
     deleteCategory: (state, action: PayloadAction<string>) => {
       state.categories = state.categories.filter(

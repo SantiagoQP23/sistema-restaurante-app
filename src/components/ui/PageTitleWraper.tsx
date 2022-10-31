@@ -4,7 +4,7 @@ import { FC, ReactNode } from "react";
 
 const PageTitle = styled(Box)(
   ({ theme }) => `
-        padding: ${theme.spacing(4, 0)};
+        padding: ${theme.spacing(3, 0)};
 `
 );
 

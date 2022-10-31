@@ -2,28 +2,18 @@ import { useState, useEffect, FC, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-// import { useModal } from '../../hooks/useModal';
 
 // Material UI
-import { Typography, Grid, Box, Button } from '@mui/material/'
+import { Typography, Grid, Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/'
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
 
-// servicios
-/* import { getCategoriasByIdSeccion } from '../../selectors/getCategoriasByIdSeccion';
-import { getProductosByIdCategoria } from '../../selectors/getProductosByIdCategoria';
 
-// Components
-import { Modal, ModalEliminarProducto, ModalcreateProduct, Producto } from '.';
-import { CategoriasState, ProductosState, SeccionesState, selectCategorias } from '../../reducers';
-import { ICategoria, IProduct, ISeccion } from '../../interfaces';
-import { useProductos } from '../../hooks';
-import { selectSecciones } from '../../reducers/seccionesSlice'; */
 import { MenuContext } from '../../../../../context/MenuContext';
 import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
-import { resetActiveProduct, setActiveProduct } from '../../../../../redux';
+import { resetActiveProduct, selectProducts, setActiveProduct } from '../../../../../redux';
 import { DeleteProduct } from './DeleteProduct.component';
 import { useModal } from '../../../../../hooks';
 
@@ -35,41 +25,25 @@ export const EditProducts: FC<Props> = () => {
 
   const navigate = useNavigate();
 
-  /* let { nombreSeccion, nombreCategoria } = useParams(); */
+  const { products, activeCategory, categories, changeCategory } = useContext(MenuContext)
 
-  // TODO Valiaar si el nombre de la seccion y la categoria son validos
-
-
-  const { products, activeCategory } = useContext(MenuContext)
+  const { activeProduct } = useSelector(selectProducts);
 
   const dispatch = useDispatch()
- 
+
   const { isOpen, handleOpen, handleClose } = useModal();
 
 
-  /*  const { categorias, categoriaActiva } = useSelector(selectCategorias);
-   const { seccionActiva } = useSelector(selectSecciones); */
-
   // El producto que se va a mostrar en el modal
   const [producto, setProducto] = useState<IProduct | null>(null);
-  /* 
-    const { isOpen: isOpenEditar, handleClickOpen: openModalEditar, handleClose: closeModalEditar } = useModal(false);
-    const { isOpen: isOpenEliminar, handleClickOpen: openModalEliminar, handleClose: closeModalEliminar } = useModal(false);
-   */
-  /* const {
-    categoriasSeccion,
-    productosCategoria,
-    cambiarCategoria,
-    categoria
-  } = useProductos(seccionActiva?.idSeccion!, categoriaActiva?.idCategoria!); */
+
 
   // Abrir el modal de editar
   const createProduct = (producto: IProduct | null) => {
 
     dispatch(resetActiveProduct())
     navigate('../product');
-    /*  setProducto(producto);
-     openModalEditar(); */
+
   }
 
   // Abrir el modal de eliminar
@@ -83,10 +57,14 @@ export const EditProducts: FC<Props> = () => {
     navigate(-1);
   }
 
+  const onChange = (e: SelectChangeEvent) => {
+    changeCategory(e.target.value)
+   }
+ 
   useEffect(() => {
 
-    if(!activeCategory)
-      navigate(`/${PrivateRoutes.MENU_EDIT}` )
+    if (!activeCategory)
+      navigate(`/${PrivateRoutes.MENU_EDIT}`)
 
   }, [])
 
@@ -94,19 +72,49 @@ export const EditProducts: FC<Props> = () => {
   return (
     <>
 
-
-      <Box mb={2} display='flex' justifyContent='space-between'>
-
-
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />} 
-          onClick={backRoute}
+      <Grid container display='flex' justifyContent='space-between' >
+        <Grid item display='flex' alignItems='center'>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={backRoute}
           >
-        </Button>
+          </Button>
 
-        <Typography align="center" variant="h6" color="initial">{activeCategory && activeCategory!.name}</Typography>
 
+          <Typography align="center" variant="h5" color="initial">{activeCategory && activeCategory!.name}</Typography>
+
+        </Grid>
+
+        <Grid item>
+
+          <InputLabel id='select-categoria'>Categoria</InputLabel>
+          <Select
+            label="select-categoria"
+            margin='dense'
+            fullWidth
+            value={activeCategory?.id}
+            onChange={onChange}
+           
+          >
+            {
+              categories.map(categoria => (
+                <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
+
+              ))
+            }
+          </Select>
+
+
+        </Grid>
+
+      </Grid>
+
+
+
+
+      <Box my={1} display='flex' justifyContent='space-between' alignItems='center'>
+
+        <Typography variant='h6'>Total productos: {products.length}</Typography>
 
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => createProduct(null)} >
           Añadir
@@ -125,46 +133,31 @@ export const EditProducts: FC<Props> = () => {
 
           {
             products.length > 0 && products.map(producto => (
+              <Grid key={producto.id!}
+                item xs={12} sm={6} >
 
-              <Product
-                key={producto.id!}
-                producto={producto}
-               
-                eliminarProducto={eliminarProducto}
-              />
+                <Product
 
+                  producto={producto}
+
+                  eliminarProducto={eliminarProducto}
+                />
+
+              </Grid>
             )
             )
           }
 
 
+
         </Grid>
       </Box>
 
-      <DeleteProduct  isOpen={isOpen} closeModal={handleClose}/>
+      {
+        activeProduct &&
+        <DeleteProduct isOpen={isOpen} closeModal={handleClose} />
+      }
 
-  {/*     <Link to={rutaAtras}>
-        <Button variant="outlined" startIcon={<ArrowBackIcon />} >Atras
-        </Button>
-      </Link> */}
-
-      {/*   <Modal open={isOpenEditar} closeModal={closeModalEditar}>
-        <ModalcreateProduct
-          producto={producto}
-          closeModal={closeModalEditar}
-          categorias={categoriasSeccion}
-          idCategoria={categoria}
-
-
-        />
-      </Modal>
-
-      <Modal open={isOpenEliminar} closeModal={closeModalEliminar}>
-        <ModalEliminarProducto
-          producto={producto!}
-          closeModal={closeModalEliminar}
-        />
-      </Modal> */}
 
     </>
   )

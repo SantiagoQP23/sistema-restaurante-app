@@ -13,8 +13,8 @@ import { ISection } from '../../../../../models';
 
 
 import { Section } from './Section.component';
-import { useDispatch } from 'react-redux';
-import { resetActiveSection, setActiveSection } from '../../../../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetActiveSection, selectSections, setActiveSection } from '../../../../../redux';
 import { useModal } from '../../../../../hooks';
 import { DeleteSection } from './DeleteSection.component';
 
@@ -25,6 +25,8 @@ export const EditSections = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {activeSection} = useSelector(selectSections);
   const { isOpen, handleOpen, handleClose } = useModal();
 
 
@@ -46,13 +48,9 @@ export const EditSections = () => {
     <>
       <Box mb={2} display='flex' justifyContent='space-between' alignItems='center'>
 
-        <Button
-          variant="outlined"
-          disabled
-          startIcon={<ArrowBackIcon />} >
-        </Button>
+       
 
-        <Typography align='center' variant="h3" color="initial">Secciones</Typography>
+        <Typography align='center' variant="h4" color="initial">Secciones</Typography>
 
         <Button
           variant="contained"
@@ -88,7 +86,10 @@ export const EditSections = () => {
         </Grid>
       </Box>
 
-      <DeleteSection isOpen={isOpen} closeModal={handleClose} />
+      {
+        activeSection &&
+        <DeleteSection isOpen={isOpen} closeModal={handleClose} />
+      }
 
 
 

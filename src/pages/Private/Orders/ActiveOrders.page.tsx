@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
-import { Grid } from '@mui/material';
-import { useLocation, } from 'react-router-dom';
-import queryString from 'query-string';
+import { Container, Grid } from '@mui/material';
+import { Outlet, useLocation, } from 'react-router-dom';
+import { PageTitleWrapper, PageTitle } from '../../../components/ui';
+/* import queryString from 'query-string';
 
 
 import { useFecha } from '../hooks/useFecha';
@@ -20,10 +21,10 @@ import { PageTitle } from '../components/ui/PageTitle';
 import { PageTitleWrapper } from '../components/ui/PageTitleWraper';
 import { FiltrosPedidos } from '../components/Pedidos';
 import { PedidoPendiente } from '../components/pedidosPendientes/';
+ */
 
-
-export const PedidosPendientes = () => {
-
+export const ActiveOrders = () => {
+/* 
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { pedidos } = useAppSelector(selectPedidos);
@@ -53,7 +54,7 @@ export const PedidosPendientes = () => {
     // eslint-disable-next-line 
   }, [fechaPedidos]);
 
-
+ */
 
   return (
     <>
@@ -62,8 +63,13 @@ export const PedidosPendientes = () => {
         <PageTitle heading='Pedidos Pendientes' />
       </PageTitleWrapper>
 
+      <Container maxWidth='lg' >
+        <Outlet />
+
+      </Container>
+
       {/* Filtro por mesero */}
-      <Grid container spacing={1} mb={2}>
+     {/*  <Grid container spacing={1} mb={2}>
         <FiltrosPedidos />
       </Grid>
 
@@ -74,9 +80,11 @@ export const PedidosPendientes = () => {
         )
         )}
 
-      </Grid>
+      </Grid> */}
 
     </>
 
   )
 }
+
+export default ActiveOrders;

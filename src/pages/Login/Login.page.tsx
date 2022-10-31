@@ -12,6 +12,7 @@ import { selectAuth, startLogin } from '../../redux/slices/auth';
 import { Copyright } from '../../components/ui';
 import { IFormLogin } from '../../models/';
 import { useNavigate } from 'react-router-dom';
+import { LoadingButton } from '@mui/lab';
 
 
 
@@ -30,13 +31,14 @@ export const LoginPage = () => {
     defaultValues: initialForm
   });
 
-  const { error } = useAppSelector(selectAuth);
+  const { error, status } = useAppSelector(selectAuth);
 
   const handleLogin = (form: IFormLogin) => {
 
     dispatch(startLogin(form));
+    if(status === 'authenticated')
+      navigate('/', {replace: true})
 
-    navigate('/', {replace: true})
   }
  
 
@@ -116,14 +118,15 @@ export const LoginPage = () => {
                   control={<Checkbox value="remember" color="primary" />}
                   label={"Remember me "}
                 />
-                <Button
+                <LoadingButton
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  loading={ status === 'checking'}
                 >
                   Sign In
-                </Button>
+                </LoadingButton>
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">

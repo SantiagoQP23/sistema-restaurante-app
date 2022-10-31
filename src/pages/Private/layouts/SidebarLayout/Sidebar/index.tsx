@@ -11,7 +11,8 @@ import {
   Button,
   lighten,
   darken,
-  Tooltip
+  Tooltip,
+  Typography
 } from '@mui/material';
 
 import SidebarMenu from './SidebarMenu';
@@ -47,7 +48,7 @@ function Sidebar() {
           top: 0,
           background:
             theme.palette.mode === 'dark'
-              ? alpha(lighten(theme.header.background, 0.1), 0.5)
+              ? alpha(lighten(theme.header.background!, 0.1), 0.5)
               : darken(theme.colors.alpha.black[100], 0.5),
           boxShadow:
             theme.palette.mode === 'dark' ? theme.sidebar.boxShadow : 'none'
@@ -79,7 +80,9 @@ function Sidebar() {
           }}
         />
         <Box p={2}>
-          <Button
+
+          <Typography  variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
+         {/*  <Button
             href="https://bloomui.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -89,7 +92,7 @@ function Sidebar() {
             fullWidth
           >
             Upgrade to PRO
-          </Button>
+          </Button> */}
         </Box>
       </SidebarWrapper>
       <Drawer

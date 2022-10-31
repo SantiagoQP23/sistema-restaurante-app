@@ -54,7 +54,7 @@ export const EditSection = () => {
       await callEndpoint(updateSectionS(activeSection.id, form))
         .then((resp) => {
           const { data } = resp;
-         
+          console.log(data.section)
           dispatch(updateSection(data.section))
           enqueueSnackbar('La sección ha sido actualizada', { variant: 'success' })
 

@@ -77,8 +77,9 @@ export const EditCategory: FC<Props> = ({ }) => {
       await callEndpoint(updateCategoryS(activeCategory.id, form))
         .then((resp) => {
           const { data } = resp;
-          enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
+         
           dispatch(updateCategory(data.category))
+          enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
 
         })
         .catch((err) => {

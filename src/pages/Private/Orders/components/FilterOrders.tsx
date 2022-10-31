@@ -2,55 +2,57 @@ import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, TextField, InputLabel, MenuItem, FormControl, Select} from '@mui/material'
+import { Grid, TextField, InputLabel, MenuItem, FormControl, Select } from '@mui/material'
 
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import MobileDatePicker from '@mui/lab/MobileDatePicker';
 
-import { useFecha } from '../../hooks/useFecha';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { selectAuth } from '../../../../redux';
+
+/* import { useFecha } from '../../hooks/useFecha';
 import { IUsuario } from '../../interfaces';
 import { parsearFecha } from '../../helpers/fecha';
-import { selectAuth } from '../../reducers/authSlice';
+import { selectAuth } from '../../reducers/authSlice'; */
 
-interface Props{
+interface Props {
 
 }
 
 
-export const FiltrosPedidos: FC<Props> = () => {
+export const FilterOrders: FC<Props> = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {fecha, setFecha } = useFecha();
+  //const {fecha, setFecha } = useFecha();
   const [estadoPedidos, setEstadoPedidos] = React.useState(10);
 
-  const {usuarios} = useSelector(selectAuth);
+  const { } = useSelector(selectAuth);
 
 
   const cambiarFecha = (fecha: Date) => {
 
     // la fecha se guarda como string
-    setFecha(parsearFecha(fecha));
+    /*   setFecha(parsearFecha(fecha));
+  
+      navigate(`?fecha=${parsearFecha(fecha)}`); */
 
-    navigate(`?fecha=${parsearFecha(fecha)}`);
-    
   }
+  // onChange={(value) => cambiarFecha(value as Date)}
+  // renderInput={(params) => <TextField {...params} />}
 
   return (
     <>
       <Grid item xs={6} lg={3}>
         <FormControl fullWidth color='primary'>
-          <LocalizationProvider dateAdapter={AdapterDateFns} >
-            <MobileDatePicker
+
+          <MobileDatePicker
             label="Fecha"
             inputFormat="dd/MM/yyyy"
-            value={new Date(`${fecha}T21:11:54`)}
-            onChange={(value) => cambiarFecha(value as Date)}
-            renderInput={(params) => <TextField {...params} />}
+            value={new Date()}
+            onChange={(e: any) => console.log(e)}
+            renderInput={(params: any) => <TextField {...params} />}
           />
-          </LocalizationProvider>
-         
+
+
         </FormControl>
 
       </Grid>
@@ -81,17 +83,17 @@ export const FiltrosPedidos: FC<Props> = () => {
             labelId="select-meseros"
             label="Meseros"
             value={1000}
-            
+
           >
             {
 
-              usuarios.map((usuario) => (
-                <MenuItem key={usuario.idUsuario} value={usuario.idUsuario}>{usuario.nombres}</MenuItem>
-                
-                )
-                )
-              }
-              <MenuItem key={1000} value={1000}>{"Todos"}</MenuItem>
+              /*  usuarios.map((usuario) => (
+                 <MenuItem key={usuario.idUsuario} value={usuario.idUsuario}>{usuario.nombres}</MenuItem>
+                 
+                 )
+                 ) */
+            }
+            <MenuItem key={1000} value={1000}>{"Todos"}</MenuItem>
 
           </Select>
         </FormControl>

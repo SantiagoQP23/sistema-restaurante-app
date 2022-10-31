@@ -1,9 +1,9 @@
 
 
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ISection } from "../../../models";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
+import { ISection } from "../../../models";
 
 
 export interface SectionsState {
@@ -29,7 +29,8 @@ export const sectionsSlice = createSlice({
         ? payload
         : p 
       )
-      setActiveSection(payload)
+      state.activeSection = payload
+      
     },
     deleteSection: (state, action: PayloadAction<string>) => {
       state.sections = state.sections.filter(

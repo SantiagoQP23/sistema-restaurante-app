@@ -1,9 +1,6 @@
 import React, { FC } from 'react'
 
-import { Typography, Grid, Box, Button, Card, CardContent, IconButton, CardActions } from '@mui/material/';
-
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography, Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip } from '@mui/material/';
 
 import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 
@@ -16,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
   producto: IProduct;
- 
+
   eliminarProducto: (producto: IProduct) => void;
 }
 
@@ -26,7 +23,7 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
 
   const navigate = useNavigate();
 
-  const editProduct = () =>{
+  const editProduct = () => {
     dispatch(setActiveProduct(producto))
     navigate('../product')
 
@@ -37,41 +34,78 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
   return (
     <>
 
-      <Grid item xs={12} sm={4} md={3} lg={3}>
-        <Card >
-          <CardContent>
 
-            <Typography variant="h6" align='center' color='white' >{producto.name}</Typography>
-            <Typography variant="subtitle2" color='primary' align='center'>$ {producto.price}</Typography>
+      <Card sx={{ display: 'flex' }} >
+        <CardMedia
+          component="img"
+          sx={{ width: 151 }}
+          image="/static/images/products/no-image.png"
+          alt="Product"
+        />
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 
-            <Box display='flex' justifyContent='space-between'>
+          <CardContent >
 
-              <Button
-                variant='text'
+            <Typography variant="h6" color='white' >{producto.name}</Typography>
+            <Typography variant="body1" color='white' >$ {producto.price}</Typography>
+            <Typography variant="body1" color='white' >Descripcion: {producto.description}</Typography>
+            <Typography variant="body1" color='white' >Stock: {producto.stock}</Typography>
+            <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography>
+          </CardContent>
+
+          <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
+
+
+
+            <Tooltip title='Editar'>
+
+              <IconButton
+                color='primary'
+                onClick={() => editProduct()}
+
+              >
+                <EditOutlined />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title='Eliminar'>
+
+              <IconButton
+
                 color='error'
                 onClick={() => eliminarProducto(producto)}
               >
                 <DeleteOutline />
-                Eliminar
-              </Button>
-
-              <Button
-                color='primary'
-                onClick={() => editProduct()}
-                variant='text'
-              >
-                <EditOutlined />
-                Editar
-              </Button>
+              </IconButton>
+            </Tooltip>
 
 
-            </Box>
+          </CardActions>
+        </Box>
 
 
-          </CardContent>
-        </Card>
-      </Grid>
+
+      </Card>
+
 
     </>
   )
 }
+            /*   <Button
+variant='text'
+color='error'
+onClick={() => eliminarProducto(producto)}
+>
+<DeleteOutline />
+Eliminar
+</Button>
+
+<Button
+color='primary'
+onClick={() => editProduct()}
+variant='text'
+>
+<EditOutlined />
+Editar
+</Button>
+*/

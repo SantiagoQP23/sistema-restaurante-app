@@ -20,8 +20,7 @@ export const Sections: FC<Props> = ({  }) => {
   return (
     <>
       <Box >
-        <Card>
-          <CardContent>
+       
            { activeSection && <Tabs
               value={activeSection!.id}
               onChange={(e, value) => changeSection(value)}
@@ -44,8 +43,7 @@ export const Sections: FC<Props> = ({  }) => {
 
             </Tabs>}
 
-          </CardContent>
-        </Card>
+          
       </Box>
 
    

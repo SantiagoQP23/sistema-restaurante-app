@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Input, FormHelperText, Divider, IconButton, InputBase, Paper, Grid, Button } from '@mui/material';
+import { FormControl, InputLabel, Input, FormHelperText, Divider, IconButton, InputBase, Paper, Grid, Button, CircularProgress } from '@mui/material';
 import { useState } from "react";
 import { TextField } from '@mui/material/';
 
@@ -7,19 +7,55 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClientsTable from "./ClientsTable.component";
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loadClients, resetActiveClient } from '../../../../../redux/slices/clients';
+import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
+import { useAsync } from '../../../../../hooks';
+import { getClient, getClients } from '../../services';
+import { IClient } from '../../../../../models';
+import { useSnackbar } from 'notistack';
 
 
 
 
 export const ClientsList = () => {
 
-  const [name, setName] = useState('Composed TextField');
+  const [cedula, setCedula] = useState<string>('');
 
+  const { loading, callEndpoint } = useFetchAndLoad();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  const { enqueueSnackbar } = useSnackbar();
+
+
+
+  const createClient = () => {
+    dispatch(resetActiveClient())
+    navigate('edit');
+  }
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+    setCedula(event.target.value);
   };
 
 
+  const searchClient = async () => {
+    if (cedula.length === 10){
+      await callEndpoint(getClient(cedula))
+      .then((resp) => {
+        const {data } = resp;
+        console.log(data);
+      })
+      .catch((err) => {
+        enqueueSnackbar('No se encontró al cliente', {variant: 'error'})
+
+      })
+    }
+      
+  }
 
 
   return (
@@ -34,12 +70,23 @@ export const ClientsList = () => {
           >
 
             <InputBase
+              type='number'
+              onChange={handleChange}
               sx={{ ml: 1, flex: 1 }}
-              placeholder="Nombre del cliente"
-              inputProps={{ 'aria-label': 'search google maps' }}
+              placeholder="Número de cédula"
+              inputProps={{ 'aria-label': 'Buscar cliente' }}
             />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon />
+            <IconButton
+              type="button"
+              sx={{ p: '10px' }}
+              aria-label="search"
+              onClick={searchClient}
+            >
+              {
+                loading
+                  ? <CircularProgress size={20} />
+                  : <SearchIcon />
+              }
             </IconButton>
 
 
@@ -47,13 +94,16 @@ export const ClientsList = () => {
         </Grid>
 
         <Grid item>
-        <Button
-          sx={{ mt: { xs: 2, md: 0 } }}
-          variant="contained"
-          startIcon={<AddTwoToneIcon fontSize="small" />}
-        >
-          Añadir cliente
-        </Button>
+
+          <Button
+            sx={{ mt: { xs: 2, md: 0 } }}
+            variant="contained"
+            startIcon={<AddTwoToneIcon fontSize="small" />}
+            onClick={createClient}
+          >
+            Añadir cliente
+          </Button>
+
         </Grid>
 
       </Grid>

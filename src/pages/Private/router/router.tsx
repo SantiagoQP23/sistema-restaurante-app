@@ -10,6 +10,10 @@ import { EditClient } from '../Clients/components/EditClient/EditClient.componen
 import { EditCategories, EditCategory, EditProducts, EditSection } from '../EditMenu/components';
 import { EditProduct } from '../EditMenu/components/products/EditProduct.component';
 import { ListTables } from '../Tables/components';
+import { EditOrder, ListOrders } from '../Orders/pages';
+import { EditTable } from '../Tables/components/EditTable.component';
+import { ListActiveOrders } from '../Orders/pages/ListActiveOrders.component';
+import { AddProductsOrder } from '../Orders/pages/AddProductsOrder.component';
 
 
 
@@ -18,6 +22,7 @@ const EditMenu = lazy(() => import('../EditMenu/EditMenu.page'))
 const Orders = lazy(() => import('../Orders/Orders.page'))
 const Clients = lazy(() => import('../Clients/Clients.page'))
 const Tables = lazy(() => import('../Tables/Tables.page'))
+const ActiveOrders = lazy(() => import('../Orders/ActiveOrders.page'))
 
 
 
@@ -99,7 +104,37 @@ export const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Orders />
+        element: <Orders />,
+        children: [
+          {
+            path: '',
+            element: <ListOrders />
+          },
+          {
+            path: 'edit',
+            element: <EditOrder />
+          },
+          {
+            path: 'edit/products',
+            element: <AddProductsOrder/>
+          }
+        ]
+      },
+    ]
+  },
+  {
+    path: PrivateRoutes.ACTIVE_ORDERS,
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: '',
+        element: <ActiveOrders/>,
+        children: [
+          {
+            path: '',
+            element: <ListActiveOrders />
+          }
+        ]
       },
     ]
   },
@@ -117,7 +152,7 @@ export const routes: RouteObject[] = [
           },
           
           {
-            path: 'edit/:clientId',
+            path: 'edit',
             element: <EditClient />
           },
 
@@ -137,6 +172,10 @@ export const routes: RouteObject[] = [
          {
           path: '',
           element: <ListTables />
+         },
+         {
+          path: 'edit',
+          element: <EditTable />
          }
 
 

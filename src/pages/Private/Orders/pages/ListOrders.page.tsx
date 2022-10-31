@@ -8,32 +8,41 @@ import { toast } from 'react-toastify';
 
 // Componentes
 
-import { selectOrders } from '../../../../redux';
+import { resetActiveOrder, selectOrders } from '../../../../redux';
 
 import { SocketContext } from '../../../../context/';
 import { PageTitle, PageTitleWrapper } from '../../../../components/ui';
 import { Order } from '../components';
+import { FilterOrders } from '../components/FilterOrders';
+import { IOrder } from '../../../../models';
+import { useNavigate } from 'react-router-dom';
 
 
-interface resp{
+interface resp {
   ok: boolean
 }
 
 
-export const listOrders = () => {
+
+export const ListOrders = () => {
 
   const { socket } = useContext(SocketContext);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { orders, date } = useSelector(selectOrders);
 
   const aniadirPedido = () => {
+    dispatch(resetActiveOrder())
+
+    navigate('edit');
 
     //socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}: INuevoDetalle) => {
-    socket?.emit('nuevoPedido', {} , ({ok}: {ok: boolean}) => {
-      if(!ok){
+    /* socket?.emit('nuevoPedido', {}, ({ ok }: { ok: boolean }) => {
+      if (!ok) {
         toast.error("No se puedo añadir el pedido");
       }
-    });
+    }); */
     //dispatch(pedidoStartAdded());
   }
 
@@ -41,26 +50,35 @@ export const listOrders = () => {
   return (
 
     <>
-      <PageTitleWrapper>
-        <PageTitle heading='listOrders' />
-      </PageTitleWrapper>
 
-     {/*  <Grid container spacing={1}>
-        <FiltrosPedidos />
+
+      <Grid container spacing={1}>
+        <FilterOrders />
         <Grid item xs={12}>
-          <ContadorPedidos orders={orders} />
+          {/* <ContadorPedidos orders={orders} /> */}
 
         </Grid>
-      </Grid> */}
+      </Grid>
 
+      <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
+        <Grid item>
+          <Typography variant="h5">Pedidos: {orders.length}</Typography>
+
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => aniadirPedido()}
+          // disabled={date !== obtenerFechaActual()}
+          >Añadir Pedido</Button>
+
+
+        </Grid>
+
+      </Grid>
 
       {/* ESTADOS DE PEDIDOS */}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => aniadirPedido()}
-        // disabled={date !== obtenerFechaActual()}
-      >Añadir Pedido</Button>
 
       {
         /* Mensaje de no hay orders */
@@ -74,7 +92,24 @@ export const listOrders = () => {
       }
 
       {/* Lista de orders */}
-      <Grid  mt={2} container spacing={1}>
+      <Grid mt={2} container spacing={1}>
+        <Grid item xs={12} md={6} lg={4}  >
+
+          <Order />
+
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}  >
+
+          <Order />
+
+        </Grid>
+        <Grid item xs={12} md={6} lg={4}  >
+
+          <Order />
+
+        </Grid>
+      </Grid>
+      {/* <Grid  mt={2} container spacing={1}>
         {
           orders.length > 0 &&
           orders.map(p => (
@@ -82,7 +117,7 @@ export const listOrders = () => {
           )
           )
         }
-      </Grid>
+      </Grid> */}
 
 
     </>

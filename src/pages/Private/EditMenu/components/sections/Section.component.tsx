@@ -42,11 +42,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
         </CardContent>
 
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-
-
-
           <Box >
-
             <Button
               size='small'
               variant="outlined"
@@ -54,35 +50,23 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
             >
               Categorías
             </Button>
-
           </Box>
           <Box >
-
-            <Tooltip
-              title='Editar'
-            >
-
-              <IconButton
+            <Tooltip title='Editar' >
+              <IconButton color='primary'
                 onClick={() => {
                   editarSeccion();
                 }}
-                color='primary'
               >
-
                 <EditOutlined />
-
               </IconButton>
             </Tooltip>
 
-            <Tooltip
-              title='Eliminar'
-            >
+            <Tooltip title='Eliminar' >
 
-              <IconButton
+              <IconButton color='error'
                 onClick={() => { eliminarSeccion(seccion) }}
-                color='error'
               >
-
                 <DeleteOutlined />
               </IconButton>
             </Tooltip>

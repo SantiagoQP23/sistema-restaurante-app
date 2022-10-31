@@ -7,24 +7,25 @@ import { Card, CardContent, Typography, Button, TextField, Box, ButtonGroup, Ico
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { RemoveCircleOutline, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
+import { IProduct } from '../../../../models';
 
-
+/* 
 import { Producto } from '../Menu/';
 import { useCounter } from '../../hooks/useCounter';
 import { IProducto } from '../../interfaces';
 import { INuevoDetallePedido } from '../../interfaces/pedidos';
 import { PedidosState, selectPedidos } from '../../reducers';
-import { RemoveCircleOutline, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
-
+ */
 interface Props {
-  producto: IProducto;
+  producto: IProduct;
   abrirModal: () => void;
-  setDetalle: (detalle: INuevoDetallePedido) => void;
+  setDetalle: (detalle: any) => void;
 }
 
 export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle }) => {
 
-  const { pedidoActivo } = useSelector(selectPedidos);
+ /*  const { pedidoActivo } = useSelector(selectPedidos);
 
   const { state: counter, increment, decrement } = useCounter(1);
 
@@ -34,13 +35,13 @@ export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle })
   useEffect(() => {
     setSubtotal(counter * producto.precio);
 
-  }, [counter])
+  }, [counter]) */
 
 
   return (
     <>
 
-
+{/* 
       <Producto key={producto.idProducto} producto={producto} />
 
 
@@ -87,7 +88,7 @@ export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle })
 
 
 
-      </Card>
+      </Card> */}
 
     </>
   )

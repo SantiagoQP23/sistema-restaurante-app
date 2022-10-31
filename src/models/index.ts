@@ -5,4 +5,5 @@ export * from './menu.model';
 export * from './orders.model';
 export * from './roles';
 export * from './routes';
+export * from './table.model';
 export * from './user.model';

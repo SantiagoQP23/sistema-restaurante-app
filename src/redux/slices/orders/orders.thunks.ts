@@ -1,24 +1,24 @@
-
+/* 
 import { restauranteApi } from "../../../api";
 import { AppThunk } from "../../store";
 import { pedidoLoaded, pedidoSetActive, pedidoSetFecha } from "./orders.slice";
 import { IOrder } from '../../../models/orders.model';
 
-
+ */
 
 
 // Establecer la fecha de los pedidos
-export const pedidoStartSetFecha = (fecha: string): AppThunk => async (
+/* export const pedidoStartSetFecha = (fecha: string): AppThunk => async (
   dispatch,
   getState) => {
 
   dispatch(pedidoSetFecha(fecha));
 
-};
+}; */
 
 
 // Cargar los pedidos del dia
-export const pedidoStartLoaded = (fecha: string): AppThunk => async (
+/* export const pedidoStartLoaded = (fecha: string): AppThunk => async (
   dispatch,
   getState) => {
 
@@ -32,7 +32,7 @@ export const pedidoStartLoaded = (fecha: string): AppThunk => async (
     console.log(e);
   }
 
-};
+}; */
 
 
 // Añadir un pedido
@@ -94,14 +94,14 @@ export const pedidoStartLoaded = (fecha: string): AppThunk => async (
 
 }; */
 
-export const pedidoStartSetActive = (pedido: IOrder): AppThunk => async (
+/* export const pedidoStartSetActive = (pedido: IOrder): AppThunk => async (
   dispatch,
   getState) => {
     
     dispatch(pedidoSetActive(pedido));
     
 };
-
+ */
 /*
 export const pedidoStart = (fecha: string): AppThunk => async (
   dispatch,

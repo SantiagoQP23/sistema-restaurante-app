@@ -24,12 +24,13 @@ export const productsSlice = createSlice({
     addProduct: (state, action: PayloadAction<IProduct>) => {
       state.products = [...state.products, action.payload]
     },
-    updateProduct: (state, action: PayloadAction<IProduct>) =>{
+    updateProduct: (state, {payload}: PayloadAction<IProduct>) =>{
       state.products = state.products.map(
-        p => (p.id === action.payload.id) 
-        ? action.payload
+        p => (p.id === payload.id) 
+        ? payload
         : p 
       )
+      state.activeProduct = payload
     },
     deleteProduct: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(

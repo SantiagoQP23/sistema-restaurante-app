@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 // Material UI
-import { Typography, Grid, Box, Button, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from '@mui/material/';
+import { Typography, Grid, Box, Button, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, CardActions, Tooltip } from '@mui/material/';
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -42,48 +42,68 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
   return (
     <>
-      <Grid item xs={12} sm={4}  >
-        <Card>
-          <CardContent>
-            <Typography variant="h6" align='center' color='white'>{categoria.name}</Typography>
 
-            <Box display='flex' justifyContent='center'>
-              <Button variant="text" size='small' onClick={() => establecerCategoria()} >
-                Ver productos
+      <Card>
+        <CardContent>
+          <Typography variant="h6"  color='white'>{categoria.name}</Typography>
+        </CardContent>
+        <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
-              </Button>
+          <Box>
+            <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
+              Productos
 
-            </Box>
+            </Button>
+
+          </Box>
 
 
-            <Box display='flex' justifyContent='space-between'>
+          <Box >
+            <Tooltip title="Editar">
 
-              <Button variant='text' size='small'
+              <IconButton color='primary'
+                onClick={() => editarCategoria()}
+              >
+
+                <EditOutlined />
+
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Eliminar">
+
+              <IconButton
                 color='error'
                 onClick={() => eliminarCategoria(categoria)}
               >
 
                 <DeleteOutlined />
-                Eliminar
-              </Button>
 
-              <Button variant='text' size='small'
-                onClick={() => editarCategoria()}
-              >
-
-                <EditOutlined />
-                Editar
-              </Button>
-            </Box>
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </CardActions>
+      </Card>
 
 
 
-          </CardContent>
-        </Card>
-      </Grid>
-
-   
 
     </>
   )
 }
+
+/*  <Button variant='text' size='small'
+   color='error'
+   onClick={() => eliminarCategoria(categoria)}
+ >
+
+   <DeleteOutlined />
+   Eliminar
+ </Button>
+
+ <Button variant='text' size='small'
+   onClick={() => editarCategoria()}
+ >
+
+   <EditOutlined />
+   Editar
+ </Button> */

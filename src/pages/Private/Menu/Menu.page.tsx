@@ -1,5 +1,5 @@
 
-import { Card, Container, Divider } from '@mui/material';
+import { Card, CardContent, CardHeader, Container, Divider } from '@mui/material';
 import { PageTitle, PageTitleWrapper } from '../../../components/ui';
 import { MenuProvider } from '../../../context/MenuContext';
 
@@ -25,16 +25,26 @@ export const Menu = () => {
         <Container maxWidth="lg">
 
           <Card>
+            <CardHeader
+              title={
+                <Sections />
 
-            <Sections />
+              }
+            />
+          <Divider />
+            <CardContent>
+              <Categories />
 
-            <Divider />
+             
 
-            <Categories />
+              <ListProducts />
+            </CardContent>
 
-            <Divider />
-            <ListProducts />
-           
+
+
+
+
+
           </Card>
         </Container>
 

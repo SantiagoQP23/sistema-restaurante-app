@@ -1,7 +1,7 @@
 import { ShoppingBagTwoTone } from '@mui/icons-material';
 import { Box, Card, Typography, useTheme, styled, Avatar } from '@mui/material';
 import { FC } from 'react';
-import { IPedido } from '../../interfaces';
+import { IOrder } from '../../../../models';
 
 
 
@@ -15,10 +15,10 @@ const AvatarPrimary = styled(Avatar)(
 );
 
 interface Props{
-  pedidos: IPedido[];
+  orders: IOrder[];
 }
 
-export const ContadorPedidos:FC<Props> = ({pedidos}) => {
+export const CountOrders:FC<Props> = ({orders}) => {
 
   const theme = useTheme();
 
@@ -39,7 +39,7 @@ export const ContadorPedidos:FC<Props> = ({pedidos}) => {
               >
                 Total
               </Typography>
-              <Typography variant="h2">{pedidos.length}</Typography>
+              <Typography variant="h2">{orders.length}</Typography>
             </Box>
             <Box pr={6}>
               <Typography
@@ -49,7 +49,7 @@ export const ContadorPedidos:FC<Props> = ({pedidos}) => {
               >
                 Activos
               </Typography>
-              <Typography variant="h2">{pedidos.filter(p => p.estado).length}</Typography>
+              <Typography variant="h2">{orders.filter(p => p.isDelivered).length}</Typography>
             </Box>
             <Box>
               <Typography
@@ -59,7 +59,7 @@ export const ContadorPedidos:FC<Props> = ({pedidos}) => {
               >
                 Entregados
               </Typography>
-              <Typography variant="h2">{pedidos.filter(p => !p.estado).length}</Typography>
+              <Typography variant="h2">{orders.filter(p => !p.isDelivered).length}</Typography>
             </Box>
           </Box>
         </Box>

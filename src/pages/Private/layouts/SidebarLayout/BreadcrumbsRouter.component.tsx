@@ -20,8 +20,8 @@ export const BreadcrumbsRouter = () => {
 
   return (
     <>
-      <Breadcrumbs className='MuiPageTitle-wrapper'>
-        <LinkRouter to='/'>MUI</LinkRouter>
+      <Breadcrumbs className='MuiPageTitle-wrapper' sx={{p: 1, pl: 3}}>
+        <LinkRouter to='/'>Home</LinkRouter>
         {
           pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;

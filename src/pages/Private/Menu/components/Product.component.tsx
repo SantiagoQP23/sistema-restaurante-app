@@ -1,4 +1,5 @@
-import { Card, CardContent, Typography, CardMedia } from '@mui/material/';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { Card, CardContent, Typography, CardMedia, Box, Button } from '@mui/material/';
 import { FC } from 'react';
 import { IProduct } from '../../../../models';
 
@@ -12,54 +13,28 @@ export const Product: FC<Props> = ({ product }) => {
   return (
     < >
 
-      {/*  <CardMedia
-        component="img"
-        height="200"
-        image="https://sainfoinc.com/wp-content/uploads/2018/02/image-not-available.jpg"
-        alt={product.nombre}
-      /> */}
-      <Card >
-        <CardContent>
-          <Typography variant='h6'>
-            {product.name}
-          </Typography>
-          <Typography >
-            {product.price}
-          </Typography>
-          <Typography variant="body2">
-            {product.description}
-          </Typography>
-        </CardContent>
-
-      </Card>
-
-
-      {/* 
-
-      ESTO PUEDE SERVIR PARA UNA VENTANA MODAL PARA MOSTRAR MAS INFORMACIÓN DEL PRODUCTO
-      <Card sx={{ maxWidth: 345 }}>
+      
+    <Card sx={{ display: 'flex' }} >
         <CardMedia
           component="img"
-          height="140"
-          image="https://www.goya.com/media/6910/easy-seafood-and-rice.jpg?quality=80"
-          alt=""
+          sx={{ width: 151 }}
+          image="/static/images/products/no-image.png"
+          alt="Product"
         />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
-            {product.nombre}
-          </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
-          <Typography sx={{ height: 70 }} variant="body2" color="text.secondary">
-            {product.descripcion}
-          </Typography>
+          <CardContent  sx={{ flex: '1 0 auto' }} >
 
-          <Typography variant="h6" component="div" align='right'>
-            $ {product.precio}
-          </Typography>
+            <Typography variant="h6" color='primary' >{product.name}</Typography>
+            <Typography variant="h6" color='white' >$ {product.price}</Typography>
+            <Typography variant="h6" color='white' >Descripcion: {product.description}</Typography>
 
-        </CardContent>
+           
 
-      </Card> */}
+          </CardContent>
+        </Box>
+      </Card>
+
     </>
   );
 }

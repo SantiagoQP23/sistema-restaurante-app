@@ -7,14 +7,14 @@ import { RootState } from "../../store";
 
 export interface PedidosState {
   orders: IOrder[]
-  orderActive: IOrder | null;
+  activeOrder: IOrder | null;
   date: string;
   detailActive: IOrderDetail | null;
 }
 
 const initialState: PedidosState = {
   orders: [],
-  orderActive: null,
+  activeOrder: null,
   date: '',
   detailActive: null
 };
@@ -24,15 +24,15 @@ export const ordersSlice = createSlice({
   initialState,
   reducers: {
 
-    pedidoSetActive: (state, action: PayloadAction<IOrder>) => {
-      state.orderActive = action.payload;
+    setActiveOrder: (state, action: PayloadAction<IOrder>) => {
+      state.activeOrder = action.payload;
     },
 
-    pedidoAddNew: (state, action: PayloadAction<IOrder>) => {
+    addOrder: (state, action: PayloadAction<IOrder>) => {
       state.orders = [...state.orders, action.payload]
     },
 
-    pedidoUpdated: (state, action: PayloadAction<IOrder>) => {
+    updateOrder: (state, action: PayloadAction<IOrder>) => {
       state.orders = state.orders.map(
         p => (p.id === action.payload.id)
           ? action.payload
@@ -40,96 +40,100 @@ export const ordersSlice = createSlice({
       )
     },
 
-    pedidoDeleted: (state, action: PayloadAction<string>) => {
+    deleteOrder: (state, action: PayloadAction<string>) => {
       state.orders = state.orders.filter(
         p => p.id !== action.payload
       )
     },
 
-    pedidoLoaded: (state, action: PayloadAction<IOrder[]>) => {
+    loadOrders: (state, action: PayloadAction<IOrder[]>) => {
       state.orders = action.payload
     },
-    pedidoSetFecha: (state, action: PayloadAction<string>) => {
+    setDateOrders: (state, action: PayloadAction<string>) => {
       state.date = action.payload;
+    },
+    resetOrders: () => ({ ...initialState }),
+    resetActiveOrder: (state) => {
+      state.activeOrder = null
     },
 /* 
     pedidoUpdateTotal: (state, action: PayloadAction<number>) => {
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? { ...p, total: action.payload }
           : p
       )
-      state.orderActive = { ...state.orderActive!, total: action.payload }
+      state.activeOrder = { ...state.activeOrder!, total: action.payload }
     },
 
 
     pedidoUpdatedCliente: (state, action: PayloadAction<string>) => {
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? { ...p, nombreCliente: action.payload }
           : p
       );
-      state.orderActive = { ...state.orderActive!, nombreCliente: action.payload };
+      state.activeOrder = { ...state.activeOrder!, nombreCliente: action.payload };
     },
 
     pedidoUpdatedEstado: (state, action: PayloadAction<boolean>) => {
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? { ...p, estado: action.payload }
           : p
 
       );
-      state.orderActive = { ...state.orderActive!, estado: action.payload };
+      state.activeOrder = { ...state.activeOrder!, estado: action.payload };
     },
 
     pedidoUpdatedNombreCliente: (state, action: PayloadAction<string>) => {
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? { ...p, nombreCliente: action.payload }
           : p
 
       );
-      state.orderActive = { ...state.orderActive!, nombreCliente: action.payload };
+      state.activeOrder = { ...state.activeOrder!, nombreCliente: action.payload };
 
     },
 
     pedidoUpdateDetalles: (state, action: PayloadAction<IOrderDetail[]>) => {
 
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? { ...p, detalles: action.payload }
           : p
       )
-      state.orderActive = { ...state.orderActive!, detalles: action.payload }
+      state.activeOrder = { ...state.activeOrder!, detalles: action.payload }
     },
 
     pedidoDetalleAddNew: (state, action: PayloadAction<IOrderDetail>) => {
 
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
-          ? { ...p, detalles: [...state.orderActive!.detalles, action.payload] }
+        p => (p.idPedido === state.activeOrder?.idPedido)
+          ? { ...p, detalles: [...state.activeOrder!.detalles, action.payload] }
           : p
       );
 
-      state.orderActive = {
-        ...state.orderActive!, detalles: [...state.orderActive!.detalles, action.payload]
+      state.activeOrder = {
+        ...state.activeOrder!, detalles: [...state.activeOrder!.detalles, action.payload]
       }
     },
 
     pedidoDetalleDeleted: (state, action: PayloadAction<number>) => {
 
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? {
-            ...p, detalles: state.orderActive!.detalles.filter(
+            ...p, detalles: state.activeOrder!.detalles.filter(
               d => d.idDetallePedido !== action.payload
             )
           }
           : p
       );
 
-      state.orderActive = {
-        ...state.orderActive!, detalles: state.orderActive!.detalles.filter(
+      state.activeOrder = {
+        ...state.activeOrder!, detalles: state.activeOrder!.detalles.filter(
           d => d.idDetallePedido !== action.payload
         )
       }
@@ -137,11 +141,11 @@ export const ordersSlice = createSlice({
     },
 
     pedidoDetalleCantidad: (state, action: PayloadAction<number>) => {
-      const detalles = state.orderActive!.detalles;
+      const detalles = state.activeOrder!.detalles;
       const subtotal = state.detailActive!.producto.precio * action.payload;
       const cantidad = action.payload;
       state.orders = state.orders.map(
-        p => (p.idPedido === state.orderActive?.idPedido)
+        p => (p.idPedido === state.activeOrder?.idPedido)
           ? {
             ...p, detalles: detalles.map(
               d => d.idDetallePedido === state.detailActive!.idDetallePedido
@@ -156,8 +160,8 @@ export const ordersSlice = createSlice({
           : p
       );
 
-      state.orderActive = {
-        ...state.orderActive!, detalles: detalles.map(
+      state.activeOrder = {
+        ...state.activeOrder!, detalles: detalles.map(
           d => d.idDetallePedido === state.detailActive!.idDetallePedido
             ? {
               ...d,
@@ -192,12 +196,14 @@ export const ordersSlice = createSlice({
 
 });
 export const { 
-  pedidoAddNew, 
-  pedidoDeleted, 
-  pedidoLoaded,
-  pedidoSetActive, 
-  pedidoUpdated, 
-  pedidoSetFecha, 
+  setActiveOrder,
+  addOrder,
+  updateOrder,
+  deleteOrder,
+  loadOrders,
+  setDateOrders,
+  resetOrders,
+  resetActiveOrder,
   /* 
   pedidoUpdatedCliente,
   pedidoUpdatedEstado, 
