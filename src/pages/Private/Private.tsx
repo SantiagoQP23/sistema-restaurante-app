@@ -7,7 +7,7 @@ import { RoutesWithNotFound } from "../../helpers"
 
 import { ISection, PrivateRoutes } from "../../models"
 
-import { getSections, getCategories, getProducts } from "../../services"
+import { getSections, getCategories, getProducts, getMenu } from "../../services"
 
 import { useDispatch } from 'react-redux';
 import { loadSections, loadCategories, loadProducts } from "../../redux"
@@ -27,7 +27,14 @@ export const Private = () => {
   const dispatch = useDispatch();
 
   const { loading, callEndpoint } = useFetchAndLoad();
-  const { loading: loadingS, callEndpoint: callEndpointS } = useFetchAndLoad();
+
+  const getMenuCall = async () => await callEndpoint(getMenu());
+
+  const loadMenuState = (data: ISection[]) => { dispatch(loadSections(data)); }
+
+  useAsync(getMenuCall, loadMenuState, () => {}, [] );
+
+  /* const { loading: loadingS, callEndpoint: callEndpointS } = useFetchAndLoad();
   const { loading: loadingC, callEndpoint: callEndpointC } = useFetchAndLoad();
 
   const getSectionsCall = async () => await callEndpointS(getSections())
@@ -36,7 +43,6 @@ export const Private = () => {
 
   const getProductsCall = async () => await callEndpoint(getProducts())
 
-  const loadSectionsState = (data: ISection[]) => { dispatch(loadSections(data)); }
 
   const loadCategoriesState = (data: ICategory[]) => { dispatch(loadCategories(data)); }
 
@@ -44,7 +50,7 @@ export const Private = () => {
 
   useAsync(getSectionsCall, loadSectionsState, () => { }, []);
   useAsync(getCategoriesCall, loadCategoriesState, () => { }, []);
-  useAsync(getProductsCall, loadProductsState, () => { }, []);
+  useAsync(getProductsCall, loadProductsState, () => { }, []); */
 
 
 
@@ -56,11 +62,7 @@ export const Private = () => {
         {
           loading
             ? <CircularProgress />
-              : loadingC 
-                ?  <CircularProgress />
-                : loadingS 
-                ? <CircularProgress />
-            
+              
             :
             <>
               {content}

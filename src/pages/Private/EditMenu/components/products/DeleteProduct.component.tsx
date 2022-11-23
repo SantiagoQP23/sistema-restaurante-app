@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectCategories } from "../../../../../redux";
+import { selectCategories, selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 
 
@@ -19,7 +19,7 @@ export const DeleteProduct: FC<Props> = ({isOpen, closeModal }) => {
   const { loading, callEndpoint } = useFetchAndLoad();
 
 
-  const {activeCategory: category} = useSelector(selectCategories);
+  const {activeProduct: product} = useSelector(selectMenu);
   
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ export const DeleteProduct: FC<Props> = ({isOpen, closeModal }) => {
       <Dialog open={isOpen} onClose={closeModal}>
 
         <DialogTitle id="alert-dialog-title" color='white'>
-          {`¿Esta seguro de eliminar el producto ${category!.name}?`}
+          {`¿Esta seguro de eliminar el producto ${product!.name}?`}
         </DialogTitle>
         <Divider />
         <DialogContent>

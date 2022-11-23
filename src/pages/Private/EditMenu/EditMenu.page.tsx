@@ -17,9 +17,9 @@ export const EditMenu = () => {
 
 
       <Container maxWidth="lg">
-        <MenuProvider>
+     
           <Outlet />
-        </MenuProvider>
+      
       </Container>
     </>
   )

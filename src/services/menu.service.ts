@@ -4,6 +4,18 @@ import { ICategory, IProduct, ISection } from "../models";
 
 
 
+export const getMenu = () => {
+  const controller = loadAbort();
+  
+  return {
+    call: restauranteApi.get<ISection[]>('/menu',
+    { signal: controller.signal }),
+    controller
+  };
+};
+
+
+
 export const getSections = () => {
   const controller = loadAbort();
   

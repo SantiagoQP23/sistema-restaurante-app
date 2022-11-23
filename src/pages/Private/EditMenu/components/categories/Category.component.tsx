@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { ICategory } from '../../../../../models';
 import { useAppDispatch, useModal } from '../../../../../hooks';
-import { setActiveCategory } from '../../../../../redux';
+import { setActiveCategory, setActiveProducts } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
 import { DeleteCategory } from './DeleteCategory.component';
 
@@ -37,6 +37,19 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
   const editarCategoria = () => {
     dispatch(setActiveCategory(categoria))
+
+    
+
+
+    if(categoria.products.length > 0){
+      dispatch(setActiveProducts(categoria.products))
+    }
+    else{
+      dispatch(setActiveProducts([]))
+
+    }
+
+
     navigate('../category');
   }
 
@@ -45,13 +58,14 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
       <Card>
         <CardContent>
-          <Typography variant="h6"  color='white'>{categoria.name}</Typography>
+          <Typography variant="h6" color='white'>{categoria.name}</Typography>
+          <Typography variant="subtitle1" color="orange">Productos: {categoria.products.length}</Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
           <Box>
             <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
-              Productos
+              Ver Productos
 
             </Button>
 

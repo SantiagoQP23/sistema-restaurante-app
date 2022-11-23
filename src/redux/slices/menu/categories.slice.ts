@@ -52,13 +52,14 @@ export const categoriesSlice = createSlice({
 
 
 export const {
-  addCategory, 
+  /* addCategory, 
   deleteCategory, 
   loadCategories, 
-  updateCategory,
+  updateCategory, */
+  /* 
   setActiveCategory,
   resetActiveCategory,
-  resetCategories
+  resetCategories */
 } = categoriesSlice.actions;
 
 export const selectCategories = (state: RootState) => state.categories;

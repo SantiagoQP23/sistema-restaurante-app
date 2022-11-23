@@ -38,19 +38,29 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
       <Card sx={{ display: 'flex' }} >
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: 180 }}
           image="/static/images/products/no-image.png"
           alt="Product"
         />
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 
           <CardContent >
+            <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Typography variant="h4" color='white' >{producto.name}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" >{producto.description ? producto.description: 'No se ha añadido descripción'}</Typography>
+            </Grid>
+            <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Typography variant="h6" color='orangered' >$ {producto.price}</Typography>
+              <Typography variant="body1" >Stock: {producto.stock}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+            </Grid>
 
-            <Typography variant="h6" color='white' >{producto.name}</Typography>
-            <Typography variant="body1" color='white' >$ {producto.price}</Typography>
-            <Typography variant="body1" color='white' >Descripcion: {producto.description}</Typography>
-            <Typography variant="body1" color='white' >Stock: {producto.stock}</Typography>
-            <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography>
+            </Grid>
+            {/* <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography> */}
           </CardContent>
 
           <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>

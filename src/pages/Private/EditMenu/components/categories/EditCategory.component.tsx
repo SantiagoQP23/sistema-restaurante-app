@@ -8,16 +8,18 @@ import { DialogActions, TextField, DialogContent, DialogContentText, DialogTitle
 // MOdal
 
 import { Controller, useForm } from 'react-hook-form';
-import { selectSections, selectCategories, resetActiveCategory, addCategory, setActiveCategory, updateCategory } from '../../../../../redux';
-import { ICreateCategory } from '../../../../../models/menu.model';
+// import { selectSections, selectCategories, resetActiveCategory, setActiveCategory, updateCategory, selectMenu } from '../../../../../redux';
+import { ICreateCategory, ICategory } from '../../../../../models/menu.model';
 import { BtnCancel } from '../../../components';
 import { LoadingButton } from '@mui/lab';
-import { useFetchAndLoad } from '../../../../../hooks';
+import { useAppDispatch, useFetchAndLoad } from '../../../../../hooks';
 import {
   createCategory,
   updateCategory as updateCategoryS
 } from '../../services/sections.service';
 import { ArrowBack } from '@mui/icons-material';
+import { addCategory, updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
+import { resetActiveCategory, selectMenu, setActiveCategory } from '../../../../../redux';
 
 
 
@@ -39,10 +41,9 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { activeSection, sections } = useSelector(selectSections);
-  const { activeCategory } = useSelector(selectCategories);
+  const { activeCategory, activeSection, sections } = useSelector(selectMenu);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -54,7 +55,7 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   if (activeCategory) {
 
-    const { id, section, ...restCategory } = activeCategory!;
+    const { id, section, products, ...restCategory } = activeCategory!;
 
     category = { ...restCategory, sectionId: activeSection!.id }
 
@@ -63,7 +64,7 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   //const category = activeCategory ? { name: activeCategory.name, sectionId: activeCategory.section.id } : initialForm(activeSection!.id);
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<ICreateCategory>({
+  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<ICreateCategory>({
     defaultValues: category,
 
   });
@@ -77,8 +78,9 @@ export const EditCategory: FC<Props> = ({ }) => {
       await callEndpoint(updateCategoryS(activeCategory.id, form))
         .then((resp) => {
           const { data } = resp;
-         
-          dispatch(updateCategory(data.category))
+
+          dispatch(updateCategory(data.category));
+          dispatch(setActiveCategory({...activeCategory, ...data.category}))
           enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
 
         })
@@ -90,7 +92,16 @@ export const EditCategory: FC<Props> = ({ }) => {
 
     } else {
 
-      await callEndpoint(createCategory(form))
+      const category: ICategory = {
+        id: '134124',
+        name: 'Ensaladas',
+        products: [],
+        section: { id: '13232', name: 'lajds' }
+      };
+      dispatch(addCategory(category));
+      reset();
+
+      /* await callEndpoint(createCategory(form))
         .then((resp) => {
           const { data } = resp;
 
@@ -103,7 +114,7 @@ export const EditCategory: FC<Props> = ({ }) => {
         .catch((err) => {
           enqueueSnackbar(err, { variant: 'error' })
 
-        });
+        }); */
     }
 
     /*  if (!form.idCategoria) {

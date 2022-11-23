@@ -2,7 +2,7 @@ import { FC, useState, useContext } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Grid, Typography, Button, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Grid, Typography, Button, Box, FormControl, InputLabel, MenuItem, Select, Card, CardContent, CardHeader, Divider } from '@mui/material';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
@@ -15,10 +15,13 @@ import { useModal, useProductos } from '../hooks';
 import { PedidosState, selectPedidos } from '../reducers/pedidosSlice';
 import { DetallesState, selectDetalles } from '../reducers/detallesPedidoSlice';
 import { IDetallePedido, INuevoDetallePedido } from '../interfaces'; */
-import { ShoppingCartOutlined } from '@mui/icons-material';
+import { ShoppingCartOutlined, ArrowBack } from '@mui/icons-material';
 import { useModal } from '../../../../hooks';
 import { MenuContext } from '../../../../context/MenuContext';
 import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
+import { selectMenu } from '../../../../redux';
+import { Sections, Categories } from '../../Menu/components';
+import { ProductAdd } from '../components';
 
 
 export const AddProductsOrder: FC = () => {
@@ -27,15 +30,9 @@ export const AddProductsOrder: FC = () => {
 
   const { isOpen: open, handleOpen, handleClose } = useModal(false);
 
-  const {
-    activeSection: section,
-    activeCategory: category,
-    sections,
-    categories,
-    products,
-    changeSection,
-    changeCategory
-  } = useContext(MenuContext);
+
+  const { sections, categories, activeCategory } = useSelector(selectMenu)
+
 
   const { activeOrder } = useSelector(selectOrders);
   //const { detalles } = useSelector(selectDetalles);
@@ -46,9 +43,15 @@ export const AddProductsOrder: FC = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }} my={3}>
 
-        <Typography variant='h2'>Añadir productos</Typography>
+      <Grid container display='flex' justifyContent='space-between'>
+        <Grid item display='flex' justifyContent='left' alignItems='center'>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </Button>
+          <Typography variant='h5'>Añadir Productos </Typography>
+
+        </Grid>
 
         <Button
           variant="outlined"
@@ -58,66 +61,55 @@ export const AddProductsOrder: FC = () => {
           <ShoppingCartOutlined /> $ {15}
         </Button>
 
-      </Box>
+      </Grid>
 
 
-      <FormControl fullWidth>
-        <Grid container spacing={1}>
-          {section && <Grid item xs={12} md={6} lg={3} >
-            <InputLabel id='select-seccion'>Sección</InputLabel>
-            <Select
-              id='select-seccion'
-              value={section!.id}
-              label="Seccion"
-              margin='dense'
-              onChange={(e) =>
-                changeSection(String(e.target.value))
+
+
+      {
+        sections?.length === 0
+          ? <>No se ha creado un menu</>
+          :
+          <Card sx={{my: 1}}>
+            <CardHeader
+              title={
+                <Sections sections={sections} />
+
               }
-              fullWidth
+            />
+            <Divider />
+            <CardContent>{
+              categories.length > 0
 
-            >
+                ? <Categories />
+                : <><h6>Sin categorias</h6></>
+              }
+              
+                          </ CardContent >
+                        </Card>
+            }
               {
-                sections.length > 0 && sections.map(seccion =>
-                (
-                  <MenuItem key={seccion.id!} value={seccion.id!}>{seccion.name}</MenuItem>
+                activeCategory && activeCategory.products.length > 0
+                  ? <>
+                    <Grid container spacing={1}>
 
-                )
-                )}
+                      {
+                        activeCategory.products.map((producto) => (
+                          <Grid  key={producto.id} item xs={12} sm={6} md={6} xl={3} >
+                            <ProductAdd
+                              producto={producto}
+                              abrirModal={handleOpen}
+                            />
+                          </Grid>
+                        ))
+                      }
+                    </Grid>
+                  </>
+                  :
+                  <>No hay productos</>
+            }
 
-            </Select>
 
-          </Grid>}
-          {category && <Grid item xs={12} md={6} lg={3} >
-            <Select
-              id='select-categoria'
-              value={category!.id}
-              label="categoria"
-              onChange={(e => {
-                changeCategory(String(e.target.value))
-
-              })}
-              fullWidth
-
-
-            >
-
-              {
-                categories.length > 0 && categories.map(cat =>
-                (
-                  <MenuItem key={cat.id} value={cat.id}>{cat.name}</MenuItem>
-
-                )
-                )}
-
-            </Select>
-
-          </Grid>
-
-          }
-
-        </Grid>
-
-      </FormControl>
 
 
       <Grid container spacing={1} mt={1}>

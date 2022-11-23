@@ -1,7 +1,12 @@
 export interface ISection {
   id: string;
   name: string;
-  categories?: ICategory[];
+  categories: ICategory[];
+
+}
+export interface ISectionCategory {
+  id: string;
+  name: string;
 
 }
 
@@ -16,8 +21,15 @@ export interface IUpdateSection {
 export interface ICategory {
   id: string;
   name: string;
-  products?: IProduct[]
-  section: ISection;
+  products: IProduct[]
+  section: ISectionCategory;
+
+}
+
+export interface ICategoryProduct {
+  id: string;
+  name: string;
+  section: ISectionCategory;
 
 }
 
@@ -25,7 +37,6 @@ export interface ICreateCategory {
   name: string;
   sectionId: string;
 }
-
 
 
 
@@ -39,7 +50,7 @@ export interface IProduct {
   images: string;
   stock: number;
   
-  category: ICategory;
+  category: ICategoryProduct;
   
   
 }

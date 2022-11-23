@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectCategories } from "../../../../../redux";
+import { selectCategories, selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 
 
@@ -19,7 +19,7 @@ export const DeleteCategory: FC<Props> = ({isOpen, closeModal }) => {
   const { loading, callEndpoint } = useFetchAndLoad();
 
 
-  const {activeCategory: category} = useSelector(selectCategories);
+  const {activeCategory: category} = useSelector(selectMenu);
   
   const dispatch = useDispatch();
 

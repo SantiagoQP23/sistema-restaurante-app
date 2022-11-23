@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Grid, Button, Typography, useTheme } from '@mui/material';
+import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader } from '@mui/material';
 
 import { toast } from 'react-toastify';
 
@@ -37,6 +37,8 @@ export const ListOrders = () => {
 
     navigate('edit');
 
+    socket?.emit('create-order');
+
     //socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}: INuevoDetalle) => {
     /* socket?.emit('nuevoPedido', {}, ({ ok }: { ok: boolean }) => {
       if (!ok) {
@@ -51,32 +53,44 @@ export const ListOrders = () => {
 
     <>
 
+      <Card>
+        <CardHeader title={'Filtros de pedidos'} />
+        <CardContent>
 
-      <Grid container spacing={1}>
-        <FilterOrders />
-        <Grid item xs={12}>
-          {/* <ContadorPedidos orders={orders} /> */}
+          <Grid container spacing={1}>
+            <FilterOrders />
+            <Grid item xs={12}>
+              {/* <ContadorPedidos orders={orders} /> */}
 
-        </Grid>
-      </Grid>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
 
-      <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
-        <Grid item>
-          <Typography variant="h5">Pedidos: {orders.length}</Typography>
-
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => aniadirPedido()}
-          // disabled={date !== obtenerFechaActual()}
-          >Añadir Pedido</Button>
+      <Card sx={{my: 1}}>
+        <CardContent>
 
 
-        </Grid>
 
-      </Grid>
+          <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
+            <Grid item>
+              <Typography variant="h5">Pedidos: {orders.length}</Typography>
+
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => aniadirPedido()}
+              // disabled={date !== obtenerFechaActual()}
+              >Añadir Pedido</Button>
+
+
+            </Grid>
+
+          </Grid>
+        </CardContent>
+      </Card>
 
       {/* ESTADOS DE PEDIDOS */}
 
@@ -93,6 +107,11 @@ export const ListOrders = () => {
 
       {/* Lista de orders */}
       <Grid mt={2} container spacing={1}>
+        <Grid item xs={12} md={6} lg={4}  >
+
+          <Order />
+
+        </Grid>
         <Grid item xs={12} md={6} lg={4}  >
 
           <Order />

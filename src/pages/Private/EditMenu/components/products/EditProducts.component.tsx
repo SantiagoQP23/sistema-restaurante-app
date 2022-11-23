@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 // Material UI
-import { Typography, Grid, Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material/'
+import { Typography, Grid, Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent, Card, CardContent, CardHeader } from '@mui/material/'
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { MenuContext } from '../../../../../context/MenuContext';
 import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
-import { resetActiveProduct, selectProducts, setActiveProduct } from '../../../../../redux';
+import { resetActiveProduct, selectMenu, selectProducts, setActiveCategory, setActiveProduct, setActiveProducts } from '../../../../../redux';
 import { DeleteProduct } from './DeleteProduct.component';
 import { useModal } from '../../../../../hooks';
 
@@ -25,9 +25,11 @@ export const EditProducts: FC<Props> = () => {
 
   const navigate = useNavigate();
 
-  const { products, activeCategory, categories, changeCategory } = useContext(MenuContext)
 
-  const { activeProduct } = useSelector(selectProducts);
+
+  //const { products, activeCategory, categories, changeCategory } = useContext(MenuContext)
+
+  const { activeProduct, activeCategory, activeSection } = useSelector(selectMenu);
 
   const dispatch = useDispatch()
 
@@ -57,10 +59,18 @@ export const EditProducts: FC<Props> = () => {
     navigate(-1);
   }
 
+  const changeCategory = (categoryId: string) => {
+    const category = activeSection!.categories.find(s => s.id === categoryId);
+    dispatch(setActiveCategory(category!))
+    dispatch(setActiveProducts(category!.products))
+
+
+  }
+
   const onChange = (e: SelectChangeEvent) => {
     changeCategory(e.target.value)
-   }
- 
+  }
+
   useEffect(() => {
 
     if (!activeCategory)
@@ -71,6 +81,7 @@ export const EditProducts: FC<Props> = () => {
 
   return (
     <>
+
 
       <Grid container display='flex' justifyContent='space-between' >
         <Grid item display='flex' alignItems='center'>
@@ -86,23 +97,9 @@ export const EditProducts: FC<Props> = () => {
         </Grid>
 
         <Grid item>
-
-          <InputLabel id='select-categoria'>Categoria</InputLabel>
-          <Select
-            label="select-categoria"
-            margin='dense'
-            fullWidth
-            value={activeCategory?.id}
-            onChange={onChange}
-           
-          >
-            {
-              categories.map(categoria => (
-                <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
-
-              ))
-            }
-          </Select>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => createProduct(null)} >
+            Añadir
+          </Button>
 
 
         </Grid>
@@ -110,29 +107,55 @@ export const EditProducts: FC<Props> = () => {
       </Grid>
 
 
+      <Card sx={{ my: 1 }}>
+        <CardHeader
+
+          title={
+
+            <Box  display='flex' justifyContent='space-between' alignItems='center'>
+
+              <Typography variant='h6'>Total productos: {activeCategory!.products.length}</Typography>
+              <Box>
+                <InputLabel id='select-categoria'>Categoria</InputLabel>
+                <Select
+                  label="select-categoria"
+                  margin='dense'
+                  fullWidth
+                  value={activeCategory?.id}
+                  onChange={onChange}
+
+                >
+                  {
+                    activeSection!.categories.map(categoria => (
+                      <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
+
+                    ))
+                  }
+                </Select>
 
 
-      <Box my={1} display='flex' justifyContent='space-between' alignItems='center'>
+              </Box>
 
-        <Typography variant='h6'>Total productos: {products.length}</Typography>
 
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => createProduct(null)} >
-          Añadir
-        </Button>
+            </Box>
+          }
+        />
 
-      </Box>
 
-      <Box minHeight={"70vh"}>
+
+      </Card>
+
+      <Box >
 
         <Grid container rowSpacing={1} spacing={1}>
           {
-            products.length === 0 && (
+            activeCategory!.products.length === 0 && (
               <Typography align="center" variant='subtitle1'>No se han registrado productos</Typography>
             )
           }
 
           {
-            products.length > 0 && products.map(producto => (
+            activeCategory!.products.length > 0 && activeCategory!.products.map(producto => (
               <Grid key={producto.id!}
                 item xs={12} sm={6} >
 

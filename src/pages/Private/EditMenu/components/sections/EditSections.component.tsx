@@ -26,12 +26,11 @@ export const EditSections = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {activeSection} = useSelector(selectSections);
+  const {activeSection, sections} = useSelector(selectSections);
   const { isOpen, handleOpen, handleClose } = useModal();
 
 
-  const { sections } = useContext(MenuContext);
-
+  
   const createSection = () => {
 
     dispatch(resetActiveSection())
@@ -72,11 +71,11 @@ export const EditSections = () => {
           }
           {
             sections.length > 0 && sections.map(seccion => (
-              <Grid item xs={12} sm={6} lg={4}>
+              <Grid  key={seccion.id} item xs={12} sm={6} lg={4}>
 
                 <Section
                   seccion={seccion}
-                  key={seccion.id}
+                 
                   eliminarSeccion={eliminarSeccion}
                 />
               </Grid>

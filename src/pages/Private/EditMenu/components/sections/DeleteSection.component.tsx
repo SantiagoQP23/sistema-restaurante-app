@@ -46,7 +46,7 @@ export const DeleteSection: FC<Props> = ({isOpen, closeModal }) => {
             Se eliminarán todas las categorías y productos que pertenecen a esta categoría
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{display: 'flex', justifyContent: 'center'}}>
           <Button onClick={closeModal} >Cancelar</Button>
           <LoadingButton loading={loading} variant='contained' color='error' onClick={deleteSection}>
             Aceptar

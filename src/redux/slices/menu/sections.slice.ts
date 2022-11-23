@@ -53,13 +53,13 @@ export const sectionsSlice = createSlice({
 
 
 export const {
-  addSection,
+ /*  addSection,
   deleteSection, 
   loadSections, 
   setActiveSection,
   updateSection, 
   resetActiveSection,
-  resetSections
+  resetSections */
 } = sectionsSlice.actions;
 
 export const selectSections = (state: RootState) => state.sections;

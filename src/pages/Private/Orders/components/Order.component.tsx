@@ -117,9 +117,9 @@ export const Order: FC<Props> = ({ }) => {
 
           </Box>
 
-          <Box display='flex' justifyContent='right'>
+          <Box display='flex' >
 
-            <Typography variant="body2" >{'Santiago Quirumbay'}</Typography>
+            <Typography variant="body2" ><b>Mesero: </b>{'Santiago Quirumbay'}</Typography>
 
 
 

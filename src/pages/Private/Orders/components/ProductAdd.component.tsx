@@ -9,6 +9,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { RemoveCircleOutline, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
 import { IProduct } from '../../../../models';
+import { Product } from '../../Menu/components';
+import { useCounter } from '../hooks';
 
 /* 
 import { Producto } from '../Menu/';
@@ -20,30 +22,31 @@ import { PedidosState, selectPedidos } from '../../reducers';
 interface Props {
   producto: IProduct;
   abrirModal: () => void;
-  setDetalle: (detalle: any) => void;
+  setDetalle?: (detalle: any) => void;
 }
 
-export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle }) => {
-
- /*  const { pedidoActivo } = useSelector(selectPedidos);
-
+export const ProductAdd: FC<Props> = ({ producto, abrirModal, setDetalle }) => {
   const { state: counter, increment, decrement } = useCounter(1);
 
-  const [subtotal, setSubtotal] = useState(counter * producto.precio);
+  const [subtotal, setSubtotal] = useState(counter * producto.price);
+ /* 
+  const { pedidoActivo } = useSelector(selectPedidos);
 
 
-  useEffect(() => {
-    setSubtotal(counter * producto.precio);
 
-  }, [counter]) */
 
+  */
+ 
+ useEffect(() => {
+   setSubtotal(counter * producto.price);
+
+ }, [counter]) 
 
   return (
     <>
 
-{/* 
-      <Producto key={producto.idProducto} producto={producto} />
 
+      <Product  product={producto} />
 
       <Card>
 
@@ -70,16 +73,9 @@ export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle })
               disabled={counter <= 0}
               color='primary'
               onClick={() => {
-                setDetalle({
-                  idPedido: pedidoActivo!.idPedido,
-                  cantidad: counter,
-                  descripcion: '',
-                  subtotal,
-                  producto,
-                })
                 abrirModal();
               }}
-            >
+              >
               <ShoppingCartIcon />
             </IconButton>
           </Box>
@@ -88,8 +84,16 @@ export const DetalleProducto: FC<Props> = ({ producto, abrirModal, setDetalle })
 
 
 
-      </Card> */}
+      </Card>
 
     </>
   )
 }
+
+              /* setDetalle({
+                idPedido: pedidoActivo!.idPedido,
+                cantidad: counter,
+                descripcion: '',
+                subtotal,
+                producto,
+              }) */

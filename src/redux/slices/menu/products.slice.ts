@@ -54,13 +54,14 @@ export const productsSlice = createSlice({
 });
 
 export const {
+  /* 
   addProduct, 
   deleteProduct, 
   loadProducts,
   updateProduct,
   setActiveProduct,
   resetActiveProduct,
-  resetProducts
+  resetProducts */
 } = productsSlice.actions;
 
 export const selectProducts = (state: RootState) => state.products;

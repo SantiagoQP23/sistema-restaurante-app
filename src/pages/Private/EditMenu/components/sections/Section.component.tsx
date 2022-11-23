@@ -6,7 +6,7 @@ import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, To
 import { EditOutlined, DeleteOutlined } from '@mui/icons-material';
 import { ISection } from '../../../../../models';
 
-import { setActiveSection } from '../../../../../redux';
+import { setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -29,6 +29,24 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
   const editarSeccion = () => {
     dispatch(setActiveSection(seccion));
+
+    dispatch(setActiveCategories(seccion!.categories))
+
+    if(seccion!.categories.length > 0){
+      dispatch(setActiveCategory(seccion!.categories[0]))
+  
+      dispatch(setActiveProducts(seccion!.categories[0].products))
+      
+    }else {
+      
+      dispatch(setActiveProducts([]))
+    }
+
+
+
+
+
+
     navigate(`seccion`);
   }
 
@@ -39,6 +57,8 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
       <Card >
         <CardContent>
           <Typography variant="h6" color="white">{seccion.name}</Typography>
+          <Typography variant="subtitle1" color="orange">Categorias: {seccion.categories.length}</Typography>
+
         </CardContent>
 
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>

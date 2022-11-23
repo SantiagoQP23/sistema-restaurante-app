@@ -17,7 +17,7 @@ import { ArrowBack, AttachMoney } from '@mui/icons-material';
 import { Controller, useForm } from 'react-hook-form';
 
 
-import { addProduct, resetActiveProduct, selectCategories, selectProducts, updateProduct } from '../../../../../redux';
+import {  resetActiveProduct, selectCategories, selectMenu, selectProducts, setActiveProduct } from '../../../../../redux';
 import { ICreateProduct, IProduct } from '../../../../../models/menu.model';
 import { LoadingButton } from '@mui/lab';
 import { BtnCancel } from '../../../components';
@@ -28,6 +28,8 @@ import {
 } from '../../services/sections.service';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../../../hooks';
+import { addProduct, updateProduct } from '../../../../../redux/slices/menu/menu.thunks';
 
 
 
@@ -93,14 +95,13 @@ const ButtonUploadWrapper = styled(Box)(
 export const EditProduct: FC<Props> = ({ }) => {
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
 
-  const { activeCategory, categories } = useSelector(selectCategories);
-  const { activeProduct } = useSelector(selectProducts);
+  const { activeProduct, activeCategory, activeSection } = useSelector(selectMenu);
 
   let product: ICreateProduct;
 
@@ -115,7 +116,7 @@ export const EditProduct: FC<Props> = ({ }) => {
 
   //  activeProduct ? { ...activeProduct, categoryId: activeProduct.category.id } : initialForm(activeCategory!.id!);
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<ICreateProduct>({
+  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<ICreateProduct>({
     defaultValues: product
   });
 
@@ -130,6 +131,7 @@ export const EditProduct: FC<Props> = ({ }) => {
           const { data } = resp;
           console.log(data.product);
           dispatch(updateProduct(data.product))
+          dispatch(setActiveProduct({...activeProduct, ...data.product}))
           enqueueSnackbar('El producto ha sido actualizada', { variant: 'success' })
 
         })
@@ -147,6 +149,7 @@ export const EditProduct: FC<Props> = ({ }) => {
           console.log(data.product);
           dispatch(addProduct(data.product))
           enqueueSnackbar('El producto ha sido añadido', { variant: 'success' })
+          reset()
 
         })
         .catch((err) => {
@@ -314,7 +317,7 @@ export const EditProduct: FC<Props> = ({ }) => {
                       error={!!errors.categoryId}
                     >
                       {
-                        categories.map(categoria => (
+                        activeSection!.categories.map(categoria => (
                           <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
 
                         ))

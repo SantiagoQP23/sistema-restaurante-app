@@ -4,7 +4,7 @@ import { Grid, TextField, Button, Typography, CircularProgress } from '@mui/mate
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICreateSection, ISection } from '../../../../../models';
-import { resetActiveSection, selectSections, updateSection, addSection, setActiveSection } from '../../../../../redux';
+import { resetActiveSection, selectSections, updateSection, addSection, setActiveSection, selectMenu } from '../../../../../redux';
 
 import {
   createSection,
@@ -29,20 +29,20 @@ export const EditSection = () => {
 
   const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
 
-  const { activeSection } = useSelector(selectSections);
+  const { activeSection } = useSelector(selectMenu);
 
   let section: ICreateSection;
 
   if (activeSection) {
 
-    const { id, ...restSection } = activeSection!;
+    const { id, categories, ...restSection } = activeSection!;
     section = restSection;
 
   } else { section = { name: '' } }
 
 
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ICreateSection>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreateSection>({
     defaultValues: section,
 
   })
@@ -69,7 +69,7 @@ export const EditSection = () => {
 
       const section = { name: 'lasjdlfjasl', id: 'ajlfdñ' } as ISection;
       dispatch(addSection(section))
-      dispatch(setActiveSection(section))
+     reset();
 
       /* await callEndpoint(createSection( form))
       .then((resp) =>{

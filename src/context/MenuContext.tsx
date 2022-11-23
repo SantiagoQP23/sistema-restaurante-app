@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { resetActiveCategory, selectCategories, selectProducts, selectSections, setActiveCategory, setActiveSection } from '../redux/slices/menu';
 import { useAppSelector } from '../hooks';
 import { useAppDispatch } from '../hooks/useRedux';
+import { useSelector } from 'react-redux';
+import { selectMenu } from '../redux/slices/menu/menu.slice';
 
 
 
@@ -39,30 +41,21 @@ export const MenuProvider: FC<Props> = ({ children }) => {
 
   const dispatch = useAppDispatch();
 
-
-
-
-
-
-  // Cargar menu
-  /*   const [menu, setMenu] = useState<IMenuState>({ idSection: '', idCategory: '' });
-  
-    const { idCategory, idSection } = menu; */
-
   const [categoriasSeccion, setCategoriasSeccion] = useState<ICategory[]>([]);
 
   const [productosCategoria, setProductosCategoria] = useState<IProduct[]>([]);
 
-  const { sections, activeSection } = useAppSelector((selectSections));
+  const { sections, activeSection, activeCategory} = useSelector(selectMenu);
 
-  const { categories, activeCategory } = useAppSelector((selectCategories));
+  //const { sections, activeSection } = useAppSelector((selectSections));
 
-  const { products, activeProduct } = useAppSelector((selectProducts));
+  //const { categories, activeCategory } = useAppSelector((selectCategories));
+
+  //const { products, activeProduct } = useAppSelector((selectProducts));
 
   const changeSection = (idSection: string) => {
 
     const section = sections.find(section => section.id === idSection);
-
 
     dispatch(setActiveSection(section!));
     //setMenu({ ...menu, idSection });
@@ -70,46 +63,41 @@ export const MenuProvider: FC<Props> = ({ children }) => {
 
   const changeCategory = (idCategory: string) => {
 
-    const category = categories.find(cate => cate.id === idCategory);
+    const category = categoriasSeccion.find(cate => cate.id === idCategory);
 
-    dispatch(setActiveCategory(category!))
+   // dispatch(setActiveCategory(category!))
     //setMenu({ ...menu, idCategory });
   }
 
+ 
   const filterCategories = () => {
-    const categoriesActive = categories.filter(category => category.section.id === activeSection!.id);
+    
+    if(activeSection) {
+      setCategoriasSeccion(activeSection.categories!);
 
-    setCategoriasSeccion(categoriesActive);
-  }
-
-  const cargarCategoriasBySeccion = () => {
-
-    if (activeSection) {
-
-      filterCategories()
-
-    }  
+      if(categoriasSeccion.length > 0) changeCategory(categoriasSeccion[0].id);
+    }
 
 
   }
 
   // Funciona
   const cargarProductosByIdCategoria = (idCategory?: string) => {
-
+/* 
     if (categories.length > 0 && activeCategory) {
 
       let productosCategoria = products.filter(product => product.category.id === activeCategory!.id);
 
-      setProductosCategoria(productosCategoria);
+      setProductosCategoria(activeCategory.products!);
 
     }else {
       setProductosCategoria([])
-    }
+    } */
 
 
   }
 
-  useEffect(() => {
+/*   useEffect(() => {
     
     if (categoriasSeccion.length > 0) {
       changeCategory(categoriasSeccion[0].id)
@@ -117,22 +105,22 @@ export const MenuProvider: FC<Props> = ({ children }) => {
       dispatch(resetActiveCategory())
     }
 
-  }, [categoriasSeccion])
-
-  useEffect(() => {
-    cargarCategoriasBySeccion();
-
-  }, [activeSection])
+  }, [categoriasSeccion]) */
 
   useEffect(() => {
     filterCategories();
-  }, [categories])
+
+  }, [activeSection])
+
+ /*  useEffect(() => {
+    filterCategories();
+  }, [categories]) */
 
   // Funciona
   useEffect(() => {
     cargarProductosByIdCategoria()
 
-  }, [activeCategory, products])
+  }, [activeCategory])
 
 
   useEffect(() => {

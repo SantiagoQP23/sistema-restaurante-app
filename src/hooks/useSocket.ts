@@ -1,5 +1,5 @@
 
-import { io, Socket } from "socket.io-client";
+import { io, Manager, Socket } from "socket.io-client";
 import { useEffect, useState, useCallback } from "react";
 
 
@@ -12,8 +12,22 @@ export const useSocket = (serverPath: string) => {
 
 
   const conectarSocket = useCallback( () => {
+
+    const token = localStorage.getItem('token') || '';
+
+    const manager = new Manager(serverPath, {
+      extraHeaders: {
+        authentication: token
+      }
+    });
+
+    const socketTemp = manager.socket('/');
+
+    setSocket(socketTemp);
+    
+
+
 /* 
-    const token = localStorage.getItem('token');
 
      const socketTemp = io(serverPath, {
       transports: ['websocket'],
@@ -31,7 +45,7 @@ export const useSocket = (serverPath: string) => {
 
   const desconectarSocket = useCallback( () => {
 
-    //socket?.disconnect();
+    socket?.disconnect();
   }, [socket]);
 
 

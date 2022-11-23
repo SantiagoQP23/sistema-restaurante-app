@@ -17,7 +17,10 @@ import {
   MenuItem,
   Select,
   CircularProgress,
-  CardHeader
+  CardHeader,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DoneOutline, DeleteOutline } from '@mui/icons-material';
@@ -32,6 +35,12 @@ import { getClient } from '../../Clients/services';
 import { useFetchAndLoad } from '../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { Order, OrderDetail } from '../components';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
+import { Label } from '../../../../components/ui';
+
+
 /* 
 import { SocketContext } from '../context/SocketContext';
 
@@ -128,76 +137,44 @@ export const EditOrder = () => {
 
   return (
     <>
-      <Grid container display='flex' justifyContent='space-between'>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h5'>{activeOrder ? `Pedido ${activeOrder.num}` : "Añadir pedido"} </Typography>
-
-        </Grid>
-
-      </Grid>
-
-
       <Card>
+        <CardContent>
+
+          <Grid container display='flex' justifyContent='space-between'>
+            <Grid item display='flex' justifyContent='left' alignItems='center'>
+              <Button onClick={() => navigate(-1)}>
+                <ArrowBack />
+              </Button>
+              <Typography variant='h5'>{activeOrder ? `Pedido ${activeOrder.num}` : "Añadir pedido"} </Typography>
+
+            </Grid>
+
+          </Grid>
+        </CardContent>
+      </Card>
+
+
+
+
+
+      {/*   <Card>
         <CardHeader title={'Datos del pedido'} />
         <CardContent>
 
           <Grid container spacing={1} >
             <Grid item xs={6} md={2} lg={3} >
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Mesa del pedido"
-                >
 
-                  <MenuItem key={10} value={10}>Mesa 1</MenuItem>
-                  <MenuItem key={20} value={20}>Mesa 2</MenuItem>
-                  <MenuItem key={30} value={30}>Mesa 3</MenuItem>
-
-                </Select>
-              </FormControl>
             </Grid>
 
             <Grid item>
 
-              <Paper
-                component="form"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-              >
-
-                <InputBase
-                  type='number'
-                  onChange={handleChange}
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="Número de cédula"
-                  inputProps={{ 'aria-label': 'Buscar cliente' }}
-                />
-                <IconButton
-                  type="button"
-                  sx={{ p: '10px' }}
-                  aria-label="search"
-                  onClick={searchClient}
-                >
-                  {
-                    loading
-                      ? <CircularProgress size={20} />
-                      : <SearchIcon />
-                  }
-                </IconButton>
-
-
-              </Paper>
+             
             </Grid>
           </Grid>
         </CardContent>
-      </Card>
+      </Card> */}
 
-      <Box display='flex' justifyContent='right' pb={2}>
+      {/*   <Box display='flex' justifyContent='right' pb={2}>
 
         <Box>
           <IconButton
@@ -216,11 +193,148 @@ export const EditOrder = () => {
 
         </Box>
 
-      </Box>
+      </Box> */}
 
       <Grid container spacing={1}>
-        <Grid item xs={12} sm={6}>
-          <Order />
+        <Grid container spacing={1} item xs={12} sm={6}>
+
+          <Grid item xs={6}>
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Hora</Typography>
+                <Typography variant='h4'>13:34</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={6}>
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Número de pedido</Typography>
+                <Typography variant='h4'>234</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={6}>
+
+            <Card>
+
+              <CardContent>
+                <Typography variant='h6'>Mesa</Typography>
+
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography variant='h3'>3</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={10}
+                        label="Mesa del pedido"
+                      >
+
+                        <MenuItem key={10} value={10}>Mesa 1</MenuItem>
+                        <MenuItem key={20} value={20}>Mesa 2</MenuItem>
+                        <MenuItem key={30} value={30}>Mesa 3</MenuItem>
+
+                      </Select>
+                    </FormControl>
+
+                  </AccordionDetails>
+                </Accordion>
+
+
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={6}>
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Estado</Typography>
+                <Label color='success' >Activo</Label>
+              </CardContent>
+            </Card>
+          </Grid>
+
+
+          <Grid item xs={12}>
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Cliente</Typography>
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography variant='h5'>Lionel Messi</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Paper
+                      component="form"
+                      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+                    >
+
+                      <InputBase
+                        type='number'
+                        onChange={handleChange}
+                        sx={{ ml: 1, flex: 1 }}
+                        placeholder="Número de cédula"
+                        inputProps={{ 'aria-label': 'Buscar cliente' }}
+                      />
+                      <IconButton
+                        type="button"
+                        sx={{ p: '10px' }}
+                        aria-label="search"
+                        onClick={searchClient}
+                      >
+                        {
+                          loading
+                            ? <CircularProgress size={20} />
+                            : <SearchIcon />
+                        }
+                      </IconButton>
+
+
+                    </Paper>
+
+
+                  </AccordionDetails>
+                </Accordion>
+              </CardContent>
+            </Card>
+          </Grid>
+
+
+
+
+          <Grid item xs={12}>
+
+            <Card>
+              <CardContent>
+                <Typography variant='h6'>Mesero</Typography>
+                <Typography variant='h5'>Santiago Quirumbay</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+
+
         </Grid>
 
         <Grid item xs={12} sm={6}>
