@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 
 import { useDispatch } from 'react-redux'
@@ -9,11 +9,13 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline } from '@mui/icons-material';
-import { IOrderDetail } from '../../../../models';
+import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { ICreateOrderDetail, IOrderDetail } from '../../../../models';
 import { useCounter } from '../hooks';
 
 import { Label } from '../../../../components/ui';
+import { OrderContext } from '../context/Order.context';
+import { sharingInformationService } from '../services/sharing-information.service';
 
 /* import { useCounter } from '../../hooks/useCounter';
 
@@ -21,23 +23,41 @@ import { SocketContext } from '../../context/SocketContext';
 import { IDetallePedido, INuevoDetallePedido } from '../../interfaces';
 import { ICallbackSocket } from '../../interfaces/sockets';
 import { detalleDeleted, detalleSetActive, detalleUpdatedCantidad, pedidoDetalleActivo, pedidoDetalleCantidad, pedidoDetalleDeleted, pedidoUpdateTotal } from '../../reducers';
+import { OrderContext } from '../context/Order.context';
  */
 interface Props {
-  detalle?: IOrderDetail;
+  detalle: ICreateOrderDetail;
 }
 
-export const OrderDetail: FC<Props> = ({ detalle }) => {
+export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
-  const { state: counter, increment, decrement } = useCounter(2);
+  const { state: counter, increment, decrement } = useCounter(detalle.quantity);
 
-  const deleteDetail = () => {
+  const { updateDetail, deleteDetail } = useContext(OrderContext);
+
+  const update = () => {
+    updateDetail({ ...detalle, quantity: counter })
+
+  }
+
+  const deleteDet = () => {
+
+    deleteDetail(detalle.product.name);
+
+  }
+
+  const editDescription = () => {
+      
+    sharingInformationService.setSubject(true, detalle);
 
   }
 
 
-  const updateDetail = () => {
+  useEffect(() => {
+    update();
 
-  }
+  }, [counter])
+
 
 
   /*  const { idPedido } = useParams();
@@ -131,49 +151,44 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
 
       <Card>
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
             <Typography
               variant="body1"
               color="initial"
-              
-              >
 
-              {'Filete de pescado'}
+            >
+
+              {detalle.product.name}
             </Typography>
 
             {/* 
             */}
-            {
-              true
-                ? (
-                  <Box>
-                    <Label color='success'>Pendiente</Label>
-                    <IconButton
-                      aria-label="Eliminar detalle"
-                      onClick={deleteDetail}
-                      disabled={false}
-                      color='error'
-                    >
-                      <DeleteOutline />
-                    </IconButton>
-                  </Box>
-                )
 
-                : <Label color='warning'>Entregado</Label>
-
-            }
+            <IconButton
+              aria-label="Eliminar detalle"
+              onClick={deleteDet}
+              disabled={false}
+              color='error'
+            >
+              <DeleteOutline />
+            </IconButton>
 
 
           </Box>
-          <Typography variant="body2" color="orange">
-            {'Sin arroz'}
+          <Typography variant="body2" color={detalle.description ? "orange" : "green"}>
+            {detalle.description ? detalle.description : "Normal"}
+            <IconButton
+              onClick={editDescription}
+            >
+              <EditOutlined />
+            </IconButton>
           </Typography>
 
           <Box sx={{ display: "flex" }}>
             <Box sx={{ flexGrow: 1 }} mt={2}>
               <Typography variant="body1" color="initial">
-                $ {4}
+                $ {detalle.product.price}
 
               </Typography>
 
@@ -183,31 +198,37 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
               <Box display='flex' justifyContent='space-between' alignItems='center'>
 
                 <IconButton
-                  onClick={decrement}
+                  onClick={ () => {
+                    decrement()
+                
+                  }}
                 >
                   <RemoveCircleOutline />
                 </IconButton>
 
                 <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
                 <IconButton
-                  onClick={increment}
+                  onClick={ () => {
+                    increment() 
+             
+                  }}
                 >
                   <AddCircleOutline />
                 </IconButton>
-                <IconButton
-                  disabled={!counter || counter === 3}
+                {/* <IconButton
+                  disabled={!counter}
                   color='primary'
-                  onClick={() => updateDetail()}
+                  onClick={() => update()}
                 >
                   <SaveOutlined />
-                </IconButton>
+                </IconButton> */}
               </Box>
 
 
             </Box>
           </Box>
 
-          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {8}</Typography>
+          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detalle.product.price * counter}</Typography>
 
           {/* 
 

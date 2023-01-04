@@ -16,9 +16,6 @@ export interface IAppStore {
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
-    sections: sectionsSlice.reducer,
-    categories: categoriesSlice.reducer,
-    products: productsSlice.reducer,
     orders: ordersSlice.reducer,
     details: detailsSlice.reducer,
     clients: clientsSlice.reducer,

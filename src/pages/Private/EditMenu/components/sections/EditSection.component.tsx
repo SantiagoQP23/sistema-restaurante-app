@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Grid, TextField, Button, Typography, CircularProgress } from '@mui/material/';
+import { Grid, TextField, Button, Typography, CircularProgress, Card } from '@mui/material/';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICreateSection, ISection } from '../../../../../models';
@@ -16,6 +16,7 @@ import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { ArrowBack } from '@mui/icons-material';
+import { CardContent, CardHeader } from '@mui/material';
 
 
 
@@ -60,7 +61,7 @@ export const EditSection = () => {
 
         })
         .catch((err) => {
-          
+
           enqueueSnackbar('Ya existe', { variant: 'error' })
 
         });
@@ -69,7 +70,7 @@ export const EditSection = () => {
 
       const section = { name: 'lasjdlfjasl', id: 'ajlfdñ' } as ISection;
       dispatch(addSection(section))
-     reset();
+      reset();
 
       /* await callEndpoint(createSection( form))
       .then((resp) =>{
@@ -119,29 +120,32 @@ export const EditSection = () => {
         </Grid>
 
       </Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
 
+      <Card>
+        <CardHeader title="Datos de la sección" />
+        <CardContent sx={{my: 0, py: 0}}>
 
+          <form onSubmit={handleSubmit(onSubmit)}>
 
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Nombre de la sección"
-          type="text"
-          fullWidth
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Nombre de la sección"
+              type="text"
+              fullWidth
 
-          {
-          ...register('name', {
-            required: 'Este campo es requerido',
-            minLength: { value: 2, message: 'Minimo 2 caracteres' }
-          })
-          }
+              {
+              ...register('name', {
+                required: 'Este campo es requerido',
+                minLength: { value: 2, message: 'Minimo 2 caracteres' }
+              })
+              }
 
-          error={!!errors.name}
-          helperText={<Typography color="red">{errors.name?.message}</Typography>}
-        />
+              error={!!errors.name}
+              helperText={<Typography color="red">{errors.name?.message}</Typography>}
+            />
 
-        {/*  <TextField
+            {/*  <TextField
           id="descripcion-seccion"
           label="Descripcion de la sección"
           margin="dense"
@@ -152,27 +156,29 @@ export const EditSection = () => {
           disabled
         /> */}
 
-        <LoadingButton
-          variant='outlined'
-          type='submit'
-          loading={loading}
-        >
-          {activeSection ? `Editar` : "Crear"}
-        </LoadingButton>
+            <LoadingButton
+              variant='outlined'
+              type='submit'
+              loading={loading}
+            >
+              {activeSection ? `Editar` : "Crear"}
+            </LoadingButton>
 
-        {
-          loading && <Button
-            color='error'
-            variant='outlined'
-            onClick={() => cancelEndpoint()}
-          >
-            Cancelar
-          </Button>
-        }
+            {
+              loading && <Button
+                color='error'
+                variant='outlined'
+                onClick={() => cancelEndpoint()}
+              >
+                Cancelar
+              </Button>
+            }
 
 
-      </form>
+          </form>
 
+        </CardContent>
+      </Card>
     </>
   )
 }

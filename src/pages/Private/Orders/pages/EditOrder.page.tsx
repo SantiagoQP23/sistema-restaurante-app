@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -20,10 +20,11 @@ import {
   CardHeader,
   Accordion,
   AccordionDetails,
-  AccordionSummary
+  AccordionSummary,
+  Switch
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { DoneOutline, DeleteOutline } from '@mui/icons-material';
+import { DoneOutline, DeleteOutline, Done } from '@mui/icons-material';
 
 
 import SaveIcon from '@mui/icons-material/Save';
@@ -38,7 +39,8 @@ import { Order, OrderDetail } from '../components';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import { Label } from '../../../../components/ui';
+import { InputSearch, Label } from '../../../../components/ui';
+import { OrderDetails } from '../components/OrderDetails.component';
 
 
 /* 
@@ -51,6 +53,137 @@ import { useAppDispatch } from '../hooks/useRedux';
 import { IDetallePedido } from '../interfaces/pedidos';
 import { FormControl } from '@mui/material';
  */
+
+
+
+const DataClient: FC = () => {
+
+
+  const { loading, callEndpoint } = useFetchAndLoad();
+
+  const [cedula, setCedula] = useState<string>('');
+
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCedula(event.target.value);
+  };
+
+
+  const searchClient = async () => {
+    if (cedula.length === 10) {
+      await callEndpoint(getClient(cedula))
+        .then((resp) => {
+          const { data } = resp;
+          console.log(data);
+        })
+        .catch((err) => {
+          //nqueueSnackbar('No se encontró al cliente', { variant: 'error' })
+
+        })
+    }
+
+  }
+
+
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <Typography variant='body1'>Cliente</Typography>
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              sx={{ p: 0, m: 0 }}
+            >
+              <Typography variant='body2'>Lionel Messi</Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ p: 0, m: 0 }}>
+              <InputSearch
+                handleChange={handleChange}
+                placeholder='Número de cédula'
+                search={searchClient}
+              />
+
+            </AccordionDetails>
+          </Accordion>
+        </CardContent>
+      </Card>
+
+    </>
+  )
+}
+
+
+const TableOrder: FC = () => {
+
+
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <Accordion sx={{ p: 0, m: 0 }}>
+            <AccordionSummary
+              expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              sx={{ p: 0, m: 0 }}
+            >
+              <Typography variant='body1'>Mesa <b>3</b></Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ p: 0, m: 0 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={10}
+                  label="Mesa del pedido"
+                >
+
+                  <MenuItem key={10} value={10}>Mesa 1</MenuItem>
+                  <MenuItem key={20} value={20}>Mesa 2</MenuItem>
+                  <MenuItem key={30} value={30}>Mesa 3</MenuItem>
+
+                </Select>
+              </FormControl>
+
+            </AccordionDetails>
+          </Accordion>
+
+        </CardContent>
+      </Card>
+
+
+    </>
+  )
+}
+
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+
+const StatusOrder: FC = () => {
+
+
+  return (
+    <>
+      <Card>
+        <CardContent>
+
+          <Typography variant='body1'>Estado <Label color='success' >Activo</Label></Typography>
+          <Switch {...label} defaultChecked />
+
+
+        </CardContent>
+      </Card>
+    </>
+  )
+
+
+}
+
 
 export const EditOrder = () => {
 
@@ -112,46 +245,31 @@ export const EditOrder = () => {
    } */
 
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCedula(event.target.value);
-  };
-
-
-  const searchClient = async () => {
-    if (cedula.length === 10) {
-      await callEndpoint(getClient(cedula))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data);
-        })
-        .catch((err) => {
-          enqueueSnackbar('No se encontró al cliente', { variant: 'error' })
-
-        })
-    }
-
-  }
-
 
 
 
   return (
     <>
-      <Card>
-        <CardContent>
 
-          <Grid container display='flex' justifyContent='space-between'>
-            <Grid item display='flex' justifyContent='left' alignItems='center'>
-              <Button onClick={() => navigate(-1)}>
+
+      <Grid container display='flex' justifyContent='space-between'>
+        <Typography variant='h6'>{activeOrder ? `Pedido ${activeOrder.num}` : "Añadir pedido"} </Typography>
+        {/*   <Button onClick={() => navigate(-1)}>
                 <ArrowBack />
-              </Button>
-              <Typography variant='h5'>{activeOrder ? `Pedido ${activeOrder.num}` : "Añadir pedido"} </Typography>
+              </Button> */}
 
-            </Grid>
+        <Button variant='contained' onClick={() => navigate(-1)}>
+          <Done />
+          Finalizar Edición
+        </Button>
 
-          </Grid>
-        </CardContent>
-      </Card>
+
+
+      </Grid>
+
+
+
+
 
 
 
@@ -174,150 +292,46 @@ export const EditOrder = () => {
         </CardContent>
       </Card> */}
 
-      {/*   <Box display='flex' justifyContent='right' pb={2}>
 
-        <Box>
-          <IconButton
-            color='error'
-          >
-            <DeleteOutline />
-          </IconButton>
-          <IconButton
-
-            color='success'
-          >
-            <DoneOutline />
-          </IconButton>
-
-
-
-        </Box>
-
-      </Box> */}
 
       <Grid container spacing={1}>
         <Grid container spacing={1} item xs={12} sm={6}>
 
           <Grid item xs={6}>
-
             <Card>
               <CardContent>
-                <Typography variant='h6'>Hora</Typography>
-                <Typography variant='h4'>13:34</Typography>
+                <Typography variant='body2'>Número de pedido</Typography>
+                <Typography variant='body1'>234</Typography>
               </CardContent>
             </Card>
+
+          </Grid>
+
+          <Grid item xs={6}>
+            <Card>
+              <CardContent>
+                <Typography variant='body1'>Hora  </Typography>
+                <Typography variant='body2'>13:34</Typography>
+              </CardContent>
+            </Card>
+
+
           </Grid>
 
           <Grid item xs={6}>
 
-            <Card>
-              <CardContent>
-                <Typography variant='h6'>Número de pedido</Typography>
-                <Typography variant='h4'>234</Typography>
-              </CardContent>
-            </Card>
+            <TableOrder />
           </Grid>
 
           <Grid item xs={6}>
+            <StatusOrder />
 
-            <Card>
-
-              <CardContent>
-                <Typography variant='h6'>Mesa</Typography>
-
-
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography variant='h3'>3</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={10}
-                        label="Mesa del pedido"
-                      >
-
-                        <MenuItem key={10} value={10}>Mesa 1</MenuItem>
-                        <MenuItem key={20} value={20}>Mesa 2</MenuItem>
-                        <MenuItem key={30} value={30}>Mesa 3</MenuItem>
-
-                      </Select>
-                    </FormControl>
-
-                  </AccordionDetails>
-                </Accordion>
-
-
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={6}>
-
-            <Card>
-              <CardContent>
-                <Typography variant='h6'>Estado</Typography>
-                <Label color='success' >Activo</Label>
-              </CardContent>
-            </Card>
           </Grid>
 
 
           <Grid item xs={12}>
 
-            <Card>
-              <CardContent>
-                <Typography variant='h6'>Cliente</Typography>
-
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography variant='h5'>Lionel Messi</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Paper
-                      component="form"
-                      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-                    >
-
-                      <InputBase
-                        type='number'
-                        onChange={handleChange}
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Número de cédula"
-                        inputProps={{ 'aria-label': 'Buscar cliente' }}
-                      />
-                      <IconButton
-                        type="button"
-                        sx={{ p: '10px' }}
-                        aria-label="search"
-                        onClick={searchClient}
-                      >
-                        {
-                          loading
-                            ? <CircularProgress size={20} />
-                            : <SearchIcon />
-                        }
-                      </IconButton>
-
-
-                    </Paper>
-
-
-                  </AccordionDetails>
-                </Accordion>
-              </CardContent>
-            </Card>
+            <DataClient />
           </Grid>
 
 
@@ -327,71 +341,44 @@ export const EditOrder = () => {
 
             <Card>
               <CardContent>
-                <Typography variant='h6'>Mesero</Typography>
-                <Typography variant='h5'>Santiago Quirumbay</Typography>
+
+                <Typography variant='body1'>Mesero: <b>Santiago Quirumbay</b></Typography>
               </CardContent>
             </Card>
           </Grid>
+
+          <Button
+          variant='contained'
+        >
+          Comprobante
+        </Button>
+
+        <Button
+          variant='contained'
+        >
+          Factura
+        </Button>
+
+        <Button
+          variant='contained'
+          color='error'
+        >
+          <DeleteOutline />
+
+          Eliminar
+        </Button>
+
 
 
 
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Card>
-            <CardHeader title={
-              <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-                <Typography variant="h6" fontWeight='bold'>Detalles de pedido</Typography>
-
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => navigate('products')}
-
-                >
-
-                  <AddIcon />
-                  Añadir
-                </Button>
-
-              </Box>
-            } />
-            <CardContent >
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-                <Grid item xs={12}>
-                  <OrderDetail />
-
-                </Grid>
-
-              </Grid>
-            </CardContent>
-          </Card>
+          <OrderDetails />
         </Grid>
 
+     
       </Grid>
-
-
 
       {/* 
       <Container maxWidth="lg">

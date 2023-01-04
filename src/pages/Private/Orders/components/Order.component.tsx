@@ -82,6 +82,8 @@ export const Order: FC<Props> = ({ }) => {
    }
   */
 
+   
+
   return (
 
     <>
@@ -92,7 +94,7 @@ export const Order: FC<Props> = ({ }) => {
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant="h6" fontWeight='bold'>Mesa 1</Typography>
+              <Typography variant="body1" fontWeight='bold'>Mesa 1</Typography>
 
               {
                 true
@@ -101,18 +103,29 @@ export const Order: FC<Props> = ({ }) => {
               }
 
             </Box>}
-          subheader={formatDistance(new Date(), new Date(), {
-            addSuffix: true,
-            includeSeconds: true,
-            locale: es
 
-          })} />
+
+          subheader={
+            <Typography variant="subtitle1">
+              {
+
+
+                formatDistance(new Date(), new Date(), {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es
+                })
+              }
+            </Typography>
+          }
+
+        />
         <Divider />
         <CardContent>
 
           <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-            <Typography variant="h6"  ><b>Cliente: </b>{'Lionel Andres Messi'}</Typography>
+            <Typography variant="body1"  ><b>Cliente: </b>{'Lionel Andres Messi'}</Typography>
 
 
           </Box>
@@ -140,6 +153,7 @@ export const Order: FC<Props> = ({ }) => {
             <IconButton
 
               color='primary'
+              onClick={() => {navigate('edit')}}
             >
               <EditOutlined />
             </IconButton>
@@ -152,7 +166,7 @@ export const Order: FC<Props> = ({ }) => {
             </IconButton>
           </Box>
 
-          <Typography variant="h5" >$ {20.00}</Typography>
+          <Typography variant="body1" >$ {20.00}</Typography>
 
         </CardActions>
       </Card>

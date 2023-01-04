@@ -17,7 +17,7 @@ export const Product: FC<Props> = ({ product }) => {
       <Card sx={{ display: 'flex' }} >
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: 151, display: 'none' }}
           image="/static/images/products/no-image.png"
           alt="Product"
         />
@@ -29,7 +29,7 @@ export const Product: FC<Props> = ({ product }) => {
 
 
               <Grid item xs={12}>
-                <Typography variant="h3" >{product.name}</Typography>
+                <Typography variant="body1" color='InfoText' >{product.name}</Typography>
 
               </Grid>
               <Grid item xs={12}>
@@ -41,7 +41,7 @@ export const Product: FC<Props> = ({ product }) => {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="h5" color='orangered' >$ {product.price}</Typography>
+                <Typography variant="body2" color='orangered' textAlign='right'>$ {product.price}</Typography>
 
               </Grid>
 

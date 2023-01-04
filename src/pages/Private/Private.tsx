@@ -10,7 +10,7 @@ import { ISection, PrivateRoutes } from "../../models"
 import { getSections, getCategories, getProducts, getMenu } from "../../services"
 
 import { useDispatch } from 'react-redux';
-import { loadSections, loadCategories, loadProducts } from "../../redux"
+import { loadMenu } from "../../redux"
 import { IProduct, ICategory } from '../../models/menu.model';
 import BaseLayout from "./layouts/BaseLayout"
 import { routes } from "./router"
@@ -30,7 +30,7 @@ export const Private = () => {
 
   const getMenuCall = async () => await callEndpoint(getMenu());
 
-  const loadMenuState = (data: ISection[]) => { dispatch(loadSections(data)); }
+  const loadMenuState = (data: ISection[]) => { dispatch(loadMenu(data)); }
 
   useAsync(getMenuCall, loadMenuState, () => {}, [] );
 

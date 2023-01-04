@@ -25,7 +25,7 @@ const initialState: MenuState = {
 };
 
 export const menuSlice = createSlice({
-  name: 'sections',
+  name: 'menu',
   initialState,
   reducers: {
     addSection: (state, action: PayloadAction<ISection>) => {
@@ -45,7 +45,7 @@ export const menuSlice = createSlice({
         p => p.id !== action.payload
       )
     },
-    loadSections: (state, action: PayloadAction<ISection[]>) => {
+    loadMenu: (state, action: PayloadAction<ISection[]>) => {
       state.sections = action.payload
     },
     setActiveCategories: (state, action: PayloadAction<ICategory[]>) => {
@@ -83,7 +83,7 @@ export const menuSlice = createSlice({
 export const {
   addSection,
   deleteSection,
-  loadSections,
+  loadMenu,
   resetActiveCategory,
   resetActiveProduct,
   resetActiveSection,

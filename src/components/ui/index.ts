@@ -1,4 +1,5 @@
 export * from './Copyright';
+export * from './InputSearch';
 export * from './Label';
 export * from './PageTitle';
 export * from './PageTitleWraper';

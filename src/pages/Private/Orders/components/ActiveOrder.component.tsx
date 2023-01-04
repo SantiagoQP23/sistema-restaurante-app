@@ -150,7 +150,7 @@ export const ActiveOrder: FC<Props> = ({ pedido }) => {
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant="h6" fontWeight='bold'>Mesa 1</Typography>
+              <Typography variant="body1" fontWeight='bold'>Mesa 1</Typography>
 
 
               <Label color='success'>

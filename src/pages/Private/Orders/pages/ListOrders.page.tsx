@@ -1,8 +1,10 @@
-import { useContext, useState } from 'react';
+import { FC, useContext, useState, useEffect } from 'react';
+
+import { format } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader } from '@mui/material';
+import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader, Accordion, AccordionSummary, AccordionDetails, ToggleButtonGroup, ToggleButton, Divider } from '@mui/material';
 
 import { toast } from 'react-toastify';
 
@@ -16,6 +18,11 @@ import { Order } from '../components';
 import { FilterOrders } from '../components/FilterOrders';
 import { IOrder } from '../../../../models';
 import { useNavigate } from 'react-router-dom';
+import { ExpandMore } from '@mui/icons-material';
+
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import ViewListIcon from '@mui/icons-material/ViewList';
+
 
 
 interface resp {
@@ -24,9 +31,50 @@ interface resp {
 
 
 
+export const Clock: FC = () => {
+
+  const [date, setDate] = useState(new Date());
+
+
+  function tick() {
+    setDate(new Date());
+  }
+
+
+  useEffect(() => {
+    const timerId = setInterval(tick, 1000);
+
+    return () => {
+      clearInterval(timerId);
+    }
+  }, [])
+
+
+  return (
+    <>
+      <Card>
+        <CardContent>
+          {
+            format(new Date(), 'HH:mm EEEE dd MMMM yyyy')
+          }
+        </CardContent>
+      </Card>
+    </>
+  )
+}
+
+
+
 export const ListOrders = () => {
 
   const { socket } = useContext(SocketContext);
+
+  const [view, setView] = useState('list');
+
+  const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
+    setView(nextView);
+  };
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,7 +83,7 @@ export const ListOrders = () => {
   const aniadirPedido = () => {
     dispatch(resetActiveOrder())
 
-    navigate('edit');
+    navigate('add');
 
     socket?.emit('create-order');
 
@@ -53,44 +101,87 @@ export const ListOrders = () => {
 
     <>
 
-      <Card>
-        <CardHeader title={'Filtros de pedidos'} />
-        <CardContent>
-
-          <Grid container spacing={1}>
-            <FilterOrders />
-            <Grid item xs={12}>
-              {/* <ContadorPedidos orders={orders} /> */}
-
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      <Card sx={{my: 1}}>
+      <Card sx={{ my: 1 }}>
         <CardContent>
 
 
 
           <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
-            <Grid item>
-              <Typography variant="h5">Pedidos: {orders.length}</Typography>
+            <Grid container item spacing={1}>
+              <Grid item>
+                <Clock />
+
+              </Grid>
+
+
+
+              <Grid item>
+
+
+
+                <Card>
+                  <CardContent>
+
+                    <Typography variant="body1">Pedidos: {orders.length}</Typography>
+
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item>
+
+                <Button>Filtrar</Button>
+              </Grid>
+
+
+
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => aniadirPedido()}
+                // disabled={date !== obtenerFechaActual()}
+                >Añadir Pedido</Button>
+
+
+              </Grid>
 
             </Grid>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => aniadirPedido()}
-              // disabled={date !== obtenerFechaActual()}
-              >Añadir Pedido</Button>
 
-
-            </Grid>
 
           </Grid>
         </CardContent>
       </Card>
+      {/* 
+      <Card>
+        <Accordion>
+
+          <CardHeader title={
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography variant='h5'>Filtros de pedidos</Typography>
+            </AccordionSummary>
+          }
+          />
+          <AccordionDetails>
+
+            <CardContent>
+
+              <Grid container spacing={1}>
+                <FilterOrders />
+                <Grid item xs={12}>
+
+                </Grid>
+              </Grid>
+            </CardContent>
+          </AccordionDetails>
+        </Accordion>
+      </Card>
+ */}
+
 
       {/* ESTADOS DE PEDIDOS */}
 
@@ -106,7 +197,26 @@ export const ListOrders = () => {
       }
 
       {/* Lista de orders */}
-      <Grid mt={2} container spacing={1}>
+
+
+      <ToggleButtonGroup
+        orientation="horizontal"
+        value={view}
+        exclusive
+        onChange={handleChange}
+        size='small'
+      >
+        <ToggleButton value="list" aria-label="list">
+          <ViewListIcon />
+        </ToggleButton>
+        <ToggleButton value="module" aria-label="module">
+          <ViewModuleIcon />
+        </ToggleButton>
+
+      </ToggleButtonGroup>
+
+
+      <Grid container spacing={1}>
         <Grid item xs={12} md={6} lg={4}  >
 
           <Order />
@@ -128,14 +238,16 @@ export const ListOrders = () => {
 
         </Grid>
       </Grid>
+
+
       {/* <Grid  mt={2} container spacing={1}>
         {
           orders.length > 0 &&
           orders.map(p => (
             <Order key={p.id} pedido={p} />
-          )
-          )
-        }
+            )
+            )
+          }
       </Grid> */}
 
 

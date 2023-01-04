@@ -16,11 +16,11 @@ import { SocketContext } from '../context/SocketContext';
 import { IPedido } from '../interfaces';
 import { pedidoAddNew, pedidoDeleted } from '../reducers';
  */
-import { pedidoStartLoaded } from '../../../redux';
 import { RoutesWithNotFound } from '../../../helpers';
 import { PageTitleWrapper, PageTitle } from '../../../components/ui';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { OrderProvider } from './context/Order.context';
 
 
 
@@ -98,18 +98,21 @@ export const Orders = () => {
 
 
       <Container maxWidth="lg">
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <OrderProvider>
 
-          <Outlet />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-          {/*  <RoutesWithNotFound >
+            <Outlet />
+
+            {/*  <RoutesWithNotFound >
           <Route index element={<Pedidos />} />
           <Route path="editar/:idPedido" element={<EditarPedido />} />
           <Route path="editar/:idPedido/productos" element={<AniadirProductos />} />
           <Route path='pendientes' element={<PedidosPendientes />} />
         </RoutesWithNotFound> */}
 
-        </LocalizationProvider>
+          </LocalizationProvider>
+        </OrderProvider>
 
       </Container>
       {/* <Footer /> */}

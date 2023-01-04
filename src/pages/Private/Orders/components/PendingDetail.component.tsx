@@ -62,12 +62,12 @@ export const PendingDetail: FC<Props> = ({ detalle, despachar }) => {
       >
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box >
-            <Typography variant="h6" noWrap gutterBottom>
+            <Typography variant="body1" noWrap gutterBottom>
               <Text color="success">{3}</Text> de {' '}
               <Text color="info">{5}</Text> {' '}
               {`${'Camarones apanados'}`}
             </Typography>
-            <Typography variant="h6" fontWeight='bold'>
+            <Typography variant="body2" >
               {'Sin ensalada'}
             </Typography>
           </Box>

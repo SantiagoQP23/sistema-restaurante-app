@@ -10,7 +10,7 @@ import { EditClient } from '../Clients/components/EditClient/EditClient.componen
 import { EditCategories, EditCategory, EditProducts, EditSection } from '../EditMenu/components';
 import { EditProduct } from '../EditMenu/components/products/EditProduct.component';
 import { ListTables } from '../Tables/components';
-import { EditOrder, ListOrders } from '../Orders/pages';
+import { AddOrder, EditOrder, ListOrders } from '../Orders/pages';
 import { EditTable } from '../Tables/components/EditTable.component';
 import { ListActiveOrders } from '../Orders/pages/ListActiveOrders.component';
 import { AddProductsOrder } from '../Orders/pages/AddProductsOrder.component';
@@ -117,6 +117,10 @@ export const routes: RouteObject[] = [
           {
             path: 'edit/products',
             element: <AddProductsOrder/>
+          },
+          {
+            path: 'add',
+            element: <AddOrder />
           }
         ]
       },

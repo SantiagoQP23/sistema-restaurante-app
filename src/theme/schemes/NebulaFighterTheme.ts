@@ -468,8 +468,8 @@ export const NebulaFighterTheme = createTheme({
     MuiCardHeader: {
       styleOverrides: {
         action: {
-          marginTop: -5,
-          marginBottom: -5
+          marginTop: -3,
+          marginBottom: -3
         },
         title: {
           fontSize: 15
@@ -1150,61 +1150,58 @@ export const NebulaFighterTheme = createTheme({
     borderRadius: 10
   },
   typography: {
-    fontFamily:
-      '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+    fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     h1: {
       fontWeight: 700,
-      fontSize: 35
+      fontSize: '4.5rem',
     },
     h2: {
       fontWeight: 700,
-      fontSize: 30
+      fontSize: '3.8rem',
     },
     h3: {
       fontWeight: 700,
-      fontSize: 25,
+      fontSize: '2.9rem',
       lineHeight: 1.4,
-      color: colors.alpha.black[100]
     },
     h4: {
       fontWeight: 700,
-      fontSize: 22
+      fontSize: '2.3rem',
     },
     h5: {
       fontWeight: 700,
-      fontSize: 18
+      fontSize: '1.8rem',
     },
     h6: {
-      fontSize: 15
+      fontSize: '1.5rem',
     },
     body1: {
-      fontSize: 14
+      fontSize: '1rem',
+      fontWeight: 400,
     },
     body2: {
-      fontSize: 14
+      fontSize: '0.875rem',
+      fontWeight: 600,
     },
     button: {
-      fontWeight: 600
+      fontWeight: 600,
     },
     caption: {
-      fontSize: 13,
+      fontSize: '0.75rem',
       textTransform: 'uppercase',
-      color: colors.alpha.black[50]
     },
     subtitle1: {
-      fontSize: 14,
-      color: colors.alpha.black[70]
+      fontSize: '0.8rem',
     },
     subtitle2: {
       fontWeight: 400,
-      fontSize: 15,
-      color: colors.alpha.black[50]
+      fontSize: '0.7rem',
     },
     overline: {
       fontSize: 13,
       fontWeight: 700,
-      textTransform: 'uppercase'
-    }
+      textTransform: 'uppercase',
+    },
   },
   shadows: [
     'none',

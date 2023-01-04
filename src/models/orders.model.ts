@@ -65,3 +65,14 @@ export interface IOrderDetail{
   product: IProduct;
 
  }
+
+
+ export interface ICreateOrderDetail{
+
+  quantity: number;
+  product: IProduct;
+  description?: string;
+  
+  
+
+ }

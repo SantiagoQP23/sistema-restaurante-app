@@ -2,7 +2,7 @@ import { FC, useState, useContext } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Grid, Typography, Button, Box, FormControl, InputLabel, MenuItem, Select, Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { Grid, Typography, Button, Box, FormControl, InputLabel, MenuItem, Select, Card, CardContent, CardHeader, Divider, Accordion, AccordionDetails, AccordionSummary, IconButton } from '@mui/material';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
@@ -15,13 +15,22 @@ import { useModal, useProductos } from '../hooks';
 import { PedidosState, selectPedidos } from '../reducers/pedidosSlice';
 import { DetallesState, selectDetalles } from '../reducers/detallesPedidoSlice';
 import { IDetallePedido, INuevoDetallePedido } from '../interfaces'; */
-import { ShoppingCartOutlined, ArrowBack } from '@mui/icons-material';
+import { ShoppingCartOutlined, ArrowBack, ExpandMore, AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
 import { useModal } from '../../../../hooks';
 import { MenuContext } from '../../../../context/MenuContext';
 import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
 import { selectMenu } from '../../../../redux';
 import { Sections, Categories } from '../../Menu/components';
 import { ProductAdd } from '../components';
+import { InputSearch } from '../../../../components/ui/InputSearch';
+import { OrderDetails } from '../components/OrderDetails.component';
+import { ICategory, IProduct } from '../../../../models/menu.model';
+import { useCounter } from '../hooks';
+import { MenuAddProduct } from '../components/MenuAddProduct.component';
+
+
+
+
 
 
 export const AddProductsOrder: FC = () => {
@@ -31,7 +40,10 @@ export const AddProductsOrder: FC = () => {
   const { isOpen: open, handleOpen, handleClose } = useModal(false);
 
 
-  const { sections, categories, activeCategory } = useSelector(selectMenu)
+  const { sections, categories, activeCategory } = useSelector(selectMenu);
+
+  const [nameProduct, setNameProduct] = useState('')
+
 
 
   const { activeOrder } = useSelector(selectOrders);
@@ -41,6 +53,7 @@ export const AddProductsOrder: FC = () => {
 
   //const [detalle, setDetalle] = useState<INuevoDetallePedido | null >();
 
+
   return (
     <>
 
@@ -49,7 +62,7 @@ export const AddProductsOrder: FC = () => {
           <Button onClick={() => navigate(-1)}>
             <ArrowBack />
           </Button>
-          <Typography variant='h5'>Añadir Productos </Typography>
+          <Typography variant='h6'>Añadir Productos </Typography>
 
         </Grid>
 
@@ -65,49 +78,28 @@ export const AddProductsOrder: FC = () => {
 
 
 
+      <Grid container spacing={1}>
 
-      {
-        sections?.length === 0
-          ? <>No se ha creado un menu</>
-          :
-          <Card sx={{my: 1}}>
-            <CardHeader
-              title={
-                <Sections sections={sections} />
+        <Grid item xs={12} sm={6}>
 
-              }
-            />
-            <Divider />
-            <CardContent>{
-              categories.length > 0
+          <MenuAddProduct />
 
-                ? <Categories />
-                : <><h6>Sin categorias</h6></>
-              }
-              
-                          </ CardContent >
-                        </Card>
-            }
-              {
-                activeCategory && activeCategory.products.length > 0
-                  ? <>
-                    <Grid container spacing={1}>
 
-                      {
-                        activeCategory.products.map((producto) => (
-                          <Grid  key={producto.id} item xs={12} sm={6} md={6} xl={3} >
-                            <ProductAdd
-                              producto={producto}
-                              abrirModal={handleOpen}
-                            />
-                          </Grid>
-                        ))
-                      }
-                    </Grid>
-                  </>
-                  :
-                  <>No hay productos</>
-            }
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+
+          <OrderDetails />
+
+        </Grid>
+
+      </Grid>
+
+
+
+
+
+
 
 
 

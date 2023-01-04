@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect } from 'react';
-import { Grid, Select, MenuItem } from '@mui/material';
+import { Grid, Select, MenuItem, Accordion, AccordionDetails, AccordionSummary, Typography, Card } from '@mui/material';
 
 import { useProducts } from '../../../../hooks';
 import { MenuContext } from '../../../../context/MenuContext';
@@ -7,14 +7,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectSections } from '../../../../redux/slices/menu/sections.slice';
 import { ICategory } from '../../../../models';
 import { selectMenu, setActiveCategory, setActiveProducts } from '../../../../redux';
+import { ExpandMore } from '@mui/icons-material';
+import { Product } from './Product.component';
+import { Category } from './Category.component';
 
 interface Props {
-    categories?: ICategory[];
-    cambiarCategoria?: (value: number) => void;
-    categoria?: number;
+  categories?: ICategory[];
+  cambiarCategoria?: (value: number) => void;
+  categoria?: number;
 }
 
-export const Categories: FC<Props> = ({  }) => {
+export const Categories: FC<Props> = ({ }) => {
 
   const { activeSection, activeCategory, categories } = useSelector(selectMenu);
 
@@ -36,39 +39,29 @@ export const Categories: FC<Props> = ({  }) => {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} md={6} lg={4}>
-          {
-              activeCategory &&  <Select
-              labelId="label-select-categoria"
-              id="select-categoria"
-              value={activeCategory.id}
-              label="Categoria"
-              margin='dense'
-              onChange={(e) => changeCategory(e.target.value)}
-              fullWidth
-            >
-              {
-                categories.length > 0 && (
-                  categories.map(categoria => (
-                    <MenuItem
-                      key={categoria.id}
-                      value={categoria.id}
-                    >
-                      {categoria.name}
-                    </MenuItem>
 
-                  )
-                  )
-                )
+      
+        {
 
-              }
-            </Select>
-          }
 
-        </Grid>
+          activeSection && activeSection.categories.map(category => (
 
-        {/*   <Card sx={{ minWidth: 275 }}>
+            <Category category={category}/>
+              
+           
+
+          ))
+        }
+     
+
+
+
+
+
+
+
+
+      {/*   <Card sx={{ minWidth: 275 }}>
           <CardContent>
             
             <Typography variant="h6" component="div">
@@ -78,7 +71,7 @@ export const Categories: FC<Props> = ({  }) => {
           </CardContent>
           
         </Card> */}
-      </Grid>
+
 
 
     </>

@@ -1,43 +1,57 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText,
-   DialogTitle, FormControl, FormHelperText} from '@mui/material/'
+import {
+  TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText,
+  DialogTitle, FormControl, FormHelperText
+} from '@mui/material/'
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {DetallePedido} from '.';
-import { SocketContext } from '../../context/SocketContext';
-import { INuevoDetallePedido } from '../../interfaces';
-import { INuevoDetalle } from '../../interfaces/sockets';
-import { detalleAddNew, pedidoDetalleAddNew, pedidoUpdateDetalles, pedidoUpdateTotal, selectDetalles, selectPedidos } from '../../reducers';
+import { ICreateOrderDetail } from '../../../../models/orders.model';
+import { SocketContext } from '../../../../context';
+import { sharingInformationService } from '../services/sharing-information.service';
+import { OrderContext } from '../context/Order.context';
 
 
 
-interface Props{
-  handleClose: () => void;
-  open: boolean;
-  detalle: INuevoDetallePedido;
+interface Props {
+  // handleClose: () => void;
+  // open: boolean;
+  // detalle: ICreateOrderDetail;
 }
 
 
-export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle }) => {
+export const ModalAddDetail: FC<Props> = ({ }) => {
 
-  const {idPedido} = useParams();
-  const [descripcion, setDescripcion] = useState('');
-  const { producto, cantidad, subtotal } = detalle;
+  const { idPedido } = useParams();
+  const [description, setDescription] = useState('');
 
-  const total = useSelector(selectPedidos).pedidoActivo?.total;
+  const subscription$ = sharingInformationService.getSubject();
+
+  const [open, setOpen] = useState(false);
+
+  const [detail, setDetail] = useState<ICreateOrderDetail>();
+
+
+  const {addDetail, updateDetail} = useContext(OrderContext);
+
+
+ //const { product, quantity } = detalle;
+
+  // const total = useSelector(selectPedidos).pedidoActivo?.total;
 
   const dispatch = useDispatch();
 
-  const {socket} = useContext( SocketContext);
+  const { socket } = useContext(SocketContext);
 
   const crearDetalle = () => {
 
-    const detalle = { idProducto: producto.idProducto, cantidad, descripcion, idPedido };
+    updateDetail({...detail!, description})
 
-    socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}: INuevoDetalle) => {
+    //const detalle = { idProducto: producto.idProducto, cantidad, descripcion, idPedido };
+
+    /* socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}:) => {
        
       if(ok){
 
@@ -46,19 +60,30 @@ export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle })
         const { pedido, ...detalle } = nuevoDetalle;
         
         // TODO aniadir el detalle de pedido recibido
-        dispatch(pedidoDetalleAddNew(detalle));
+        //dispatch(pedidoDetalleAddNew(detalle));
         
-        dispatch(pedidoUpdateTotal(Number(total) + Number(detalle.subtotal)));
+        //dispatch(pedidoUpdateTotal(Number(total) + Number(detalle.subtotal)));
 
 
       }
 
 
-    })
-    
+    }) */
 
-    handleClose();
+
+    setOpen(false)
   }
+
+  useEffect(() => {
+    subscription$.subscribe((data) => {
+
+      setDetail(data.detalle)
+      setOpen(!!data.value);
+      
+    })
+  }, [])
+
+
 
   return (
     <>
@@ -66,15 +91,15 @@ export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle })
       <Dialog
         open={open}
         onClose={() => {
-          handleClose()
-          setDescripcion('');
+          setOpen(false)
+          setDescription('');
         }}
       >
         <DialogTitle>Detalle del pedido</DialogTitle>
 
         <DialogContent>
           <DialogContentText>
-            {cantidad} - {detalle.producto.nombre}
+            {detail?.quantity} - {detail?.product.name}
           </DialogContentText>
 
           <FormControl fullWidth>
@@ -85,14 +110,16 @@ export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle })
               margin="dense"
               multiline
               rows={4}
-              defaultValue={descripcion}
+              defaultValue={description}
               sx={{ width: 300 }}
               onBlur={(e) => {
                 console.log(e.target.value);
-                setDescripcion(e.target.value);
+                setDescription(e.target.value);
 
               }
               }
+
+              autoFocus
 
             />
 
@@ -108,8 +135,8 @@ export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle })
         <DialogActions>
           <Button
             onClick={() => {
-              handleClose()
-              setDescripcion('');
+              setOpen(false)
+              setDescription('');
             }}
 
           >Cancelar</Button>
@@ -120,4 +147,3 @@ export const AniadirProductosModal: FC<Props> = ({ handleClose, open, detalle })
   )
 }
 
-export default AniadirProductosModal
