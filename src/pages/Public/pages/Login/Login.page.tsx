@@ -1,18 +1,18 @@
+
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Box, TextField, Typography,Button, Link, Paper, Avatar, FormControlLabel, Checkbox, Chip } from '@mui/material';
-
-
-import { useAppDispatch } from '../../hooks';
+import { LoadingButton } from '@mui/lab';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useAppSelector } from '../../hooks/useRedux';
-import { selectAuth, startLogin } from '../../redux/slices/auth';
+import { Copyright } from '@mui/icons-material';
 
-import { Copyright } from '../../components/ui';
-import { IFormLogin } from '../../models/';
-import { useNavigate } from 'react-router-dom';
-import { LoadingButton } from '@mui/lab';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+
+
+import { IFormLogin } from '../../../../models';
+import { selectAuth, startLogin } from '../../../../redux';
 
 
 
@@ -74,7 +74,7 @@ export const LoginPage = () => {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign in
+                Iniciar sesión
               </Typography>
               <Chip
                 label={error}
@@ -114,10 +114,10 @@ export const LoginPage = () => {
 
 
                 />
-                <FormControlLabel
+               {/*  <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label={"Remember me "}
-                />
+                /> */}
                 <LoadingButton
                   type="submit"
                   fullWidth
@@ -130,11 +130,11 @@ export const LoginPage = () => {
                 <Grid container>
                   <Grid item xs>
                     <Link href="#" variant="body2">
-                      Forgot password?
+                      Olvidé mi contraseña
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link href="signup" variant="body2" >
                       {"No tienes una cuenta? Regístrate"}
                     </Link>
                   </Grid>

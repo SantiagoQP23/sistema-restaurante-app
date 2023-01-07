@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectCategories, selectSections } from "../../../../../redux";
+import { selectCategories, selectMenu, selectSections } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 
 
@@ -19,7 +19,7 @@ export const DeleteSection: FC<Props> = ({isOpen, closeModal }) => {
   const { loading, callEndpoint } = useFetchAndLoad();
 
 
-  const {activeSection: section} = useSelector(selectSections);
+  const {activeSection: section} = useSelector(selectMenu);
   
   const dispatch = useDispatch();
 

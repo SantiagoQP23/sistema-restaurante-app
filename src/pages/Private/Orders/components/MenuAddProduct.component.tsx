@@ -17,7 +17,7 @@ import { sharingInformationService } from "../services/sharing-information.servi
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { findProductsByName, getAllProducts } from "../../../../helpers";
-import { useModal } from "../../../../hooks";
+import { useAppSelector, useModal } from "../../../../hooks";
 import { ICreateOrderDetail } from '../../../../models/orders.model';
 import { ModalAddDetail } from './ModalAddDetail.component';
 import { OrderContext } from '../context/Order.context';
@@ -213,9 +213,6 @@ const AllMenu: FC = () => {
 
   }
 
-  
-
-
   return (
     <>
       <Grid item xs={12} >
@@ -273,7 +270,7 @@ const AllMenu: FC = () => {
 
 export const MenuAddProduct = () => {
 
-  const { sections, categories, activeCategory } = useSelector(selectMenu);
+  const { sections} = useSelector(selectMenu);
 
   const [nameProduct, setNameProduct] = useState('')
 

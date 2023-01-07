@@ -3,7 +3,7 @@ import { Tabs, Tab, Box, Card, CardContent } from '@mui/material/';
 
 import { ISection } from '../../../../models';
 
-import { useProducts } from '../../../../hooks/';
+import { useAppSelector, useProducts } from '../../../../hooks/';
 import { MenuContext } from '../../../../context/MenuContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectMenu, setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection } from '../../../../redux';
@@ -18,7 +18,7 @@ interface Props {
 
 export const Sections: FC<Props> = ({ sections }) => {
 
-  const { activeSection } = useSelector(selectMenu);
+  const { activeSection } = useAppSelector(selectMenu);
 
   const dispatch = useDispatch();
 

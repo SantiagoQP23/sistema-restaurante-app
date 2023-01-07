@@ -74,7 +74,7 @@ export const Userbox = () => {
 
   const user =
   {
-    name: userState?.fullName,
+    name: userState?.username,
     avatar: '/static/images/avatars/3.jpg',
     jobtitle: userState?.role.name
   };

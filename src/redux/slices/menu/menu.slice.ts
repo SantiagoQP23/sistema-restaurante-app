@@ -46,7 +46,9 @@ export const menuSlice = createSlice({
       )
     },
     loadMenu: (state, action: PayloadAction<ISection[]>) => {
-      state.sections = action.payload
+      state.sections = action.payload;
+      state.activeSection = action.payload[0];
+
     },
     setActiveCategories: (state, action: PayloadAction<ICategory[]>) => {
       state.categories = action.payload

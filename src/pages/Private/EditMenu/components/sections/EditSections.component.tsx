@@ -14,7 +14,7 @@ import { ISection } from '../../../../../models';
 
 import { Section } from './Section.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetActiveSection, selectSections, setActiveSection } from '../../../../../redux';
+import { resetActiveSection, selectMenu, selectSections, setActiveSection } from '../../../../../redux';
 import { useModal } from '../../../../../hooks';
 import { DeleteSection } from './DeleteSection.component';
 
@@ -26,7 +26,7 @@ export const EditSections = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {activeSection, sections} = useSelector(selectSections);
+  const {activeSection, sections} = useSelector(selectMenu);
   const { isOpen, handleOpen, handleClose } = useModal();
 
 

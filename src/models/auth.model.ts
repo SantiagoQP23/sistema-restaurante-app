@@ -1,3 +1,4 @@
+import { IPerson } from "./common.model";
 
 
 export interface IRole {
@@ -8,11 +9,10 @@ export interface IRole {
 
 
 export interface IUser {
-  idUsuario?: number,
+  id: number,
   username: string,
-  fullName: string,
-
-  password?: string;
+  
+  person: IPerson,
 
   online: boolean,
   

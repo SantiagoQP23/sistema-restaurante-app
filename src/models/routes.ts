@@ -1,7 +1,9 @@
 
 
 export const PublicRoutes = {
-  LOGIN: 'auth/login'
+  LOGIN: 'auth/login',
+  SIGNUP: 'auth/signup',
+  FORGOT_PASSWORD: 'auth/forgot-password',
 }
 
 export const PrivateRoutes = {
