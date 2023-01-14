@@ -2,23 +2,23 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Box, TextField, Typography,Button, Link, Paper, Avatar, FormControlLabel, Checkbox, Chip } from '@mui/material';
+import { Grid, Box, TextField, Typography, Button, Link, Paper, Avatar, FormControlLabel, Checkbox, Chip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Copyright } from '@mui/icons-material';
 
-import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 
 
-import { IFormLogin } from '../../../../models';
-import { selectAuth, startLogin } from '../../../../redux';
+import { IFormLogin, PublicRoutes } from '../../../models';
+import { selectAuth, startLogin } from '../../../redux';
 
 
 
 const initialForm: IFormLogin = {
   username: 'SantiagoQP23',
-  password: 'Santiago2022'
+  password: 'Santiago1234'
 }
 
 export const LoginPage = () => {
@@ -36,11 +36,11 @@ export const LoginPage = () => {
   const handleLogin = (form: IFormLogin) => {
 
     dispatch(startLogin(form));
-    if(status === 'authenticated')
-      navigate('/', {replace: true})
+    if (status === 'authenticated')
+      navigate('/', { replace: true })
 
   }
- 
+
 
   return (
     <>
@@ -52,7 +52,7 @@ export const LoginPage = () => {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(https://source.unsplash.com/random)',
+              backgroundImage: 'url(https://images.unsplash.com/photo-1670819917685-f1040e76b9b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY3MzQwNTQxMA&ixlib=rb-4.0.3&q=80&w=1080)',
               backgroundRepeat: 'no-repeat',
               backgroundColor: (t) =>
                 t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -114,7 +114,7 @@ export const LoginPage = () => {
 
 
                 />
-               {/*  <FormControlLabel
+                {/*  <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label={"Remember me "}
                 /> */}
@@ -123,27 +123,33 @@ export const LoginPage = () => {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  loading={ status === 'checking'}
+                  loading={status === 'checking'}
                 >
-                  Sign In
+                  Iniciar sesión
                 </LoadingButton>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link href={'/' + PublicRoutes.FORGOT_PASSWORD} variant="body2">
                       Olvidé mi contraseña
                     </Link>
                   </Grid>
-                  <Grid item>
-                    <Link href="signup" variant="body2" >
-                      {"No tienes una cuenta? Regístrate"}
-                    </Link>
-                  </Grid>
+                 
                 </Grid>
-                <Copyright sx={{ mt: 5 }} />
+                <Grid container display='flex' >
+                  <Grid item xs>
+                    <Typography sx={{ mt: 5, display: 'flex', alignItems: 'center' }} variant="body2" color="text.secondary" align="center">
+                      <Copyright />
+                      Santiago Quirumbay
+                    </Typography>
+
+                  </Grid>
+
+
+                </Grid>
               </Box>
             </Box>
           </Grid>
-          
+
         </Grid>
       </Box>
 

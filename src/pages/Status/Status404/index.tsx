@@ -47,18 +47,10 @@ function Status404() {
         <Container maxWidth="md">
           <Box textAlign="center">
             <img alt="404" height={180} src="/static/images/status/404.svg" />
-            <Typography variant="h4" sx={{ my: 2 }}>
-              The page you were looking for doesn't exist.
+            <Typography variant="h5" sx={{ my: 2 }}>
+              La página que estás buscando no existe
             </Typography>
-            <Typography
-              variant="h6"
-              color="text.secondary"
-              fontWeight="normal"
-              sx={{ mb: 4 }}
-            >
-              It's on us, we moved the content to a different page. The search
-              below should help!
-            </Typography>
+            
           </Box>
           <Container maxWidth="sm">
             <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
@@ -80,9 +72,9 @@ function Status404() {
                   }
                 />
               </FormControl>
-              <Divider sx={{ my: 4 }}>OR</Divider>
-              <Button href="/overview" variant="outlined">
-                Go to homepage
+              <Divider sx={{ my: 4 }}>O</Divider>
+              <Button href="/menu" variant="outlined">
+               Ir a menú principal
               </Button>
             </Card>
           </Container>

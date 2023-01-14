@@ -81,8 +81,8 @@ export default function ClientsTable() {
                 </TableCell>
                 <TableCell>Apellidos</TableCell>
                 <TableCell>Nombres</TableCell>
-                <TableCell>Cedula</TableCell>
-                <TableCell>RUC</TableCell>
+                <TableCell>Tipo de identificación</TableCell>
+                <TableCell>Número de identificación</TableCell>
                 <TableCell>address</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Actions</TableCell>
@@ -107,7 +107,7 @@ export default function ClientsTable() {
                         gutterBottom
                         noWrap
                       >
-                        {client.lastNames}
+                        {client.person.firstName}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -118,7 +118,7 @@ export default function ClientsTable() {
                         gutterBottom
                         noWrap
                       >
-                        {client.firstNames}
+                        {client.person.lastName}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -129,7 +129,7 @@ export default function ClientsTable() {
                         gutterBottom
                         noWrap
                       >
-                        {client.cedula}
+                        {client.person.identification.type}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -140,7 +140,7 @@ export default function ClientsTable() {
                         gutterBottom
                         noWrap
                       >
-                        {client.ruc}
+                        {client.person.identification.num}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -162,7 +162,7 @@ export default function ClientsTable() {
                         gutterBottom
                         noWrap
                       >
-                        {client.email}
+                        {client.person.email}
                       </Typography>
                     </TableCell>
 

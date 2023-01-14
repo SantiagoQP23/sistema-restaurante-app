@@ -7,11 +7,15 @@ import { CssBaseline } from '@mui/material'
 import { AppRouter } from './routers';
 import { SuspenseLoader } from './components/ui/';
 import ThemeProvider from './theme/ThemeProvider';
+import { useSelector } from 'react-redux';
+import { selectAuth } from './redux';
 
 
 
 
 function App() {
+
+  const { status } = useSelector(selectAuth);
 
   return (
 
@@ -22,7 +26,14 @@ function App() {
         <CssBaseline />
 
         <BrowserRouter>
-          <AppRouter />
+        {
+          // status === 'checking'
+          // ? <SuspenseLoader />
+          // : <AppRouter />
+          
+        }
+        <AppRouter />
+            
         </BrowserRouter>
 
       </Suspense>

@@ -27,6 +27,10 @@ import DeliveryDiningOutlinedIcon from '@mui/icons-material/DeliveryDiningOutlin
 import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../../../../../redux';
+import { ValidRoles } from '../../../../router';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -143,9 +147,9 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-                  'transform',
-                  'opacity'
-                ])};
+    'transform',
+    'opacity'
+  ])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -173,12 +177,15 @@ const SubMenuWrapper = styled(Box)(
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
 
+  const { user } = useSelector(selectAuth);
+
   return (
     <>
       <MenuWrapper>
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
+              {/* 
               <ListItem component="div">
                 <Button
                   disableRipple
@@ -189,7 +196,7 @@ function SidebarMenu() {
                 >
                   Dashboard
                 </Button>
-              </ListItem>
+              </ListItem> */}
               <ListItem component="div">
                 <Button
                   disableRipple
@@ -239,7 +246,7 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-          
+
         </List>
         <List
           component="div"
@@ -284,21 +291,38 @@ function SidebarMenu() {
                   Clientes
                 </Button>
               </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/restaurant"
-                  startIcon={<StorefrontOutlinedIcon />}
-                >
-                  Restaurante
-                </Button>
-              </ListItem>
+              {
+                user && user.role.name === ValidRoles.admin && (
+                  <>
+                    <ListItem component="div">
+                      <Button
+                        disableRipple
+                        component={RouterLink}
+                        onClick={closeSidebar}
+                        to="/users"
+                        startIcon={<PeopleOutlineIcon />}
+                      >
+                        Usuarios
+                      </Button>
+                    </ListItem>
+                    <ListItem component="div">
+                      <Button
+                        disableRipple
+                        component={RouterLink}
+                        onClick={closeSidebar}
+                        to="/restaurant"
+                        startIcon={<StorefrontOutlinedIcon />}
+                      >
+                        Restaurante
+                      </Button>
+                    </ListItem>
+                  </>
+                )
+              }
             </List>
           </SubMenuWrapper>
         </List>
-       
+
         <List
           component="div"
           subheader={
@@ -320,7 +344,7 @@ function SidebarMenu() {
                   Perfil de usuario
                 </Button>
               </ListItem>
-              <ListItem component="div">
+              {/*  <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
@@ -330,7 +354,7 @@ function SidebarMenu() {
                 >
                   Configuración de cuenta
                 </Button>
-              </ListItem>
+              </ListItem> */}
             </List>
           </SubMenuWrapper>
         </List>
@@ -446,7 +470,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List> */}
-        <List
+        {/*  <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -503,6 +527,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
+             */}
       </MenuWrapper>
     </>
   );

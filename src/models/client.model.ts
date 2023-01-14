@@ -1,23 +1,15 @@
+import { CreatePerson, Identification, IPerson } from './common.model';
 
 
 export interface IClient {
 
   id: string;
-  lastNames: string;
-  firstNames: string;
-  cedula: string;
-  ruc?: string;
+  person: IPerson;
   address: string;
-  email: string;
 }
 
-export interface ICreateClient {
+export interface ICreateClient extends CreatePerson{
 
- 
-  lastNames: string;
-  firstNames: string;
-  cedula: string;
-  ruc?: string;
   address?: string;
-  email?: string;
+
 }

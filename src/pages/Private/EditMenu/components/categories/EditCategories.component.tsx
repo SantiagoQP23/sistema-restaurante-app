@@ -106,7 +106,7 @@ export function EditCategories() {
           </Button>
 
 
-          <Typography align="center" variant="h3" color="initial">Categorías</Typography>
+          <Typography align="center" variant="h6" color="initial">Categorías</Typography>
 
         </Grid>
         <Grid item>
@@ -131,7 +131,7 @@ export function EditCategories() {
 
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant='h6'>Total categorías: {activeSection!.categories.length}</Typography>
+              <Typography variant='body2'>Total categorías: {activeSection!.categories.length}</Typography>
               <Box>
 
                 {<InputLabel id='select-seccion'>Seccion</InputLabel>}

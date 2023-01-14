@@ -4,6 +4,7 @@ export const PublicRoutes = {
   LOGIN: 'auth/login',
   SIGNUP: 'auth/signup',
   FORGOT_PASSWORD: 'auth/forgot-password',
+  RESET_PASSWORD: 'auth/reset-password/:token',
 }
 
 export const PrivateRoutes = {
@@ -13,7 +14,8 @@ export const PrivateRoutes = {
   ACTIVE_ORDERS: 'active-orders',
   DASHBOARD: 'dashboard',
   CLIENTS: 'clients',
-  TABLES: 'tables'
+  TABLES: 'tables',
+  USERS: 'users',
 
 }
 

@@ -20,6 +20,7 @@ export const startLogin = ({username, password}: IFormLogin): AppThunk => async 
   try {
     const { data } = await restauranteApi.post('/auth/login', { username, password });
 
+    console.log({data})
     
     localStorage.setItem('token', data.token);
     localStorage.setItem('token-init-date', String(new Date().getTime()));
