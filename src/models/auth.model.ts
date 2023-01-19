@@ -1,5 +1,10 @@
 import { IPerson } from "./common.model";
 
+export interface IFormLogin{
+  username: string;
+  password: string;
+}
+
 
 export interface IRole {
   id: number,
@@ -9,19 +14,13 @@ export interface IRole {
 
 
 export interface IUser {
-  id: number,
+  id: string,
   username: string,
-  
   person: IPerson,
-
   online: boolean,
-  
   role: IRole,
 }
 
 
-export interface IFormLogin{
-  username: string;
-  password: string;
-}
+
 

@@ -16,3 +16,5 @@ export class SubjectManager {
     this.subject$.next({value, detalle});
   }
 }
+
+

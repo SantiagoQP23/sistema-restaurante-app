@@ -80,12 +80,14 @@ export const ListOrders = () => {
 
   const { orders, date } = useSelector(selectOrders);
 
-  const aniadirPedido = () => {
+  const addOrder = () => {
     dispatch(resetActiveOrder())
 
     navigate('add');
 
-    socket?.emit('create-order');
+    socket?.emit('create-order', {
+      data: 'hola'
+    });
 
     //socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}: INuevoDetalle) => {
     /* socket?.emit('nuevoPedido', {}, ({ ok }: { ok: boolean }) => {
@@ -139,7 +141,7 @@ export const ListOrders = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => aniadirPedido()}
+                  onClick={() => addOrder()}
                 // disabled={date !== obtenerFechaActual()}
                 >Añadir Pedido</Button>
 

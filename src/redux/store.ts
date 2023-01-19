@@ -5,6 +5,7 @@ import { clientsSlice } from './slices/clients';
 import { sectionsSlice,categoriesSlice, productsSlice, menuSlice,  } from './slices/menu';
 import { detailsSlice, ordersSlice } from './slices/orders';
 import { tablesSlice } from './slices/tables';
+import { userSlice } from './slices/users';
 
 
 
@@ -20,7 +21,8 @@ export const store = configureStore({
     details: detailsSlice.reducer,
     clients: clientsSlice.reducer,
     tables: tablesSlice.reducer,
-    menu: menuSlice.reducer
+    menu: menuSlice.reducer,
+    users: userSlice.reducer,
   },
 })
 

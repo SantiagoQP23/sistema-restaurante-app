@@ -5,6 +5,10 @@ import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { selectCategories, selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
+import { deleteProduct as deleteProductS } from "../../services/sections.service";
+import { useSnackbar } from 'notistack';
+import { deleteProduct } from "../../../../../redux/slices/menu/menu.thunks";
+import { useAppDispatch } from '../../../../../hooks/useRedux';
 
 
 
@@ -13,26 +17,37 @@ interface Props {
   closeModal: () => void;
 }
 
-export const DeleteProduct: FC<Props> = ({isOpen, closeModal }) => {
+export const DeleteProduct: FC<Props> = ({ isOpen, closeModal }) => {
 
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
 
-  const {activeProduct: product} = useSelector(selectMenu);
-  
-  const dispatch = useDispatch();
+  const { activeProduct: product } = useSelector(selectMenu);
 
-  const deleteProduct = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useAppDispatch();
+
+  const submitDeleteProduct = async () => {
 
     console.log('Modal eliminar')
 
+    await callEndpoint(deleteProductS(product!.id))
+      .then((res) => {
 
-    closeModal()
+        enqueueSnackbar('Producto eliminado', { variant: 'success' });
+        dispatch(deleteProduct(product!));
+        closeModal();
+      })
+      .catch((err) => {
 
+        enqueueSnackbar('Error al eliminar el producto', { variant: 'error' });
+
+        closeModal()
+
+      })
   }
-
-
   return (
     <>
       <Dialog open={isOpen} onClose={closeModal}>
@@ -48,7 +63,7 @@ export const DeleteProduct: FC<Props> = ({isOpen, closeModal }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModal} >Cancelar</Button>
-          <LoadingButton loading={loading} variant='contained' color='error' onClick={deleteProduct}>
+          <LoadingButton loading={loading} variant='contained' color='error' onClick={submitDeleteProduct}>
             Aceptar
           </LoadingButton>
         </DialogActions>

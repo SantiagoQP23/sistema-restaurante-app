@@ -16,9 +16,17 @@ import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { ArrowBack } from '@mui/icons-material';
-import { CardContent, CardHeader } from '@mui/material';
+import { CardContent, CardHeader, Container } from '@mui/material';
 
 
+
+
+export const FormSection = () => {
+  return (
+    <>
+    </>
+  )
+}
 
 export const EditSection = () => {
 
@@ -56,7 +64,10 @@ export const EditSection = () => {
         .then((resp) => {
           const { data } = resp;
           console.log(data.section)
-          dispatch(updateSection(data.section))
+
+
+
+          dispatch(updateSection({...data.section, categories: activeSection.categories}))
           enqueueSnackbar('La sección ha sido actualizada', { variant: 'success' })
 
         })
@@ -68,17 +79,14 @@ export const EditSection = () => {
 
     } else {
 
-      const section = { name: 'lasjdlfjasl', id: 'ajlfdñ' } as ISection;
-      dispatch(addSection(section))
-      reset();
-
-      /* await callEndpoint(createSection( form))
+      
+      await callEndpoint(createSection( form))
       .then((resp) =>{
         const {data} = resp;
         console.log(data.section);
-        dispatch(addSection(data.section))
-        dispatch(setActiveSection(data.section))
-        enqueueSnackbar('La sección ha sido actualizada',{variant: 'success'})
+        dispatch(addSection({...data.section, categories: []}))
+        //dispatch(setActiveSection(data.section))
+        enqueueSnackbar('La sección ha sido añadida',{variant: 'success'})
         
       })
       .catch((err)=> {
@@ -86,7 +94,7 @@ export const EditSection = () => {
         enqueueSnackbar('Ya existe',{variant: 'error'})
         
       });
- */
+
       console.log('Crear section')
     }
 
@@ -110,42 +118,47 @@ export const EditSection = () => {
 
   return (
     <>
-      <Grid container display='flex' justifyContent='space-between'>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h5'>{activeSection ? `Sección ${section.name}` : "Añadir seccion"} </Typography>
+
+      <Container maxWidth='sm'>
+
+
+        <Grid container display='flex' justifyContent='space-between'>
+          <Grid item display='flex' justifyContent='left' alignItems='center'>
+            <Button onClick={() => navigate(-1)}>
+              <ArrowBack />
+             
+            </Button>
+            <Typography variant='h6'>{activeSection ? `Editar sección` : "Añadir seccion"} </Typography>
+
+          </Grid>
 
         </Grid>
 
-      </Grid>
+        <Card>
+          <CardHeader title="Datos de la sección" />
+          <CardContent sx={{ my: 0, py: 0 }}>
 
-      <Card>
-        <CardHeader title="Datos de la sección" />
-        <CardContent sx={{my: 0, py: 0}}>
+            <form onSubmit={handleSubmit(onSubmit)}>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Nombre de la sección"
+                type="text"
+                fullWidth
 
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Nombre de la sección"
-              type="text"
-              fullWidth
+                {
+                ...register('name', {
+                  required: 'Este campo es requerido',
+                  minLength: { value: 2, message: 'Minimo 2 caracteres' }
+                })
+                }
 
-              {
-              ...register('name', {
-                required: 'Este campo es requerido',
-                minLength: { value: 2, message: 'Minimo 2 caracteres' }
-              })
-              }
+                error={!!errors.name}
+                helperText={<Typography color="red">{errors.name?.message}</Typography>}
+              />
 
-              error={!!errors.name}
-              helperText={<Typography color="red">{errors.name?.message}</Typography>}
-            />
-
-            {/*  <TextField
+              {/*  <TextField
           id="descripcion-seccion"
           label="Descripcion de la sección"
           margin="dense"
@@ -156,29 +169,30 @@ export const EditSection = () => {
           disabled
         /> */}
 
-            <LoadingButton
-              variant='outlined'
-              type='submit'
-              loading={loading}
-            >
-              {activeSection ? `Editar` : "Crear"}
-            </LoadingButton>
-
-            {
-              loading && <Button
-                color='error'
+              <LoadingButton
                 variant='outlined'
-                onClick={() => cancelEndpoint()}
+                type='submit'
+                loading={loading}
               >
-                Cancelar
-              </Button>
-            }
+                {activeSection ? `Editar` : "Crear"}
+              </LoadingButton>
+
+              {
+                loading && <Button
+                  color='error'
+                  variant='outlined'
+                  onClick={() => cancelEndpoint()}
+                >
+                  Cancelar
+                </Button>
+              }
 
 
-          </form>
+            </form>
 
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Container>
     </>
   )
 }

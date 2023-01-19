@@ -125,39 +125,57 @@ export function EditCategories() {
       </Grid>
 
 
-      <Card sx={{ my: 1 }}>
-        <CardHeader
-          title={
 
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
+      <Grid container spacing={1} sx={{ my: 2 }}>
 
-              <Typography variant='body2'>Total categorías: {activeSection!.categories.length}</Typography>
-              <Box>
+      <Grid item xs={12} sm={3}>
+          <Card>
+            <CardContent>
 
-                {<InputLabel id='select-seccion'>Seccion</InputLabel>}
-                <Select
-                  labelId="select-seccion"
-                  label="Seccion"
-                  margin='dense'
-                  value={activeSection?.id}
-                  onChange={onChange}
-                  fullWidth
-                >
-                  {
-                    sections.map(seccion => (
-                      <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
-                    ))
-                  }
-                </Select>
-              </Box>
+          <Typography variant='body2'>Sección</Typography>
+          <Select
+            labelId="select-seccion"
+            label="Seccion"
+            margin='dense'
+            value={activeSection?.id}
+            onChange={onChange}
+            fullWidth
+          >
+            {
+              sections.map(seccion => (
+                <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
+              ))
+            }
+          </Select>
+          </ CardContent>
+          </Card>
+
+        </Grid>
+
+        <Grid item xs={12} sm={3}>
+
+          <Card>
+            <CardContent>
+              <Typography variant='body2'>Categorías</Typography>
+              <Typography variant='h6'>{activeSection?.categories.length}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+
+       
+
+      </Grid>
 
 
 
-            </Box>
-          }
-        />
 
-      </Card>
+
+
+
+
+
+
 
 
       {

@@ -1,9 +1,11 @@
 import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 import { ICreateTable, ITable } from "../../../../models";
+import { SubjectDeleteTable } from '../helpers/subjects-tables.helper';
 
 
 
+export const statusModalDeleteTable = new SubjectDeleteTable();
 
 
 

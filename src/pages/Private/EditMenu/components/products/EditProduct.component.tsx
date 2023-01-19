@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -17,19 +17,22 @@ import { ArrowBack, AttachMoney } from '@mui/icons-material';
 import { Controller, useForm } from 'react-hook-form';
 
 
-import {  resetActiveProduct, selectCategories, selectMenu, selectProducts, setActiveProduct } from '../../../../../redux';
+import { resetActiveProduct, selectCategories, selectMenu, selectProducts, setActiveProduct } from '../../../../../redux';
 import { ICreateProduct, IProduct } from '../../../../../models/menu.model';
 import { LoadingButton } from '@mui/lab';
 import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import {
   createProduct,
-  updateProduct as updateProductS
+  updateProduct as updateProductS,
+  updateProductImage
 } from '../../services/sections.service';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../../../hooks';
 import { addProduct, updateProduct } from '../../../../../redux/slices/menu/menu.thunks';
+import { Container } from '@mui/material';
+import { CardContent } from '@mui/material/';
 
 
 
@@ -53,7 +56,6 @@ interface Props {
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
   
-  position: absolute;
     overflow: visible;
     display: inline-block;
     margin-top: -${theme.spacing(0)};
@@ -69,7 +71,6 @@ const AvatarWrapper = styled(Card)(
 const ButtonUploadWrapper = styled(Box)(
   ({ theme }) => `
   
-  position: absolute;
   width: ${theme.spacing(4)};
   height: ${theme.spacing(6)};
   bottom: -${theme.spacing(1)};
@@ -90,7 +91,109 @@ const ButtonUploadWrapper = styled(Box)(
 `
 );
 
+interface IFormProductImage {
+  product: IProduct
+}
 
+
+
+export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
+
+  const { register, handleSubmit, formState: { errors }, control, reset, watch} = useForm<{file: FileList}>({
+  });
+
+  const [image, setImage] = useState<string>();
+
+  const {loading, callEndpoint} = useFetchAndLoad();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useAppDispatch();
+
+
+  const convert2base64 = (file: File) => {
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+        setImage(reader.result?.toString())
+    }
+
+    reader.readAsDataURL(file);
+  }
+
+  
+
+
+
+  const onSubmit = async (data: {file: FileList}) => {
+    console.log({data});
+
+    if(data.file.length === 0) {
+      enqueueSnackbar('Debe seleccionar una imagen', { variant: 'error' });
+      return;
+    }
+
+    convert2base64(data.file[0]);
+
+    await callEndpoint(updateProductImage(product.id, {file: data.file[0]}))
+      .then((resp) => {
+        console.log(resp);
+
+        const {data} = resp;
+
+
+        dispatch(updateProduct(data.product))
+        dispatch(setActiveProduct({ ...product, ...data.product }))
+        enqueueSnackbar('Imagen actualizada', { variant: 'success' });
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar('Error al actualizar la imagen', { variant: 'error' });   
+      })
+
+    
+  }
+
+  useEffect(() => {
+    if(watch('file')?.length === 0) return;
+
+    convert2base64(watch('file')[0]);
+  }, [watch('file')])
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+
+
+      <AvatarWrapper>
+        <Avatar variant="rounded" alt={product.name} src={image || product?.images || "/static/images/products/no-image.png"} />
+        <ButtonUploadWrapper>
+          <input
+
+            id="icon-button-file"
+            
+            type="file"
+            accept="image/*"
+            
+
+            {...register('file')}
+
+          />
+          <label htmlFor="icon-button-file">
+            <IconButton component="span" color="primary">
+              <UploadTwoToneIcon />
+            </IconButton>
+          </label>
+        </ButtonUploadWrapper>
+      </AvatarWrapper>
+
+
+      <LoadingButton loading={loading} type='submit'>Actualizar</LoadingButton>
+
+
+    </form>
+  )
+}
 
 export const EditProduct: FC<Props> = ({ }) => {
 
@@ -131,7 +234,7 @@ export const EditProduct: FC<Props> = ({ }) => {
           const { data } = resp;
           console.log(data.product);
           dispatch(updateProduct(data.product))
-          dispatch(setActiveProduct({...activeProduct, ...data.product}))
+          dispatch(setActiveProduct({ ...activeProduct, ...data.product }))
           enqueueSnackbar('El producto ha sido actualizada', { variant: 'success' })
 
         })
@@ -148,13 +251,14 @@ export const EditProduct: FC<Props> = ({ }) => {
           const { data } = resp;
           console.log(data.product);
           dispatch(addProduct(data.product))
+          dispatch(setActiveProduct(data.product))
           enqueueSnackbar('El producto ha sido añadido', { variant: 'success' })
           reset()
 
         })
         .catch((err) => {
           console.log(err)
-          enqueueSnackbar('Ya existe', { variant: 'error' })
+          enqueueSnackbar('No se pudo crear el producto', { variant: 'error' })
 
         });
     }
@@ -168,192 +272,185 @@ export const EditProduct: FC<Props> = ({ }) => {
   return (
     <>
 
+      <Container maxWidth='md' >
 
-      <Grid container display='flex' justifyContent='space-between'>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h4'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
+        <Grid container display='flex' justifyContent='space-between'>
+          <Grid item display='flex' justifyContent='left' alignItems='center'>
+            <Button onClick={() => navigate(-1)}>
+              <ArrowBack />
+            </Button>
+            <Typography variant='h6'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
 
-        </Grid>
-
-      </Grid>
-
-
-
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={1} mb={1}>
-
-          <Grid item xs={12} sm={3}>
-
-            <AvatarWrapper>
-              <Avatar variant="rounded" alt={product.name} src={'/static/images/products/no-image.png'} />
-              <ButtonUploadWrapper>
-                <Input
-
-                  id="icon-button-file"
-                  name="icon-button-file"
-                  type="file"
-                  
-                />
-                <label htmlFor="icon-button-file">
-                  <IconButton component="span" color="primary">
-                    <UploadTwoToneIcon />
-                  </IconButton>
-                </label>
-              </ButtonUploadWrapper>
-            </AvatarWrapper>
-
-          </Grid>
-
-          <Grid container item xs={12} sm={9} spacing={1}>
-
-
-            <Grid item xs={12} sm={8}>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Nombre del producto"
-                type="text"
-                fullWidth
-
-                {
-                ...register('name', {
-                  required: 'Este campo es requerido',
-                  minLength: { value: 2, message: 'Minimo 2 caracteres' },
-
-
-                })
-                }
-                helperText={<Typography color="red">{errors.name?.message} </ Typography>}
-              />
-
-            </Grid>
-            <Grid item xs={12} sm={4}>
-
-              <TextField
-                label="Precio"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AttachMoney />
-                    </InputAdornment>
-                  ),
-                }}
-                margin='dense'
-                fullWidth
-                type='number'
-                inputProps={{
-                  step: 0.25,
-                }}
-
-                {
-                ...register('price', {
-                  required: 'Este campo es requerido',
-                  min: { value: 0, message: 'El valor debe ser mayor a 0' },
-                  valueAsNumber: true,
-
-                })
-                }
-                helperText={<Typography color="red">{errors.price?.message} </ Typography>}
-
-              />
-            </Grid>
-            <Grid item xs={12} sm={8}>
-
-              <TextField
-                label="Descripcion del producto"
-                margin="dense"
-                multiline
-                rows={4}
-                fullWidth
-                {
-                ...register('description', {
-                  minLength: { value: 10, message: 'Minimo 10 caracteres' },
-
-
-                })
-                }
-                helperText={<Typography color="red">{errors.description?.message} </ Typography>}
-
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                label="Stock"
-                margin='dense'
-                fullWidth
-                type='number'
-                {
-                ...register('stock', {
-                  required: 'Este campo es requerido',
-
-                  min: { value: 0, message: 'El valor debe ser mayor a 0' },
-                  valueAsNumber: true
-
-                })
-                }
-                helperText={<Typography color="red">{errors.stock?.message} </ Typography>}
-
-              />
-
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Controller
-                name='categoryId'
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) =>
-                  <>
-                    <InputLabel id='select-categoria'>Categoria</InputLabel>
-                    <Select
-                      label="select-categoria"
-                      margin='dense'
-                      fullWidth
-                      value={value}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      error={!!errors.categoryId}
-                    >
-                      {
-                        activeSection!.categories.map(categoria => (
-                          <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
-
-                        ))
-                      }
-                    </Select>
-                  </>
-                }
-              />
-
-            </Grid>
-            <Grid item xs={12}>
-              <LoadingButton
-                variant='outlined'
-                loading={loading}
-                type='submit'
-              >
-                {activeProduct ? 'Editar' : "Crear"}
-              </LoadingButton>
-
-
-              {
-                loading && <Button
-                  color='error'
-                  variant='outlined'
-                  onClick={() => cancelEndpoint()}
-                >
-                  Cancelar
-                </Button>
-              }
-
-            </Grid>
           </Grid>
 
         </Grid>
 
 
+        <Card>
+          <CardContent>
+
+            <Grid container spacing={1} mb={1}>
+              <Grid item xs={12} sm={3}>
+
+
+                {
+                  activeProduct &&
+                  <FormProductImage product={activeProduct} />
+                }
+
+              </Grid>
+
+              <Grid item xs={12} sm={9}>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Grid container spacing={1} mb={1}>
+
+
+
+                    <Grid container item xs={12} sm={9} spacing={1}>
+
+
+                      <Grid item xs={12} sm={8}>
+                        <TextField
+                          autoFocus
+                          margin="dense"
+                          label="Nombre del producto"
+                          type="text"
+                          fullWidth
+
+                          {
+                          ...register('name', {
+                            required: 'Este campo es requerido',
+                            minLength: { value: 2, message: 'Minimo 2 caracteres' },
+
+
+                          })
+                          }
+                          helperText={<Typography color="red">{errors.name?.message} </ Typography>}
+                        />
+
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+
+                        <TextField
+                          label="Precio"
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <AttachMoney />
+                              </InputAdornment>
+                            ),
+                          }}
+                          margin='dense'
+                          fullWidth
+                          type='number'
+                          inputProps={{
+                            step: 0.25,
+                          }}
+
+                          {
+                          ...register('price', {
+                            required: 'Este campo es requerido',
+                            min: { value: 0, message: 'El valor debe ser mayor a 0' },
+                            valueAsNumber: true,
+
+                          })
+                          }
+                          helperText={<Typography color="red">{errors.price?.message} </ Typography>}
+
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={8}>
+
+                        <TextField
+                          label="Descripcion del producto"
+                          margin="dense"
+                          multiline
+                          rows={4}
+                          fullWidth
+                          {
+                          ...register('description', {
+                            minLength: { value: 10, message: 'Minimo 10 caracteres' },
+
+
+                          })
+                          }
+                          helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          label="Stock"
+                          margin='dense'
+                          fullWidth
+                          type='number'
+                          {
+                          ...register('stock', {
+                            required: 'Este campo es requerido',
+
+                            min: { value: 0, message: 'El valor debe ser mayor a 0' },
+                            valueAsNumber: true
+
+                          })
+                          }
+                          helperText={<Typography color="red">{errors.stock?.message} </ Typography>}
+
+                        />
+
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <Controller
+                          name='categoryId'
+                          control={control}
+                          render={({ field: { onChange, onBlur, value } }) =>
+                            <>
+                              <InputLabel id='select-categoria'>Categoria</InputLabel>
+                              <Select
+                                label="select-categoria"
+                                margin='dense'
+                                fullWidth
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                error={!!errors.categoryId}
+                              >
+                                {
+                                  activeSection!.categories.map(categoria => (
+                                    <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
+
+                                  ))
+                                }
+                              </Select>
+                            </>
+                          }
+                        />
+
+                      </Grid>
+                      <Grid item xs={12}>
+                        <LoadingButton
+                          variant='outlined'
+                          loading={loading}
+                          type='submit'
+                        >
+                          {activeProduct ? 'Editar' : "Crear"}
+                        </LoadingButton>
+
+
+                        {
+                          loading && <Button
+                            color='error'
+                            variant='outlined'
+                            onClick={() => cancelEndpoint()}
+                          >
+                            Cancelar
+                          </Button>
+                        }
+
+                      </Grid>
+                    </Grid>
+
+                  </Grid>
 
 
 
@@ -364,7 +461,23 @@ export const EditProduct: FC<Props> = ({ }) => {
 
 
 
-      </form>
+
+
+                </form>
+
+
+              </Grid>
+
+            </Grid>
+
+
+
+
+          </CardContent>
+
+        </Card>
+      </Container>
+
     </>
   )
 }

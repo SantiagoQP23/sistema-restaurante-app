@@ -1,6 +1,6 @@
 import { ArrowBack } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Grid, Button, Typography, TextField } from "@mui/material";
+import { Grid, Button, Typography, TextField, Container, Card, CardContent } from '@mui/material';
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -36,7 +36,7 @@ export const EditTable = () => {
 
 
   if (activeTable) {
-    const { id, ...restTable } = activeTable!;
+    const { id, isAvailable, ...restTable } = activeTable!;
     table = restTable;
   } else { table = initialTable }
 
@@ -48,35 +48,39 @@ export const EditTable = () => {
 
 
   const onSubmit = async (form: ICreateTable) => {
-    if(activeTable){
-      await callEndpoint(updateTableS({id: activeTable.id, data: form}))
-      .then((resp) => {
-        const {data} = resp;
-        console.log(data)
-        dispatch(updateTable(data.table));
-        enqueueSnackbar('Mesa actualizada', {variant: 'success'})
 
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('Error al actualizar', {variant: 'error'})
+    
 
-      })
-    }else{
+
+    if (activeTable) {
+      await callEndpoint(updateTableS({ id: activeTable.id, data: form }))
+        .then((resp) => {
+          const { data } = resp;
+          console.log(data)
+          dispatch(updateTable(data.table));
+          enqueueSnackbar('Mesa actualizada', { variant: 'success' })
+
+        })
+        .catch((err) => {
+          console.log(err)
+          enqueueSnackbar('Error al actualizar', { variant: 'error' })
+
+        })
+    } else {
 
       await callEndpoint(createTable(form))
-      .then((resp) => {
-        const {data} = resp;
-        console.log(data)
-        dispatch(addTable(data.table));
-        enqueueSnackbar('Mesa añadida', {variant: 'success'})
+        .then((resp) => {
+          const { data } = resp;
+          console.log(data)
+          dispatch(addTable(data.table));
+          enqueueSnackbar('Mesa añadida', { variant: 'success' })
 
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('Error al crear', {variant: 'error'})
+        })
+        .catch((err) => {
+          console.log(err)
+          enqueueSnackbar('Error al crear', { variant: 'error' })
 
-      })
+        })
     }
 
   }
@@ -84,107 +88,121 @@ export const EditTable = () => {
 
   return (
     <>
-      <Grid container display='flex' justifyContent='space-between'>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h5'>{activeTable ? `Mesa ${activeTable.name}` : "Añadir mesa"} </Typography>
 
-        </Grid>
+      <Container maxWidth='xs'>
 
-      </Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
-
-        <Grid container spacing={1}  maxWidth={300} display='flex' justifyContent='center'>
-
-          <Grid item xs={12} >
-
-
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Nombre de la mesa"
-              type="text"
-              fullWidth
-
-              {
-              ...register('name', {
-                required: 'Este campo es requerido',
-
-              })
-              }
-
-              error={!!errors.name}
-              helperText={<Typography color="red">{errors.name?.message}</Typography>}
-            />
-          </Grid>
-
-          <Grid item xs={12} >
-
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Descripción"
-              type="text"
-              fullWidth
-
-              {
-              ...register('description', {
-
-
-              })
-              }
-
-              error={!!errors.description}
-              helperText={<Typography color="red">{errors.description?.message}</Typography>}
-            />
-          </Grid>
-
-          <Grid item xs={12} >
-
-
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Asientos"
-              type="number"
-              fullWidth
-
-              {
-              ...register('chairs', {
-                required: 'Este campo es requerido',
-                maxLength: { value: 2, message: ' ' },
-                valueAsNumber: true
-
-              })
-              }
-
-              error={!!errors.chairs}
-              helperText={<Typography color="red">{errors.chairs?.message}</Typography>}
-            />
-
-          </Grid>
-
-          <LoadingButton
-            variant='outlined'
-            type='submit'
-            loading={loading}
-          >
-            {activeTable ? `Editar` : "Crear"}
-          </LoadingButton>
-
-          {
-            loading && <Button
-              color='error'
-              variant='outlined'
-              onClick={() => cancelEndpoint()}
-            >
-              Cancelar
+        <Grid container display='flex' justifyContent='space-between'>
+          <Grid item display='flex' justifyContent='left' alignItems='center'>
+            <Button onClick={() => navigate(-1)}>
+              <ArrowBack />
             </Button>
-          }
+            <Typography variant='h5'>{activeTable ? `Mesa ${activeTable.name}` : "Añadir mesa"} </Typography>
+
+          </Grid>
+
         </Grid>
-      </form>
+
+        <Card>
+          <CardContent>
+
+            <form onSubmit={handleSubmit(onSubmit)}>
+
+              <Grid container spacing={1} display='flex' justifyContent='center'>
+
+                <Grid item xs={12} >
+
+
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Nombre de la mesa"
+                    type="text"
+                    fullWidth
+
+                    {
+                    ...register('name', {
+                      required: 'Este campo es requerido',
+
+                    })
+                    }
+
+                    error={!!errors.name}
+                    helperText={<Typography color="red">{errors.name?.message}</Typography>}
+                  />
+                </Grid>
+
+                <Grid item xs={12} >
+
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Descripción"
+                    type="text"
+                    fullWidth
+
+                    {
+                    ...register('description', {
+
+
+                    })
+                    }
+
+                    error={!!errors.description}
+                    helperText={<Typography color="red">{errors.description?.message}</Typography>}
+                  />
+                </Grid>
+
+                <Grid item xs={12} >
+
+
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Asientos"
+                    type="number"
+                    fullWidth
+
+                    {
+                    ...register('chairs', {
+                      required: 'Este campo es requerido',
+                      maxLength: { value: 2, message: ' ' },
+                      valueAsNumber: true
+
+                    })
+                    }
+
+                    error={!!errors.chairs}
+                    helperText={<Typography color="red">{errors.chairs?.message}</Typography>}
+                  />
+
+                </Grid>
+
+                <LoadingButton
+                  variant='outlined'
+                  type='submit'
+                  loading={loading}
+                >
+                  {activeTable ? `Editar` : "Crear"}
+                </LoadingButton>
+
+                {
+                  loading && <Button
+                    color='error'
+                    variant='outlined'
+                    onClick={() => cancelEndpoint()}
+                  >
+                    Cancelar
+                  </Button>
+                }
+              </Grid>
+            </form>
+
+
+          </CardContent>
+
+        </Card>
+      </Container>
+
 
     </>
   )

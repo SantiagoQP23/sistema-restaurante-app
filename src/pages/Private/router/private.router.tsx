@@ -14,6 +14,10 @@ import { AddOrder, EditOrder, ListOrders } from '../Orders/pages';
 import { EditTable } from '../Tables/components/EditTable.component';
 import { ListActiveOrders } from '../Orders/pages/ListActiveOrders.component';
 import { AddProductsOrder } from '../Orders/pages/AddProductsOrder.component';
+import { AddClient } from '../Clients/components/AddClient/AddClient.component';
+import { UsersList } from '../Users/pages/UsersList.page';
+import { AddUser } from '../Users/components/AddUser/AddUser.component';
+import { EditUser } from '../Users/components/EditUser/EditUser.component';
 
 
 
@@ -38,7 +42,7 @@ export const routes: RouteObject[] = [
 
   {
     path: '/',
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]}/>,
+    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
     children: [
       {
         path: '',
@@ -140,7 +144,7 @@ export const routes: RouteObject[] = [
   },
   {
     path: PrivateRoutes.ACTIVE_ORDERS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]}/>,
+    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
     children: [
       {
         path: '',
@@ -170,6 +174,10 @@ export const routes: RouteObject[] = [
           {
             path: 'edit',
             element: <EditClient />
+          },
+          {
+            path: 'add',
+            element: <AddClient />
           },
 
 
@@ -207,10 +215,24 @@ export const routes: RouteObject[] = [
         path: '',
         element: <Users />,
         children: [
-          
-
+          {
+            path: '',
+            element: <UsersList />
+          },
+          {
+            path: 'edit',
+            element: <EditUser />
+          },
+          {
+            path: 'add',
+            element: <AddUser />
+          },
         ]
-      },
+      }
+
+
+
+
     ]
   },
   {

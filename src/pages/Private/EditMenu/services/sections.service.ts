@@ -2,6 +2,8 @@ import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 
 import { ISection, ICreateSection, IUpdateSection, ICreateCategory, ICategory, IProduct, ICreateProduct } from "../../../../models";
+import { UpdateCategoryDto, CreateCategoryDto } from '../dto/category.dto';
+import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
 
 
 
@@ -51,7 +53,7 @@ export const deleteSection = (id: string) => {
 
 
 
-export const createCategory = (data: ICreateCategory) => {
+export const createCategory = (data: CreateCategoryDto) => {
 
   const controller = loadAbort();
 
@@ -65,7 +67,7 @@ export const createCategory = (data: ICreateCategory) => {
 
 }
 
-export const updateCategory = (id: string,data: ICreateCategory) => {
+export const updateCategory = (id: string, data: UpdateCategoryDto) => {
 
   const controller = loadAbort();
 
@@ -90,9 +92,7 @@ export const deleteCategory = (id: string) => {
   }
 }
 
-
-
-export const createProduct = (data: ICreateProduct) => {
+export const createProduct = (data: CreateProductDto) => {
 
   const controller = loadAbort();
 
@@ -103,10 +103,9 @@ export const createProduct = (data: ICreateProduct) => {
     controller
   }
 
-
 }
 
-export const updateProduct = (id: string,data: ICreateProduct) => {
+export const updateProduct = (id: string,data: UpdateProductDto) => {
 
   const controller = loadAbort();
 
@@ -117,8 +116,33 @@ export const updateProduct = (id: string,data: ICreateProduct) => {
     controller
   }
 
+}
+
+export interface UpdateProductImageDto {
+  file: File;
+}
+
+
+export const updateProductImage = (id: string, data: UpdateProductImageDto) => {
+
+  console.log({data})
+
+  const formData = new FormData();
+  formData.append('file', data.file);
+
+  const controller = loadAbort();
+
+  return {
+    call: restauranteApi.patch<ISection>(`/files/product-image/${id}`,
+    formData,
+    { signal: controller.signal }),
+    controller
+  }
+
 
 }
+
+
 export const deleteProduct = (id: string) => {
 
   const controller = loadAbort();

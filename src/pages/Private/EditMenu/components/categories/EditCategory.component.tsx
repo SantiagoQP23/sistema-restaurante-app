@@ -20,6 +20,7 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { addCategory, updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { resetActiveCategory, selectMenu, setActiveCategory } from '../../../../../redux';
+import { Container } from '@mui/material';
 
 
 
@@ -73,14 +74,13 @@ export const EditCategory: FC<Props> = ({ }) => {
   async function onSubmit(form: ICreateCategory) {
 
     if (activeCategory) {
-      console.log('Editar')
 
       await callEndpoint(updateCategoryS(activeCategory.id, form))
         .then((resp) => {
           const { data } = resp;
 
           dispatch(updateCategory(data.category));
-          dispatch(setActiveCategory({...activeCategory, ...data.category}))
+          dispatch(setActiveCategory({ ...activeCategory, ...data.category }))
           enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
 
         })
@@ -92,29 +92,30 @@ export const EditCategory: FC<Props> = ({ }) => {
 
     } else {
 
-      const category: ICategory = {
-        id: '134124',
-        name: 'Ensaladas',
-        products: [],
-        section: { id: '13232', name: 'lajds' }
-      };
-      dispatch(addCategory(category));
-      reset();
+      /*  const category: ICategory = {
+         id: '134124',
+         name: 'Ensaladas',
+         products: [],
+         section: { id: '13232', name: 'lajds' }
+       };
+       dispatch(addCategory(category));
+       reset(); */
 
-      /* await callEndpoint(createCategory(form))
+      await callEndpoint(createCategory(form))
         .then((resp) => {
           const { data } = resp;
 
           dispatch(addCategory(data.category))
-          dispatch(setActiveCategory(data.category))
+          dispatch(setActiveCategory({ ...data.category, products: [] }))
 
           enqueueSnackbar('La categoría ha sido añadida', { variant: 'success' })
 
         })
         .catch((err) => {
-          enqueueSnackbar(err, { variant: 'error' })
+          console.log(err);
+          enqueueSnackbar('No se pudo crear la categoria', { variant: 'error' })
 
-        }); */
+        });
     }
 
     /*  if (!form.idCategoria) {
@@ -140,40 +141,41 @@ export const EditCategory: FC<Props> = ({ }) => {
   return (
     <>
 
+      <Container maxWidth='xs'>
 
-      <Grid container display='flex' justifyContent='space-between'>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h3'> {activeCategory ? activeCategory.name : "Añadir Categoria"}</Typography>
+        <Grid container display='flex' justifyContent='space-between'>
+          <Grid item display='flex' justifyContent='left' alignItems='center'>
+            <Button onClick={() => navigate(-1)}>
+              <ArrowBack />
+            </Button>
+            <Typography variant='h6'> {activeCategory ? activeCategory.name : "Añadir Categoria"}</Typography>
+
+          </Grid>
 
         </Grid>
-
-      </Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
 
 
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Nombre de la Categoria"
-          type="text"
-          fullWidth
-          {
-          ...register('name', {
-            required: 'Este campo es requerido',
-            minLength: { value: 2, message: 'Minimo 2 caracteres' }
-          })
-          }
-          error={!!errors.name}
-          helperText={<Typography variant="body1" color="red">{errors.name?.message}</Typography>}
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Nombre de la Categoria"
+            type="text"
+            fullWidth
+            {
+            ...register('name', {
+              required: 'Este campo es requerido',
+              minLength: { value: 2, message: 'Minimo 2 caracteres' }
+            })
+            }
+            error={!!errors.name}
+            helperText={<Typography variant="body1" color="red">{errors.name?.message}</Typography>}
 
 
-        />
+          />
 
-        {/*   <TextField
+          {/*   <TextField
           id="descripcion-seccion"
           label="Descripcion de la Categoria"
           margin="dense"
@@ -185,73 +187,76 @@ export const EditCategory: FC<Props> = ({ }) => {
 
         /> */}
 
-        <Controller
-          name='sectionId'
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) =>
-            <>
-              <InputLabel id='select-seccion'>Seccion</InputLabel>
-              <Select
-                labelId="select-seccion"
+          <Controller
+            name='sectionId'
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) =>
+              <>
+                <InputLabel id='select-seccion'>Seccion</InputLabel>
+                <Select
+                  labelId="select-seccion"
 
-                label="Seccion"
-                fullWidth
-                margin='dense'
-                disabled
+                  label="Seccion"
+                  fullWidth
+                  margin='dense'
+                  disabled
 
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                error={!!errors.sectionId}
+                  value={value}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  error={!!errors.sectionId}
 
-              >
+                >
 
-                {sections.map(seccion => (
+                  {sections.map(seccion => (
 
-                  <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
-                )
+                    <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
+                  )
 
 
-                )
-                }
+                  )
+                  }
 
-              </Select>
-            </>
+                </Select>
+              </>
+            }
+
+          />
+
+
+
+
+          <LoadingButton
+            variant='outlined'
+            type='submit'
+            loading={loading}
+          >
+            {activeCategory ? 'Editar' : "Crear"}
+          </LoadingButton>
+
+
+          {
+            loading && <Button
+              color='error'
+              variant='outlined'
+              onClick={() => cancelEndpoint()}
+            >
+              Cancelar
+            </Button>
           }
 
-        />
 
 
 
 
-        <LoadingButton
-          variant='outlined'
-          type='submit'
-          loading={loading}
-        >
-          {activeCategory ? 'Editar' : "Crear"}
-        </LoadingButton>
-
-
-        {
-          loading && <Button
-            color='error'
-            variant='outlined'
-            onClick={() => cancelEndpoint()}
-          >
-            Cancelar
-          </Button>
-        }
-
-
-
-
-
-        {/*   <DialogActions>
+          {/*   <DialogActions>
           <Button onClick={closeModal}>Cancelar</Button>
           <Button type='submit'>{categoria ? "Guardar cambios" : "Añadir Categoria"}</Button>
         </DialogActions> */}
-      </form>
+        </form>
+
+      </Container>
+
     </>
   )
 }

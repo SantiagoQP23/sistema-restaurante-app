@@ -3,8 +3,11 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectCategories, selectMenu, selectSections } from "../../../../../redux";
+import { deleteSection, selectCategories, selectMenu, selectSections } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
+import { useSnackbar } from 'notistack';
+import { deleteSection as deleteSectionS } from "../../services/sections.service";
+import { useAppDispatch } from '../../../../../hooks/useRedux';
 
 
 
@@ -13,22 +16,36 @@ interface Props {
   closeModal: () => void;
 }
 
-export const DeleteSection: FC<Props> = ({isOpen, closeModal }) => {
+export const DeleteSection: FC<Props> = ({ isOpen, closeModal }) => {
 
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
 
-  const {activeSection: section} = useSelector(selectMenu);
-  
-  const dispatch = useDispatch();
+  const { activeSection: section } = useSelector(selectMenu);
 
-  const deleteSection = () => {
+  const dispatch = useAppDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const submitDeleteSection = async () => {
 
     console.log('Modal eliminar')
 
+    await callEndpoint(deleteSectionS(section!.id))
+      .then((res) => {
 
-    closeModal()
+        enqueueSnackbar('Sección eliminada', { variant: 'success' });
+        dispatch(deleteSection(section!.id));
+        closeModal();
+      })
+      .catch((err) => {
+
+        enqueueSnackbar('Error al eliminar la sección', { variant: 'error' });
+
+        closeModal()
+
+      })
 
   }
 
@@ -46,9 +63,9 @@ export const DeleteSection: FC<Props> = ({isOpen, closeModal }) => {
             Se eliminarán todas las categorías y productos que pertenecen a esta categoría
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{display: 'flex', justifyContent: 'center'}}>
+        <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button onClick={closeModal} >Cancelar</Button>
-          <LoadingButton loading={loading} variant='contained' color='error' onClick={deleteSection}>
+          <LoadingButton loading={loading} variant='contained' color='error' onClick={submitDeleteSection}>
             Aceptar
           </LoadingButton>
         </DialogActions>

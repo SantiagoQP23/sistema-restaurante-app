@@ -5,6 +5,10 @@ import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { selectCategories, selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
+import { useAppDispatch } from '../../../../../hooks/useRedux';
+import { useSnackbar } from 'notistack';
+import { deleteCategory as deleteCategoryS } from "../../services/sections.service";
+import { deleteCategory } from "../../../../../redux/slices/menu/menu.thunks";
 
 
 
@@ -21,12 +25,27 @@ export const DeleteCategory: FC<Props> = ({isOpen, closeModal }) => {
 
   const {activeCategory: category} = useSelector(selectMenu);
   
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const eliminarCategoria = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+
+  const eliminarCategoria = async () => {
 
     console.log('Modal eliminar')
 
+    await callEndpoint(deleteCategoryS(category!.id))
+
+      .then((res) => {
+
+        enqueueSnackbar('Categoría eliminada', { variant: 'success' });
+        dispatch(deleteCategory(category!));
+        closeModal();
+      })
+      .catch((err) => {
+        
+        enqueueSnackbar('Error al eliminar la categoría', { variant: 'error' });
+      })
 
     closeModal()
 

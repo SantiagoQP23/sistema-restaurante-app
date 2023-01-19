@@ -6,6 +6,7 @@ import { createSection } from "../../EditMenu/services/sections.service";
 import { CardTable } from "./CardTable.component";
 import { useNavigate } from 'react-router-dom';
 import { resetactiveTable, selectTables } from "../../../../redux/slices/tables";
+import { DeleteTable } from './DeleteTable.component';
 
 export const ListTables = () => {
 
@@ -26,7 +27,7 @@ export const ListTables = () => {
 
       <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
         <Grid item>
-          <Typography variant="h5">Mesas registradas: {tables.length}</Typography>
+          <Typography variant="h6">Mesas registradas: {tables.length}</Typography>
 
         </Grid>
         <Grid item>
@@ -48,7 +49,7 @@ export const ListTables = () => {
           : <Grid container spacing={2}>
             {
               tables.map(table => (
-                <Grid item xs={6} sm={2}>
+                <Grid item xs={6} sm={2} key={table.id}>
 
                   <CardTable table={table} />
 
@@ -59,7 +60,10 @@ export const ListTables = () => {
 
 
 
+
       }
+
+      <DeleteTable />
 
     </>
 

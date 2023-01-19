@@ -92,7 +92,7 @@ export const EditProducts: FC<Props> = () => {
           </Button>
 
 
-          <Typography align="center" variant="h5" color="initial">{activeCategory && activeCategory!.name}</Typography>
+          <Typography align="center" variant="h6" color="initial">{activeCategory && activeCategory!.name}</Typography>
 
         </Grid>
 
@@ -107,43 +107,42 @@ export const EditProducts: FC<Props> = () => {
       </Grid>
 
 
-      <Card sx={{ my: 1 }}>
-        <CardHeader
-
-          title={
-
-            <Box  display='flex' justifyContent='space-between' alignItems='center'>
-
-              <Typography variant='h6'>Total productos: {activeCategory!.products.length}</Typography>
-              <Box>
-                <InputLabel id='select-categoria'>Categoria</InputLabel>
-                <Select
-                  label="select-categoria"
-                  margin='dense'
-                  fullWidth
-                  value={activeCategory?.id}
-                  onChange={onChange}
-
-                >
-                  {
-                    activeSection!.categories.map(categoria => (
-                      <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
-
-                    ))
-                  }
-                </Select>
-
-
-              </Box>
-
-
-            </Box>
-          }
-        />
 
 
 
-      </Card>
+      <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+      <Card>
+          <CardContent>
+            <Typography variant='body2'>Productos</Typography>
+            <Typography variant='h6'>{activeCategory?.products.length}</Typography>
+          </CardContent>
+        </Card>
+        <Box>
+          <InputLabel id='select-categoria'>Categoria</InputLabel>
+          <Select
+            label="select-categoria"
+            margin='dense'
+            fullWidth
+            value={activeCategory?.id}
+            onChange={onChange}
+
+          >
+            {
+              activeSection!.categories.map(categoria => (
+                <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
+
+              ))
+            }
+          </Select>
+
+
+        </Box>
+
+
+      </Box>
+
+
 
       <Box >
 

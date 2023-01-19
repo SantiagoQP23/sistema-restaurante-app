@@ -39,7 +39,7 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
         <CardMedia
           component="img"
           sx={{ width: 180 }}
-          image="/static/images/products/no-image.png"
+          image={producto.images ? producto.images : '/static/images/products/no-image.png'}
           alt="Product"
         />
         <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -47,13 +47,13 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
           <CardContent >
             <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography variant="h4" color='white' >{producto.name}</Typography>
+              <Typography variant="body1" color='white' >{producto.name}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" >{producto.description ? producto.description: 'No se ha añadido descripción'}</Typography>
+              <Typography variant="body2" >{producto.description ? producto.description: 'No se ha añadido descripción'}</Typography>
             </Grid>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Typography variant="h6" color='orangered' >$ {producto.price}</Typography>
+              <Typography variant="body2" color='orangered' >$ {producto.price}</Typography>
               <Typography variant="body1" >Stock: {producto.stock}</Typography>
             </Grid>
             <Grid item xs={12}>

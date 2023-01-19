@@ -1,8 +1,8 @@
 
 
 export enum TypeIdentification{
-  CEDULA = "cedula",
-  RUC = "ruc"
+  CEDULA = "CEDULA",
+  RUC = "RUC"
 }
 
 export interface Identification{
@@ -25,7 +25,7 @@ export interface IPerson {
   lastName: string;
   email: string;
   identification: Identification
-  phone?: string;
+  numPhone?: string;
 }
 
 
@@ -35,7 +35,7 @@ export interface CreatePerson{
   firstName: string;
   lastName: string;
   email: string;
-  phone?: string;
+  numPhone?: string;
   identification: CreateIdentification;
 }
 

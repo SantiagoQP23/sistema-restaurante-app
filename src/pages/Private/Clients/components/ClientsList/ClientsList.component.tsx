@@ -4,24 +4,30 @@ import { TextField } from '@mui/material/';
 
 
 import SearchIcon from '@mui/icons-material/Search';
-import ClientsTable from "./ClientsTable.component";
+import {ClientsTable} from "./ClientsTable.component";
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadClients, resetActiveClient } from '../../../../../redux/slices/clients';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { useAsync } from '../../../../../hooks';
 import { getClient, getClients } from '../../services';
 import { IClient } from '../../../../../models';
 import { useSnackbar } from 'notistack';
+import { selectClients } from '../../../../../redux/slices/clients/clients.slice';
+import { DeleteClient } from '../DeleteClient/DeleteClient.component';
 
 
 
 
 export const ClientsList = () => {
 
-  const [cedula, setCedula] = useState<string>('');
+  const [identification, setIdentification] = useState<string>('');
+
+  const { clients } = useSelector(selectClients);
+
+  const [client, setClient] = useState<IClient>();
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -32,29 +38,45 @@ export const ClientsList = () => {
 
 
 
+
+
   const createClient = () => {
     dispatch(resetActiveClient())
-    navigate('edit');
+    navigate('add');
   }
-  
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCedula(event.target.value);
+    setIdentification(event.target.value);
+    setClient(undefined);
   };
 
 
   const searchClient = async () => {
-    if (cedula.length === 10){
-      await callEndpoint(getClient(cedula))
-      .then((resp) => {
-        const {data } = resp;
-        console.log(data);
-      })
-      .catch((err) => {
-        enqueueSnackbar('No se encontró al cliente', {variant: 'error'})
 
-      })
+    if (identification.length === 0) {
+      enqueueSnackbar('Ingrese un número de identificación', { variant: 'error' })
+      return;
     }
-      
+
+    if (identification.length === 10 || identification.length === 13) {
+
+      await callEndpoint(getClient(identification))
+        .then((resp) => {
+          const { data } = resp;
+
+          setClient(data);
+          console.log(data);
+        })
+        .catch((err) => {
+          enqueueSnackbar('No se encontró al cliente', { variant: 'error' })
+
+        })
+    } else {
+      enqueueSnackbar('El número de identificación es incorrecto', { variant: 'error' })
+      return;
+    }
+
+
   }
 
 
@@ -73,7 +95,7 @@ export const ClientsList = () => {
               type='number'
               onChange={handleChange}
               sx={{ ml: 1, flex: 1 }}
-              placeholder="Número de cédula"
+              placeholder="Número de identificación"
               inputProps={{ 'aria-label': 'Buscar cliente' }}
             />
             <IconButton
@@ -108,13 +130,9 @@ export const ClientsList = () => {
 
       </Grid>
 
+      <ClientsTable clients={clients} client={client}/>
 
-
-
-
-      <ClientsTable />
-
-
+      <DeleteClient />
 
     </>
 

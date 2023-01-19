@@ -17,8 +17,8 @@ export const Product: FC<Props> = ({ product }) => {
       <Card sx={{ display: 'flex' }} >
         <CardMedia
           component="img"
-          sx={{ width: 151, display: 'none' }}
-          image="/static/images/products/no-image.png"
+          sx={{ width: 151, }}
+          image={product.images || "/static/images/products/no-image.png"}
           alt="Product"
         />
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

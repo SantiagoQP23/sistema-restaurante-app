@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { setActiveTable } from "../../../../redux/slices/tables";
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import { Box } from "@mui/system";
+import { Label } from '../../../../components/ui/Label';
+import { statusModalDeleteTable } from '../services/tables.service';
 
 const IconButtonError = styled(IconButton)(
   ({ theme }) => `
@@ -40,6 +42,13 @@ export const CardTable: FC<Props> = ({ table }) => {
     navigate('edit');
   }
 
+
+  const deleteTable = () =>{
+    statusModalDeleteTable.setSubject(true, table);
+    console.log('deleteTable')
+
+  }
+
   return (
     <>
       <Card >
@@ -47,18 +56,27 @@ export const CardTable: FC<Props> = ({ table }) => {
         <CardContent sx={{textAlign: 'center'}}>
           <Box display='flex' alignItems='center' justifyContent='center' >
             <TableRestaurantIcon />
-            <Typography variant="h6" fontWeight="bold" pl={1}>
+            <Typography variant="body1" fontWeight="bold" pl={1}>
               Mesa {table.name}
             </Typography>
 
           </Box>
           <Divider sx={{my: 1}} />
-          <Typography variant="body1" fontWeight="bold" >
+
+          {
+            table.isAvailable 
+            ? <Label color='success'>Disponible</Label>
+            : <Label color='error'>Ocupado</Label>
+
+          }
+
+          <Typography variant="body2" fontWeight="bold" >
             Asientos: {table.chairs}
           </Typography>
-          <Typography variant="body1" fontWeight="normal">
+          <Typography variant="body2" fontWeight="normal">
             {table.description ? table.description : '...'}
           </Typography>
+
         </CardContent>
         <CardActions sx={{display: 'flex', justifyContent: 'center'}}>
           <IconButton
@@ -67,7 +85,7 @@ export const CardTable: FC<Props> = ({ table }) => {
             <EditOutlined fontSize="medium" />
           </IconButton>
 
-          <IconButtonError>
+          <IconButtonError onClick={deleteTable}>
             <DeleteTwoToneIcon fontSize="medium" />
           </IconButtonError>
         </CardActions>

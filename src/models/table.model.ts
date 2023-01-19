@@ -6,6 +6,7 @@ export interface ITable {
   name: string;
   description: string;
   chairs: number;
+  isAvailable: boolean;
 
 }
 
