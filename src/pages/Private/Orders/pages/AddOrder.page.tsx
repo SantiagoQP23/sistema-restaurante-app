@@ -15,6 +15,8 @@ import { CardHeader, Box, } from "@mui/material"
 import { OrderDetail } from "./../components"
 import { OrderContext } from '../context/Order.context';
 import { NewOrderDetail } from '../components/NewOrderDetail.component';
+import { SocketContext } from '../../../../context/SocketContext';
+import { CreateOrderDto } from '../dto/create-order.dto';
 
 
 
@@ -23,6 +25,8 @@ import { NewOrderDetail } from '../components/NewOrderDetail.component';
 
 const People: FC = () => {
 
+  const {people, setPeople} = useContext(OrderContext);
+
   return (
     <>
       <Card>
@@ -30,7 +34,8 @@ const People: FC = () => {
           <TextField
             type='number'
             label='Personas'
-            value={10}
+            value={people}
+            onChange={(e)=>{setPeople(Number(e.target.value))}}
           />
         </CardContent>
       </Card>
@@ -85,12 +90,28 @@ export const AddOrder = () => {
 
   const navigate = useNavigate();
 
-  const { amount, reset } = useContext(OrderContext);
+  const {socket}= useContext(SocketContext);
+
+  const { amount, reset,getOrder } = useContext(OrderContext);
 
   const cancelOrder = () => {
     navigate(-1);
     reset();
   }
+
+  const submitAddOrder = () => {
+
+    const order: CreateOrderDto = getOrder();
+
+    socket?.emit('create-order', order, (resp: any)=>{
+      console.log(resp);
+    });
+
+
+
+  }
+
+
 
   return (
     <>
@@ -106,7 +127,7 @@ export const AddOrder = () => {
 
               <Button variant='outlined' onClick={cancelOrder}>Cancelar</Button>
               {/* <Typography variant='body2'>$ {amount}</Typography> */}
-              <Button variant='contained' > ${amount} Create Order</Button>
+              <Button variant='contained' onClick={submitAddOrder}> ${amount} Create Order</Button>
             </Grid>
             
           </Grid>
@@ -123,6 +144,7 @@ export const AddOrder = () => {
           <Grid item xs={12} md={6}>
             <TableOrder />
           </Grid>
+          
           <Grid item xs={12} md={6}>
             <People />
           </Grid>

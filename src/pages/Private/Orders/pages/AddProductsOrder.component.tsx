@@ -37,6 +37,7 @@ export const AddProductsOrder: FC = () => {
   const navigate = useNavigate();
 
 
+
   const { isOpen: open, handleOpen, handleClose } = useModal(false);
 
 
@@ -53,11 +54,13 @@ export const AddProductsOrder: FC = () => {
 
   //const [detalle, setDetalle] = useState<INuevoDetallePedido | null >();
 
+  if(!activeOrder)
+    return (<></>)
 
   return (
     <>
 
-      <Grid container display='flex' justifyContent='space-between'>
+      <Grid container display='flex' justifyContent='space-between' alignItems='center' mb={2}>
         <Grid item display='flex' justifyContent='left' alignItems='center'>
           <Button onClick={() => navigate(-1)}>
             <ArrowBack />
@@ -71,7 +74,7 @@ export const AddProductsOrder: FC = () => {
           color="primary"
           onClick={() => navigate(-1)}
         >
-          <ShoppingCartOutlined /> $ {15}
+          <ShoppingCartOutlined /> $ {activeOrder.amount}
         </Button>
 
       </Grid>
@@ -89,7 +92,7 @@ export const AddProductsOrder: FC = () => {
 
         <Grid item xs={12} sm={6}>
 
-          <OrderDetails />
+          <OrderDetails details={activeOrder.details} />
 
         </Grid>
 

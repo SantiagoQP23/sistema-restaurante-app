@@ -23,66 +23,63 @@ import { Label } from '../../../../components/ui';
 
 //import '../../styles/estilos-pedido.css';
 import { CardActions } from '@mui/material/';
+import { useSnackbar } from 'notistack';
+import { SocketResponse } from '../interfaces/responses-sockets.interface';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { statusModalDeleteOrder } from '../services/orders.service';
 
 interface Props {
-  //pedido: IOrder
+  order: IOrder
 }
 
 
-export const Order: FC<Props> = ({ }) => {
+export const Order: FC<Props> = ({ order }) => {
 
   const { socket } = useContext(SocketContext);
+
+  const { client, user, table } = order;
 
 
 
   let navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const eliminarPedido = () => {
-    /* 
-        Swal.fire({
-          title: '¿Quieres eliminar el pedido?',
-          showCancelButton: true,
-          confirmButtonText: 'Eliminar',
-        }).then((result) => {
-         
-          if (result.isConfirmed) {
-    
-            socket?.emit('eliminarPedido', { idPedido: pedido.idPedido }, ({ok}: { ok: boolean }) => {
-    
-              console.log("Pedido eliminado", ok);
-    
-              if (!ok) {
-    
-                toast.error('No se pudo eliminar el pedido');
-              }
-            })
-          }
-        }) */
+
+    statusModalDeleteOrder.setSubject(true, order)
+
   }
 
-  const finalizarPedido = () => {
 
-    /*  Swal.fire({
-       title: '¿Quieres finalizar el pedido?',
-       showCancelButton: true,
-       confirmButtonText: 'Finalizar',
-     }).then((result) => {
-       if (result.isConfirmed) {
-         console.log("finalizar el pedido: ", pedido.idPedido);
-         dispatch(pedidoStartUpdatedEstado(pedido.idPedido));
-       }
-     }) */
-  }
 
-  /*  const editarPedido = () => {
-     dispatch(pedidoStartSetActive(pedido));
-     navigate(`/edit/${pedido.id}`);
- 
-   }
-  */
 
-   
+  /* 
+      Swal.fire({
+        title: '¿Quieres eliminar el pedido?',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+      }).then((result) => {
+       
+        if (result.isConfirmed) {
+  
+          socket?.emit('eliminarPedido', { idPedido: pedido.idPedido }, ({ok}: { ok: boolean }) => {
+  
+            console.log("Pedido eliminado", ok);
+  
+            if (!ok) {
+  
+              toast.error('No se pudo eliminar el pedido');
+            }
+          })
+        }
+      }) */
+
+
+
+
+
 
   return (
 
@@ -94,10 +91,10 @@ export const Order: FC<Props> = ({ }) => {
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant="body1" fontWeight='bold'>Mesa 1</Typography>
+              <Typography variant="body1" fontWeight='bold'>Mesa {table?.name}</Typography>
 
               {
-                true
+                !order.isDelivered
                   ? (<Label color='success'>Activo</Label>)
                   : (<Label color='error'>Finalizado</Label>)
               }
@@ -110,7 +107,7 @@ export const Order: FC<Props> = ({ }) => {
               {
 
 
-                formatDistance(new Date(), new Date(), {
+                formatDistance(new Date(order.createdAt), new Date(), {
                   addSuffix: true,
                   includeSeconds: true,
                   locale: es
@@ -125,14 +122,17 @@ export const Order: FC<Props> = ({ }) => {
 
           <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-            <Typography variant="body1"  ><b>Cliente: </b>{'Lionel Andres Messi'}</Typography>
+            <Typography variant="body1"  ><b>Cliente: </b>{client
+              ? `${client.person.firstName} ${client.person.lastName}`
+              : '-'}
+            </Typography>
 
 
           </Box>
 
           <Box display='flex' >
 
-            <Typography variant="body2" ><b>Mesero: </b>{'Santiago Quirumbay'}</Typography>
+            <Typography variant="body2" ><b>Mesero: </b>{`${user.person.firstName} ${user.person.lastName}`}</Typography>
 
 
 
@@ -143,17 +143,17 @@ export const Order: FC<Props> = ({ }) => {
 
 
           <Box>
-            <IconButton
+            {/* <IconButton
               onClick={finalizarPedido}
               color='success'
             >
               <DoneOutline />
-            </IconButton>
+            </IconButton> */}
 
             <IconButton
 
               color='primary'
-              onClick={() => {navigate('edit')}}
+              onClick={() => { navigate(`edit/${order.id}`) }}
             >
               <EditOutlined />
             </IconButton>
@@ -166,7 +166,7 @@ export const Order: FC<Props> = ({ }) => {
             </IconButton>
           </Box>
 
-          <Typography variant="body1" >$ {20.00}</Typography>
+          <Typography variant="body1" >$ {order.amount}</Typography>
 
         </CardActions>
       </Card>

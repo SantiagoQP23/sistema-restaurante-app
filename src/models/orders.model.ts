@@ -11,17 +11,19 @@ export interface IOrder {
   amount: number;
 
   isDelivered: boolean;
+  
+  isPaid: boolean;
 
   user: IUser;
 
-  client: IClient;
-  table: ITable;
+  client?: IClient;
+  table?: ITable;
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  details?: IOrderDetail[];
+  details: IOrderDetail[];
 
 }
 
@@ -50,7 +52,7 @@ export interface IOrderDetail{
 
   quantity: number;
 
-  qtyDeliverd: number;
+  qtyDelivered: number;
 
   amount: number;
 

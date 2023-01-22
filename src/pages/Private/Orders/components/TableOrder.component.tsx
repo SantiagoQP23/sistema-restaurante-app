@@ -1,38 +1,99 @@
 import { Card, CardContent, Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput } from "@mui/material"
-import { FC, useContext, useState } from "react"
+import { FC, useContext, useState, useEffect } from "react"
 import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
 import { useAsync, useFetchAndLoad } from "../../../../hooks";
 import { ITable } from "../../../../models";
 import { getTables } from "../../Tables/services";
 import { OrderContext } from '../context/Order.context';
+import { SocketContext } from '../../../../context/SocketContext';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { useSnackbar } from 'notistack';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { ChangeTable } from '../interfaces/data-emit-sockets.interface';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { selectTables } from '../../../../redux/slices/tables/tables.slice';
 
-export const TableOrder: FC = () => {
+interface Props {
+  table?: ITable;
+}
 
-  const {setTable, table} = useContext(OrderContext);
+export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
 
-  const { loading, callEndpoint } = useFetchAndLoad();
 
-  const [tables, setTables] = useState<ITable[]>([]);
+  const { setTable, table } = useContext(OrderContext);
 
-  const getTablesCall = async () => await callEndpoint(getTables());
+  const { socket } = useContext(SocketContext);
 
-  const loadTablesState = (data: ITable[]) => {
-   setTables(data);
+  const dispatch = useDispatch();
+
+  const { activeOrder } = useSelector(selectOrders);
+
+  const {tables} = useSelector(selectTables);
+
+  const [tablesAvailable, setTablesAvailable] = useState<ITable[]>([])
+
+  const { enqueueSnackbar } = useSnackbar();
+
+
+
+  const filterTablesAvailable = (tables: ITable[]) => {
+
+    const tablesAvailable = tables.filter(t => t.isAvailable);
+
+    return tablesAvailable;
   }
 
 
-  const changeTable = (tableId: number) => {
+  const changeTable = (tableId: string) => {
 
     const table = tables.find(t => t.id === tableId);
 
-    setTable(table!);
+    console.log({ tableOrder })
+
+    if (activeOrder) {
+
+      console.log('emitiendo evento')
+
+      const data: UpdateOrderDto = {
+        id: activeOrder.id,
+        tableId,
+      }
+
+      socket?.emit(EventsEmitSocket.changeTable, data, ({ ok, msg, order }: SocketResponseOrder) => {
+
+        console.log('response', ok);
+        if (ok) {
+          setTable(table!);
+          dispatch(setActiveOrder(order!))
+        }
+        else {
+          enqueueSnackbar(msg, { variant: 'error' });
+        }
+
+
+      });
+    } else {
+      setTable(table!);
+    }
+
 
 
   }
 
 
+  useEffect(() => {
+    if (tableOrder)
+      setTable(tableOrder);
 
-  useAsync(getTablesCall, loadTablesState, () => {}, []);
+    filterTablesAvailable(tables); 
+  },[])
+
+  useEffect(() => {
+    setTablesAvailable(filterTablesAvailable(tables));
+  }, [tables]);
+
 
 
 
@@ -50,26 +111,32 @@ export const TableOrder: FC = () => {
               <Typography variant='body1'>Mesa <b>{table ? table.name : 'N.A.'}</b></Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ p: 0, m: 0 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={table?.id}
-                  label="Mesa del pedido"
+              {
+                tablesAvailable.length === 0
+                  ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
+                  : <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={table?.id}
+                        label="Mesa del pedido"
 
-                  onChange={ (e) => changeTable(Number(e.target.value))}
+                        onChange={(e) => changeTable(e.target.value)}
 
-                >
-                  {
-                    tables.map(table => (
-                      <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
+                      >
+                        {
+                          tablesAvailable.map(table => (
 
-                    ))
-                  }
+                            <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
 
-                </Select>
-              </FormControl>
+                          ))
+                        }
+
+                      </Select>
+                    </FormControl>
+              }
+
 
             </AccordionDetails>
           </Accordion>

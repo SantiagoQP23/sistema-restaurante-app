@@ -13,7 +13,7 @@ export const useCounter = (initialState = 1, max?: number, min?: number) => {
   }
 
   return {
-    state, increment, decrement
+    state, increment, decrement, setCounter: setstate
   }
   
 }

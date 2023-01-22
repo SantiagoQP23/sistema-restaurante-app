@@ -22,6 +22,7 @@ import { ExpandMore } from '@mui/icons-material';
 
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import { ModalDeleteOrder } from '../components/EditOrder/ModalDeleteOrder.component';
 
 
 
@@ -67,8 +68,6 @@ export const Clock: FC = () => {
 
 export const ListOrders = () => {
 
-  const { socket } = useContext(SocketContext);
-
   const [view, setView] = useState('list');
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
@@ -85,9 +84,6 @@ export const ListOrders = () => {
 
     navigate('add');
 
-    socket?.emit('create-order', {
-      data: 'hola'
-    });
 
     //socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}: INuevoDetalle) => {
     /* socket?.emit('nuevoPedido', {}, ({ ok }: { ok: boolean }) => {
@@ -124,7 +120,8 @@ export const ListOrders = () => {
                 <Card>
                   <CardContent>
 
-                    <Typography variant="body1">Pedidos: {orders.length}</Typography>
+                    <Typography variant="body1">Pedidos</Typography>
+                    <Typography variant="h6"> {orders.length}</Typography>
 
                   </CardContent>
                 </Card>
@@ -201,7 +198,7 @@ export const ListOrders = () => {
       {/* Lista de orders */}
 
 
-      <ToggleButtonGroup
+     {/*  <ToggleButtonGroup
         orientation="horizontal"
         value={view}
         exclusive
@@ -216,30 +213,24 @@ export const ListOrders = () => {
         </ToggleButton>
 
       </ToggleButtonGroup>
-
+ */}
 
       <Grid container spacing={1}>
-        <Grid item xs={12} md={6} lg={4}  >
 
-          <Order />
+        {
+          orders.length > 0 && orders.map(order => (
+            <Grid key={order.id} item xs={12} md={6} lg={4}  >
 
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}  >
+              <Order order={order}/>
 
-          <Order />
+            </Grid>
+          ))
 
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}  >
+        }
 
-          <Order />
-
-        </Grid>
-        <Grid item xs={12} md={6} lg={4}  >
-
-          <Order />
-
-        </Grid>
       </Grid>
+
+
 
 
       {/* <Grid  mt={2} container spacing={1}>

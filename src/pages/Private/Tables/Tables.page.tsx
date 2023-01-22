@@ -13,14 +13,7 @@ const Table = () => {
 
   const dispatch = useDispatch();
 
-  const getTablesCall = async () => await callEndpoint(getTables());
-
-  const loadTablesState = (data: ITable[]) => {
-    dispatch(loadTables(data));
-  }
-
-  useAsync(getTablesCall, loadTablesState, () => {}, []);
-
+ 
 
 
   return (

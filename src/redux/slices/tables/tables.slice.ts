@@ -32,7 +32,7 @@ export const tablesSlice = createSlice({
       state.activeTable = payload
       
     },
-    deleteTable: (state, {payload}: PayloadAction<number>) => {
+    deleteTable: (state, {payload}: PayloadAction<string>) => {
       state.tables = state.tables.filter(
         p => p.id !== payload
       )

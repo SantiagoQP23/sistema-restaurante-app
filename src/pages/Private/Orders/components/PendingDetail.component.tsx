@@ -12,6 +12,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { IOrderDetail } from '../../../../models';
 import { selectAuth } from '../../../../redux';
 import { Text } from '../../components';
+import { statusModalDispatchDetail } from '../services/orders.service';
 
 
 const LinearProgressWrapper = styled(LinearProgress)(
@@ -29,23 +30,25 @@ const LinearProgressWrapper = styled(LinearProgress)(
 );
 
 interface Props {
-  detalle?: IOrderDetail;
-  despachar: () => void;
+  detail: IOrderDetail;
+  orderId: string
 }
 
 
 
-export const PendingDetail: FC<Props> = ({ detalle, despachar }) => {
+export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
 
   const { user } = useSelector(selectAuth);
+
+
 
 
   const theme = useTheme();
 
   const despacharDetalle = () => {
 
-    despachar();
-    // despachar(detalle);
+    console.log('Despachar detalle')
+    statusModalDispatchDetail.setSubject(true, detail, orderId);
   }
 
   return (
@@ -63,12 +66,12 @@ export const PendingDetail: FC<Props> = ({ detalle, despachar }) => {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box >
             <Typography variant="body1" noWrap gutterBottom>
-              <Text color="success">{3}</Text> de {' '}
-              <Text color="info">{5}</Text> {' '}
-              {`${'Camarones apanados'}`}
+              <Text color="success">{detail.qtyDelivered}</Text> de {' '}
+              <Text color="info">{detail.quantity}</Text> {' '}
+              {`${detail.product.name}`}
             </Typography>
-            <Typography variant="body2" >
-              {'Sin ensalada'}
+            <Typography variant="body2" color='orange'>
+              {detail.description}
             </Typography>
           </Box>
           <Box display='flex'>
@@ -94,7 +97,7 @@ export const PendingDetail: FC<Props> = ({ detalle, despachar }) => {
           </Box>
         </Box>
         <LinearProgressWrapper
-          value={(3 * 100) / 5}
+          value={(detail.qtyDelivered * 100) / detail.quantity}
           color="primary"
           variant="determinate"
         />

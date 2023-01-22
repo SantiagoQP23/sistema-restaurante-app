@@ -12,7 +12,7 @@ import { EditProduct } from '../EditMenu/components/products/EditProduct.compone
 import { ListTables } from '../Tables/components';
 import { AddOrder, EditOrder, ListOrders } from '../Orders/pages';
 import { EditTable } from '../Tables/components/EditTable.component';
-import { ListActiveOrders } from '../Orders/pages/ListActiveOrders.component';
+import { ListActiveOrders } from '../ActiveOrders/ListActiveOrders.component';
 import { AddProductsOrder } from '../Orders/pages/AddProductsOrder.component';
 import { AddClient } from '../Clients/components/AddClient/AddClient.component';
 import { UsersList } from '../Users/pages/UsersList.page';
@@ -119,6 +119,8 @@ export const routes: RouteObject[] = [
     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
     children: [
       {
+
+        
         path: '',
         element: <Orders />,
         children: [
@@ -127,11 +129,11 @@ export const routes: RouteObject[] = [
             element: <ListOrders />
           },
           {
-            path: 'edit',
+            path: 'edit/:orderId',
             element: <EditOrder />
           },
           {
-            path: 'edit/products',
+            path: 'edit/:orderId/products',
             element: <AddProductsOrder />
           },
           {

@@ -1,21 +1,65 @@
-import { FC, useState, useContext } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 
-import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
 import { DriveFileRenameOutlineOutlined } from "@mui/icons-material";
 import { InputSearch } from "../../../../components/ui";
 import { useFetchAndLoad } from "../../../../hooks";
 import { IClient } from "../../../../models";
 import { getClient } from "../../Clients/services";
 import { OrderContext } from '../context/Order.context';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
+import { useSnackbar } from 'notistack';
+import { SocketContext } from '../../../../context/SocketContext';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { UpdateOrderDto } from '../dto/update-order.dto';
 
-export const DataClient: FC = () => {
 
+interface Props {
+  client?: IClient;
+}
+
+interface DataClientProps {
+  client: IClient;
+}
+
+
+const DataClientOrder: FC<DataClientProps> = (
+  { client }
+) => {
+  return (
+    <>
+      <Typography variant='body1'><b>Nombre: </b> {client.person.firstName + ' ' + client.person.lastName}</Typography>
+      <Typography variant='body1'><b>{client.person.identification.type}: </b> {client.person.identification.num}</Typography>
+      <Typography variant='body1'><b>Email: </b> {client.person.email}</Typography>
+      <Typography variant='body1'><b>Dirección: </b> {client.address}</Typography>
+    </>
+  )
+
+
+}
+
+export const DataClient: FC<Props> = (
+  { client: clientOrder }
+) => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
   const [cedula, setCedula] = useState<string>('');
 
-  const {client, setClient} = useContext(OrderContext);
+  const { client, setClient } = useContext(OrderContext);
+
+  const { activeOrder } = useSelector(selectOrders);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { socket } = useContext(SocketContext);
+
+  const dispatch = useDispatch();
+
+
+
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +70,7 @@ export const DataClient: FC = () => {
 
 
   const searchClient = async () => {
-    if (cedula.length === 10) {
+    if (cedula.length === 10 || cedula.length === 13) {
       await callEndpoint(getClient(cedula))
         .then((resp) => {
           const { data } = resp;
@@ -34,12 +78,41 @@ export const DataClient: FC = () => {
           console.log(data);
         })
         .catch((err) => {
-          //nqueueSnackbar('No se encontró al cliente', { variant: 'error' })
+          enqueueSnackbar('No se encontró al cliente', { variant: 'error' })
 
         })
+    } else {
+      enqueueSnackbar('Ingrese un número de identificación válido', { variant: 'warning' })
     }
 
   }
+
+  const setClientOrder = () => {
+
+    const data: UpdateOrderDto = {
+      id: activeOrder!.id,
+      clientId: client!.id
+    }
+
+    socket?.emit(EventsEmitSocket.changeClient, data, (res: SocketResponseOrder) => {
+      console.log(res);
+      if (res.ok) {
+        dispatch(setActiveOrder(res.order!));
+      } else {
+        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
+      }
+    });
+  }
+
+  useEffect(() => {
+   
+
+    return () => {
+      setClient(undefined);
+    }
+
+
+  }, [])
 
 
   return (
@@ -56,11 +129,11 @@ export const DataClient: FC = () => {
               sx={{ p: 0, m: 0 }}
             >
               <Typography variant='body2'>
-                { client
-                  ? client?.firstNames + client?.lastNames
-                  : 'No asignado'
+                {clientOrder
+                  ? clientOrder.person.firstName + ' ' + clientOrder.person.lastName
+                  : client && !activeOrder && client.person.firstName + ' ' + client.person.lastName || 'No asignado'
                 }
-                </Typography>
+              </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ p: 0, m: 0 }}>
               <InputSearch
@@ -69,16 +142,17 @@ export const DataClient: FC = () => {
                 search={searchClient}
                 loading={loading}
               />
+              {
+                client 
+                ?  <DataClientOrder client={client} />
+                : activeOrder?.client && <DataClientOrder client={activeOrder.client} />
+              }
 
-              {client && !loading && (
-                <>
-                  <Typography variant='body1'><b>Nombre: </b> {client?.firstNames + client?.lastNames}</Typography>
-                  <Typography variant='body1'><b>Cedula: </b> {client.cedula}</Typography>
-                  <Typography variant='body1'><b>RUC: </b> {client.ruc}</Typography>
-                  <Typography variant='body1'><b>Email: </b> {client.email}</Typography>
-                  <Typography variant='body1'><b>Dirección: </b> {client.address}</Typography>
-                </>
-              )}
+              
+              {
+                client && activeOrder && <Button variant="outlined" onClick={setClientOrder}>Actualizar cliente</Button>
+
+              }
 
             </AccordionDetails>
           </Accordion>

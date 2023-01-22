@@ -2,7 +2,7 @@
 
 
 export interface ITable {
-  id: number;
+  id: string;
   name: string;
   description: string;
   chairs: number;

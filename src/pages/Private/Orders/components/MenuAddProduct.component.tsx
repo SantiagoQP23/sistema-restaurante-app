@@ -2,7 +2,7 @@ import { FC, useState, useEffect, useContext } from "react";
 
 import { AddCircleOutline, ExpandMore, RemoveCircleOutline } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, Grid, IconButton, Typography, Divider } from '@mui/material';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 import { InputSearch } from "../../../../components/ui";
 import { IProduct, ICategory } from "../../../../models";
 import { selectMenu } from "../../../../redux";
@@ -18,9 +18,16 @@ import { sharingInformationService } from "../services/sharing-information.servi
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { findProductsByName, getAllProducts } from "../../../../helpers";
 import { useAppSelector, useModal } from "../../../../hooks";
-import { ICreateOrderDetail } from '../../../../models/orders.model';
+import { ICreateOrderDetail, IOrderDetail } from '../../../../models/orders.model';
 import { ModalAddDetail } from './ModalAddDetail.component';
 import { OrderContext } from '../context/Order.context';
+import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
+import { SocketContext } from '../../../../context/SocketContext';
+import { useSnackbar } from 'notistack';
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { CreateOrderDetailDto } from '../dto/create-order-detail.dto';
 
 interface PropsProduct {
   product: IProduct,
@@ -28,24 +35,98 @@ interface PropsProduct {
 }
 
 
-const Product: FC<PropsProduct> = ({ product}) => {
+const Product: FC<PropsProduct> = ({ product }) => {
   const { state: counter, increment, decrement } = useCounter(1);
 
+  const { activeOrder } = useSelector(selectOrders);
+
   const [subtotal, setSubtotal] = useState(counter * product.price);
-  const {addDetail} = useContext(OrderContext);
+  const { addDetail } = useContext(OrderContext);
 
   useEffect(() => {
     setSubtotal(counter * product.price)
   }, [counter]);
 
+  const {enqueueSnackbar} = useSnackbar();
+
+  const dispatch = useDispatch();
+
+
+
+
+  const {socket} = useContext(SocketContext);
+
+
+  const updateOrderDetail = (detail: IOrderDetail) => {
+    const data: UpdateOrderDto = {
+      id: activeOrder!.id,
+      orderDetail: {
+        id: detail.id,
+        quantity: detail.quantity + counter
+      }
+    }
+
+    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+
+      if (ok) {
+        dispatch(setActiveOrder(order!))
+
+      } else {
+        enqueueSnackbar(msg, { variant: 'error' });
+      }
+
+    });
+
+  }
+
+
+  const createOrderDetail = () => {
+    const data : CreateOrderDetailDto = {
+
+      orderId: activeOrder!.id,
+      productId: product.id,
+      quantity: counter
+    }
+
+    console.log(data);
+
+    socket?.emit(EventsEmitSocket.addOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+        
+        if (ok) {
+          dispatch(setActiveOrder(order!))
+  
+        } else {
+          enqueueSnackbar(msg, { variant: 'error' });
+        }
+  
+      });
+  }
+
+
+
 
   const createNewDetail = () => {
 
-    addDetail({product, quantity: counter})
+    if (activeOrder) {
+      const detail = activeOrder.details.find(det => det.product.id === product.id);
 
-   /*  const detail:ICreateOrderDetail = {product, quantity: counter}
+      if(detail) {
+        updateOrderDetail(detail);
 
-    sharingInformationService.setSubject(true, detail); */
+      }else {
+        createOrderDetail();
+      }
+
+    }
+    else {
+
+      addDetail({ product, quantity: counter })
+    }
+
+
+    /*  const detail:ICreateOrderDetail = {product, quantity: counter}
+ 
+     sharingInformationService.setSubject(true, detail); */
   }
 
 
@@ -138,8 +219,8 @@ const ProductsList: FC<ProductsListProps> = ({ products }) => {
       <Grid container spacing={1}>
         {
           products.map(product => (
-            <Grid item xs={12}>
-              <Product product={product}  />
+            <Grid key={product.id} item xs={12}>
+              <Product product={product} />
 
             </Grid>
           ))
@@ -175,8 +256,8 @@ const Category: FC<PropsCategory> = ({ category }) => {
                 <Grid container spacing={1}>
                   {
                     category.products.map(product => (
-                      <Grid item xs={12}>
-                        <Product product={product}  />
+                      <Grid key={product.id} item xs={12}>
+                        <Product product={product} />
 
                       </Grid>
                     ))
@@ -239,7 +320,7 @@ const AllMenu: FC = () => {
 
                       {
                         activeSection?.categories.map(category => (
-                          <Grid item xs={12}>
+                          <Grid key={category.id} item xs={12}>
                             <Category category={category} />
 
                           </Grid>
@@ -257,7 +338,7 @@ const AllMenu: FC = () => {
 
         }
       </Grid>
-    
+
 
 
     </>
@@ -270,7 +351,7 @@ const AllMenu: FC = () => {
 
 export const MenuAddProduct = () => {
 
-  const { sections} = useSelector(selectMenu);
+  const { sections } = useSelector(selectMenu);
 
   const [nameProduct, setNameProduct] = useState('')
 

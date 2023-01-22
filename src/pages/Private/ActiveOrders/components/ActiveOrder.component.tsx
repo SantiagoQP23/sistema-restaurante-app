@@ -3,10 +3,10 @@ import { formatDistance } from 'date-fns';
 
 import { Card, CardHeader, Grid, CardContent, Box, Divider, Typography } from '@mui/material';
 import { IOrder, IOrderDetail } from '../../../../models';
-import { PendingDetail } from './PendingDetail.component';
+import { PendingDetail } from '../../Orders/components/PendingDetail.component';
 import { Label } from '../../../../components/ui';
 import { useModal } from '../../../../hooks';
-import { DespachoDetalle } from './DespachoDetalle';
+import { DespachoDetalle } from '../../Orders/components/DespachoDetalle';
 /* 
 import { IPedido } from '../../interfaces'
 import { IDetallePedido } from '../../interfaces/pedidos';
@@ -23,10 +23,12 @@ import { ActiveOrder } from './PendingDetail.component';
  */
 
 interface Props {
-  pedido?: IOrder;
+  order: IOrder;
 }
 
-export const ActiveOrder: FC<Props> = ({ pedido }) => {
+export const ActiveOrder: FC<Props> = ({ order }) => {
+
+  const { details } = order;
 
 
   //const { socket } = useContext(SocketContext);
@@ -37,7 +39,7 @@ export const ActiveOrder: FC<Props> = ({ pedido }) => {
   
     const { isOpen, handleClose, handleClickOpen } = useModal();
    */
-    const { isOpen, handleOpen, handleClose } = useModal();
+  const { isOpen, handleOpen, handleClose } = useModal();
 
 
   const despacharDetalle = (detalle: IOrderDetail) => {
@@ -150,17 +152,17 @@ export const ActiveOrder: FC<Props> = ({ pedido }) => {
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant="body1" fontWeight='bold'>Mesa 1</Typography>
+              <Typography variant="body1" fontWeight='bold'>Mesa {order.table?.name}</Typography>
 
 
               <Label color='success'>
-                {formatDistance(new Date(), new Date(), {
+                {formatDistance(new Date(order.createdAt), new Date(), {
                   addSuffix: true,
                   includeSeconds: true,
-                 
+
 
                 })}
-                </Label>
+              </Label>
 
 
 
@@ -170,16 +172,16 @@ export const ActiveOrder: FC<Props> = ({ pedido }) => {
         <Divider />
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={12} >
-              <PendingDetail despachar={handleOpen}/>
-            </Grid>
-            <Grid item xs={12} >
-              <PendingDetail despachar={handleOpen}/>
-            </Grid>
-            <Grid item xs={12} >
-              <PendingDetail despachar={handleOpen}/>
-            </Grid>
+            {
+              details.map(detail => (
+                <Grid key={detail.id} item xs={12} >
+                  <PendingDetail detail={detail} orderId={order.id}/>
+                </Grid>
 
+              ))
+            }
+
+          
           </Grid>
 
           {/* {detalles.length > 0 && detalles!.map(det => (
@@ -189,17 +191,11 @@ export const ActiveOrder: FC<Props> = ({ pedido }) => {
             ))} */}
         </CardContent>
 
-       
+
 
       </Card>
 
-      <DespachoDetalle isOpen={isOpen} handleClose={handleClose} />
-      {/* 
-        <DespachoDetalle detalle={detalleActivo!} handleClose={handleClose} />
-      */}
-      {/*  <Modal open={isOpen} closeModal={handleClose}>
-        <DespachoDetalle handleClose={handleClose} detalle={detalleActivo!} />
-      </Modal> */}
+   
     </>
 
   )

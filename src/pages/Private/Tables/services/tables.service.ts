@@ -37,7 +37,7 @@ export const createTable = (data: ICreateTable) => {
 
 }
 
-export const updateTable = ({id, data }: {id: number,data: ICreateTable}) => {
+export const updateTable = ({id, data }: {id: string,data: ICreateTable}) => {
 
   const controller = loadAbort();
 

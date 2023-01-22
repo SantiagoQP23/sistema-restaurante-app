@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { Box, IconButton, Typography, TextField, Button, ButtonGroup, Grid, Card, CardContent } from '@mui/material';
@@ -9,11 +9,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline } from '@mui/icons-material';
+import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../models';
 import { useCounter } from '../hooks';
 
 import { Label } from '../../../../components/ui';
+import { SocketContext } from '../../../../context/SocketContext';
 
 /* import { useCounter } from '../../hooks/useCounter';
 
@@ -21,23 +22,83 @@ import { SocketContext } from '../../context/SocketContext';
 import { IDetallePedido, INuevoDetallePedido } from '../../interfaces';
 import { ICallbackSocket } from '../../interfaces/sockets';
 import { detalleDeleted, detalleSetActive, detalleUpdatedCantidad, pedidoDetalleActivo, pedidoDetalleCantidad, pedidoDetalleDeleted, pedidoUpdateTotal } from '../../reducers';
- */
+*/
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { useSnackbar } from 'notistack';
+import { setActiveOrder } from '../../../../redux';
+import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
+import { statusModalDescriptionDetail } from '../services/orders.service';
+import { DeleteOrderDetailDto } from '../dto/delete-order-detail.dto';
+
+
 interface Props {
-  detalle?: IOrderDetail;
+  detail: IOrderDetail;
 }
 
-export const OrderDetail: FC<Props> = ({ detalle }) => {
+export const OrderDetail: FC<Props> = ({ detail }) => {
 
-  const { state: counter, increment, decrement } = useCounter(2);
+  const { state: counter, increment, decrement } = useCounter(detail.quantity);
 
-  const deleteDetail = () => {
+  const dispatch = useDispatch();
 
+  const { socket } = useContext(SocketContext);
+
+  const { activeOrder } = useSelector(selectOrders);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const editDescription = () => {
+    statusModalDescriptionDetail.setSubject(true, detail);
   }
 
 
   const updateDetail = () => {
 
+    const data: UpdateOrderDto = {
+      id: activeOrder!.id,
+      orderDetail: {
+        id: detail.id,
+        quantity: counter
+      }
+    }
+
+    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+
+      if (ok) {
+        dispatch(setActiveOrder(order!))
+
+      } else {
+        enqueueSnackbar(msg, { variant: 'error' });
+      }
+
+    });
+
+
   }
+
+  const deleteDetail = () => {
+
+    const data: DeleteOrderDetailDto = {
+      detailId: detail.id,
+      orderId: activeOrder!.id
+    }
+
+    socket?.emit(EventsEmitSocket.deleteOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+
+      if (ok) {
+        dispatch(setActiveOrder(order!))
+
+      } else {
+        enqueueSnackbar(msg, { variant: 'error' });
+      }
+
+    });
+
+  }
+
 
 
   /*  const { idPedido } = useParams();
@@ -131,32 +192,35 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
 
       <Card>
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
             <Typography
               variant="body1"
               color="initial"
-              
-              >
 
-              {'Filete de pescado'}
+            >
+
+              {detail.product.name}
             </Typography>
 
             {/* 
             */}
             {
-              true
+              detail.qtyDelivered !== detail.quantity
                 ? (
                   <Box>
                     <Label color='success'>Pendiente</Label>
-                    <IconButton
-                      aria-label="Eliminar detalle"
-                      onClick={deleteDetail}
-                      disabled={false}
-                      color='error'
-                    >
-                      <DeleteOutline />
-                    </IconButton>
+                    {
+                      detail.qtyDelivered === 0 && <IconButton
+                        aria-label="Eliminar detalle"
+                        onClick={deleteDetail}
+                        disabled={false}
+                        color='error'
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+
+                    }
                   </Box>
                 )
 
@@ -166,14 +230,24 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
 
 
           </Box>
-          <Typography variant="body2" color="orange">
-            {'Sin arroz'}
+          <Typography variant="body2" color={detail.description ? "orange" : ""}>
+            {detail.description && detail.description}
+            <Button
+              onClick={editDescription}
+            >
+              {!detail.description
+                ? 'Añadir descripción'
+                : <EditOutlined />
+
+              }
+            </Button>
+
           </Typography>
 
           <Box sx={{ display: "flex" }}>
             <Box sx={{ flexGrow: 1 }} mt={2}>
               <Typography variant="body1" color="initial">
-                $ {4}
+                $ {detail.product.price}
 
               </Typography>
 
@@ -195,7 +269,7 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
                   <AddCircleOutline />
                 </IconButton>
                 <IconButton
-                  disabled={!counter || counter === 3}
+                  disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
                   color='primary'
                   onClick={() => updateDetail()}
                 >
@@ -207,7 +281,7 @@ export const OrderDetail: FC<Props> = ({ detalle }) => {
             </Box>
           </Box>
 
-          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {8}</Typography>
+          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
 
           {/* 
 

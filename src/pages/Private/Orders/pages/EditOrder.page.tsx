@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 // Material UI
@@ -24,16 +24,16 @@ import {
   Switch
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { DoneOutline, DeleteOutline, Done } from '@mui/icons-material';
+import { DoneOutline, DeleteOutline, Done, Add } from '@mui/icons-material';
 
 
 import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { selectOrders } from '../../../../redux';
+import { selectOrders, setActiveOrder } from '../../../../redux';
 import { ArrowBack } from '@mui/icons-material';
 import { getClient } from '../../Clients/services';
-import { useFetchAndLoad } from '../../../../hooks';
+import { useAsync, useFetchAndLoad } from '../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { Order, OrderDetail } from '../components';
 
@@ -41,6 +41,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import { InputSearch, Label } from '../../../../components/ui';
 import { OrderDetails } from '../components/OrderDetails.component';
+
+import { IOrder, ITable } from '../../../../models';
+
+import { getOrder, statusModalDeleteOrder } from '../services/orders.service';
+import { format } from 'date-fns';
+import { TableOrder, DataClient } from '../components/';
+
+import { OrderContext } from '../context/Order.context';
+import { ModalDeleteOrder } from '../components/EditOrder/ModalDeleteOrder.component';
 
 
 /* 
@@ -52,10 +61,16 @@ import { detalleLoaded, pedidoUpdatedNombreCliente, selectDetalles, selectPedido
 import { useAppDispatch } from '../hooks/useRedux';
 import { IDetallePedido } from '../interfaces/pedidos';
 import { FormControl } from '@mui/material';
+import { getOrder } from '../services/orders.service';
+import { IOrder } from '../../../../models/orders.model';
+import { useAsync } from '../../../../hooks/useAsync';
+import { ITable } from '../../../../models/table.model';
+import { TableOrder } from '../components/TableOrder.component';
+import { OrderContext } from '../context/Order.context';
  */
 
 
-
+/* 
 const DataClient: FC = () => {
 
 
@@ -115,9 +130,12 @@ const DataClient: FC = () => {
     </>
   )
 }
+ */
 
-
-const TableOrder: FC = () => {
+/* 
+const TableOrder: FC = ({
+  
+}) => {
 
 
   return (
@@ -160,11 +178,14 @@ const TableOrder: FC = () => {
     </>
   )
 }
-
+ */
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
+interface PropsStatusOrder {
+  status: boolean;
+}
 
-const StatusOrder: FC = () => {
+const StatusOrder: FC<PropsStatusOrder> = ({status: isDelivered}) => {
 
 
   return (
@@ -172,7 +193,7 @@ const StatusOrder: FC = () => {
       <Card>
         <CardContent>
 
-          <Typography variant='body1'>Estado <Label color='success' >Activo</Label></Typography>
+          <Typography variant='body1'>Estado <Label color={!isDelivered ? 'success': 'error'} >{!isDelivered ? 'Activo': 'Entregado'}</Label></Typography>
           <Switch {...label} defaultChecked />
 
 
@@ -189,12 +210,37 @@ export const EditOrder = () => {
 
   const navigate = useNavigate();
 
+  const { orderId } = useParams();
+
+  if (!orderId) navigate('/orders');
+
+  const { reset } = useContext(OrderContext);
+
+
+  const dispatch = useDispatch();
+
+  const { loading, callEndpoint } = useFetchAndLoad();
+
+  const getOrderCall = async () => await callEndpoint(getOrder(orderId!));
+  const loadOrderState = (data: IOrder) => { dispatch(setActiveOrder(data)) }
+  useAsync(getOrderCall, loadOrderState, () => { });
+
+
+  const endEdit = () => {
+    navigate(-1);
+
+  }
+
   const { activeOrder } = useSelector(selectOrders);
 
   const [cedula, setCedula] = useState<string>('');
 
-  const { loading, callEndpoint } = useFetchAndLoad();
   const { enqueueSnackbar } = useSnackbar();
+
+  const eliminarPedido = () => {
+
+    statusModalDeleteOrder.setSubject(true, activeOrder!)
+  }
 
 
   /*  const dispatch = useAppDispatch();
@@ -245,6 +291,19 @@ export const EditOrder = () => {
    } */
 
 
+  useEffect(() => {
+
+    return () => {
+      reset();
+    }
+  }, [])
+
+
+  if (!activeOrder) return <>
+
+  </>;
+
+
 
 
 
@@ -252,13 +311,27 @@ export const EditOrder = () => {
     <>
 
 
-      <Grid container display='flex' justifyContent='space-between'>
-        <Typography variant='h6'>{activeOrder ? `Pedido ${activeOrder.num}` : "Añadir pedido"} </Typography>
+      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
+        <Typography variant='h6'>{`Editar Pedido $${activeOrder.amount}`} </Typography>
         {/*   <Button onClick={() => navigate(-1)}>
                 <ArrowBack />
               </Button> */}
 
-        <Button variant='contained' onClick={() => navigate(-1)}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => navigate('products')}
+
+        >
+
+          <Add />
+          Añadir
+        </Button>
+
+
+        <Button variant='contained' onClick={() => {
+          endEdit();
+        }}>
           <Done />
           Finalizar Edición
         </Button>
@@ -295,13 +368,13 @@ export const EditOrder = () => {
 
 
       <Grid container spacing={1}>
-        <Grid container spacing={1} item xs={12} sm={6}>
+        <Grid container spacing={1} item xs={12} sm={6} display='flex' alignContent='start'>
 
           <Grid item xs={6}>
             <Card>
               <CardContent>
                 <Typography variant='body2'>Número de pedido</Typography>
-                <Typography variant='body1'>234</Typography>
+                <Typography variant='body1'>{activeOrder?.num}</Typography>
               </CardContent>
             </Card>
 
@@ -311,7 +384,7 @@ export const EditOrder = () => {
             <Card>
               <CardContent>
                 <Typography variant='body1'>Hora  </Typography>
-                <Typography variant='body2'>13:34</Typography>
+                <Typography variant='body2'>{format(new Date(activeOrder?.createdAt), 'HH:mm')}</Typography>
               </CardContent>
             </Card>
 
@@ -320,18 +393,18 @@ export const EditOrder = () => {
 
           <Grid item xs={6}>
 
-            <TableOrder />
+            <TableOrder table={activeOrder?.table} />
           </Grid>
 
           <Grid item xs={6}>
-            <StatusOrder />
+            <StatusOrder status={activeOrder.isDelivered}/>
 
           </Grid>
 
 
           <Grid item xs={12}>
 
-            <DataClient />
+            <DataClient client={activeOrder?.client} />
           </Grid>
 
 
@@ -342,31 +415,28 @@ export const EditOrder = () => {
             <Card>
               <CardContent>
 
-                <Typography variant='body1'>Mesero: <b>Santiago Quirumbay</b></Typography>
+                <Typography variant='body1'>Mesero: <b>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName} </b></Typography>
               </CardContent>
             </Card>
           </Grid>
 
           <Button
-          variant='contained'
-        >
-          Comprobante
-        </Button>
+            variant='contained'
+          >
+            Comprobante
+          </Button>
 
-        <Button
-          variant='contained'
-        >
-          Factura
-        </Button>
 
-        <Button
-          variant='contained'
-          color='error'
-        >
-          <DeleteOutline />
 
-          Eliminar
-        </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={eliminarPedido}
+          >
+            <DeleteOutline />
+
+            Eliminar
+          </Button>
 
 
 
@@ -374,11 +444,13 @@ export const EditOrder = () => {
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <OrderDetails />
+          <OrderDetails details={activeOrder.details} />
         </Grid>
 
-     
+
       </Grid>
+
+
 
       {/* 
       <Container maxWidth="lg">

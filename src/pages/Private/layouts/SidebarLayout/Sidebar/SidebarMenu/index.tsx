@@ -203,6 +203,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/menu"
+                  
                   startIcon={<RestaurantOutlinedIcon />}
                 >
                   Menu

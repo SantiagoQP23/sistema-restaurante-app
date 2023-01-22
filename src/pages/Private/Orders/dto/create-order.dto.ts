@@ -1,9 +1,10 @@
 
 
 export interface CreateOrderDto {
-  clientId: string;
-  tableId: string;
-  details: CreateOrderDetailDto[];
+  clientId?: string;
+  tableId?: string;
+  details?: CreateOrderDetailDto[];
+  people?: number;
 }
 
 
