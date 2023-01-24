@@ -18,6 +18,8 @@ import { AddClient } from '../Clients/components/AddClient/AddClient.component';
 import { UsersList } from '../Users/pages/UsersList.page';
 import { AddUser } from '../Users/components/AddUser/AddUser.component';
 import { EditUser } from '../Users/components/EditUser/EditUser.component';
+import { OrdersContainer } from '../Orders/OrdersContainer.page';
+import { ReceiptOrder } from '../Orders/pages/ReceiptOrder.page';
 
 
 
@@ -119,47 +121,55 @@ export const routes: RouteObject[] = [
     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
     children: [
       {
+        path: '',
+        element: <OrdersContainer />,
+        children: [
+          {
+            path: '',
+            element: <Orders />,
+            children: [
+              {
+                path: '',
+                element: <ListOrders />
+              },
+              {
+                path: 'edit/:orderId',
+                element: <EditOrder />
+              },
+              {
+                path: 'edit/:orderId/products',
+                element: <AddProductsOrder />
+              },
+              {
+                path: 'add',
+                element: <AddOrder />
+              },
+              {
+                path: 'edit/:orderId/receipt',
+                element: <ReceiptOrder />
+              }
+            ]
 
-        
-        path: '',
-        element: <Orders />,
-        children: [
-          {
-            path: '',
-            element: <ListOrders />
           },
           {
-            path: 'edit/:orderId',
-            element: <EditOrder />
-          },
-          {
-            path: 'edit/:orderId/products',
-            element: <AddProductsOrder />
-          },
-          {
-            path: 'add',
-            element: <AddOrder />
+            path: 'actives',
+            element: <ActiveOrders />,
+            children: [
+              {
+                path: '',
+                element: <ListActiveOrders />
+              }
+            ]
+
           }
+
+
         ]
+
       },
     ]
   },
-  {
-    path: PrivateRoutes.ACTIVE_ORDERS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
-      {
-        path: '',
-        element: <ActiveOrders />,
-        children: [
-          {
-            path: '',
-            element: <ListActiveOrders />
-          }
-        ]
-      },
-    ]
-  },
+  
   {
     path: PrivateRoutes.CLIENTS,
     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,

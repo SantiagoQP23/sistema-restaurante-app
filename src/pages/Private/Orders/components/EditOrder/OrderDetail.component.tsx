@@ -10,11 +10,11 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
-import { IOrderDetail } from '../../../../models';
-import { useCounter } from '../hooks';
+import { IOrderDetail } from '../../../../../models';
+import { useCounter } from '../../hooks';
 
-import { Label } from '../../../../components/ui';
-import { SocketContext } from '../../../../context/SocketContext';
+import { Label } from '../../../../../components/ui';
+import { SocketContext } from '../../../../../context/SocketContext';
 
 /* import { useCounter } from '../../hooks/useCounter';
 
@@ -23,15 +23,15 @@ import { IDetallePedido, INuevoDetallePedido } from '../../interfaces';
 import { ICallbackSocket } from '../../interfaces/sockets';
 import { detalleDeleted, detalleSetActive, detalleUpdatedCantidad, pedidoDetalleActivo, pedidoDetalleCantidad, pedidoDetalleDeleted, pedidoUpdateTotal } from '../../reducers';
 */
-import { UpdateOrderDto } from '../dto/update-order.dto';
-import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { setActiveOrder } from '../../../../redux';
-import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
-import { statusModalDescriptionDetail } from '../services/orders.service';
-import { DeleteOrderDetailDto } from '../dto/delete-order-detail.dto';
+import { setActiveOrder } from '../../../../../redux';
+import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
+import { statusModalDescriptionDetail } from '../../services/orders.service';
+import { DeleteOrderDetailDto } from '../../dto/delete-order-detail.dto';
 
 
 interface Props {
@@ -232,15 +232,18 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
           </Box>
           <Typography variant="body2" color={detail.description ? "orange" : ""}>
             {detail.description && detail.description}
-            <Button
-              onClick={editDescription}
-            >
-              {!detail.description
-                ? 'Añadir descripción'
-                : <EditOutlined />
+            {
+              !(detail.qtyDelivered === detail.quantity) && <Button
+                onClick={editDescription}
+              >
+                {!detail.description
+                  ? 'Añadir descripción'
+                  : <EditOutlined />
 
-              }
-            </Button>
+                }
+              </Button>
+
+            }
 
           </Typography>
 

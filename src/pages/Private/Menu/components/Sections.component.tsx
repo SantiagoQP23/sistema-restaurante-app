@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect } from 'react';
-import { Tabs, Tab, Box, Card, CardContent } from '@mui/material/';
+import { Tabs, Tab, Box, Card, CardContent, tabsClasses } from '@mui/material/';
 
 import { ISection } from '../../../../models';
 
@@ -48,7 +48,7 @@ export const Sections: FC<Props> = ({ sections }) => {
 
   return (
     <>
-      <Box >
+      <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }} >
         {
           activeSection &&
           <Tabs
@@ -56,8 +56,15 @@ export const Sections: FC<Props> = ({ sections }) => {
             value={activeSection.id}
             variant="scrollable"
             textColor='primary'
-            scrollButtons="auto"
+            scrollButtons={true}
+            allowScrollButtonsMobile
             indicatorColor='primary'
+            sx={{
+              [`& .${tabsClasses.scrollButtons}`]: {
+                '&.Mui-disabled': { opacity: 0.3 },
+              },
+              my: 1
+            }}
           >
             {
               sections.map(section => (

@@ -8,10 +8,16 @@ import {
 } from '@mui/material/'
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { ICreateOrderDetail } from '../../../../models/orders.model';
-import { SocketContext } from '../../../../context';
-import { sharingInformationService } from '../services/sharing-information.service';
-import { OrderContext } from '../context/Order.context';
+import { ICreateOrderDetail, IOrderDetail } from '../../../../../models/orders.model';
+import { SocketContext } from '../../../../../context';
+import { sharingInformationService } from '../../services/sharing-information.service';
+import { OrderContext } from '../../context/Order.context';
+import { statusModalDescriptionDetail } from '../../services/orders.service';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { useSnackbar } from 'notistack';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
 
 
 
@@ -22,19 +28,19 @@ interface Props {
 }
 
 
-export const ModalAddDetail: FC<Props> = ({ }) => {
+export const ModalUpdateDetail: FC<Props> = ({ }) => {
 
   const { idPedido } = useParams();
-  const [description, setDescription] = useState('');
-
-  const subscription$ = sharingInformationService.getSubject();
+  
+  const subscription$ = statusModalDescriptionDetail.getSubject();
 
   const [open, setOpen] = useState(false);
+  
+  const [detail, setDetail] = useState<IOrderDetail>();
+  
+  const [description, setDescription] = useState(detail?.description || '');
 
-  const [detail, setDetail] = useState<ICreateOrderDetail>();
-
-
-  const {addDetail, updateDetail} = useContext(OrderContext);
+  const {} = useContext(OrderContext);
 
 
  //const { product, quantity } = detalle;
@@ -45,13 +51,18 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
   const { socket } = useContext(SocketContext);
 
+  const {activeOrder} = useSelector(selectOrders);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  /*
   const crearDetalle = () => {
 
     updateDetail({...detail!, description})
 
     //const detalle = { idProducto: producto.idProducto, cantidad, descripcion, idPedido };
 
-    /* socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}:) => {
+     socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}:) => {
        
       if(ok){
 
@@ -68,10 +79,40 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
       }
 
 
-    }) */
+    }) 
+    
+    
+    setOpen(false)
+  }
+  */
 
+  const updateDetail = () => {
+
+    const data: UpdateOrderDto = {
+      id: activeOrder!.id,
+      orderDetail: {
+        id: detail!.id,
+        description
+      }
+    }
+
+    console.log(data)
+
+    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+
+      if (ok) {
+        dispatch(setActiveOrder(order!))
+
+      } else {
+        enqueueSnackbar(msg, { variant: 'error' });
+      }
+
+
+    });
 
     setOpen(false)
+
+
   }
 
   useEffect(() => {
@@ -110,7 +151,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
               margin="dense"
               multiline
               rows={4}
-              defaultValue={description}
+              defaultValue={detail?.description}
               sx={{ width: 300 }}
               onBlur={(e) => {
                 console.log(e.target.value);
@@ -140,7 +181,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
             }}
 
           >Cancelar</Button>
-          <Button onClick={crearDetalle}>Pedir producto</Button>
+          <Button onClick={updateDetail}>Actualizar</Button>
         </DialogActions>
       </Dialog>
     </>

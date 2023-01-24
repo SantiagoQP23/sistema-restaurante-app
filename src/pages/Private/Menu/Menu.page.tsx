@@ -1,127 +1,36 @@
+import {  useState } from 'react';
+import {  useSelector } from 'react-redux';
 
-import { Card, CardContent, CardHeader, CircularProgress, Container, Divider, Grid, IconButton, InputBase, Paper, Typography } from '@mui/material';
+import {  Container, Grid} from '@mui/material';
 import { InputSearch, PageTitle, PageTitleWrapper } from '../../../components/ui';
-import { MenuContext, MenuProvider } from '../../../context/MenuContext';
 
+import { selectMenu } from '../../../redux';
+
+import { IProduct } from '../../../models';
 
 // Componentes
-import { ListProducts, Categories, Sections, Product } from './components/';
-import { FC, useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectMenu, setActiveSection } from '../../../redux';
-import { Search } from '@mui/icons-material';
-import { Category } from './components/Category.component';
-import { IProduct, ISection } from '../../../models';
-import { findProductsByName, getAllProducts } from '../../../helpers';
+import { AllMenu } from './components/AllMenu.component';
 
+import { ListProductsFounded } from './components/ListProductsFounded.component';
 
-interface ProductsListProps {
-  products: IProduct[]
-}
-const ProductsList: FC<ProductsListProps> = ({ products }) => {
-
-  return (
-    <>
-      <Grid container spacing={1}>
-        {
-          products.map(product => (
-            <Grid key={product.id} item xs={12} sm={6} lg={4}>
-              <Product product={product} />
-
-            </Grid>
-          ))
-        }
-      </Grid>
-    </>
-  )
-
-}
-
-
-const AllMenu: FC = () => {
-  const { sections, activeSection, categories } = useSelector(selectMenu);
-
-
-  return (
-    <>
-      <Grid item xs={12} >
-        <Card>
-          <CardContent>
-
-            <Sections sections={sections} />
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item>
-
-        {
-          sections?.length === 0
-            ? <>No se ha creado un menu</>
-            : <>
-              {
-                categories.length > 0
-                  ?
-                  <>
-
-                    <Grid container spacing={1} >
-
-                      {
-                        activeSection?.categories.map(category => (
-                          <Grid item key={category.id} xs={12}>
-                            <Category  category={category} />
-
-                          </Grid>
-
-                        ))
-                      }
-
-                    </Grid>
-
-                  </>
-                  : <><Typography variant='body1' textAlign='center'>Sin categorías</Typography></>
-              }
-            </>
-
-
-        }
-      </Grid>
-
-
-
-    </>
-  )
-
-}
-
+import { findProductsByName,  getProducts } from '../../../helpers';
 
 
 export const Menu = () => {
 
-  const { sections, activeSection, categories } = useSelector(selectMenu);
+  const { sections } = useSelector(selectMenu);
 
   const [nameProduct, setNameProduct] = useState('');
 
-
   const [products, setProducts] = useState<IProduct[]>([]);
 
-
-  const ListProducts = getAllProducts(sections);
-
-
-
-  // const dispatch = useDispatch();
-  // const {sections, activeSection} = useContext(MenuContext);
-
-  // useEffect(() => {
-  //   sections.length > 0 && dispatch(setActiveSection(sections[0]));
-  // },[sections])
+  const ListProducts = getProducts(sections);
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameProduct(event.target.value);
 
-    setProducts(findProductsByName(event.target.value, ListProducts));
+    setProducts(findProductsByName(nameProduct, ListProducts));
 
   
   };
@@ -130,11 +39,12 @@ export const Menu = () => {
     setProducts(findProductsByName(nameProduct, ListProducts));
   }
 
+  const searchingProduct = () => {
+    return nameProduct.length > 0;
+  }
+
   return (
     < >
-
-
-
 
       <PageTitleWrapper>
         <PageTitle
@@ -159,8 +69,8 @@ export const Menu = () => {
           </Grid>
 
           {
-            nameProduct.length > 0
-              ? <ProductsList products={products} />
+            searchingProduct()
+              ? <ListProductsFounded products={products} />
               : <AllMenu />
           }
 

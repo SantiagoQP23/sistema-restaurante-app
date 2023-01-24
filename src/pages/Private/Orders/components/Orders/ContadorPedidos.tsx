@@ -1,7 +1,7 @@
 import { ShoppingBagTwoTone } from '@mui/icons-material';
 import { Box, Card, Typography, useTheme, styled, Avatar } from '@mui/material';
 import { FC } from 'react';
-import { IOrder } from '../../../../models';
+import { IOrder } from '../../../../../models';
 
 
 

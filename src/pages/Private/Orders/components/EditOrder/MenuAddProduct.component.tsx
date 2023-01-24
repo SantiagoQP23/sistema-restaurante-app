@@ -3,12 +3,12 @@ import { FC, useState, useEffect, useContext } from "react";
 import { AddCircleOutline, ExpandMore, RemoveCircleOutline } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, Grid, IconButton, Typography, Divider } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { InputSearch } from "../../../../components/ui";
-import { IProduct, ICategory } from "../../../../models";
-import { selectMenu } from "../../../../redux";
-import { Sections } from "../../Menu/components";
-import { useCounter } from "../hooks";
-import { sharingInformationService } from "../services/sharing-information.service";
+import { InputSearch } from "../../../../../components/ui";
+import { IProduct, ICategory } from "../../../../../models";
+import { selectMenu } from "../../../../../redux";
+import { Sections } from "../../../Menu/components";
+import { useCounter } from "../../hooks";
+import { sharingInformationService } from "../../services/sharing-information.service";
 
 
 
@@ -16,18 +16,18 @@ import { sharingInformationService } from "../services/sharing-information.servi
 
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { findProductsByName, getAllProducts } from "../../../../helpers";
-import { useAppSelector, useModal } from "../../../../hooks";
-import { ICreateOrderDetail, IOrderDetail } from '../../../../models/orders.model';
+import { findProductsByName, getProducts } from "../../../../../helpers";
+import { useAppSelector, useModal } from "../../../../../hooks";
+import { ICreateOrderDetail, IOrderDetail } from '../../../../../models/orders.model';
 import { ModalAddDetail } from './ModalAddDetail.component';
-import { OrderContext } from '../context/Order.context';
-import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
-import { SocketContext } from '../../../../context/SocketContext';
+import { OrderContext } from '../../context/Order.context';
+import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
+import { SocketContext } from '../../../../../context/SocketContext';
 import { useSnackbar } from 'notistack';
-import { UpdateOrderDto } from '../dto/update-order.dto';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
-import { CreateOrderDetailDto } from '../dto/create-order-detail.dto';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { CreateOrderDetailDto } from '../../dto/create-order-detail.dto';
 
 interface PropsProduct {
   product: IProduct,
@@ -358,7 +358,7 @@ export const MenuAddProduct = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
 
 
-  const ListProducts = getAllProducts(sections);
+  const ListProducts = getProducts(sections);
 
 
 

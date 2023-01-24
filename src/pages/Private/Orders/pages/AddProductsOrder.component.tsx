@@ -23,10 +23,10 @@ import { selectMenu } from '../../../../redux';
 import { Sections, Categories } from '../../Menu/components';
 import { ProductAdd } from '../components';
 import { InputSearch } from '../../../../components/ui/InputSearch';
-import { OrderDetails } from '../components/OrderDetails.component';
+import { OrderDetails } from '../components/EditOrder/OrderDetails.component';
 import { ICategory, IProduct } from '../../../../models/menu.model';
 import { useCounter } from '../hooks';
-import { MenuAddProduct } from '../components/MenuAddProduct.component';
+import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
 
 
 

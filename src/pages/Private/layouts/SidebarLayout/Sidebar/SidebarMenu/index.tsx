@@ -203,7 +203,7 @@ function SidebarMenu() {
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/menu"
-                  
+
                   startIcon={<RestaurantOutlinedIcon />}
                 >
                   Menu
@@ -239,7 +239,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/active-orders"
+                  to="/orders/actives"
                   startIcon={<DeliveryDiningOutlinedIcon />}
                 >
                   Pedidos Activos

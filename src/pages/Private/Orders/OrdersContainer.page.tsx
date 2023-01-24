@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 
 import { Outlet, Route, useLocation } from "react-router-dom";
 
-import { Container } from '@mui/material';
+import { Container, Select } from '@mui/material';
 
 import { toast } from 'react-toastify';
 /* 
@@ -25,21 +25,24 @@ import { SocketContext } from '../../../context/SocketContext';
 import { IOrder } from '../../../models/orders.model';
 import { EventsOnSocket } from './interfaces/events-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFetchAndLoad } from '../../../hooks/useFetchAndLoad';
 import { getOrdersToday } from './services/orders.service';
 import { loadOrders, updateOrder } from '../../../redux';
 import { useAsync } from '../../../hooks/useAsync';
 import { SocketResponseOrder } from './interfaces/responses-sockets.interface';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
+import { selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
 
 
 
-export const Orders = () => {
+export const OrdersContainer = () => {
 
   const dispatch = useDispatch();
 
-  const {loading, callEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint } = useFetchAndLoad();
+
+  const {activeOrder} = useSelector(selectOrders)
 
   //const {enqueueSnackbar} = useSnackbar();
 
@@ -47,7 +50,7 @@ export const Orders = () => {
 
   const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
 
-  useAsync(getOrdersCall, loadOrdersState, () => {}, []);
+  useAsync(getOrdersCall, loadOrdersState, () => { }, []);
 
 
   /*  const dispatch = useAppDispatch();
@@ -73,33 +76,37 @@ export const Orders = () => {
 
   const { socket } = useContext(SocketContext);
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
- 
-     socket?.on(EventsOnSocket.newOrder, ({ order }: { order: IOrder }) => {
-      
-        console.log(order);
-        enqueueSnackbar(`Se ha añadido un nuevo pedido`, {variant: 'success'});
- 
-       //dispatch(pedidoAddNew(pedido))
-       
- 
-     });
- 
-     return () => {
-       socket?.off(EventsOnSocket.newOrder);
-     }
- 
-   }, [socket]);
+
+    socket?.on(EventsOnSocket.newOrder, ({ order }: { order: IOrder }) => {
+
+      console.log(order);
+      enqueueSnackbar(`Se ha añadido un nuevo pedido`, { variant: 'success' });
+
+      //dispatch(pedidoAddNew(pedido))
 
 
-    useEffect(() => {
+    });
+
+    return () => {
+      socket?.off(EventsOnSocket.newOrder);
+    }
+
+  }, [socket]);
+
+
+  useEffect(() => {
 
     socket?.on(EventsOnSocket.updateOrder, ({ msg, order }: SocketResponseOrder) => {
 
      console.log('Se ha actualizado un pedido')
       dispatch(updateOrder(order!));
+
+      if(activeOrder?.id === order?.id){
+        dispatch(setActiveOrder(order!))
+      }
       enqueueSnackbar(`${msg}`, {variant: 'success'});
 
       
@@ -108,21 +115,26 @@ export const Orders = () => {
 
     });
 
+    return () => {
+      socket?.off(EventsOnSocket.updateOrder);
+
+    }
+
 
     }, [socket]);
 
-   /*  useEffect(() => {
+  /*  useEffect(() => {
 
-    socket?.on(EventsOnSocket.deleteOrder, ({ idOrder }: { idOrder: number }) => {
+   socket?.on(EventsOnSocket.deleteOrder, ({ idOrder }: { idOrder: number }) => {
 
-      enqueueSnackbar(`Se ha eliminado un pedido`, {variant: 'success'});
+     enqueueSnackbar(`Se ha eliminado un pedido`, {variant: 'success'});
 
-      //dispatch(pedidoAddNew(pedido))
+     //dispatch(pedidoAddNew(pedido))
 
-    });
+   });
 
 
-    }, [socket]); */
+   }, [socket]); */
 
   /*  
  
@@ -157,32 +169,26 @@ export const Orders = () => {
 
   return (
     <>
-      <PageTitleWrapper>
-        <PageTitle heading='Pedidos ' />
-      </PageTitleWrapper>
+     
 
+      <OrderProvider>
 
-      <Container maxWidth="lg">
-        <OrderProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <Outlet />
 
-            <Outlet />
-
-            {/*  <RoutesWithNotFound >
+          {/*  <RoutesWithNotFound >
           <Route index element={<Pedidos />} />
           <Route path="editar/:idPedido" element={<EditarPedido />} />
           <Route path="editar/:idPedido/productos" element={<AniadirProductos />} />
           <Route path='pendientes' element={<PedidosPendientes />} />
         </RoutesWithNotFound> */}
 
-          </LocalizationProvider>
-        </OrderProvider>
+        </LocalizationProvider>
+      </OrderProvider>
 
-      </Container>
+
       {/* <Footer /> */}
-
-      <ModalDeleteOrder />
 
 
     </>
@@ -190,4 +196,4 @@ export const Orders = () => {
 }
 
 
-export default Orders
+export default OrdersContainer

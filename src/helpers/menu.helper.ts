@@ -1,6 +1,6 @@
 import { IProduct, ISection } from "../models";
 
-export const getAllProducts= (sections: ISection[]) :IProduct[]  => {
+export const getProducts= (sections: ISection[]) :IProduct[]  => {
 
   let products: IProduct[] = [];
 

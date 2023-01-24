@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.4.1",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
@@ -17,11 +18,13 @@
     "@mui/styles": "^5.10.10",
     "@mui/x-data-grid": "^5.17.8",
     "@mui/x-date-pickers": "^5.0.6",
+    "@react-pdf/renderer": "^3.0.3",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/nprogress": "^0.2.0",
     "axios": "^0.27.2",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
+    "events": "^3.3.0",
     "notistack": "^2.0.8",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",

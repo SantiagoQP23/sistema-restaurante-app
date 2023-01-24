@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -40,7 +40,7 @@ import { Order, OrderDetail } from '../components';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import { InputSearch, Label } from '../../../../components/ui';
-import { OrderDetails } from '../components/OrderDetails.component';
+import { OrderDetails } from '../components/EditOrder/OrderDetails.component';
 
 import { IOrder, ITable } from '../../../../models';
 
@@ -185,7 +185,7 @@ interface PropsStatusOrder {
   status: boolean;
 }
 
-const StatusOrder: FC<PropsStatusOrder> = ({status: isDelivered}) => {
+const StatusOrder: FC<PropsStatusOrder> = ({ status: isDelivered }) => {
 
 
   return (
@@ -193,7 +193,7 @@ const StatusOrder: FC<PropsStatusOrder> = ({status: isDelivered}) => {
       <Card>
         <CardContent>
 
-          <Typography variant='body1'>Estado <Label color={!isDelivered ? 'success': 'error'} >{!isDelivered ? 'Activo': 'Entregado'}</Label></Typography>
+          <Typography variant='body1'>Estado <Label color={!isDelivered ? 'success' : 'error'} >{!isDelivered ? 'Activo' : 'Entregado'}</Label></Typography>
           <Switch {...label} defaultChecked />
 
 
@@ -216,24 +216,31 @@ export const EditOrder = () => {
 
   const { reset } = useContext(OrderContext);
 
+  const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
+
 
   const dispatch = useDispatch();
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
   const getOrderCall = async () => await callEndpoint(getOrder(orderId!));
-  const loadOrderState = (data: IOrder) => { dispatch(setActiveOrder(data)) }
+  const loadOrderState = (data: IOrder) => {
+    dispatch(setActiveOrder(data))
+
+
+
+  }
   useAsync(getOrderCall, loadOrderState, () => { });
 
 
   const endEdit = () => {
-    navigate(-1);
+    navigate('/orders');
 
   }
 
   const { activeOrder } = useSelector(selectOrders);
 
-  const [cedula, setCedula] = useState<string>('');
+
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -290,6 +297,12 @@ export const EditOrder = () => {
  
    } */
 
+  useEffect(() => {
+    if (activeOrder) {
+      setOrderDelivered(!!(activeOrder.details?.find(detail => detail.qtyDelivered > 0)))
+    }
+  }, [activeOrder])
+
 
   useEffect(() => {
 
@@ -299,10 +312,12 @@ export const EditOrder = () => {
   }, [])
 
 
-  if (!activeOrder) return <>
+  if (!activeOrder)
+    return <></>;
 
-  </>;
 
+  if (activeOrder.isPaid)
+    return <Navigate to='receipt' />;
 
 
 
@@ -312,13 +327,13 @@ export const EditOrder = () => {
 
 
       <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Typography variant='h6'>{`Editar Pedido $${activeOrder.amount}`} </Typography>
+        <Typography variant='h6'>{`Editar Pedido`} </Typography>
         {/*   <Button onClick={() => navigate(-1)}>
                 <ArrowBack />
               </Button> */}
 
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
           onClick={() => navigate('products')}
 
@@ -329,7 +344,7 @@ export const EditOrder = () => {
         </Button>
 
 
-        <Button variant='contained' onClick={() => {
+        <Button variant='outlined' onClick={() => {
           endEdit();
         }}>
           <Done />
@@ -378,11 +393,23 @@ export const EditOrder = () => {
               </CardContent>
             </Card>
 
+
+
+          </Grid>
+          <Grid item xs={6}>
+            <Card>
+              <CardContent>
+                <Typography variant='body2'>Total</Typography>
+                <Typography variant='body1'>$ {activeOrder?.amount}</Typography>
+              </CardContent>
+            </Card>
           </Grid>
 
           <Grid item xs={6}>
             <Card>
               <CardContent>
+                <Typography variant='body1'>Estado <Label color={!activeOrder.isDelivered ? 'success' : 'error'} >{!activeOrder.isDelivered ? 'Activo' : 'Entregado'}</Label></Typography>
+
                 <Typography variant='body1'>Hora  </Typography>
                 <Typography variant='body2'>{format(new Date(activeOrder?.createdAt), 'HH:mm')}</Typography>
               </CardContent>
@@ -396,10 +423,10 @@ export const EditOrder = () => {
             <TableOrder table={activeOrder?.table} />
           </Grid>
 
-          <Grid item xs={6}>
-            <StatusOrder status={activeOrder.isDelivered}/>
+          {/*      <Grid item xs={6}>
+            <StatusOrder status={activeOrder.isDelivered} />
 
-          </Grid>
+          </Grid> */}
 
 
           <Grid item xs={12}>
@@ -420,24 +447,36 @@ export const EditOrder = () => {
             </Card>
           </Grid>
 
-          <Button
-            variant='contained'
-          >
-            Comprobante
-          </Button>
+          <Grid item>
+            <Button
+              variant='contained'
+              onClick={() => { navigate('receipt') }}
+            >
+              Comprobante
+            </Button>
+
+          </Grid>
+
+          <Grid item>
 
 
+            {
+              orderDelivered
+                ? <Typography>Esta orden no se puede eliminar porque tiene productos entregados</Typography>
+                :
+                <Button
+                  variant='contained'
+                  color='error'
+                  onClick={eliminarPedido}
+                >
+                  <DeleteOutline />
 
-          <Button
-            variant='contained'
-            color='error'
-            onClick={eliminarPedido}
-          >
-            <DeleteOutline />
+                  Eliminar
+                </Button>
 
-            Eliminar
-          </Button>
+            }
 
+          </Grid>
 
 
 

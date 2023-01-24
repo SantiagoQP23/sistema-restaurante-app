@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid, Card, CardContent, Typography, TextField } from '@mui/material';
 
-import { MenuAddProduct } from '../components/MenuAddProduct.component';
+import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
 import { DataClient } from '../components';
-import { TableOrder } from '../components/TableOrder.component';
+import { TableOrder } from '../components/ReceiptOrder/TableOrder.component';
 
 
 import { useContext } from 'react';
@@ -14,9 +14,12 @@ import { Add } from "@mui/icons-material";
 import { CardHeader, Box, } from "@mui/material"
 import { OrderDetail } from "./../components"
 import { OrderContext } from '../context/Order.context';
-import { NewOrderDetail } from '../components/NewOrderDetail.component';
+import { NewOrderDetail } from '../components/AddOrder/NewOrderDetail.component';
 import { SocketContext } from '../../../../context/SocketContext';
 import { CreateOrderDto } from '../dto/create-order.dto';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { useSnackbar } from 'notistack';
 
 
 
@@ -99,12 +102,24 @@ export const AddOrder = () => {
     reset();
   }
 
+  const {enqueueSnackbar} = useSnackbar();
+
   const submitAddOrder = () => {
 
     const order: CreateOrderDto = getOrder();
 
-    socket?.emit('create-order', order, (resp: any)=>{
-      console.log(resp);
+    socket?.emit(EventsEmitSocket.createOrder, order, (resp: SocketResponseOrder)=>{
+
+      console.log('orden creada', resp)
+      if(resp.ok){
+
+        navigate('/orders');
+        reset();
+      }else{
+        enqueueSnackbar(resp.msg, {variant: 'error'});
+      }
+
+
     });
 
 

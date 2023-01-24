@@ -1,19 +1,19 @@
 import { Card, CardContent, Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput } from "@mui/material"
 import { FC, useContext, useState, useEffect } from "react"
 import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
-import { useAsync, useFetchAndLoad } from "../../../../hooks";
-import { ITable } from "../../../../models";
-import { getTables } from "../../Tables/services";
-import { OrderContext } from '../context/Order.context';
-import { SocketContext } from '../../../../context/SocketContext';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
+import { useAsync, useFetchAndLoad } from "../../../../../hooks";
+import { ITable } from "../../../../../models";
+import { getTables } from "../../../Tables/services";
+import { OrderContext } from '../../context/Order.context';
+import { SocketContext } from '../../../../../context/SocketContext';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
-import { ChangeTable } from '../interfaces/data-emit-sockets.interface';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { ChangeTable } from '../../interfaces/data-emit-sockets.interface';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
-import { UpdateOrderDto } from '../dto/update-order.dto';
-import { selectTables } from '../../../../redux/slices/tables/tables.slice';
+import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { selectTables } from '../../../../../redux/slices/tables/tables.slice';
 
 interface Props {
   table?: ITable;

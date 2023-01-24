@@ -19,6 +19,8 @@ export enum EventsEmitSocket {
   deleteOrderDetail = 'delete-order-detail',
   updateqtyDeliveredDetail = 'update-qty-delivered-detail', 
   deleteOrder = 'delete-order',
+  payOrder = 'pay-order',
+
 
 
 }

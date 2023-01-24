@@ -12,68 +12,37 @@ import { Product } from './Product.component';
 import { Category } from './Category.component';
 
 interface Props {
-  categories?: ICategory[];
-  cambiarCategoria?: (value: number) => void;
-  categoria?: number;
+  categories: ICategory[];
+ 
 }
 
-export const Categories: FC<Props> = ({ }) => {
-
-  const { activeSection, activeCategory, categories } = useSelector(selectMenu);
-
-  const dispatch = useDispatch();
-
-
-  const changeCategory = (categoryId: string) => {
-    const category = categories.find(s => s.id === categoryId);
-    dispatch(setActiveCategory(category!))
-    dispatch(setActiveProducts(category!.products))
-
-
-  }
-
-  /* useEffect(() => {
-    categories.length > 0 && dispatch(setActiveCategory(categories[0]))
-  }, [categories])
- */
+export const CategoriesOrMessage: FC<Props> = ({ categories}) => {
+ 
 
   return (
     <>
+      {
+        categories.length > 0
+          ?
+          <>
 
-      
-        {
+            <Grid container spacing={1} >
 
+              {
+                categories.map(category => (
+                  <Grid item key={category.id} xs={12}>
+                    <Category category={category} />
 
-          activeSection && activeSection.categories.map(category => (
+                  </Grid>
 
-            <Category category={category}/>
-              
-           
+                ))
+              }
 
-          ))
-        }
-     
+            </Grid>
 
-
-
-
-
-
-
-
-      {/*   <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            
-            <Typography variant="h6" component="div">
-              Productos 15   
-            </Typography>
-          
-          </CardContent>
-          
-        </Card> */}
-
-
-
+          </>
+          : <><Typography variant='body1' textAlign='center'>Sin categorías</Typography></>
+      }
     </>
   )
 }

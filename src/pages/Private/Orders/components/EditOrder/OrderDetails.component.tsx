@@ -3,8 +3,8 @@ import { Add } from "@mui/icons-material";
 import { Card, CardHeader, Box, Typography, Button, CardContent, Grid } from "@mui/material"
 import { OrderDetail } from "./OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
-import { OrderContext } from '../context/Order.context';
-import { IOrderDetail } from '../../../../models';
+import { OrderContext } from '../../context/Order.context';
+import { IOrderDetail } from '../../../../../models';
 import { ModalUpdateDetail } from './ModalUpdateDescriptionDetail.component';
 
 

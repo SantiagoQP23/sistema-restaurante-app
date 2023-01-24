@@ -5,16 +5,16 @@ import { AddCircleOutline, RemoveCircleOutline, SaveOutlined } from '@mui/icons-
 import { IDetallePedido } from '../../interfaces';
 
 import { SocketContext } from '../../context/SocketContext'; */
-import { IOrderDetail } from '../../../../models';
-import { useCounter } from '../hooks';
-import { statusModalDispatchDetail } from '../services/orders.service';
-import { SocketContext } from '../../../../context/SocketContext';
+import { IOrderDetail } from '../../../../../models';
+import { useCounter } from '../../hooks';
+import { statusModalDispatchDetail } from '../../services/orders.service';
+import { SocketContext } from '../../../../../context/SocketContext';
 import { useSnackbar } from 'notistack';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { UpdateOrderDto } from '../dto/update-order.dto';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { useSelector } from 'react-redux';
-import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
 
 
 interface Props {
@@ -65,10 +65,7 @@ export const DespachoDetalle: FC<Props> = ({ }) => {
 
     socket?.emit(EventsEmitSocket.updateqtyDeliveredDetail, data, ({ok, msg, order}: SocketResponseOrder) => {
 
-      if(ok) {
-        
-      
-      } else {
+      if(!ok) {
         enqueueSnackbar(msg, {variant: 'error'});
       }
 

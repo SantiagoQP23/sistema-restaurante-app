@@ -8,9 +8,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { RemoveCircleOutline, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
-import { IProduct } from '../../../../models';
-import { Product } from '../../Menu/components';
-import { useCounter } from '../hooks';
+import { IProduct } from '../../../../../models';
+import { Product } from '../../../Menu/components';
+import { useCounter } from '../../hooks';
 
 /* 
 import { Producto } from '../Menu/';

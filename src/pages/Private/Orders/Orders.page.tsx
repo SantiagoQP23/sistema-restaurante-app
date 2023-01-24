@@ -25,13 +25,15 @@ import { SocketContext } from '../../../context/SocketContext';
 import { IOrder } from '../../../models/orders.model';
 import { EventsOnSocket } from './interfaces/events-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFetchAndLoad } from '../../../hooks/useFetchAndLoad';
 import { getOrdersToday } from './services/orders.service';
-import { loadOrders, updateOrder } from '../../../redux';
+import { addOrder, loadOrders, updateOrder } from '../../../redux';
 import { useAsync } from '../../../hooks/useAsync';
 import { SocketResponseOrder } from './interfaces/responses-sockets.interface';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
+import { ModalPayOrder } from './components/ReceiptOrder/ModalPayOrder.component';
+import { selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
 
 
 
@@ -41,13 +43,15 @@ export const Orders = () => {
 
   const {loading, callEndpoint} = useFetchAndLoad();
 
+  const {activeOrder} = useSelector(selectOrders);
+
   //const {enqueueSnackbar} = useSnackbar();
 
-  const getOrdersCall = async () => await callEndpoint(getOrdersToday());
+  // const getOrdersCall = async () => await callEndpoint(getOrdersToday());
 
-  const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
+  // const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
 
-  useAsync(getOrdersCall, loadOrdersState, () => {}, []);
+  // useAsync(getOrdersCall, loadOrdersState, () => {}, []);
 
 
   /*  const dispatch = useAppDispatch();
@@ -71,7 +75,7 @@ export const Orders = () => {
     }, [fechaPedidos]); */
 
 
-  const { socket } = useContext(SocketContext);
+/*   const { socket } = useContext(SocketContext);
 
   const {enqueueSnackbar} = useSnackbar();
 
@@ -82,6 +86,7 @@ export const Orders = () => {
         console.log(order);
         enqueueSnackbar(`Se ha añadido un nuevo pedido`, {variant: 'success'});
  
+        dispatch(addOrder(order));
        //dispatch(pedidoAddNew(pedido))
        
  
@@ -100,6 +105,10 @@ export const Orders = () => {
 
      console.log('Se ha actualizado un pedido')
       dispatch(updateOrder(order!));
+
+      if(activeOrder?.id === order?.id){
+        dispatch(setActiveOrder(order!))
+      }
       enqueueSnackbar(`${msg}`, {variant: 'success'});
 
       
@@ -108,8 +117,13 @@ export const Orders = () => {
 
     });
 
+    return () => {
+      socket?.off(EventsOnSocket.updateOrder);
 
-    }, [socket]);
+    }
+
+
+    }, [socket]); */
 
    /*  useEffect(() => {
 
@@ -183,6 +197,7 @@ export const Orders = () => {
       {/* <Footer /> */}
 
       <ModalDeleteOrder />
+      <ModalPayOrder />
 
 
     </>

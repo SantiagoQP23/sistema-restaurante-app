@@ -9,6 +9,9 @@ export interface IOrder {
   num: number;
 
   amount: number;
+  discount: number;
+
+  total: number;
 
   isDelivered: boolean;
   

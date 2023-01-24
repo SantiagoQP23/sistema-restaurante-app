@@ -55,12 +55,17 @@ export const Private = () => {
 
     socket?.on(EventsOnSocket.updateTable, ({ msg, table }: SocketResponseTable) => {
 
-      console.log('Se ha actualizado un pedido')
+      console.log('Se ha actualizado una mesa', table)
       dispatch(updateTable(table!));
  
       //dispatch(pedidoAddNew(pedido))
 
     });
+
+    return () => {
+      socket?.off(EventsOnSocket.updateTable);
+
+    }
 
 
     }, [socket]);

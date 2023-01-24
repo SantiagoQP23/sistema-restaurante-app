@@ -15,3 +15,11 @@ export interface UpdateOrderDetailDto{
   description?: string;
   qtyDelivered?: number;
 }
+
+
+export interface PayOrderDto{
+  id: string;
+  discount?: number;
+}
+
+  

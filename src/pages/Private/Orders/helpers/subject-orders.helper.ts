@@ -43,5 +43,18 @@ export class SubjectModalDeleteOrder {
   }
 }
 
+export class SubjectModalPayOrder {
+  subject$ = new Subject<{value: boolean, order: IOrder}>();
+
+  getSubject(){
+
+    return this.subject$.asObservable();
+  }
+
+  setSubject(value: boolean, order: IOrder){
+    this.subject$.next({value, order});
+  }
+}
+
 
 

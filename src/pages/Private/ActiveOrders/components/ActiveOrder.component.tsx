@@ -3,10 +3,10 @@ import { formatDistance } from 'date-fns';
 
 import { Card, CardHeader, Grid, CardContent, Box, Divider, Typography } from '@mui/material';
 import { IOrder, IOrderDetail } from '../../../../models';
-import { PendingDetail } from '../../Orders/components/PendingDetail.component';
+import { PendingDetail } from '../../Orders/components/ActiveOrders/PendingDetail.component';
 import { Label } from '../../../../components/ui';
 import { useModal } from '../../../../hooks';
-import { DespachoDetalle } from '../../Orders/components/DespachoDetalle';
+import { DespachoDetalle } from '../../Orders/components/ActiveOrders/DespachoDetalle';
 /* 
 import { IPedido } from '../../interfaces'
 import { IDetallePedido } from '../../interfaces/pedidos';

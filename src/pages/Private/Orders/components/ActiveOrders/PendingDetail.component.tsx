@@ -9,10 +9,10 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 // import { IDetallePedido } from '../../interfaces';
 // import { Text } from '../ui/';
 // import { selectAuth } from '../../reducers';
-import { IOrderDetail } from '../../../../models';
-import { selectAuth } from '../../../../redux';
-import { Text } from '../../components';
-import { statusModalDispatchDetail } from '../services/orders.service';
+import { IOrderDetail } from '../../../../../models';
+import { selectAuth } from '../../../../../redux';
+import { Text } from '../../../components';
+import { statusModalDispatchDetail } from '../../services/orders.service';
 
 
 const LinearProgressWrapper = styled(LinearProgress)(

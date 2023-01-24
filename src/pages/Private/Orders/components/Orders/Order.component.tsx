@@ -8,25 +8,27 @@ import { es } from 'date-fns/locale';
 
 import { Grid, Box, Button, IconButton, Typography, ButtonGroup, Card, CardContent, CardHeader, Divider } from '@mui/material';
 
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+
 import { DeleteOutline, DoneOutline, EditOutlined } from '@mui/icons-material';
 
 
-import { IOrder } from '../../../../models';
+import { IOrder } from '../../../../../models';
 
-import { SocketContext } from '../../../../context';
+import { SocketContext } from '../../../../../context';
 
-import { useAppDispatch } from '../../../../hooks';
+import { useAppDispatch } from '../../../../../hooks';
 
-import { setActiveOrder } from '../../../../redux/slices/orders/';
+import { setActiveOrder } from '../../../../../redux/slices/orders';
 
-import { Label } from '../../../../components/ui';
+import { Label } from '../../../../../components/ui';
 
 //import '../../styles/estilos-pedido.css';
 import { CardActions } from '@mui/material/';
 import { useSnackbar } from 'notistack';
-import { SocketResponse } from '../interfaces/responses-sockets.interface';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { statusModalDeleteOrder } from '../services/orders.service';
+import { SocketResponse } from '../../interfaces/responses-sockets.interface';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { statusModalDeleteOrder } from '../../services/orders.service';
 
 interface Props {
   order: IOrder
@@ -39,6 +41,7 @@ export const Order: FC<Props> = ({ order }) => {
 
   const { client, user, table } = order;
 
+  const orderDelivered = order.details.find(detail => detail.qtyDelivered > 0);
 
 
   let navigate = useNavigate();
@@ -96,7 +99,9 @@ export const Order: FC<Props> = ({ order }) => {
               {
                 !order.isDelivered
                   ? (<Label color='success'>Activo</Label>)
-                  : (<Label color='error'>Finalizado</Label>)
+                  : (order.isDelivered && !order.isPaid)
+                    ? (<Label color='warning'>Entregado</Label>)
+                    : (<Label color='info'>Pagado</Label>)
               }
 
             </Box>}
@@ -154,16 +159,24 @@ export const Order: FC<Props> = ({ order }) => {
 
               color='primary'
               onClick={() => { navigate(`edit/${order.id}`) }}
-            >
-              <EditOutlined />
+            > {
+                !order.isPaid ? <EditOutlined /> : <AssignmentOutlinedIcon />
+              }
             </IconButton>
 
-            <IconButton
-              onClick={eliminarPedido}
-              color='error'
-            >
-              <DeleteOutline />
-            </IconButton>
+            {
+              !order.isPaid && !orderDelivered && (
+                <IconButton
+                  onClick={eliminarPedido}
+                  color='error'
+                >
+
+                  <DeleteOutline />
+                </IconButton>
+
+              )
+
+            }
           </Box>
 
           <Typography variant="body1" >$ {order.amount}</Typography>
