@@ -32,7 +32,7 @@ import { loadOrders, updateOrder } from '../../../redux';
 import { useAsync } from '../../../hooks/useAsync';
 import { SocketResponseOrder } from './interfaces/responses-sockets.interface';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
-import { selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
+import { addOrder, selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
 
 
 
@@ -85,6 +85,8 @@ export const OrdersContainer = () => {
       console.log(order);
       enqueueSnackbar(`Se ha añadido un nuevo pedido`, { variant: 'success' });
 
+      dispatch(addOrder(order))
+
       //dispatch(pedidoAddNew(pedido))
 
 
@@ -104,6 +106,7 @@ export const OrdersContainer = () => {
      console.log('Se ha actualizado un pedido')
       dispatch(updateOrder(order!));
 
+      console.log(order?.id, activeOrder?.id)
       if(activeOrder?.id === order?.id){
         dispatch(setActiveOrder(order!))
       }

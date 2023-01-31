@@ -141,161 +141,98 @@ export const ListOrders = () => {
 
 
 
-  // Mostrar los orders de la date seleccionada
   return (
 
     <>
 
+      <Grid container >
+        <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
+         {/*  <Grid item>
 
-
-      <Grid container display='flex' justifyContent='space-between' alignItems='center' my={1}>
-        <Grid container item spacing={1}>
-          <Grid item>
-
-
-          </Grid>
-
-
-
-          <Grid item>
-
-
-
-            <Card>
+            <Card >
+              <CardHeader title='Pedidos' />
               <CardContent>
 
-                <Typography variant="body1">Pedidos de <Clock /></Typography>
                 <Typography variant="h6"> {orders.length}</Typography>
 
               </CardContent>
             </Card>
+          </Grid> */}
+          <Grid item>
+            <Card >
+              <CardContent>
+                <Typography variant="body1"><Clock /></Typography>
+
+              </CardContent>
+
+            </Card>
+
           </Grid>
-
-          {/*  <Grid item>
-
-                <Button>Filtrar</Button>
-              </Grid>
- */}
-
-
           <Grid item>
             <Button
               variant="contained"
               color="primary"
               onClick={() => addOrder()}
-            // disabled={date !== obtenerFechaActual()}
             >Añadir Pedido</Button>
-
-
           </Grid>
-
         </Grid>
 
 
       </Grid>
 
-      {/* 
-      <Card>
-        <Accordion>
+      <Card sx={{my: 2}}>
 
-          <CardHeader title={
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography variant='h5'>Filtros de pedidos</Typography>
-            </AccordionSummary>
-          }
-          />
-          <AccordionDetails>
+        <CardContent>
 
-            <CardContent>
 
-              <Grid container spacing={1}>
-                <FilterOrders />
-                <Grid item xs={12}>
+          <Tabs
+            onChange={(e, value) => setStatusOrders(value)}
+            value={statusOrders}
+            variant="scrollable"
+            textColor='primary'
+            scrollButtons
+            indicatorColor='primary'
+            allowScrollButtonsMobile
+            sx={{
+              [`& .${tabsClasses.scrollButtons}`]: {
+                '&.Mui-disabled': { opacity: 0.3 },
+              },
+              width: '100%',
+              my: 1,
+              fontSize: '1rem'
+            }}
+          >
 
-                </Grid>
-              </Grid>
-            </CardContent>
-          </AccordionDetails>
-        </Accordion>
+            {
+              statusOrdersList.map((status) => (
+                <Tab key={status.value} label={status.label} value={status} />
+              ))
+            }
+
+
+          </Tabs>
+
+        </CardContent>
       </Card>
- */}
-
-
-      {/* ESTADOS DE PEDIDOS */}
-
-      {
-        /* Mensaje de no hay orders */
-        !orders.length && (
-          <Typography align='center' variant='body1'>No se encontraron orders de {/*  {formatDistance(new Date(`${date}`), new Date(), {
-            addSuffix: true,
-            includeSeconds: true,
-
-          })} */}</Typography>
-        )
-      }
-
-      {/* Lista de orders */}
-
-
-      {/*  <ToggleButtonGroup
-        orientation="horizontal"
-        value={view}
-        exclusive
-        onChange={handleChange}
-        size='small'
-      >
-        <ToggleButton value="list" aria-label="list">
-          <ViewListIcon />
-        </ToggleButton>
-        <ToggleButton value="module" aria-label="module">
-          <ViewModuleIcon />
-        </ToggleButton>
-
-      </ToggleButtonGroup>
- */}
-
-      <Tabs
-        onChange={(e, value) => setStatusOrders(value)}
-        value={statusOrders}
-        variant="scrollable"
-        textColor='primary'
-        scrollButtons
-        indicatorColor='primary'
-        allowScrollButtonsMobile
-        sx={{
-          [`& .${tabsClasses.scrollButtons}`]: {
-            '&.Mui-disabled': { opacity: 0.3 },
-          },
-          width: '100%',
-          my: 1,
-          fontSize: '1rem'
-        }}
-      >
-
-        {
-          statusOrdersList.map((status) => (
-            <Tab key={status.value} label={status.label} value={status} />
-          ))
-        }
-
-
-      </Tabs>
 
       <Grid container spacing={1}>
 
         {
-          ordersFiltered.length > 0 && ordersFiltered.map(order => (
-            <Grid key={order.id} item xs={12} md={6} lg={4}  >
+          ordersFiltered.length > 0
+            ? ordersFiltered.map(order => (
+              <Grid key={order.id} item xs={12} md={6} lg={4}  >
 
-              <Order order={order} />
+                <Order order={order} />
+
+              </Grid>
+            ))
+            :
+            <Grid item xs={12} sx={{ my: 3 }}>
+
+              <Typography align='center' variant='body1' >No se encontraron pedidos </Typography>
 
             </Grid>
-          ))
 
         }
 

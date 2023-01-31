@@ -16,6 +16,7 @@ export const PrivateRoutes = {
   CLIENTS: 'clients',
   TABLES: 'tables',
   USERS: 'users',
+  REPORTS: 'reports',
 
 }
 

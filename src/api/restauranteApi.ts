@@ -25,7 +25,7 @@ restauranteApi.interceptors.request.use(config => {
 restauranteApi.interceptors.response.use( 
   resp => resp, 
   (err) => {
-    return Promise.reject(err.response.data)
+    return Promise.reject(err.response)
   })
 
 export default restauranteApi;

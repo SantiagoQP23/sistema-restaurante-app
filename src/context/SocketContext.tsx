@@ -21,7 +21,7 @@ export const SocketContext = createContext({} as ISocket);
 
 export const SocketProvider:FC<Props> = ({children}) => {
 
-  const { socket, online, conectarSocket, desconectarSocket} = useSocket('http://192.168.1.45:5000/socket.io/socket.io.js');
+  const { socket, online, conectarSocket, desconectarSocket} = useSocket('http://127.0.0.1:5000/socket.io/socket.io.js');
 
   const { status } = useSelector(selectAuth);
 

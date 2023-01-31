@@ -20,6 +20,12 @@ import { AddUser } from '../Users/components/AddUser/AddUser.component';
 import { EditUser } from '../Users/components/EditUser/EditUser.component';
 import { OrdersContainer } from '../Orders/OrdersContainer.page';
 import { ReceiptOrder } from '../Orders/pages/ReceiptOrder.page';
+import { AffluenceSimulation } from '../Reports/components/AffluenceSimulator/AffluenceSimulation.component';
+import { AffluencePrediction } from '../Reports/components/AffluencePrediction/AffluencePrediction.component';
+import { DashboardReports } from '../Reports/components/DashboardReports/DashboardReports.component';
+import { StaffPlaning } from '../Reports/components/StaffPlanning/StaffPlaning.component';
+
+
 
 
 
@@ -30,6 +36,8 @@ const Clients = lazy(() => import('../Clients/Clients.page'))
 const Tables = lazy(() => import('../Tables/Tables.page'))
 const ActiveOrders = lazy(() => import('../Orders/ActiveOrders.page'))
 const Users = lazy(() => import('../Users/Users.page'))
+
+const Reports = lazy(() => import('../Reports/Reports.page'))
 
 
 
@@ -169,7 +177,7 @@ export const routes: RouteObject[] = [
       },
     ]
   },
-  
+
   {
     path: PrivateRoutes.CLIENTS,
     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
@@ -245,6 +253,36 @@ export const routes: RouteObject[] = [
 
 
 
+    ]
+  },
+  {
+    path: PrivateRoutes.REPORTS,
+    element: <SidebarLayout allowedRoles={[ValidRoles.admin]} />,
+    children: [
+      {
+        path: '',
+        element: <Reports />,
+        children: [
+          {
+            path: '',
+            element: <DashboardReports />
+          },
+          {
+            path: 'simulator',
+            element: <AffluenceSimulation />
+           
+          },
+          {
+            path: 'prediction',
+            element: <AffluencePrediction />
+          },
+          {
+            path: 'staff-planning',
+            element: <StaffPlaning />
+          }
+        ]
+      },
+      
     ]
   },
   {

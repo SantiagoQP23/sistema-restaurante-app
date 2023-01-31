@@ -17,6 +17,9 @@ import {
 
 import SidebarMenu from './SidebarMenu';
 import {LogoSign, Scrollbar} from '../../../components';
+import { ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { DarkMode, LightMode } from '@mui/icons-material';
+import { ThemeContext } from '../../../../../theme/ThemeProvider';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -32,8 +35,22 @@ const SidebarWrapper = styled(Box)(
 
 function Sidebar() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+
+  const curThemeName = localStorage.getItem('appTheme') || 'PureLightTheme';
+
   const closeSidebar = () => toggleSidebar();
   const theme = useTheme();
+
+  const setNameTheme = useContext(ThemeContext);
+
+  const handleTheme = (
+    event: React.MouseEvent<HTMLElement>,
+    newTheme: string | null,
+  ) => {
+    if (newTheme !== null) {
+      setNameTheme(newTheme);
+    }
+  };
 
   return (
     <>
@@ -81,7 +98,22 @@ function Sidebar() {
         />
         <Box p={2}>
 
+          <ToggleButtonGroup
+
+            onChange={handleTheme}
+            exclusive
+            value={curThemeName}
+          >
+            <ToggleButton value="PureLightTheme">
+              <LightMode />
+            </ToggleButton>
+            <ToggleButton value={"NebulaFighterTheme"}>
+              <DarkMode />
+              </ToggleButton>
           <Typography  variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
+          </ToggleButtonGroup>
+
+
          {/*  <Button
             href="https://bloomui.com"
             target="_blank"

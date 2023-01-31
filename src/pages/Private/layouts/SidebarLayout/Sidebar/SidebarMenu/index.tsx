@@ -245,6 +245,19 @@ function SidebarMenu() {
                   Pedidos Activos
                 </Button>
               </ListItem>
+
+
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/tables"
+                  startIcon={<TableRestaurantOutlinedIcon />}
+                >
+                  Mesas
+                </Button>
+              </ListItem>
             </List>
           </SubMenuWrapper>
 
@@ -270,17 +283,7 @@ function SidebarMenu() {
                   Administrar menú
                 </Button>
               </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/tables"
-                  startIcon={<TableRestaurantOutlinedIcon />}
-                >
-                  Mesas
-                </Button>
-              </ListItem>
+
               <ListItem component="div">
                 <Button
                   disableRipple
@@ -311,10 +314,10 @@ function SidebarMenu() {
                         disableRipple
                         component={RouterLink}
                         onClick={closeSidebar}
-                        to="/restaurant"
+                        to="/reports"
                         startIcon={<StorefrontOutlinedIcon />}
                       >
-                        Restaurante
+                        Reportes
                       </Button>
                     </ListItem>
                   </>

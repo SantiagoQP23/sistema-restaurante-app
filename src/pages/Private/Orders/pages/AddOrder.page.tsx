@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Grid, Card, CardContent, Typography, TextField } from '@mui/material';
+import { Button, Grid, Card, CardContent, Typography, TextField, IconButton } from '@mui/material';
 
 import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
 import { DataClient } from '../components';
@@ -10,7 +10,7 @@ import { TableOrder } from '../components/ReceiptOrder/TableOrder.component';
 
 
 import { useContext } from 'react';
-import { Add } from "@mui/icons-material";
+import { Add, ArrowBack, EditOutlined } from '@mui/icons-material';
 import { CardHeader, Box, } from "@mui/material"
 import { OrderDetail } from "./../components"
 import { OrderContext } from '../context/Order.context';
@@ -28,7 +28,7 @@ import { useSnackbar } from 'notistack';
 
 const People: FC = () => {
 
-  const {people, setPeople} = useContext(OrderContext);
+  const { people, setPeople } = useContext(OrderContext);
 
   return (
     <>
@@ -38,7 +38,7 @@ const People: FC = () => {
             type='number'
             label='Personas'
             value={people}
-            onChange={(e)=>{setPeople(Number(e.target.value))}}
+            onChange={(e) => { setPeople(Number(e.target.value)) }}
           />
         </CardContent>
       </Card>
@@ -93,30 +93,30 @@ export const AddOrder = () => {
 
   const navigate = useNavigate();
 
-  const {socket}= useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
-  const { amount, reset,getOrder } = useContext(OrderContext);
+  const { amount, reset, getOrder } = useContext(OrderContext);
 
   const cancelOrder = () => {
     navigate(-1);
     reset();
   }
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const submitAddOrder = () => {
 
     const order: CreateOrderDto = getOrder();
 
-    socket?.emit(EventsEmitSocket.createOrder, order, (resp: SocketResponseOrder)=>{
+    socket?.emit(EventsEmitSocket.createOrder, order, (resp: SocketResponseOrder) => {
 
       console.log('orden creada', resp)
-      if(resp.ok){
+      if (resp.ok) {
 
         navigate('/orders');
         reset();
-      }else{
-        enqueueSnackbar(resp.msg, {variant: 'error'});
+      } else {
+        enqueueSnackbar(resp.msg, { variant: 'error' });
       }
 
 
@@ -130,36 +130,84 @@ export const AddOrder = () => {
 
   return (
     <>
-      <Card sx={{mb: 2}}>
-        <CardContent>
-          <Grid container spacing={1} justifyContent='space-between' >
-            <Grid item >
+      <Grid container spacing={1} >
+        <Grid container item xs={12} md={7} spacing={1} justifyContent='space-between' >
 
-              <Typography variant='h6'>Nuevo pedido</Typography>
-            </Grid>
-            
-            <Grid item display='flex' justifyContent='right' alignItems='center'>
+          <Grid item display='flex' xs={12}>
 
-              <Button variant='outlined' onClick={cancelOrder}>Cancelar</Button>
-              {/* <Typography variant='body2'>$ {amount}</Typography> */}
-              <Button variant='contained' onClick={submitAddOrder}> ${amount} Create Order</Button>
-            </Grid>
-            
+            <Button onClick={() => { navigate('/orders') }}>
+              <ArrowBack />
+            </Button>
+            <Typography variant='h3'>Nuevo pedido</Typography>
           </Grid>
 
-        </CardContent>
-      </Card>
+          <Grid item xs={12}>
+            <MenuAddProduct />
 
-      <Grid container spacing={1} alignItems='start'>
-        <Grid item xs={12} md={6}>
-          <MenuAddProduct />
+          </Grid>
+
 
         </Grid>
-        <Grid container spacing={1} item xs={12} md={6}>
-          <Grid item xs={12} md={6}>
+
+        <Grid container item xs={12} md={5} spacing={1} alignItems='start'>
+
+          <Grid item xs={12}>
+
+            <Card>
+              <CardContent>
+
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                  <Typography variant='h5' fontWeight='bold'>Nuevo pedido</Typography>
+
+                  <Box>
+                    <Typography variant='subtitle1' >Table</Typography>
+                    <Typography variant='h5' fontWeight='bold' align='right'>12</Typography>
+
+                  </Box>
+
+                </Box>
+
+                <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+
+                  <Typography variant='h5' fontWeight='bold'>Cliente</Typography>
+                  <Box display='flex' alignItems='center'>
+                    <Typography variant='h5' fontWeight='bold'>Santiago Quirumbay </Typography>
+                    <IconButton size='small'>
+                      <EditOutlined />
+                    </IconButton>
+                  </Box>
+
+                </Box>
+
+
+
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                </Box>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                </Box>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                </Box>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                  
+                <Typography variant='h4' fontWeight='bold'>Total </Typography>
+                <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
+                </Box>
+
+
+
+
+
+
+              </CardContent>
+
+            </Card>
+
+          </Grid>
+
+          {/*  <Grid item xs={12} md={6}>
             <TableOrder />
           </Grid>
-          
+
           <Grid item xs={12} md={6}>
             <People />
           </Grid>
@@ -170,9 +218,16 @@ export const AddOrder = () => {
           <Grid item xs={12}>
             <OrderDetails />
 
-          </Grid>
+            <Button variant='contained' onClick={submitAddOrder}> Create Order</Button>
+          </Grid> */}
         </Grid>
+
+
       </Grid>
+
+
+
+
 
 
     </>
