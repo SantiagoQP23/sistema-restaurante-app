@@ -4,6 +4,9 @@ export interface ISection {
   categories: ICategory[];
 
 }
+
+
+
 export interface ISectionCategory {
   id: string;
   name: string;
@@ -40,7 +43,11 @@ export interface ICreateCategory {
 
 
 
-
+export enum ProductStatus {
+  AVAILABLE = 'AVAILABLE',
+  OUTOFSTOCK = 'OUT_OF_STOCK',
+  OUTOFSEASON = 'OUT_OF_SEASON',
+}
 
 export interface IProduct {
   id: string;
@@ -48,7 +55,7 @@ export interface IProduct {
   price: number;
   description: string;
   images: string;
-  stock: number;
+  status: ProductStatus;
   
   category: ICategoryProduct;
   

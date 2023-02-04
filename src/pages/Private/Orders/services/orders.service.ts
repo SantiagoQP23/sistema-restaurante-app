@@ -7,7 +7,7 @@ import { SubjectDescriptionDetail, SubjectDispatchDetail, SubjectModalDeleteOrde
 export const statusModalDescriptionDetail = new SubjectDescriptionDetail();
 export const statusModalDispatchDetail = new SubjectDispatchDetail();
 export const statusModalDeleteOrder = new SubjectModalDeleteOrder();
-
+export const statusModalDiscountOrder = new SubjectModalPayOrder();
 export const statusModalPayOrder = new SubjectModalPayOrder();
 
 export const getOrdersToday = () => {

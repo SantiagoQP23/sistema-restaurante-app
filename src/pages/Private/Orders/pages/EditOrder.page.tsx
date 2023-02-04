@@ -6,30 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 // Material UI
 import {
   Grid, Typography, Button, Box, Card, CardContent, Paper, IconButton,
-  InputBase,
-  Container,
-  List,
-  Divider,
-  ListItem,
-  ListItemText,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  CircularProgress,
-  CardHeader,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Switch
+
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DoneOutline, DeleteOutline, Done, Add } from '@mui/icons-material';
 
-
-import SaveIcon from '@mui/icons-material/Save';
-import AddIcon from '@mui/icons-material/Add';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { selectOrders, setActiveOrder } from '../../../../redux';
 import { ArrowBack } from '@mui/icons-material';
 import { getClient } from '../../Clients/services';
@@ -50,159 +31,111 @@ import { TableOrder, DataClient } from '../components/';
 
 import { OrderContext } from '../context/Order.context';
 import { ModalDeleteOrder } from '../components/EditOrder/ModalDeleteOrder.component';
+import { Stack } from '@mui/system';
+import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
+import { OrderStatus, OrderStatusSpanish } from '../../../../models/orders.model';
+import { OrderTable } from '../components/EditOrder/OrderTable.component';
+import { TextField } from '@mui/material';
+import { SocketContext } from '../../../../context/SocketContext';
+import { UpdateOrderDto } from '../dto/update-order.dto';
+import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
 
 
-/* 
-import { SocketContext } from '../context/SocketContext';
 
-// Componentes
-import { DetallePedido } from '../components/Pedidos/DetallePedido';
-import { detalleLoaded, pedidoUpdatedNombreCliente, selectDetalles, selectPedidos } from '../reducers';
-import { useAppDispatch } from '../hooks/useRedux';
-import { IDetallePedido } from '../interfaces/pedidos';
-import { FormControl } from '@mui/material';
-import { getOrder } from '../services/orders.service';
-import { IOrder } from '../../../../models/orders.model';
-import { useAsync } from '../../../../hooks/useAsync';
-import { ITable } from '../../../../models/table.model';
-import { TableOrder } from '../components/TableOrder.component';
-import { OrderContext } from '../context/Order.context';
- */
-
-
-/* 
-const DataClient: FC = () => {
-
-
-  const { loading, callEndpoint } = useFetchAndLoad();
-
-  const [cedula, setCedula] = useState<string>('');
-
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCedula(event.target.value);
-  };
-
-
-  const searchClient = async () => {
-    if (cedula.length === 10) {
-      await callEndpoint(getClient(cedula))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data);
-        })
-        .catch((err) => {
-          //nqueueSnackbar('No se encontró al cliente', { variant: 'error' })
-
-        })
-    }
-
-  }
-
-
-  return (
-    <>
-      <Card>
-        <CardContent>
-          <Typography variant='body1'>Cliente</Typography>
-
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              sx={{ p: 0, m: 0 }}
-            >
-              <Typography variant='body2'>Lionel Messi</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ p: 0, m: 0 }}>
-              <InputSearch
-                handleChange={handleChange}
-                placeholder='Número de cédula'
-                search={searchClient}
-              />
-
-            </AccordionDetails>
-          </Accordion>
-        </CardContent>
-      </Card>
-
-    </>
-  )
-}
- */
-
-/* 
-const TableOrder: FC = ({
-  
-}) => {
-
-
-  return (
-    <>
-      <Card>
-        <CardContent>
-          <Accordion sx={{ p: 0, m: 0 }}>
-            <AccordionSummary
-              expandIcon={<DriveFileRenameOutlineOutlinedIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              sx={{ p: 0, m: 0 }}
-            >
-              <Typography variant='body1'>Mesa <b>3</b></Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ p: 0, m: 0 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={10}
-                  label="Mesa del pedido"
-                >
-
-                  <MenuItem key={10} value={10}>Mesa 1</MenuItem>
-                  <MenuItem key={20} value={20}>Mesa 2</MenuItem>
-                  <MenuItem key={30} value={30}>Mesa 3</MenuItem>
-
-                </Select>
-              </FormControl>
-
-            </AccordionDetails>
-          </Accordion>
-
-        </CardContent>
-      </Card>
-
-
-    </>
-  )
-}
- */
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 interface PropsStatusOrder {
   status: boolean;
 }
 
-const StatusOrder: FC<PropsStatusOrder> = ({ status: isDelivered }) => {
+interface Props {
+  people: number;
+}
+
+
+const PeopleOrder: FC<Props> = ({  }) => {
+
+
+  const [people, setPeople] = useState<number>();
+
+  const { socket } = useContext(SocketContext);
+
+  const { activeOrder } = useSelector(selectOrders);
+
+
+
+  const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const num = Number(event.target.value)
+    if (num < 1) return setPeople(1);
+
+    setPeople(Number(event.target.value))
+  }
+
+  const updatePeopleOrder = () => {
+
+    const data: UpdateOrderDto = {
+      id: activeOrder!.id,
+      people,
+    }
+
+    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
+      console.log(res);
+      if (res.ok) {
+        dispatch(setActiveOrder(res.order!));
+      } else {
+        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
+      }
+    });
+
+
+
+  }
+
+
+  useEffect(() => {
+
+    setPeople(activeOrder?.people);
+
+    return () => {
+      setPeople(0);
+    }
+  }, [activeOrder])
 
 
   return (
     <>
-      <Card>
-        <CardContent>
-
-          <Typography variant='body1'>Estado <Label color={!isDelivered ? 'success' : 'error'} >{!isDelivered ? 'Activo' : 'Entregado'}</Label></Typography>
-          <Switch {...label} defaultChecked />
+      <Box display='flex'>
 
 
-        </CardContent>
-      </Card>
+        <TextField
+          type='number'
+          label='Personas'
+          value={people}
+          onChange={handleChange}
+          variant='standard'
+        />
+
+        {
+          activeOrder?.people !== people &&
+          <IconButton
+            onClick={() => updatePeopleOrder()}
+
+
+          >
+            <Done />
+
+          </IconButton>
+
+        }
+      </Box>
+
     </>
   )
-
-
 }
 
 
@@ -250,52 +183,6 @@ export const EditOrder = () => {
   }
 
 
-  /*  const dispatch = useAppDispatch();
- 
-   const { socket } = useContext(SocketContext);
- 
-   const { idPedido } = useParams();
- 
- 
-   //const { detalles } = useSelector(selectDetalles);
-   const { pedidoActivo } = useSelector((selectPedidos));
- 
- 
-   if (!pedidoActivo) {
-     navigate('/pedidos');
-   }
- 
-   const [cliente, setCliente] = useState<string>(pedidoActivo!.nombreCliente);
- 
-   const detalles: IDetallePedido[] = pedidoActivo?.detalles!;
- 
- 
-   async function cargarDetallesPedido(idPedido: number) {
- 
-     //dispatch(detallesPedidoStartLoad(idPedido));
-     dispatch(detalleLoaded(pedidoActivo?.detalles!))
-   }
- 
-   useEffect(() => {
- 
-     //cargarDetallesPedido(pedidoActivo?.idPedido!);
- 
-     // eslint-disable-next-line
-   }, [])
- 
- 
- 
-   const cambiarNombre = () => {
- 
-     socket?.emit('cambiarNombreCliente', { idPedido, cliente }, (ok: boolean) => {
-       if (ok) {
-         dispatch(pedidoUpdatedNombreCliente(cliente));
-       }
- 
-     });
- 
- 
-   } */
 
   useEffect(() => {
     if (activeOrder) {
@@ -316,174 +203,149 @@ export const EditOrder = () => {
     return <></>;
 
 
-  if (activeOrder.isPaid)
+  if (activeOrder.status === OrderStatus.PAID)
     return <Navigate to='receipt' />;
-
-
 
 
   return (
     <>
 
+      <Grid container spacing={2} display='flex' justifyContent='space-between' alignItems='center' sx={{ pb: 2 }}>
+        <Grid item display='flex' md={6}>
+          <Button onClick={() => { navigate('/orders') }}>
+            <ArrowBack />
+          </Button>
 
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Typography variant='h6'>{`Editar Pedido`} </Typography>
-        {/*   <Button onClick={() => navigate(-1)}>
-                <ArrowBack />
-              </Button> */}
+          <Typography variant="h4" >Editar pedido</Typography>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('products')}
+        </Grid>
 
-        >
-
-          <Add />
-          Añadir
-        </Button>
+        <Grid container md={6} spacing={1} item >
 
 
-        <Button variant='outlined' onClick={() => {
-          endEdit();
-        }}>
-          <Done />
-          Finalizar Edición
-        </Button>
+
+          {
+            <Grid item >
 
 
+              <Button
+                variant='contained'
+                color='error'
+                onClick={eliminarPedido}
+                disabled={orderDelivered}
+              >
+                <DeleteOutline />
+
+                Eliminar
+              </Button>
+            </Grid>
+
+          }
+                <Grid item>
+
+          <Button
+            variant='contained'
+            onClick={() => { navigate('receipt') }}
+          >
+            Comprobante
+          </Button>
+          </Grid>
+
+          <Grid item>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('products')}
+
+          >
+
+            <Add />
+            Añadir productos
+          </Button>
+          </Grid>
+
+
+        </Grid>
 
       </Grid>
-
-
-
-
-
-
-
-
-
-      {/*   <Card>
-        <CardHeader title={'Datos del pedido'} />
-        <CardContent>
-
-          <Grid container spacing={1} >
-            <Grid item xs={6} md={2} lg={3} >
-
-            </Grid>
-
-            <Grid item>
-
-             
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card> */}
-
 
 
       <Grid container spacing={1}>
-        <Grid container spacing={1} item xs={12} sm={6} display='flex' alignContent='start'>
-
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant='body2'>Número de pedido</Typography>
-                <Typography variant='body1'>{activeOrder?.num}</Typography>
-              </CardContent>
-            </Card>
+        <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
+          display: {xs:'none', md:'flex'},
 
 
+        }}>
 
-          </Grid>
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant='body2'>Total</Typography>
-                <Typography variant='body1'>$ {activeOrder?.amount}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Card>
-              <CardContent>
-                <Typography variant='body1'>Estado <Label color={!activeOrder.isDelivered ? 'success' : 'error'} >{!activeOrder.isDelivered ? 'Activo' : 'Entregado'}</Label></Typography>
-
-                <Typography variant='body1'>Hora  </Typography>
-                <Typography variant='body2'>{format(new Date(activeOrder?.createdAt), 'HH:mm')}</Typography>
-              </CardContent>
-            </Card>
-
-
-          </Grid>
-
-          <Grid item xs={6}>
-
-            <TableOrder table={activeOrder?.table} />
-          </Grid>
-
-          {/*      <Grid item xs={6}>
-            <StatusOrder status={activeOrder.isDelivered} />
-
-          </Grid> */}
-
-
-          <Grid item xs={12}>
-
-            <DataClient client={activeOrder?.client} />
-          </Grid>
-
-
-
-
-          <Grid item xs={12}>
-
-            <Card>
-              <CardContent>
-
-                <Typography variant='body1'>Mesero: <b>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName} </b></Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item>
-            <Button
-              variant='contained'
-              onClick={() => { navigate('receipt') }}
-            >
-              Comprobante
-            </Button>
-
-          </Grid>
-
-          <Grid item>
-
-
-            {
-              orderDelivered
-                ? <Typography>Esta orden no se puede eliminar porque tiene productos entregados</Typography>
-                :
-                <Button
-                  variant='contained'
-                  color='error'
-                  onClick={eliminarPedido}
-                >
-                  <DeleteOutline />
-
-                  Eliminar
-                </Button>
-
-            }
-
-          </Grid>
+          <MenuAddProduct />
 
 
 
         </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <OrderDetails details={activeOrder.details} />
+        <Grid item xs={12} sm={5}>
+
+          <Card>
+            <CardContent>
+
+
+
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <Box>
+                  <Typography variant='h5' fontWeight='bold'>Pedido N° {activeOrder.num}</Typography>
+
+                </Box>
+
+                <Box>
+                  {/* <Typography variant='subtitle1' >Mesa</Typography>
+                    <Typography variant='h5' fontWeight='bold' align='right'>12</Typography> */}
+                  <OrderTable />
+
+                </Box>
+
+              </Box>
+
+              <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+
+                <Typography variant='h5'>Hora: {format(new Date(activeOrder?.createdAt), 'HH:mm')}</Typography>
+                <Label color='info'>{OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]}</Label>
+              </Box>
+
+              <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+                <Typography variant='body1'>Mesero: <b>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName} </b></Typography>
+                <Box sx={{ width: '100px' }}>
+                  <PeopleOrder people={activeOrder.people} />
+
+                </Box>
+
+              </Box>
+
+              <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+
+                <DataClient client={activeOrder?.client} />
+              </Box>
+              {/*  <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+            <Typography variant='h5' fontWeight='bold'>Personas</Typography>
+
+            <People />
+          </Box> */}
+
+
+              <OrderDetails details={activeOrder.details} />
+
+
+
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+              </Box>
+              <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+
+                <Typography variant='h4' fontWeight='bold'>Total </Typography>
+                <Typography variant='h4' fontWeight='bold'>${activeOrder.amount}</Typography>
+              </Box>
+
+            </CardContent>
+          </Card>
         </Grid>
 
 
@@ -491,108 +353,6 @@ export const EditOrder = () => {
 
 
 
-      {/* 
-      <Container maxWidth="lg">
-
-
-
-
-
-
-        <Grid container spacing={1}>
-          <Grid item xs={12} md={6} >
-            <Typography variant='h6'>Nombre del cliente</Typography>
-            <Paper
-              component='form'
-              sx={{ px: 2, display: 'flex', alignItems: 'center', width: '100%' }}
-            >
-              <InputLabel id='input-nombre'>Cliente</InputLabel>
-              <InputBase
-                id="input-nombre"
-                defaultValue={cliente}
-                onBlur={(e) => {
-                  setCliente(e.target.value)
-                }}
-                fullWidth
-
-              />
-              <IconButton
-                color="primary"
-                onClick={cambiarNombre}
-                sx={{ p: '10px' }} aria-label="search">
-                <SaveIcon />
-              </IconButton>
-            </Paper>
-            <Typography variant='h6'>Información del pedido</Typography>
-
-            <Card>
-              <CardContent>
-                <List sx={{ px: 1 }}>
-
-                  <ListItem sx={{ py: 1.5 }}>
-                    <ListItemText
-                      primary="Mesero"
-                      primaryTypographyProps={{ variant: 'subtitle2' }}
-                    />
-                    <Typography variant="subtitle2" color="text.primary">
-                      {pedidoActivo?.usuario.nombres}
-                    </Typography>
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem sx={{ py: 1.5 }}>
-                    <ListItemText
-                      primary="Fecha"
-                      primaryTypographyProps={{ variant: 'subtitle2' }}
-                    />
-                    <Typography variant="subtitle2" color="text.primary">
-                      {`${pedidoActivo?.fecha}`}
-                    </Typography>
-                  </ListItem>
-                  <Divider component="li" />
-                  <ListItem sx={{ py: 1.5 }}>
-                    <ListItemText
-                      primary="Total"
-                      primaryTypographyProps={{ variant: 'subtitle2' }}
-                    />
-                    <Typography
-                      variant="subtitle2"
-                      color="text.primary"
-                      fontWeight="bold"
-                    >
-                      {pedidoActivo?.total}
-                    </Typography>
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={6} >
-
-            <Box>
-              <Typography variant="h6" align='center'>Detalles del pedido</Typography>
-              <Grid container spacing={1}>
-                {
-                  detalles.length > 0 && detalles.map(detalle => (
-
-                    <DetallePedido key={detalle.idDetallePedido}
-                      detalle={detalle}
-                      totalPedido={pedidoActivo!.total}
-                    />
-
-                  ))
-
-                }
-
-              </Grid>
-
-            </Box>
-          </Grid>
-
-        </Grid>
-
-
-      </Container> */}
 
 
     </>

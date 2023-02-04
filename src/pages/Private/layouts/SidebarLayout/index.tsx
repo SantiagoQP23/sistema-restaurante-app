@@ -64,7 +64,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({allowedRoles}) => {
           }}
         >
           <Box display="block">
-            <BreadcrumbsRouter />
+            {/* <BreadcrumbsRouter /> */}
               {
                 user && allowedRoles.includes(user.role.name) 
                 ? <Outlet />

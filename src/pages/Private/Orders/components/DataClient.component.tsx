@@ -94,7 +94,7 @@ export const DataClient: FC<Props> = (
       clientId: client!.id
     }
 
-    socket?.emit(EventsEmitSocket.changeClient, data, (res: SocketResponseOrder) => {
+    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
       console.log(res);
       if (res.ok) {
         dispatch(setActiveOrder(res.order!));
@@ -117,11 +117,9 @@ export const DataClient: FC<Props> = (
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography variant='body1'>Cliente</Typography>
+     
 
-          <Accordion>
+          <Accordion sx={{width: '100%'}} >
             <AccordionSummary
               expandIcon={<DriveFileRenameOutlineOutlined />}
               aria-controls="panel1a-content"
@@ -129,9 +127,11 @@ export const DataClient: FC<Props> = (
               sx={{ p: 0, m: 0 }}
             >
               <Typography variant='body2'>
+
+                <b>Cliente: </b> 
                 {clientOrder
                   ? clientOrder.person.firstName + ' ' + clientOrder.person.lastName
-                  : client && !activeOrder && client.person.firstName + ' ' + client.person.lastName || 'No asignado'
+                  : client && !activeOrder && client.person.firstName + ' ' + client.person.lastName || ' No asignado'
                 }
               </Typography>
             </AccordionSummary>
@@ -156,8 +156,7 @@ export const DataClient: FC<Props> = (
 
             </AccordionDetails>
           </Accordion>
-        </CardContent>
-      </Card>
+       
 
     </>
   )

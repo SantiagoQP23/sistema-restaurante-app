@@ -37,7 +37,7 @@ export const Private = () => {
 
   const getMenuCall = async () => await callEndpoint(getMenu());
 
-  const loadMenuState = (data: ISection[]) => { dispatch(loadMenu(data)); }
+  const loadMenuState = (sections: ISection[]) => { dispatch(loadMenu(sections)); }
 
   const getTablesCall = async () => await callEndpoint(getTables());
 

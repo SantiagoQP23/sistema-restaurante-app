@@ -56,7 +56,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
       <Card >
         <CardContent>
-          <Typography variant="body1" color="white">{seccion.name}</Typography>
+          <Typography variant="h5" >{seccion.name}</Typography>
           <Typography variant="subtitle2" color="orange">Categorias: {seccion.categories.length}</Typography>
 
         </CardContent>

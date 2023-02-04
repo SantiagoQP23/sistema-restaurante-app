@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { ActiveOrder } from "./components/ActiveOrder.component"
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../redux/slices/orders/orders.slice';
-import { IOrder } from '../../../models/orders.model';
+import { IOrder, OrderStatus } from '../../../models/orders.model';
 
 export const ListActiveOrders = () => {
 
@@ -14,7 +14,7 @@ export const ListActiveOrders = () => {
   const [activeOrders, setActiveOrders] = useState<IOrder[]>([]);
 
   const filterActiveOrder = () => {
-    setActiveOrders(orders.filter(order => !order.isDelivered));
+    setActiveOrders(orders.filter(order => order.status === OrderStatus.PENDING));
   }
   
   useEffect(() => {

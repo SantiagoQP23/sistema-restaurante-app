@@ -369,7 +369,7 @@ export const AffluenceSimulation = () => {
               if (count === 0) return null;
 
               return (
-                <Grid key={month.value} item xs={2}>
+                <Grid key={month.value} item xs={12} md={2}>
                   <AffluenceMonth month={month.label} affluence={count} />
 
                 </Grid>

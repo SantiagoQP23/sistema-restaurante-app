@@ -4,7 +4,7 @@ import { FC, useContext, useEffect, useState } from "react"
 import { IOrder } from '../../../../../models/orders.model';
 import { statusModalDeleteOrder } from '../../services/orders.service';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
-import { SocketResponse } from '../../interfaces/responses-sockets.interface';
+import { SocketResponse, SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { SocketContext } from '../../../../../context/SocketContext';
@@ -33,17 +33,17 @@ export const ModalDeleteOrder: FC = () => {
   const submitDeleteOrder = () => {
 
 
-      const data: { id: string } = { id: order!.id };
-  
-      socket?.emit(EventsEmitSocket.deleteOrder, data, ({ ok, msg }: SocketResponse) => {
-
 
   
-        if (!ok)
-          enqueueSnackbar(msg, { variant: 'error' });
-        else{
+      socket?.emit(EventsEmitSocket.deleteOrder, order!.id, (response: SocketResponseOrder) => {
+
+        if (response.ok) {
+        
           navigate('/orders');
+        } else {
+          enqueueSnackbar(response.msg, { variant: 'error' })
         }
+        
       })
     
 
@@ -63,7 +63,7 @@ export const ModalDeleteOrder: FC = () => {
 
     <Dialog open={open} onClose={closeModal}>
 
-      <DialogTitle id="alert-dialog-title" color='white'>
+      <DialogTitle id="alert-dialog-title" >
         Eliminar pedido
       </DialogTitle>
       <Divider />

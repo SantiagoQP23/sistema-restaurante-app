@@ -47,14 +47,14 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
           <CardContent >
             <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography variant="body1" color='white' >{producto.name}</Typography>
+              <Typography variant="h5" >{producto.name}</Typography>
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body2" >{producto.description ? producto.description: 'No se ha añadido descripción'}</Typography>
             </Grid>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
               <Typography variant="body2" color='orangered' >$ {producto.price}</Typography>
-              <Typography variant="body1" >Stock: {producto.stock}</Typography>
+              <Typography variant="body1" >Stock: {producto.status}</Typography>
             </Grid>
             <Grid item xs={12}>
             </Grid>

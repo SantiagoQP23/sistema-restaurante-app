@@ -5,16 +5,14 @@ export interface UpdateOrderDto{
   id: string;
   tableId?: string;
   clientId?: string;
-  orderDetail?: UpdateOrderDetailDto;
+ 
+  people?: number;
+  status?: string;
+  discount?: number;
+
 
 }
 
-export interface UpdateOrderDetailDto{
-  id: string;
-  quantity?: number;
-  description?: string;
-  qtyDelivered?: number;
-}
 
 
 export interface PayOrderDto{

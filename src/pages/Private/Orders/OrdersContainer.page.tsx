@@ -32,7 +32,7 @@ import { loadOrders, updateOrder } from '../../../redux';
 import { useAsync } from '../../../hooks/useAsync';
 import { SocketResponseOrder } from './interfaces/responses-sockets.interface';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
-import { addOrder, selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
+import { addOrder, deleteOrder, selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
 
 
 
@@ -111,8 +111,7 @@ export const OrdersContainer = () => {
         dispatch(setActiveOrder(order!))
       }
       enqueueSnackbar(`${msg}`, {variant: 'success'});
-
-      
+  
 
       //dispatch(pedidoAddNew(pedido))
 
@@ -120,24 +119,22 @@ export const OrdersContainer = () => {
 
     return () => {
       socket?.off(EventsOnSocket.updateOrder);
-
     }
-
 
     }, [socket]);
 
-  /*  useEffect(() => {
+   useEffect(() => {
 
-   socket?.on(EventsOnSocket.deleteOrder, ({ idOrder }: { idOrder: number }) => {
+   socket?.on(EventsOnSocket.deleteOrder, ({ order }: SocketResponseOrder) => {
 
      enqueueSnackbar(`Se ha eliminado un pedido`, {variant: 'success'});
 
-     //dispatch(pedidoAddNew(pedido))
+     dispatch(deleteOrder(order!.id));
 
    });
 
 
-   }, [socket]); */
+   }, [socket]);
 
   /*  
  

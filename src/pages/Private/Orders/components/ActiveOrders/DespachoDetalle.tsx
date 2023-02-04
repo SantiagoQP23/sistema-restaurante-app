@@ -15,6 +15,7 @@ import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 
 
 interface Props {
@@ -35,41 +36,39 @@ export const DespachoDetalle: FC<Props> = ({ }) => {
 
   const [orderId, setorderId] = useState('')
 
-  const {activeOrder} = useSelector(selectOrders);
+  const { activeOrder } = useSelector(selectOrders);
 
 
 
-  const {socket} = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   // const { state: counter, increment, decrement } = useCounter(
   //   detalle.cantEntregada, detalle.cantidad, detalle.cantEntregada);
 
 
-  
+
 
 
   const despacharDetalle = () => {
 
     console.log('Despachando detalle')
 
-    const data: UpdateOrderDto = {
-      id: orderId,
-      orderDetail: {
-        id: detail!.id,
-        qtyDelivered: counter
-      }
+    const data: UpdateOrderDetailDto = {
+      orderId,
+      id: detail!.id,
+      qtyDelivered: counter
 
     }
 
-    socket?.emit(EventsEmitSocket.updateqtyDeliveredDetail, data, ({ok, msg, order}: SocketResponseOrder) => {
+    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, msg, order }: SocketResponseOrder) => {
 
-      if(!ok) {
-        enqueueSnackbar(msg, {variant: 'error'});
+      if (!ok) {
+        enqueueSnackbar(msg, { variant: 'error' });
       }
 
-     })
+    })
 
 
     //console.log('Despachando', counter, detalle.producto.nombre);

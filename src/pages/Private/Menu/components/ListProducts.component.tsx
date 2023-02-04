@@ -1,45 +1,28 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 
-import { Grid, Box } from '@mui/material/';
-
+import { Grid } from '@mui/material';
+import { IProduct } from '../../../../models/menu.model';
 import { Product } from './Product.component';
-import { IProduct } from '../../../../models';
-import { useProducts } from '../../../../hooks';
-import { MenuContext } from '../../../../context/MenuContext';
-import { useSelector } from 'react-redux';
-import { selectMenu } from '../../../../redux';
 
-interface Props {
-  // products: IProduct[]
+interface ProductsListProps {
+  products: IProduct[]
 }
 
-export const ListProducts: FC<Props> = () => {
-
-  const { products } = useSelector(selectMenu);
+export const ListProducts: FC<ProductsListProps> = ({ products }) => {
 
   return (
-
     <>
-      <Grid container spacing={1} mt={1}>
-
+      <Grid container spacing={1}>
         {
-          products.length === 0 
-          ? <><h4>No se han añadido productos</h4></>
-          : (
+          products.map(product => (
+            <Grid key={product.id} item xs={12} sm={6} lg={4}>
+              <Product product={product} />
 
-            products.map((p) => (
-              <Grid key={p.id} item xs={12} md={12} lg={6} xl={4}>
-
-                <Product key={p.id} product={p} />
-
-              </Grid>
-            ))
-
-          )
+            </Grid>
+          ))
         }
       </Grid>
-
     </>
+  )
 
-  );
-};
+}

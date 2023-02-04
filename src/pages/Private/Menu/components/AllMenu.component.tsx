@@ -1,44 +1,45 @@
 import { FC } from "react";
 
 import { Grid, Card, CardContent, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectMenu } from "../../../../redux";
+import { useSelector, useDispatch } from 'react-redux';
+import { selectMenu, setActiveSection } from "../../../../redux";
 import { Sections } from "./Sections.component";
-import { Category } from "./Category.component";
-import { CategoriesOrMessage } from './Categories.component';
+import { Categories } from './Categories.compontent';
+import { ListProducts } from './ListProducts.component';
 
 export const AllMenu: FC = () => {
-  const { sections, activeSection, categories } = useSelector(selectMenu);
 
+
+
+  const { sections, activeSection, categories, activeCategory } = useSelector(selectMenu);
 
   return (
     <>
-      <Grid item xs={12} >
-        <Card>
-          <CardContent>
+      <Grid container xs={12} spacing={2}>
 
-            <Sections sections={sections} />
-          </CardContent>
-        </Card>
+        <Grid item xs={12}  >
+
+
+          <Sections sections={sections} />
+
+        </Grid>
+        <Grid item xs={12} >
+
+
+          {
+            activeSection &&
+            <Categories categories={activeSection!.categories} />
+
+          }
+        </Grid>
+        <Grid item xs={12} >
+
+          {
+            activeCategory &&
+            <ListProducts products={activeCategory.products} />
+          }
+        </Grid>
       </Grid>
-
-      <Grid item>
-
-        {
-          sections?.length === 0
-            ? <>No se ha creado un menu</>
-            : <>
-              {
-                activeSection
-                  ? <CategoriesOrMessage categories={activeSection.categories} />
-                  : <Typography variant='body1' textAlign='center'>Seleccione una sección</Typography>
-
-              }
-            </>
-
-        }
-      </Grid>
-
 
 
     </>

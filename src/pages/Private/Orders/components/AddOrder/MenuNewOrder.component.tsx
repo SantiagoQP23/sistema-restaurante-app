@@ -1,4 +1,4 @@
-import { FC, useState,  } from 'react'
+import { FC, useContext, useState,  } from 'react'
 import { useNavigate,  } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -6,27 +6,19 @@ import { Grid, Typography, Button,  } from '@mui/material';
 
 
 import { ShoppingCartOutlined, ArrowBack,  } from '@mui/icons-material';
-import { useModal } from '../../../../hooks';
-import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
-import { selectMenu } from '../../../../redux';
-
-import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
+import { MenuAddProduct } from '../EditOrder/MenuAddProduct.component';
+import { OrderContext } from '../../context/Order.context';
 
 
 
-
-
-
-export const AddProductsOrder: FC = () => {
+export const MenuNewOrder: FC = () => {
   const navigate = useNavigate();
 
+  const { amount, reset, getOrder, details } = useContext(OrderContext);
 
 
-  const { activeOrder } = useSelector(selectOrders);
-  
 
-  if(!activeOrder)
-    return (<></>)
+
 
   return (
     <>
@@ -45,7 +37,7 @@ export const AddProductsOrder: FC = () => {
           color="primary"
           onClick={() => navigate(-1)}
         >
-          <ShoppingCartOutlined /> $ {activeOrder.amount}
+          <ShoppingCartOutlined /> $ {amount}
         </Button>
 
       </Grid>

@@ -17,7 +17,7 @@ export const PageTitle: FC<PageTitleProps> = ({
   return (
     <Grid container justifyContent="space-between" alignItems="center" {...rest}>
       <Grid item>
-        <Typography variant="h5" component="h5" gutterBottom>
+        <Typography variant="h3" component="h5" gutterBottom>
           {heading}
         </Typography>
         <Typography variant="subtitle1">

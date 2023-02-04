@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Grid, Card, CardContent, Typography, TextField, IconButton } from '@mui/material';
+import { Button, Grid, Card, CardContent, Typography, TextField, IconButton, Divider } from '@mui/material';
 
 import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
 import { DataClient } from '../components';
@@ -32,16 +32,14 @@ const People: FC = () => {
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <TextField
-            type='number'
-            label='Personas'
-            value={people}
-            onChange={(e) => { setPeople(Number(e.target.value)) }}
-          />
-        </CardContent>
-      </Card>
+
+      <TextField
+        type='number'
+        label='Personas'
+        value={people}
+        onChange={(e) => { setPeople(Number(e.target.value)) }}
+      />
+
     </>
   )
 }
@@ -58,31 +56,37 @@ export const OrderDetails = () => {
   return (
 
     <>
-      <Card>
-        <CardHeader title={
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-            <Typography variant="body1" fontWeight='bold'>Detalles de pedido</Typography>
+      <Box display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
-          </Box>
-        } />
+        <Typography variant="h3" fontWeight='bold'>Productos</Typography>
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => navigate('products')}
+          sx={{display: { xs: 'flex', md: 'none' }}}
+        >
+          <Add />
+        </Button>
 
-        <CardContent >
-          <Grid container spacing={1}>
-            {
-              details.map((detail) => (
+      </Box>
 
-                <Grid key={detail.product.name} item xs={12}>
-                  <NewOrderDetail detalle={detail} />
-                </Grid>
+      <Divider sx={{ my: 1 }} />
 
-              ))
+      <Grid container spacing={1}>
+        {
+          details.map((detail) => (
 
-            }
-          </Grid>
-        </CardContent>
+            <Grid key={detail.product.name} item xs={12}>
+              <NewOrderDetail detalle={detail} />
+              <Divider sx={{ my: 1 }} />
+            </Grid>
 
-      </Card>
+          ))
+
+        }
+      </Grid>
+
     </>
   )
 }
@@ -95,7 +99,7 @@ export const AddOrder = () => {
 
   const { socket } = useContext(SocketContext);
 
-  const { amount, reset, getOrder } = useContext(OrderContext);
+  const { amount, reset, getOrder, details } = useContext(OrderContext);
 
   const cancelOrder = () => {
     navigate(-1);
@@ -133,7 +137,7 @@ export const AddOrder = () => {
       <Grid container spacing={1} >
         <Grid container item xs={12} md={7} spacing={1} justifyContent='space-between' >
 
-          <Grid item display='flex' xs={12}>
+          <Grid item display='flex' xs={12} alignContent='start'>
 
             <Button onClick={() => { navigate('/orders') }}>
               <ArrowBack />
@@ -141,7 +145,9 @@ export const AddOrder = () => {
             <Typography variant='h3'>Nuevo pedido</Typography>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{
+            display: {xs: 'none', md: 'flex'},
+          }}>
             <MenuAddProduct />
 
           </Grid>
@@ -160,8 +166,9 @@ export const AddOrder = () => {
                   <Typography variant='h5' fontWeight='bold'>Nuevo pedido</Typography>
 
                   <Box>
-                    <Typography variant='subtitle1' >Table</Typography>
-                    <Typography variant='h5' fontWeight='bold' align='right'>12</Typography>
+                    {/* <Typography variant='subtitle1' >Mesa</Typography>
+                    <Typography variant='h5' fontWeight='bold' align='right'>12</Typography> */}
+                    <TableOrder />
 
                   </Box>
 
@@ -169,36 +176,57 @@ export const AddOrder = () => {
 
                 <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
-                  <Typography variant='h5' fontWeight='bold'>Cliente</Typography>
+                  <DataClient />
+                  {/* <Typography variant='h5' fontWeight='bold'>Cliente</Typography>
                   <Box display='flex' alignItems='center'>
                     <Typography variant='h5' fontWeight='bold'>Santiago Quirumbay </Typography>
                     <IconButton size='small'>
                       <EditOutlined />
                     </IconButton>
-                  </Box>
+                  </Box> */}
 
                 </Box>
 
 
 
+                <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+                  <Typography variant='h5' fontWeight='bold'>Personas</Typography>
+
+                  <People />
+
+                  {/* <Box display='flex' alignItems='center'>
+                    <Typography variant='h5' fontWeight='bold'>6</Typography>
+                    <IconButton size='small'>
+                      <EditOutlined />
+                    </IconButton>
+                  </Box> */}
+
+
+                </Box>
+
+
+                <Box >
+                  <OrderDetails />
+
+                </Box>
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
                 </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-                </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-                </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-                  
-                <Typography variant='h4' fontWeight='bold'>Total </Typography>
-                <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
+                <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+
+                  <Typography variant='h4' fontWeight='bold'>Total </Typography>
+                  <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
                 </Box>
 
 
 
+                <Box mt={2}>
+                  <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth > Create Order</Button>
 
+                </Box>
 
 
               </CardContent>
+
 
             </Card>
 
@@ -216,9 +244,7 @@ export const AddOrder = () => {
             <DataClient />
           </Grid>
           <Grid item xs={12}>
-            <OrderDetails />
 
-            <Button variant='contained' onClick={submitAddOrder}> Create Order</Button>
           </Grid> */}
         </Grid>
 

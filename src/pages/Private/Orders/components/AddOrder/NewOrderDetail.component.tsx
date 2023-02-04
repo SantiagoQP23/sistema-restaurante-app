@@ -47,7 +47,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   }
 
   const editDescription = () => {
-      
+
     sharingInformationService.setSubject(true, detalle);
 
   }
@@ -149,93 +149,90 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
     <>
 
 
-      <Card>
-        <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-            <Typography
-              variant="body1"
-              color="initial"
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-            >
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography
+            variant="body1"
+            color="initial"
+          >
 
-              {detalle.product.name}
-            </Typography>
-
-            {/* 
-            */}
-
-            <IconButton
-              aria-label="Eliminar detalle"
-              onClick={deleteDet}
-              disabled={false}
-              color='error'
-            >
-              <DeleteOutline />
-            </IconButton>
-
-
-          </Box>
-          <Typography variant="body2" color={detalle.description ? "orange" : "green"}>
-            {detalle.description ? detalle.description : "Normal"}
-            <IconButton
-              onClick={editDescription}
-            >
-              <EditOutlined />
-            </IconButton>
+            {detalle.product.name} -
           </Typography>
 
-          <Box sx={{ display: "flex" }}>
-            <Box sx={{ flexGrow: 1 }} mt={2}>
-              <Typography variant="body1" color="initial">
-                $ {detalle.product.price}
+          <Typography variant='subtitle1'>
+            $ {detalle.product.price}
+          </Typography>
+        </Box>
 
-              </Typography>
 
-            </Box>
 
-            <Box alignContent="right" >
-              <Box display='flex' justifyContent='space-between' alignItems='center'>
 
+      </Box>
+
+
+      <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+
+        <Typography variant="body2" color={detalle.description ? "orange" : "gray"}>
+
+          {detalle.description ? detalle.description : "Normal"}
+          <IconButton
+            onClick={editDescription}
+          >
+            <EditOutlined />
+          </IconButton>
+
+        </Typography>
+
+        <Box alignContent="right" >
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+            {
+              counter > 1
+                ?
                 <IconButton
-                  onClick={ () => {
+                  onClick={() => {
                     decrement()
-                
+
                   }}
                 >
                   <RemoveCircleOutline />
                 </IconButton>
-
-                <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+                :
                 <IconButton
-                  onClick={ () => {
-                    increment() 
-             
-                  }}
+                  aria-label="Eliminar detalle"
+                  onClick={deleteDet}
+                  disabled={false}
+                  color='error'
                 >
-                  <AddCircleOutline />
+                  <DeleteOutline />
                 </IconButton>
-                {/* <IconButton
-                  disabled={!counter}
-                  color='primary'
-                  onClick={() => update()}
-                >
-                  <SaveOutlined />
-                </IconButton> */}
-              </Box>
+            }
 
+            <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+            <IconButton
+              onClick={() => {
+                increment()
 
-            </Box>
+              }}
+            >
+              <AddCircleOutline />
+            </IconButton>
+
+            <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detalle.product.price * counter}</Typography>
           </Box>
 
-          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detalle.product.price * counter}</Typography>
 
-          {/* 
+
+        </Box>
+      </Box>
+
+
+      {/* 
 
 
             */}
-        </CardContent>
-      </Card>
 
 
     </>

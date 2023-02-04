@@ -55,24 +55,24 @@ export const StaffPlaning = () => {
 
   const dataNextWeek = {
 
-    labels: days.slice(7).map(day => day.nameDay + " " + day.date),
+    labels: days.slice(10).map(day => day.nameDay + " " + day.date),
     datasets: [
 
       {
         label: 'Chefs',
-        data: staffs.slice(7).map(staff => staff.chefs),
+        data: staffs.slice(10).map(staff => staff.chefs),
         fill: true,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
         label: 'Camareros',
-        data: staffs.slice(7).map(staff => staff.waiters),
+        data: staffs.slice(10).map(staff => staff.waiters),
         fill: true,
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
 
       }, {
         label: 'Cocineros',
-        data: staffs.slice(7).map(staff => staff.cooks),
+        data: staffs.slice(10).map(staff => staff.cooks),
         backgroundColor: "rgba(75,192,200,0.2)",
 
       }
@@ -83,24 +83,24 @@ export const StaffPlaning = () => {
 
   const dataThisWeek = {
 
-    labels: days.slice(0, 7).map(day => day.nameDay + " " + day.date),
+    labels: days.slice(0, 10).map(day => day.nameDay + " " + day.date),
     datasets: [
 
       {
         label: 'Chefs',
-        data: staffs.slice(0, 7).map(staff => staff.chefs),
+        data: staffs.slice(0, 10).map(staff => staff.chefs),
         fill: true,
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
         label: 'Camareros',
-        data: staffs.slice(0, 7).map(staff => staff.waiters),
+        data: staffs.slice(0, 10).map(staff => staff.waiters),
         fill: true,
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
 
       }, {
         label: 'Cocineros',
-        data: staffs.slice(0, 7).map(staff => staff.cooks),
+        data: staffs.slice(0, 10).map(staff => staff.cooks),
         backgroundColor: "rgba(75,192,200,0.2)",
 
       }
@@ -108,10 +108,6 @@ export const StaffPlaning = () => {
     ]
 
   }
-
-
-
-
 
   return (
 
@@ -159,7 +155,7 @@ export const StaffPlaning = () => {
       </Box>
 
       <Grid container spacing={1}>
-        <Grid container spacing={1} item xs={12} md={8} sx={{ display: 'flex', alignContent: 'start' }}>
+        <Grid container spacing={1} item xs={12} sx={{ display: 'flex', alignContent: 'start' }}>
 
           <Grid item xs={12}>
 
@@ -189,11 +185,11 @@ export const StaffPlaning = () => {
           </Grid>
         </ Grid>
 
-        <Grid container item xs={12} md={4} spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
+        <Grid container item xs={12}  spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
 
           {
             staffs.slice(0).map((staff, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid item xs={12} md={3} key={index}>
                 <Card>
                   <CardHeader title={days[index].nameDay + " " + days[index].date} />
                   <CardContent>

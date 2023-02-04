@@ -55,14 +55,12 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
   }
 
 
-  const updateDetail = () => {
+  const updateQuantityDetail = () => {
 
-    const data: UpdateOrderDto = {
-      id: activeOrder!.id,
-      orderDetail: {
-        id: detail.id,
-        quantity: counter
-      }
+    const data: UpdateOrderDetailDto = {
+      orderId: activeOrder!.id,
+      id: detail.id,
+      quantity: counter
     }
 
     socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
@@ -100,198 +98,107 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
   }
 
 
-
-  /*  const { idPedido } = useParams();
- 
-   const dispatch = useDispatch();
- 
- 
-   const { socket } = useContext(SocketContext);
- 
-   const eliminarDetalle = () => {
- 
- 
-     Swal.fire({
-       title: 'Estas seguro?',
-       text: "Esta acción no se puede revertir!",
-       icon: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#3085d6',
-       cancelButtonColor: '#d33',
-       confirmButtonText: 'Sí, eliminar'
-     }).then((result) => {
-       if (result.isConfirmed) {
- 
-         console.log(detalle.idDetallePedido);
- 
-         const detalleEliminar = {
-           idDetallePedido: detalle.idDetallePedido,
-           idPedido
-         }
- 
-         socket?.emit('eliminarDetalle', detalleEliminar, ({ ok }: ICallbackSocket) => {
- 
-           // TODO leer el ok en el callbacke
-           if (ok) {
-             // TODO Eliminar el detalle de pedido
-             dispatch(pedidoDetalleDeleted(detalle.idDetallePedido));
- 
-             dispatch(pedidoUpdateTotal(Number(totalPedido) - Number(detalle.subtotal)))
- 
-           }
- 
-         }
-         )
- 
- 
-       }
-     })
- 
- 
- 
-   }
- 
-   const actualizarDetalle = () => {
- 
-     const cantidad = Math.abs(counter - detalle.cantidad);
- 
-     const detalleActualizar = {
-       idDetallePedido: detalle.idDetallePedido,
-       idPedido,
-       cantidad: counter,
-       descripcion: ''
- 
-     }
- 
-     socket?.emit('actualizarCantidadDetalle', { detalleActualizar }, (data: ICallbackSocket) => {
- 
-       
-       if (data.ok) {
-       
-         dispatch(pedidoDetalleActivo(detalle));
-         
-         dispatch(pedidoDetalleCantidad(counter));
- 
-         const subtotal = cantidad * detalle.producto.precio;
-         const aumentar = counter > detalle.cantidad;
- 
-         const total = aumentar
-           ? Number(totalPedido) + Number(subtotal)
-           : Number(totalPedido) - Number(subtotal);
- 
-         dispatch(pedidoUpdateTotal(total));
-       }
- 
-     })
- 
-   }
-  */
   return (
     <>
 
 
-      <Card>
-        <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-            <Typography
-              variant="body1"
-              color="initial"
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-            >
+        <Typography
+          variant="body1"
+          color="initial"
 
-              {detail.product.name}
-            </Typography>
+        >
 
-            {/* 
+          {detail.product.name}
+        </Typography>
+
+        {/* 
             */}
-            {
-              detail.qtyDelivered !== detail.quantity
-                ? (
-                  <Box>
-                    <Label color='success'>Pendiente</Label>
-                    {
-                      detail.qtyDelivered === 0 && <IconButton
-                        aria-label="Eliminar detalle"
-                        onClick={deleteDetail}
-                        disabled={false}
-                        color='error'
-                      >
-                        <DeleteOutline />
-                      </IconButton>
-
-                    }
-                  </Box>
-                )
-
-                : <Label color='warning'>Entregado</Label>
-
-            }
-
-
-          </Box>
-          <Typography variant="body2" color={detail.description ? "orange" : ""}>
-            {detail.description && detail.description}
-            {
-              !(detail.qtyDelivered === detail.quantity) && <Button
-                onClick={editDescription}
-              >
-                {!detail.description
-                  ? 'Añadir descripción'
-                  : <EditOutlined />
+        {
+          detail.qtyDelivered !== detail.quantity
+            ? (
+              <Box>
+                <Label color='success'>Pendiente</Label>
+                {
+                  detail.qtyDelivered === 0 && <IconButton
+                    aria-label="Eliminar detalle"
+                    onClick={deleteDetail}
+                    disabled={false}
+                    color='error'
+                  >
+                    <DeleteOutline />
+                  </IconButton>
 
                 }
-              </Button>
+              </Box>
+            )
+
+            : <Label color='warning'>Entregado</Label>
+
+        }
+
+
+      </Box>
+      <Typography variant="body2" color={detail.description ? "orange" : ""}>
+        {detail.description && detail.description}
+        {
+          !(detail.qtyDelivered === detail.quantity) &&
+          <Button
+            onClick={editDescription}
+            variant="text"
+          >
+            {!detail.description
+              ? 'Añadir descripción'
+              : <EditOutlined />
 
             }
+          </Button>
+
+        }
+
+      </Typography>
+
+      <Box sx={{ display: "flex" }}>
+        <Box sx={{ flexGrow: 1 }} mt={2}>
+          <Typography variant="body1" color="initial">
+            $ {detail.product.price}
 
           </Typography>
 
-          <Box sx={{ display: "flex" }}>
-            <Box sx={{ flexGrow: 1 }} mt={2}>
-              <Typography variant="body1" color="initial">
-                $ {detail.product.price}
+        </Box>
 
-              </Typography>
+        <Box alignContent="right" >
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-            </Box>
+            <IconButton
+              onClick={decrement}
+            >
+              <RemoveCircleOutline />
+            </IconButton>
 
-            <Box alignContent="right" >
-              <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-                <IconButton
-                  onClick={decrement}
-                >
-                  <RemoveCircleOutline />
-                </IconButton>
-
-                <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
-                <IconButton
-                  onClick={increment}
-                >
-                  <AddCircleOutline />
-                </IconButton>
-                <IconButton
-                  disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
-                  color='primary'
-                  onClick={() => updateDetail()}
-                >
-                  <SaveOutlined />
-                </IconButton>
-              </Box>
-
-
-            </Box>
+            <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+            <IconButton
+              onClick={increment}
+            >
+              <AddCircleOutline />
+            </IconButton>
+            <IconButton
+              disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
+              color='primary'
+              onClick={() => updateQuantityDetail()}
+            >
+              <SaveOutlined />
+            </IconButton>
           </Box>
 
-          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
 
-          {/* 
+        </Box>
+      </Box>
 
+      <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
 
-            */}
-        </CardContent>
-      </Card>
 
 
     </>

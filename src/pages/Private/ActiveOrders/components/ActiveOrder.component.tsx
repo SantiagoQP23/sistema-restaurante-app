@@ -7,6 +7,7 @@ import { PendingDetail } from '../../Orders/components/ActiveOrders/PendingDetai
 import { Label } from '../../../../components/ui';
 import { useModal } from '../../../../hooks';
 import { DespachoDetalle } from '../../Orders/components/ActiveOrders/DespachoDetalle';
+import { es } from 'date-fns/locale';
 /* 
 import { IPedido } from '../../interfaces'
 import { IDetallePedido } from '../../interfaces/pedidos';
@@ -159,6 +160,7 @@ export const ActiveOrder: FC<Props> = ({ order }) => {
                 {formatDistance(new Date(order.createdAt), new Date(), {
                   addSuffix: true,
                   includeSeconds: true,
+                  locale: es
 
 
                 })}

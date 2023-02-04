@@ -16,7 +16,7 @@ import { SocketContext } from '../../../../context/';
 import { PageTitle, PageTitleWrapper } from '../../../../components/ui';
 import { Order } from '../components';
 import { FilterOrders } from '../../Reports/components/FilterOrders';
-import { IOrder } from '../../../../models';
+import { IOrder, OrderStatus } from '../../../../models';
 import { useNavigate } from 'react-router-dom';
 import { ExpandMore } from '@mui/icons-material';
 
@@ -24,7 +24,7 @@ import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { ModalDeleteOrder } from '../components/EditOrder/ModalDeleteOrder.component';
 import { es } from 'date-fns/locale';
-
+import { OrderStatusSpanish } from '../../../../models/orders.model';
 
 
 interface resp {
@@ -67,27 +67,6 @@ export const Clock: FC = () => {
   )
 }
 
-const statusOrdersList = [
-  {
-
-    value: 1000,
-    label: 'Todos'
-  },
-  {
-    value: 1001,
-    label: 'Pendientes'
-  },
-  {
-    value: 1002,
-    label: 'Entregados'
-
-  },
-  {
-    value: 1003,
-    label: 'Pagados'
-  }
-]
-
 
 
 export const ListOrders = () => {
@@ -98,7 +77,7 @@ export const ListOrders = () => {
     setView(nextView);
   };
 
-  const [statusOrders, setStatusOrders] = useState(statusOrdersList[1])
+  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -116,19 +95,13 @@ export const ListOrders = () => {
 
   const filterOrders = () => {
 
-    if (statusOrders.value === 1000) { // Todos
-      console.log('Todos')
-      setOrdersFiltered(orders)
-    } else if (statusOrders.value === 1001) { // Pendientes
-      setOrdersFiltered(orders.filter(order => !order.isDelivered))
-    } else if (statusOrders.value === 1002) { // Entregados
-      setOrdersFiltered(orders.filter(order => order.isDelivered && !order.isPaid))
-    } else if (statusOrders.value === 1003) { // Pagados
-      setOrdersFiltered(orders.filter(order => order.isPaid))
+    if(!statusOrderFilter) {
+      setOrdersFiltered(orders);
+    } else {
+      setOrdersFiltered(orders.filter(order => order.status === statusOrderFilter))
     }
 
-
-
+        
 
   }
 
@@ -136,7 +109,7 @@ export const ListOrders = () => {
 
     filterOrders()
 
-  }, [orders, statusOrders])
+  }, [orders, statusOrderFilter])
 
 
 
@@ -162,7 +135,7 @@ export const ListOrders = () => {
           <Grid item>
             <Card >
               <CardContent>
-                <Typography variant="body1"><Clock /></Typography>
+                <Typography variant="h5"><Clock /></Typography>
 
               </CardContent>
 
@@ -184,11 +157,11 @@ export const ListOrders = () => {
       <Card sx={{my: 2}}>
 
         <CardContent>
-
+          <Typography variant="h5">Filtrar pedidos por estado</Typography>
 
           <Tabs
-            onChange={(e, value) => setStatusOrders(value)}
-            value={statusOrders}
+            onChange={(e, value) => setStatusOrderFilter(value)}
+            value={statusOrderFilter}
             variant="scrollable"
             textColor='primary'
             scrollButtons
@@ -205,8 +178,8 @@ export const ListOrders = () => {
           >
 
             {
-              statusOrdersList.map((status) => (
-                <Tab key={status.value} label={status.label} value={status} />
+              Object.keys(OrderStatus).map((status) => (
+                <Tab key={status} label={OrderStatusSpanish[`${status as OrderStatus}`]} value={status} />
               ))
             }
 
@@ -230,7 +203,7 @@ export const ListOrders = () => {
             :
             <Grid item xs={12} sx={{ my: 3 }}>
 
-              <Typography align='center' variant='body1' >No se encontraron pedidos </Typography>
+              <Typography align='center' variant='h4' >No se encontraron pedidos </Typography>
 
             </Grid>
 

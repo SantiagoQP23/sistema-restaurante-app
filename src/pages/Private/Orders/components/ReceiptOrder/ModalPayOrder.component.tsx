@@ -1,149 +1,112 @@
-import { AttachMoney } from "@mui/icons-material";
-import { Typography, Dialog, DialogTitle, Button, DialogActions, DialogContent, DialogContentText, FormControl, FormHelperText, InputAdornment, TextField } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { IOrder } from '../../../../../models/orders.model';
+import { LoadingButton } from "@mui/lab"
+import { Dialog, DialogTitle, Divider, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material"
+import { FC, useContext, useEffect, useState } from "react"
+import { IOrder, OrderStatus } from '../../../../../models/orders.model';
 import { statusModalPayOrder } from '../../services/orders.service';
-import { SocketContext } from '../../../../../context/SocketContext';
-import { PayOrderDto } from '../../dto/update-order.dto';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
-import { useDispatch } from 'react-redux';
-import { setActiveOrder } from "../../../../../redux";
+import { SocketResponse } from '../../interfaces/responses-sockets.interface';
+import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { SocketContext } from '../../../../../context/SocketContext';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
 
 
-export const ModalPayOrder = () => {
+export const ModalPayOrder: FC = () => {
 
-  const [open, setOpen] = useState(false);
 
   const [order, setOrder] = useState<IOrder>();
 
+
+  const [open, setOpen] = useState<boolean>(false);
+
   const subscription$ = statusModalPayOrder.getSubject();
 
-  const {socket} = useContext(SocketContext);
+  const {socket} = useContext(SocketContext); 
 
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [discount, setDiscount] = useState(0);
+  const navigate = useNavigate();
 
-  const {enqueueSnackbar} = useSnackbar();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-    const value = Number(e.target.value);
-    if (value < 0) {
-      setDiscount(0);
-      return;
-      
-    }
-
-    if(value > (order!.amount * 0.05)) {
-      return;
-    }
-    setDiscount(value);
+  const closeModal = () => {
+    setOpen(false);
   }
 
+  const submitPayOrder = () => {
 
-  const payOrder = () => {
+    console.log('pagar orden');
 
-    const data : PayOrderDto = {
+    const data: UpdateOrderDto = { 
       id: order!.id,
-      discount
-    }
+      status: OrderStatus.PAID
+     };
 
-    socket?.emit(EventsEmitSocket.payOrder, data, ({ok, msg, order}: SocketResponseOrder) => {
+    socket?.emit(EventsEmitSocket.updateOrder, data, (response: SocketResponse) => {
 
-      console.log('RESPUESTA DEL SERVIDOR', ok, msg, order);
-      console.log('orden pagada', ok)
-      if(ok) {
-        console.log(order)
-        dispatch(setActiveOrder(order!));
-        setOpen(false);
-      }else{
-        enqueueSnackbar(msg, {variant: 'error'});
+      console.log(response);
 
-
+      if(response.ok) {
+        
+        closeModal();
+        
+      } else {
+        enqueueSnackbar(response.msg, {variant: 'error'});
       }
 
+    })
 
-    });
+      // const data: { id: string } = { id: order!.id };
+  
+      // socket?.emit(EventsEmitSocket.deleteOrder, data, (response: {status: 'string', message: 'string'}) => {
 
-    setOpen(false);
+      //   console.log(response);
+  
+        
+      // })
+    
 
   }
 
-
   useEffect(() => {
+
     subscription$.subscribe((data) => {
       setOrder(data.order);
       setOpen(!!data.value);
     })
+    
   }, [])
 
 
   return (
-    <Dialog
-      open={open}
-      onClose={() => {
-        setOpen(false)
-        setDiscount(0);
-      }}
-    >
-      <DialogTitle>Pagar pedido</DialogTitle>
 
+    <Dialog open={open} onClose={closeModal}>
+
+      <DialogTitle id="alert-dialog-title" textAlign='center' variant='h4'>
+        Cobrar pedido
+      </DialogTitle>
+      <Divider />
       <DialogContent>
-        <DialogContentText>
-          <Typography variant='h6'>Total: {order?.amount}</Typography>
-        </DialogContentText>
-
-        <FormControl fullWidth>
-          {
-            order &&
-            <FormHelperText>El descuento debe ser menor a {(order?.amount * 0.05).toFixed(2)}</FormHelperText> 
-
-          }
-
-          <TextField
-            label="Descuento"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AttachMoney />
-                </InputAdornment>
-              ),
-            }}
-            margin='dense'
-            fullWidth
-            type='number'
-            inputProps={{
-              step: 0.25,
-            }}
-
-            onChange={handleChange}
-           value={discount}
-          />
-
-
-        </FormControl>
-
-
-
-
-
-      </DialogContent>
-
-      <DialogActions>
-        <Button
-          onClick={() => {
-            setOpen(false)
-            setDiscount(0);
-          }}
+        <DialogContentText id="alert-dialog-description">
+          {`¿Esta seguro de pagar la orden?`}
           
-
-        >Cancelar</Button>
-        <Button variant="contained" onClick={payOrder}>Pagar</Button>
+        </DialogContentText>
+        <DialogContentText id="alert-dialog-description">
+          <b>Cliente: </b>{`${order?.client?.person.firstName} ${order?.client?.person.lastName}`}
+          
+        </DialogContentText>
+        <DialogContentText id="alert-dialog-description">
+          <b>Mesa: </b>{`${order?.table?.name}`}
+          
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeModal} >Cancelar</Button>
+        <LoadingButton variant='contained' color='primary' onClick={submitPayOrder}>
+          Aceptar
+        </LoadingButton>
       </DialogActions>
     </Dialog>
 
   )
+
 }
+

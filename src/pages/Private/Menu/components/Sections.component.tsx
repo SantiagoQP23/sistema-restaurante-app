@@ -26,17 +26,20 @@ export const Sections: FC<Props> = ({ sections }) => {
   const changeSection = (sectionId: string) => {
     const section = sections.find(s => s.id === sectionId);
     dispatch(setActiveSection(section!))
-    dispatch(setActiveCategories(section!.categories))
 
-    if(section!.categories.length > 0){
-      dispatch(setActiveCategory(section!.categories[0]))
-  
-      dispatch(setActiveProducts(section!.categories[0].products))
-      
-    }else {
-      
-      dispatch(setActiveProducts([]))
-    }
+    dispatch(setActiveCategory(section!.categories[0]))
+
+    // dispatch(setActiveCategories(section!.categories))
+
+    // if (section!.categories.length > 0) {
+    //   dispatch(setActiveCategory(section!.categories[0]))
+
+    //   dispatch(setActiveProducts(section!.categories[0].products))
+
+    // } else {
+
+    //   dispatch(setActiveProducts([]))
+    // }
 
 
 
@@ -55,15 +58,15 @@ export const Sections: FC<Props> = ({ sections }) => {
             onChange={(e, value) => changeSection(value)}
             value={activeSection.id}
             variant="scrollable"
-            textColor='primary'
-            scrollButtons={true}
+            scrollButtons
             allowScrollButtonsMobile
             indicatorColor='primary'
+            
             sx={{
               [`& .${tabsClasses.scrollButtons}`]: {
                 '&.Mui-disabled': { opacity: 0.3 },
               },
-              my: 1
+
             }}
           >
             {

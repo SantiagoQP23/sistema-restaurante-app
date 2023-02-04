@@ -24,6 +24,7 @@ import { AffluenceSimulation } from '../Reports/components/AffluenceSimulator/Af
 import { AffluencePrediction } from '../Reports/components/AffluencePrediction/AffluencePrediction.component';
 import { DashboardReports } from '../Reports/components/DashboardReports/DashboardReports.component';
 import { StaffPlaning } from '../Reports/components/StaffPlanning/StaffPlaning.component';
+import { MenuNewOrder } from '../Orders/components/AddOrder/MenuNewOrder.component';
 
 
 
@@ -151,6 +152,10 @@ export const routes: RouteObject[] = [
               {
                 path: 'add',
                 element: <AddOrder />
+              },
+              {
+                path: 'add/products',
+                element: <MenuNewOrder />
               },
               {
                 path: 'edit/:orderId/receipt',

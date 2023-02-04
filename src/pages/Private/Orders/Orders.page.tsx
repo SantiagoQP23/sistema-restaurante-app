@@ -34,6 +34,7 @@ import { SocketResponseOrder } from './interfaces/responses-sockets.interface';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
 import { ModalPayOrder } from './components/ReceiptOrder/ModalPayOrder.component';
 import { selectOrders, setActiveOrder } from '../../../redux/slices/orders/orders.slice';
+import { ModalDiscountOrder } from './components/ReceiptOrder/ModalDiscountOrder.component';
 
 
 
@@ -197,6 +198,7 @@ export const Orders = () => {
       {/* <Footer /> */}
 
       <ModalDeleteOrder />
+      <ModalDiscountOrder />
       <ModalPayOrder />
 
 

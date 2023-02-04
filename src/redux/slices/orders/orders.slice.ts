@@ -32,12 +32,16 @@ export const ordersSlice = createSlice({
       state.orders = [...state.orders, action.payload]
     },
 
-    updateOrder: (state, action: PayloadAction<IOrder>) => {
+    updateOrder: (state, {payload}: PayloadAction<IOrder>) => {
       state.orders = state.orders.map(
-        p => (p.id === action.payload.id)
-          ? action.payload
+        p => (p.id === payload.id)
+          ? payload
           : p
       )
+      if(state.activeOrder?.id === payload.id){
+        state.activeOrder = payload;
+      }
+
     },
 
     deleteOrder: (state, action: PayloadAction<string>) => {

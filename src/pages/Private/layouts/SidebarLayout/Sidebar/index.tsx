@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 
 import SidebarMenu from './SidebarMenu';
-import {LogoSign, Scrollbar} from '../../../components';
+import { LogoSign, Scrollbar } from '../../../components';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { DarkMode, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
@@ -109,22 +109,12 @@ function Sidebar() {
             </ToggleButton>
             <ToggleButton value={"NebulaFighterTheme"}>
               <DarkMode />
-              </ToggleButton>
-          <Typography  variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
+            </ToggleButton>
+            <Typography variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
           </ToggleButtonGroup>
 
 
-         {/*  <Button
-            href="https://bloomui.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="contained"
-            color="success"
-            size="small"
-            fullWidth
-          >
-            Upgrade to PRO
-          </Button> */}
+
         </Box>
       </SidebarWrapper>
       <Drawer
@@ -164,6 +154,30 @@ function Sidebar() {
               }}
             />
             <SidebarMenu />
+
+            <Divider
+              sx={{
+                background: theme.colors.alpha.trueWhite[10]
+              }}
+            />
+            <Box p={2}>
+
+              <ToggleButtonGroup
+
+                onChange={handleTheme}
+                exclusive
+                value={curThemeName}
+              >
+                <ToggleButton value="PureLightTheme">
+                  <LightMode />
+                </ToggleButton>
+                <ToggleButton value={"NebulaFighterTheme"}>
+                  <DarkMode />
+                </ToggleButton>
+                <Typography variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
+              </ToggleButtonGroup>
+
+            </Box>
           </Scrollbar>
         </SidebarWrapper>
       </Drawer>

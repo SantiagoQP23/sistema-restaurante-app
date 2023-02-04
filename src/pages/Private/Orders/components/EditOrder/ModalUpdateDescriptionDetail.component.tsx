@@ -18,6 +18,7 @@ import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { useSnackbar } from 'notistack';
 import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 
 
 
@@ -86,14 +87,12 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
   }
   */
 
-  const updateDetail = () => {
+  const updateDescriptionDetail = () => {
 
-    const data: UpdateOrderDto = {
-      id: activeOrder!.id,
-      orderDetail: {
+    const data: UpdateOrderDetailDto = {
+      orderId: activeOrder!.id,
         id: detail!.id,
         description
-      }
     }
 
     console.log(data)
@@ -181,7 +180,7 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
             }}
 
           >Cancelar</Button>
-          <Button onClick={updateDetail}>Actualizar</Button>
+          <Button onClick={updateDescriptionDetail}>Actualizar</Button>
         </DialogActions>
       </Dialog>
     </>

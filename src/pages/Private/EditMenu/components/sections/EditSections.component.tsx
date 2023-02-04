@@ -49,7 +49,7 @@ export const EditSections = () => {
 
        
 
-        <Typography align='center' variant="h5" color="initial">Secciones</Typography>
+        <Typography align='center' variant="h4">Secciones</Typography>
 
         <Button
           variant="contained"

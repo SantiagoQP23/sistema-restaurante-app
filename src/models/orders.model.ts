@@ -1,6 +1,23 @@
 import { IUser, IClient, IProduct } from '.';
 import { ITable } from './table.model';
 
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  // IN_PROGRESS = 'IN_PROGRESS',
+  // READY = 'READY',
+  DELIVERED = 'DELIVERED',
+  // CANCELLED = 'CANCELLED',
+  PAID = 'PAID',
+}
+
+export enum OrderStatusSpanish {
+  PENDING = 'PENDIENTE',
+  IN_PROGRESS = 'EN PROCESO',
+  READY = 'LISTO',
+  DELIVERED = 'ENTREGADO',
+  CANCELLED = 'CANCELADO',
+  PAID = 'PAGADO',
+}
 
 export interface IOrder {
 
@@ -13,9 +30,7 @@ export interface IOrder {
 
   total: number;
 
-  isDelivered: boolean;
-  
-  isPaid: boolean;
+  status: OrderStatus;  
 
   user: IUser;
 
@@ -27,8 +42,11 @@ export interface IOrder {
   updatedAt: Date;
 
   details: IOrderDetail[];
+  people: number
 
 }
+
+
 
 export interface IUpdateOrder{
   amount?: number;
@@ -47,6 +65,15 @@ export interface IUpdateOrder{
 
 
 
+export enum DetailStatus {
+  PENDING = 'PENDING',
+  COOKING = 'COOKING',
+  READY = 'READY',
+  DELIVERED = 'DELIVERED',
+  RETURNED = 'RETURNED',
+}
+
+
 
 
 export interface IOrderDetail{
@@ -59,7 +86,7 @@ export interface IOrderDetail{
 
   amount: number;
 
-  isCompleted: boolean;
+  status: DetailStatus;
   
   description: string;
 
@@ -68,6 +95,8 @@ export interface IOrderDetail{
   updatedAt: Date;
 
   product: IProduct;
+
+  isActive: boolean;
 
  }
 

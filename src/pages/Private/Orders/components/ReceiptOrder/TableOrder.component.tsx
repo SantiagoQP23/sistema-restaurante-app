@@ -61,7 +61,23 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
         tableId,
       }
 
-      socket?.emit(EventsEmitSocket.changeTable, data, ({ ok, msg, order }: SocketResponseOrder) => {
+      const tables : {previousTableId: string, newTableId: string} = {
+        previousTableId: tableOrder!.id,
+        newTableId: table!.id
+      }
+      
+      console.log('Actualizando mesas')
+
+      socket?.emit(EventsEmitSocket.changeTable, tables, ({ ok, msg, order }: SocketResponseOrder) => {
+
+        console.log('response', ok);
+        if (!ok) {
+          enqueueSnackbar(msg, { variant: 'error' });
+        }
+      })
+
+
+      socket?.emit(EventsEmitSocket.updateOrder, data, ({ ok, msg, order }: SocketResponseOrder) => {
 
         console.log('response', ok);
         if (ok) {
@@ -74,6 +90,10 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
 
 
       });
+
+
+
+
     } else {
       setTable(table!);
     }
@@ -82,25 +102,24 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
 
   }
 
-
+/* 
   useEffect(() => {
     if (tableOrder)
       setTable(tableOrder);
 
     filterTablesAvailable(tables); 
   },[])
-
-  useEffect(() => {
+ */
+ /*  useEffect(() => {
     setTablesAvailable(filterTablesAvailable(tables));
   }, [tables]);
-
+ */
 
 
 
   return (
     <>
-      <Card>
-        <CardContent>
+      
           <Accordion sx={{ p: 0, m: 0 }}>
             <AccordionSummary
               expandIcon={<DriveFileRenameOutlineOutlined />}
@@ -112,7 +131,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
             </AccordionSummary>
             <AccordionDetails sx={{ p: 0, m: 0 }}>
               {
-                tablesAvailable.length === 0
+                tables.length === 0
                   ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
                   : <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
@@ -126,7 +145,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
 
                       >
                         {
-                          tablesAvailable.map(table => (
+                          tables.map(table => (
 
                             <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
 
@@ -141,9 +160,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
             </AccordionDetails>
           </Accordion>
 
-        </CardContent>
-      </Card>
-
+    
 
     </>
   )

@@ -65,12 +65,12 @@ export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
       >
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box >
-            <Typography variant="body1" noWrap gutterBottom>
+            <Typography variant="h5" noWrap gutterBottom>
               <Text color="success">{detail.qtyDelivered}</Text> de {' '}
               <Text color="info">{detail.quantity}</Text> {' '}
               {`${detail.product.name}`}
             </Typography>
-            <Typography variant="body2" color='orange'>
+            <Typography variant="h6" color='blue'>
               {detail.description}
             </Typography>
           </Box>
@@ -111,37 +111,3 @@ export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
 
 )
 }
-/*  <Grid key={detalle.idDetallePedido} item xs={12} md={6} lg={4}>
-
-<Card sx={{ p: 2.5 }}>
-
-<Box display="flex" alignItems="center" pb={3} justifyContent="space-between">
-
-    <Box sx={{ ml: 1.5 }}>
-      <Typography variant="h4" noWrap gutterBottom>
-        {detalle.cantidad}  {detalle.producto.nombre}
-      </Typography>
-      <Typography variant="subtitle2" noWrap>
-        {detalle.descripcion}
-      </Typography>
-    </Box>
-
-    <Box>
-      {formatDistance(subDays(new Date(), 14), new Date(), {
-        addSuffix: true
-      })}
-
-    </Box>
-  </Box>
-
-  <Typography variant="subtitle2" gutterBottom>
-    <Text color="black">{detalle.cantEntregada}</Text> out of{' '}
-    <Text color="black">{detalle.cantidad}</Text> tasks completed
-  </Typography>
-  <LinearProgressWrapper
-    value={(detalle.cantEntregada * 100) / detalle.cantidad}
-    color="primary"
-    variant="determinate"
-  />
-</Card>
-</Grid> */

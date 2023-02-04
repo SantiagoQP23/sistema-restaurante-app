@@ -29,6 +29,7 @@ import { useSnackbar } from 'notistack';
 import { SocketResponse } from '../../interfaces/responses-sockets.interface';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { statusModalDeleteOrder } from '../../services/orders.service';
+import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
 
 interface Props {
   order: IOrder
@@ -97,11 +98,7 @@ export const Order: FC<Props> = ({ order }) => {
               <Typography variant="body1" fontWeight='bold'>Mesa {table?.name}</Typography>
 
               {
-                !order.isDelivered
-                  ? (<Label color='success'>Activo</Label>)
-                  : (order.isDelivered && !order.isPaid)
-                    ? (<Label color='warning'>Entregado</Label>)
-                    : (<Label color='info'>Pagado</Label>)
+               <Label color='info'>{OrderStatusSpanish[`${order.status as OrderStatus}`]}</Label>
               }
 
             </Box>}
@@ -160,12 +157,12 @@ export const Order: FC<Props> = ({ order }) => {
               color='primary'
               onClick={() => { navigate(`edit/${order.id}`) }}
             > {
-                !order.isPaid ? <EditOutlined /> : <AssignmentOutlinedIcon />
+                order.status !== OrderStatus.PAID ? <EditOutlined /> : <AssignmentOutlinedIcon />
               }
             </IconButton>
 
             {
-              !order.isPaid && !orderDelivered && (
+              order.status === OrderStatus.PENDING &&  !orderDelivered && (
                 <IconButton
                   onClick={eliminarPedido}
                   color='error'

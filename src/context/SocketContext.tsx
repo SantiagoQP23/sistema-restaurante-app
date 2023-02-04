@@ -4,6 +4,10 @@ import { Socket } from "socket.io-client";
 import { useAppSelector } from "../hooks/useRedux";
 import { useSocket } from "../hooks/useSocket";
 import { selectAuth } from "../redux/slices/auth";
+import { getEnvVariables } from '../helpers/getEnvVariables';
+
+const { VITE_WS_URL } = getEnvVariables();
+
 
 interface ISocket{
   socket: Socket | null;
@@ -21,7 +25,7 @@ export const SocketContext = createContext({} as ISocket);
 
 export const SocketProvider:FC<Props> = ({children}) => {
 
-  const { socket, online, conectarSocket, desconectarSocket} = useSocket('http://127.0.0.1:5000/socket.io/socket.io.js');
+  const { socket, online, conectarSocket, desconectarSocket} = useSocket(VITE_WS_URL);
 
   const { status } = useSelector(selectAuth);
 

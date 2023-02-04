@@ -1,4 +1,3 @@
-import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { Card, CardContent, Typography, CardMedia, Box, Button, Grid } from '@mui/material/';
 import { FC } from 'react';
 import { IProduct } from '../../../../models';
@@ -29,19 +28,19 @@ export const Product: FC<Props> = ({ product }) => {
 
 
               <Grid item xs={12}>
-                <Typography variant="body1" color='InfoText' >{product.name}</Typography>
+                <Typography variant="h4"  align='center'>{product.name}</Typography>
 
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle1" >
+                <Typography variant="subtitle1"  align='center'>
 
                   {
                     product.description ? product.description : 'Sin descripción'
                   }
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2" color='orangered' textAlign='right'>$ {product.price}</Typography>
+              <Grid item xs={12} >
+                <Typography variant="body2" textAlign='center'>$ {product.price}</Typography>
 
               </Grid>
 

@@ -54,7 +54,7 @@ export const AffluencePrediction = () => {
       {
         data: days.map(day => {
 
-          if (day.affluences.length == 0)
+          if (day.affluences?.length === 0)
             return 0;
 
           const affluence = day.affluences.find(affluence => affluence.type === TypeAffluence["PREDICTED"]);
@@ -75,7 +75,7 @@ export const AffluencePrediction = () => {
 
         data: days.map(day => {
 
-          if (day.affluences.length == 0)
+          if (day.affluences?.length == 0)
             return 0;
 
           const affluence = day.affluences.find(affluence => affluence.type === TypeAffluence["REAL"]);
@@ -158,7 +158,7 @@ export const AffluencePrediction = () => {
           <Button onClick={() => { navigate('/reports') }}>
             <ArrowBack />
           </Button>
-          <Typography variant="h6">Predicción de afluencia</Typography>
+          <Typography variant="h4">Predicción de afluencia</Typography>
 
         </Box>
 
@@ -233,7 +233,7 @@ export const AffluencePrediction = () => {
 
                   return (
 
-                    <Grid key={day.id} item xs={2}>
+                    <Grid key={day.id} item xs={12} md={2}>
 
                       <Card >
                         <CardContent>

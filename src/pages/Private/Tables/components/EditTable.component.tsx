@@ -2,7 +2,6 @@ import { ArrowBack } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { Grid, Button, Typography, TextField, Container, Card, CardContent } from '@mui/material';
 import { useSnackbar } from "notistack";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +10,8 @@ import { useFetchAndLoad } from "../../../../hooks";
 import { ICreateTable } from "../../../../models";
 import { addTable, selectTables, updateTable } from "../../../../redux/slices/tables";
 import { createTable, updateTable as updateTableS } from '../services/tables.service';
+
+import { useForm } from "react-hook-form";
 
 const initialTable: ICreateTable = {
   name: '',

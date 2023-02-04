@@ -1,19 +1,19 @@
-import {  useState } from 'react';
-import {  useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {  Container, Grid} from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { InputSearch, PageTitle, PageTitleWrapper } from '../../../components/ui';
 
-import { selectMenu } from '../../../redux';
+import { selectMenu, setActiveCategory, setActiveSection } from '../../../redux';
 
 import { IProduct } from '../../../models';
 
 // Componentes
 import { AllMenu } from './components/AllMenu.component';
 
-import { ListProductsFounded } from './components/ListProductsFounded.component';
+import { ListProducts } from './components/ListProducts.component';
 
-import { findProductsByName,  getProducts } from '../../../helpers';
+import { findProductsByName, getProducts } from '../../../helpers';
 
 
 export const Menu = () => {
@@ -24,24 +24,32 @@ export const Menu = () => {
 
   const [products, setProducts] = useState<IProduct[]>([]);
 
-  const ListProducts = getProducts(sections);
+  const listProducts = getProducts(sections);
+
+  const dispatch = useDispatch();
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameProduct(event.target.value);
 
-    setProducts(findProductsByName(nameProduct, ListProducts));
+    setProducts(findProductsByName(nameProduct, listProducts));
 
-  
+
   };
 
   const searchProduct = () => {
-    setProducts(findProductsByName(nameProduct, ListProducts));
+    setProducts(findProductsByName(nameProduct, listProducts));
   }
 
   const searchingProduct = () => {
     return nameProduct.length > 0;
   }
+
+  useEffect(() => {
+    dispatch(setActiveSection(sections[0]));
+    dispatch(setActiveCategory(sections[0].categories[0]));
+
+  }, [])
 
   return (
     < >
@@ -57,7 +65,7 @@ export const Menu = () => {
       <Container maxWidth="lg">
 
         <Grid container spacing={1} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <Grid item xs={12}>
+          <Grid item xs={12} mb={1}>
 
 
             <InputSearch
@@ -67,13 +75,15 @@ export const Menu = () => {
             />
 
           </Grid>
+          <Grid item xs={12} mb={1}>
 
-          {
-            searchingProduct()
-              ? <ListProductsFounded products={products} />
-              : <AllMenu />
-          }
+            {
+              searchingProduct()
+                ? <ListProducts products={products} />
+                : <AllMenu />
+            }
 
+          </Grid>
         </Grid>
       </Container>
 

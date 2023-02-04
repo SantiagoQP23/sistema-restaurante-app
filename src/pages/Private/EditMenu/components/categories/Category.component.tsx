@@ -58,7 +58,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
       <Card>
         <CardContent>
-          <Typography variant="body1" color='white'>{categoria.name}</Typography>
+          <Typography variant="h5">{categoria.name}</Typography>
           <Typography variant="body2" color="orange">Productos: {categoria.products.length}</Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>

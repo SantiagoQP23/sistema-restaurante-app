@@ -54,11 +54,7 @@ export const EditClient = () => {
 
   async function onSubmit(form: ICreateClient) {
 
-
-    
-
     const { identification, ...dataClient } = form;
-
     
     if( form.address === "" ){
       delete dataClient.address;
