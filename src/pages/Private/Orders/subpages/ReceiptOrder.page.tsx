@@ -1,5 +1,5 @@
-import { ArrowBack, Done } from "@mui/icons-material";
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader } from '@mui/material';
+import { ArrowBack, Done, EditOutlined } from "@mui/icons-material";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader, IconButton } from '@mui/material';
 import Add from "date-fns/add";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -22,28 +22,6 @@ function ccyFormat(num: number) {
   return `${num.toFixed(2)}`;
 }
 
-/* function priceRow(qty: number, unit: number) {
-  return qty * unit;
-}
-
-function createRow(desc: string, qty: number, unit: number) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
- */
-
-/* 
-
-const rows = [
-  createRow('Paperclips (Box)', 100, 1.15),
-  createRow('Paper (Case)', 10, 45.99),
-  createRow('Waste Basket', 2, 17.99),
-];
-
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
-
- */
 
 export const ReceiptOrder = () => {
 
@@ -56,7 +34,7 @@ export const ReceiptOrder = () => {
   const endEdit = () => {
 
     if (activeOrder) {
-      activeOrder.status !== OrderStatus.PAID ? navigate('/orders/edit/' + activeOrder.id) : navigate('/orders')
+      activeOrder.isPaid ? navigate('/orders/edit/' + activeOrder.id) : navigate('/orders')
     }
 
   }
@@ -87,29 +65,29 @@ export const ReceiptOrder = () => {
     <>
       <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
 
-        <Button variant='outlined'
+        <Button
+          startIcon={<ArrowBack />}
+          variant='outlined'
           onClick={() => {
-            endEdit();
+            navigate('/orders');
           }}
         >
-          <ArrowBack />
-          {activeOrder.status !== OrderStatus.PAID ? 'Editar pedido' : 'Volver a pedidos'}
+          Pedidos
         </Button>
-        <Typography variant='h4'> Comprobante de pedido </Typography>
+
+        <Button
+          startIcon={<EditOutlined />}
+          variant='contained'
+          onClick={() => {
+            navigate('/orders/edit/' + activeOrder.id)
+          }}
+        >
+          Editar
+        </Button>
 
 
-        {
-
-          <PDFDownloadLink document={<ReceiptPdf order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
-            <Button
-              variant='contained'
-            >Descargar PDF
-            </Button>
 
 
-          </PDFDownloadLink>
-
-        }
 
 
 
@@ -118,18 +96,15 @@ export const ReceiptOrder = () => {
 
       </Grid>
 
-
-
-
-      {/*  <PDFViewer style={{ height: "90vh", width: "100%"}}>
-        <ReceiptPdf order={activeOrder} />
-      </PDFViewer> */}
-
       <Container maxWidth='sm'>
 
 
 
         <Card>
+
+          <CardHeader title={
+            <Typography variant='h4' align='center'> Comprobante de pedido </Typography>
+          } />
 
           <CardContent>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -140,7 +115,7 @@ export const ReceiptOrder = () => {
 
               <Box>
                 <Typography variant='subtitle1' >Mesa</Typography>
-                <Typography variant='h5' fontWeight='bold' align='right'>12</Typography>
+                <Typography variant='h5' fontWeight='bold' align='right'>{activeOrder.table?.name}</Typography>
 
 
               </Box>
@@ -151,9 +126,22 @@ export const ReceiptOrder = () => {
 
               <Box>
                 <Typography variant='subtitle1' >Fecha</Typography>
-                <Typography variant='h5'>{format(new Date(activeOrder?.createdAt), 'dd MMMM yyyy HH:mm', {locale: es})}</Typography>
+                <Typography variant='h5'>{format(new Date(activeOrder?.createdAt), 'dd MMMM yyyy HH:mm', { locale: es })}</Typography>
               </Box>
-              <Label color='info'>{OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]}</Label>
+              {
+                !activeOrder.isPaid && activeOrder.status === OrderStatus.DELIVERED
+                ? <Label color='warning'>Por pagar</Label>
+                :
+                <Label color='info'>
+
+                  {
+                    activeOrder.isPaid
+                      ? 'PAGADO'
+                      : OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]
+
+                  }
+                </Label>
+              }
             </Box>
 
             <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
@@ -213,7 +201,18 @@ export const ReceiptOrder = () => {
 
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
-              <Typography variant='h4' fontWeight='bold'>Descuento </Typography>
+              <Box display='flex' alignItems='center'>
+
+                <Typography variant='h4' fontWeight='bold'>Descuento </Typography>
+                <IconButton
+                  size='small'
+                  onClick={openModalDiscount}
+                  disabled={activeOrder.isPaid}
+
+                >
+                  <EditOutlined />
+                </IconButton>
+              </Box>
               <Typography variant='h4' fontWeight='bold'>${activeOrder.discount}</Typography>
             </Box>
 
@@ -226,27 +225,29 @@ export const ReceiptOrder = () => {
 
             <Box display='flex' justifyContent='center' alignItems='center' mt={2}>
               <Stack direction='row' spacing={2}>
+                {
+                  !activeOrder.isPaid &&
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={payOrder}
+                    disabled={activeOrder.status !== OrderStatus.DELIVERED}
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={payOrder}
-                  disabled={activeOrder.status !== OrderStatus.DELIVERED}
+                  >
+                    Cobrar
+                  </Button>
+                }
 
-                >
-                  Cobrar
-                </Button>
-
-                <Button
+                {/* <Button
 
                   variant="contained"
                   color="secondary"
                   onClick={openModalDiscount}
-                  disabled={activeOrder.status === OrderStatus.PAID}
+                  disabled={activeOrder.isPaid}
 
                 >
                   Descuento
-                </Button>
+                </Button> */}
 
                 <PDFDownloadLink document={<ReceiptPdf order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
                   <Button

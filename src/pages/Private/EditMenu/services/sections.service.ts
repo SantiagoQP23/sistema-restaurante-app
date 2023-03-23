@@ -4,6 +4,7 @@ import { loadAbort } from "../../../../helpers";
 import { ISection, ICreateSection, IUpdateSection, ICreateCategory, ICategory, IProduct, ICreateProduct } from "../../../../models";
 import { UpdateCategoryDto, CreateCategoryDto } from '../dto/category.dto';
 import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
+import { UpdateSectionDto } from '../dto/update-section.dto';
 
 
 
@@ -23,7 +24,7 @@ export const createSection = (data: ICreateSection) => {
 
 }
 
-export const updateSection = (id: string,data: ICreateSection) => {
+export const updateSection = (id: string,data: UpdateSectionDto) => {
 
   const controller = loadAbort();
 

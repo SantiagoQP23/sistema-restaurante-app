@@ -3,12 +3,21 @@ import { ITable } from './table.model';
 
 export enum OrderStatus {
   PENDING = 'PENDING',
-  // IN_PROGRESS = 'IN_PROGRESS',
+  IN_PROGRESS = 'IN_PROGRESS',
   // READY = 'READY',
   DELIVERED = 'DELIVERED',
-  // CANCELLED = 'CANCELLED',
-  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+
 }
+
+
+export enum TypeOrder {
+  TAKE_AWAY = 'PARA LLEVAR',
+  IN_PLACE = 'PARA SERVIR',
+  //DELIVERY = 'ENTREGA DOMICILIO',
+}
+
+
 
 export enum OrderStatusSpanish {
   PENDING = 'PENDIENTE',
@@ -16,51 +25,26 @@ export enum OrderStatusSpanish {
   READY = 'LISTO',
   DELIVERED = 'ENTREGADO',
   CANCELLED = 'CANCELADO',
-  PAID = 'PAGADO',
 }
 
 export interface IOrder {
 
-  id: string;
-
-  num: number;
-
   amount: number;
-  discount: number;
-
-  total: number;
-
-  status: OrderStatus;  
-
-  user: IUser;
-
   client?: IClient;
-  table?: ITable;
-
   createdAt: Date;
-
-  updatedAt: Date;
-
   details: IOrderDetail[];
+  discount: number;
+  id: string;
+  isPaid: boolean;
+  num: number;
   people: number
-
+  status: OrderStatus;  
+  table?: ITable;
+  total: number;
+  type: TypeOrder;
+  updatedAt: Date;
+  user: IUser;
 }
-
-
-
-export interface IUpdateOrder{
-  amount?: number;
-
-  isDelivered?: boolean;
-
-  client?: IClient;
-
-  updatedAt?: Date;
-
-  details?: IOrderDetail[];
-
-}
-
 
 
 
@@ -98,6 +82,8 @@ export interface IOrderDetail{
 
   isActive: boolean;
 
+  discount: number;
+
  }
 
 
@@ -106,7 +92,6 @@ export interface IOrderDetail{
   quantity: number;
   product: IProduct;
   description?: string;
-  
-  
+   
 
  }

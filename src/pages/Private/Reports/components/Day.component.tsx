@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { Card, CardContent, TextField, Typography, Grid, Divider, CardHeader, Box, FormGroup, FormControlLabel, Button } from '@mui/material';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { IDay } from '../models/day.interface';
+import { codes, IDay, WeatherbitCodes } from '../models/day.interface';
 import { useFetchAndLoad } from '../../../../hooks/useFetchAndLoad';
 import { getAffluenceDate, updateDay } from '../services/affluence.service';
 import { format } from 'date-fns';
@@ -11,6 +11,7 @@ import { useSnackbar } from 'notistack';
 import { Checkbox } from '@mui/material/';
 import { LoadingButton } from '@mui/lab';
 import { UpdateDayDto } from '../dto/update-day.dto';
+import Switch from '@mui/material/Switch';
 
 
 const formatDate = (newValue: Date | string) => {
@@ -138,21 +139,13 @@ export const Day = () => {
                   <Typography variant='subtitle1' align="center">{day.tempMax} °C</Typography>
                   <Typography variant='h5' align="center"> {day.temp} °C</Typography>
                   <Typography variant='subtitle1' align="center">{day.tempMin} °C</Typography>
+                  <Typography variant='body2' align="center">{ codes[day.weatherCode].descriptionEs }</Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant='body1' align="center">Asistencia</Typography>
                   <Typography variant='h6' align="center">{day.affluences[0].affluence}</Typography>
-                  <Divider sx={{ my: 1 }} />
+                
 
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-
-                    <FormGroup >
-
-                      <FormControlLabel control={<Checkbox checked={checked} onChange={handleHoliday} />} label="Feriado" />
-                      {
-                        checked !== day.holiday &&  <LoadingButton loading={loading} onClick={submitUpdateDay}>Actualizar</LoadingButton>
-                      }
-                    </FormGroup>
-                  </Box>
+                 
 
 
 

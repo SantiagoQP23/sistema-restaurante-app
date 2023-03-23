@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Box, TextField, Typography, Button, Link, Paper, Avatar, FormControlLabel, Checkbox, Chip } from '@mui/material';
+import { Grid, Box, TextField, Typography, Button, Link, Paper, Avatar, Chip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -17,8 +17,8 @@ import { selectAuth, startLogin } from '../../../redux';
 
 
 const initialForm: IFormLogin = {
-  username: 'SantiagoQP23',
-  password: 'Santiago1234'
+  username: '',
+  password: ''
 }
 
 export const LoginPage = () => {
@@ -114,10 +114,7 @@ export const LoginPage = () => {
 
 
                 />
-                {/*  <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label={"Remember me "}
-                /> */}
+              
                 <LoadingButton
                   type="submit"
                   fullWidth

@@ -37,7 +37,7 @@ export const ModalPayOrder: FC = () => {
 
     const data: UpdateOrderDto = { 
       id: order!.id,
-      status: OrderStatus.PAID
+      isPaid: true,
      };
 
     socket?.emit(EventsEmitSocket.updateOrder, data, (response: SocketResponse) => {
@@ -54,14 +54,7 @@ export const ModalPayOrder: FC = () => {
 
     })
 
-      // const data: { id: string } = { id: order!.id };
-  
-      // socket?.emit(EventsEmitSocket.deleteOrder, data, (response: {status: 'string', message: 'string'}) => {
-
-      //   console.log(response);
-  
-        
-      // })
+     
     
 
   }

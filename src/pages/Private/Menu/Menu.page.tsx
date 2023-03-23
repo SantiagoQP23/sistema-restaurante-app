@@ -47,7 +47,7 @@ export const Menu = () => {
 
   useEffect(() => {
     dispatch(setActiveSection(sections[0]));
-    dispatch(setActiveCategory(sections[0].categories[0]));
+    dispatch(setActiveCategory(sections[0]?.categories[0]));
 
   }, [])
 

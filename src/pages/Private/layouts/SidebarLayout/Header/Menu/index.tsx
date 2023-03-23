@@ -89,7 +89,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/components/buttons"
+            to="/orders"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
@@ -100,13 +100,14 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/components/forms"
+            to="/tables"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
               primary="Mesas"
             />
           </ListItem>
+          {/* 
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}
             button
@@ -124,10 +125,10 @@ function HeaderMenu() {
                 </Box>
               }
             />
-          </ListItem>
+          </ListItem> */}
         </List>
       </ListWrapper>
-      <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
+      {/* <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/overview">
           Overview
         </MenuItem>
@@ -140,7 +141,7 @@ function HeaderMenu() {
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/components/modals">
           Modals
         </MenuItem>
-      </Menu>
+      </Menu> */}
     </>
   );
 }

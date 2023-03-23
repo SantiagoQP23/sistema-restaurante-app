@@ -15,9 +15,38 @@ export const getOrdersToday = () => {
   const controller = loadAbort();
 
   return {
-    call: restauranteApi.get<IOrder>(`orders`,
+    call: restauranteApi.get<IOrder[]>(`orders`,
 
       { signal: controller.signal }),
+    controller
+
+  }
+
+}
+
+export interface FindOrderByDate {
+  startDate?: string;
+  endDate?: string;
+}
+
+export const getOrdersByDate = (find?: FindOrderByDate) => {
+
+  const controller = loadAbort();
+
+
+  let call;
+
+  if (find) {
+    call = restauranteApi.get<IOrder[]>(`orders/${find.startDate ? `?startDate=${find.startDate}` : ''}`,
+      { signal: controller.signal });
+  } else {
+    call = restauranteApi.get<IOrder[]>(`orders`,
+      { signal: controller.signal });
+
+  }
+
+  return {
+    call,
     controller
 
   }

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom"
 import { Container } from '@mui/material';
 
 import { PageTitleWrapper, PageTitle } from "../../../components/ui"
-import { MenuProvider } from "../../../context/MenuContext"
 
 
 export const EditMenu = () => {

@@ -1,7 +1,7 @@
 import { createContext, FC, useState } from 'react';
 import { IClient, ITable } from '../../../../models';
 
-import { ICreateOrderDetail } from '../../../../models/orders.model';
+import { ICreateOrderDetail, TypeOrder } from '../../../../models/orders.model';
 import { CreateOrderDto, CreateOrderDetailDto } from '../dto/create-order.dto';
 
 
@@ -14,6 +14,8 @@ interface IOrderContext {
   table: ITable | undefined;
 
   people: number | undefined;
+  typeOrder: TypeOrder;
+
   addDetail: (detail: ICreateOrderDetail) => void;
   deleteDetail: (nameProduct: string) => void;
   reset: () => void;
@@ -23,6 +25,7 @@ interface IOrderContext {
   updateDetail: (detail: ICreateOrderDetail) => void;
   getOrder: () => CreateOrderDto;
   setDetails: (details: ICreateOrderDetail[]) => void;
+  setTypeOrder: (typeOrder: TypeOrder) => void;
 }
 
 interface Props {
@@ -41,6 +44,7 @@ export const OrderProvider: FC<Props> = ({ children }) => {
   const [table, setTable] = useState<ITable>();
   const [client, setClient] = useState<IClient>();
   const [people, setPeople] = useState<number>(1);
+  const [typeOrder, setTypeOrder] = useState<TypeOrder>(TypeOrder.IN_PLACE);
 
 
 
@@ -113,6 +117,7 @@ export const OrderProvider: FC<Props> = ({ children }) => {
       }),
 
       people,
+      typeOrder
 
     }
 
@@ -145,7 +150,9 @@ export const OrderProvider: FC<Props> = ({ children }) => {
           getOrder, 
           people,
           setPeople,
-          setDetails
+          setDetails,
+          typeOrder,
+          setTypeOrder
 
         }
       }

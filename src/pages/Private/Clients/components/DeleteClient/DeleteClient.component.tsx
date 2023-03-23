@@ -1,14 +1,12 @@
 import { FC, useState, useEffect } from "react";
 
-
 import { LoadingButton } from "@mui/lab"
 import { Dialog, DialogTitle, Divider, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material"
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteClient, selectClients } from '../../../../../redux/slices/clients/clients.slice';
+import {  useDispatch } from 'react-redux';
+import { deleteClient,  } from '../../../../../redux/slices/clients/clients.slice';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { statusModalDeleteClient, deleteClient as deleteClientS} from '../../services/clients.service';
 import { IClient } from '../../../../../models/client.model';
-import { useModal } from '../../../../../hooks/useModal';
 import { useSnackbar } from 'notistack';
 
 

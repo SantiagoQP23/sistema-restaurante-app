@@ -69,27 +69,7 @@ export const Private = () => {
 
 
     }, [socket]);
-  
 
-
-
-  /* const { loading: loadingS, callEndpoint: callEndpointS } = useFetchAndLoad();
-  const { loading: loadingC, callEndpoint: callEndpointC } = useFetchAndLoad();
-
-  const getSectionsCall = async () => await callEndpointS(getSections())
-
-  const getCategoriesCall = async () => await callEndpointC(getCategories())
-
-  const getProductsCall = async () => await callEndpoint(getProducts())
-
-
-  const loadCategoriesState = (data: ICategory[]) => { dispatch(loadCategories(data)); }
-
-  const loadProductsState = (data: IProduct[]) => { dispatch(loadProducts(data)); }
-
-  useAsync(getSectionsCall, loadSectionsState, () => { }, []);
-  useAsync(getCategoriesCall, loadCategoriesState, () => { }, []);
-  useAsync(getProductsCall, loadProductsState, () => { }, []); */
 
 
 
@@ -114,23 +94,3 @@ export const Private = () => {
 }
 
 export default Private;
-{/* <BaseLayout>
-
-  
-  <RoutesWithNotFound>
-
-
-    <Route path={PrivateRoutes.DASHBOARD} element={<h1>Dashboard</h1>}></Route>
-
-    <Route path={PrivateRoutes.MENU} element={<Menu />}></Route>
-
-    <Route path={`${PrivateRoutes.MENU_EDIT}/*`} element={<EditMenu />}></Route>
-    
-    <Route path={PrivateRoutes.ORDERS} element={<Orders />}></Route>
-
-    <Route path='/' element={<Navigate to={PrivateRoutes.DASHBOARD} />}></Route>
-
-
-  </RoutesWithNotFound>
-
-</BaseLayout> */}

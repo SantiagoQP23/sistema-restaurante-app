@@ -51,7 +51,7 @@ export const updateTable = ({id, data }: {id: string,data: ICreateTable}) => {
 
 }
 
-export const deleteTable = (id: number) => {
+export const deleteTable = (id: string) => {
 
   const controller = loadAbort();
 

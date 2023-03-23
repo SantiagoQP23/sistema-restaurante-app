@@ -14,12 +14,16 @@ export const ListProducts: FC<ProductsListProps> = ({ products }) => {
     <>
       <Grid container spacing={1}>
         {
-          products.map(product => (
-            <Grid key={product.id} item xs={12} sm={6} lg={4}>
-              <Product product={product} />
+          products.map(product => {
 
-            </Grid>
-          ))
+            if (product.isActive)
+              return (
+                <Grid key={product.id} item xs={12} sm={6} lg={4}>
+                  <Product product={product} />
+
+                </Grid>
+              )
+          })
         }
       </Grid>
     </>

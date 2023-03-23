@@ -1,33 +1,25 @@
-import { FC, useContext } from 'react';
+import { FC, } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { toast } from 'react-toastify';
 
-import { formatDistance } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-import { Grid, Box, Button, IconButton, Typography, ButtonGroup, Card, CardContent, CardHeader, Divider } from '@mui/material';
+import { Box, IconButton, Typography, Card, CardContent, CardHeader, Divider } from '@mui/material';
 
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
-import { DeleteOutline, DoneOutline, EditOutlined } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 
 
 import { IOrder } from '../../../../../models';
 
-import { SocketContext } from '../../../../../context';
 
-import { useAppDispatch } from '../../../../../hooks';
-
-import { setActiveOrder } from '../../../../../redux/slices/orders';
 
 import { Label } from '../../../../../components/ui';
 
-//import '../../styles/estilos-pedido.css';
 import { CardActions } from '@mui/material/';
-import { useSnackbar } from 'notistack';
-import { SocketResponse } from '../../interfaces/responses-sockets.interface';
-import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+
 import { statusModalDeleteOrder } from '../../services/orders.service';
 import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
 
@@ -38,7 +30,6 @@ interface Props {
 
 export const Order: FC<Props> = ({ order }) => {
 
-  const { socket } = useContext(SocketContext);
 
   const { client, user, table } = order;
 
@@ -46,42 +37,13 @@ export const Order: FC<Props> = ({ order }) => {
 
 
   let navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
-  const { enqueueSnackbar } = useSnackbar();
 
   const eliminarPedido = () => {
 
     statusModalDeleteOrder.setSubject(true, order)
 
   }
-
-
-
-
-  /* 
-      Swal.fire({
-        title: '¿Quieres eliminar el pedido?',
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-      }).then((result) => {
-       
-        if (result.isConfirmed) {
-  
-          socket?.emit('eliminarPedido', { idPedido: pedido.idPedido }, ({ok}: { ok: boolean }) => {
-  
-            console.log("Pedido eliminado", ok);
-  
-            if (!ok) {
-  
-              toast.error('No se pudo eliminar el pedido');
-            }
-          })
-        }
-      }) */
-
-
-
 
 
 
@@ -97,9 +59,23 @@ export const Order: FC<Props> = ({ order }) => {
 
               <Typography variant="body1" fontWeight='bold'>Mesa {table?.name}</Typography>
 
+
+
               {
-               <Label color='info'>{OrderStatusSpanish[`${order.status as OrderStatus}`]}</Label>
+                !order.isPaid && order.status === OrderStatus.DELIVERED
+                  ? <Label color='warning'>Por pagar</Label>
+                  :
+                  <Label color='info'>
+
+                    {
+                      order.isPaid
+                        ? 'PAGADO'
+                        : OrderStatusSpanish[`${order.status as OrderStatus}`]
+
+                    }
+                  </Label>
               }
+
 
             </Box>}
 
@@ -107,13 +83,13 @@ export const Order: FC<Props> = ({ order }) => {
           subheader={
             <Typography variant="subtitle1">
               {
+                // formatDistance(new Date(order.createdAt), new Date(), {
+                //   addSuffix: true,
+                //   includeSeconds: true,
+                //   locale: es
+                // })
+                format(new Date(order.createdAt), 'dd MMMM HH:mm:ss', { locale: es })
 
-
-                formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-                })
               }
             </Typography>
           }
@@ -145,24 +121,31 @@ export const Order: FC<Props> = ({ order }) => {
 
 
           <Box>
-            {/* <IconButton
-              onClick={finalizarPedido}
-              color='success'
-            >
-              <DoneOutline />
-            </IconButton> */}
 
-            <IconButton
-
-              color='primary'
-              onClick={() => { navigate(`edit/${order.id}`) }}
-            > {
-                order.status !== OrderStatus.PAID ? <EditOutlined /> : <AssignmentOutlinedIcon />
-              }
-            </IconButton>
 
             {
-              order.status === OrderStatus.PENDING &&  !orderDelivered && (
+
+              order.isPaid
+                ?
+                <IconButton
+                  color='primary'
+                  onClick={() => { navigate(`edit/${order.id}`) }}
+                >
+                  <AssignmentOutlinedIcon />
+
+                </IconButton>
+                :
+                <IconButton
+                  color='primary'
+                  onClick={() => { navigate(`edit/${order.id}`) }}
+                >
+                  <EditOutlined />
+
+
+                </IconButton>}
+
+            {
+              order.status === OrderStatus.PENDING && !orderDelivered && (
                 <IconButton
                   onClick={eliminarPedido}
                   color='error'
@@ -176,7 +159,7 @@ export const Order: FC<Props> = ({ order }) => {
             }
           </Box>
 
-          <Typography variant="body1" >$ {order.amount}</Typography>
+          <Typography variant="body1" >$ {order.total}</Typography>
 
         </CardActions>
       </Card>

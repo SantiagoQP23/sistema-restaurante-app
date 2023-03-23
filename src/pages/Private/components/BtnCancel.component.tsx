@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
-import { resetActiveSection } from "../../../redux";
-import { useDispatch } from 'react-redux';
+
 import { useNavigate } from 'react-router-dom';
 import { FC } from "react";
 

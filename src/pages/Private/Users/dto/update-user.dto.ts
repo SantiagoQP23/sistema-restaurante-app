@@ -11,5 +11,10 @@ export interface UpdateUserDto{
     numberIdentification?: string;
     numPhone?: string;
     rol?: string;
+    isActive?: boolean;
 
+}
+
+export interface ResetPasswordUserDto {
+  userId: string;
 }

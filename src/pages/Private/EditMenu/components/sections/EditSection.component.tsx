@@ -1,18 +1,17 @@
-import { useEffect } from 'react';
 
-import { Grid, TextField, Button, Typography, CircularProgress, Card } from '@mui/material/';
+import { Grid, TextField, Button, Typography,  Card } from '@mui/material/';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { ICreateSection, ISection } from '../../../../../models';
-import { resetActiveSection, selectSections, updateSection, addSection, setActiveSection, selectMenu } from '../../../../../redux';
+import { ICreateSection,  } from '../../../../../models';
+import {   updateSection, addSection,  selectMenu } from '../../../../../redux';
 
 import {
   createSection,
   updateSection as updateSectionS
 } from '../../services/sections.service';
+
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
-import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { ArrowBack } from '@mui/icons-material';
@@ -64,8 +63,6 @@ export const EditSection = () => {
         .then((resp) => {
           const { data } = resp;
           console.log(data.section)
-
-
 
           dispatch(updateSection({...data.section, categories: activeSection.categories}))
           enqueueSnackbar('La sección ha sido actualizada', { variant: 'success' })

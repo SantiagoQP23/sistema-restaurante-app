@@ -39,22 +39,17 @@ export const InvoiceTableFooter: FC<Props> = ({ order }) => {
         <Text style={styles.description}>SUBTOTAL</Text>
         <Text style={styles.total}>{Number.parseFloat(String(order.amount)).toFixed(2)}</Text>
       </View>
-      {
-        order.isPaid && (
-          <>
 
-            <View style={styles.row}>
-              <Text style={styles.description}>DESCUENTO</Text>
-              <Text style={styles.total}>{Number.parseFloat(String(order.discount)).toFixed(2)}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.description}>TOTAL</Text>
-              <Text style={styles.total}>{Number.parseFloat(String(order.total)).toFixed(2)}</Text>
-            </View>
-          </>
-        )
 
-      }
+      <View style={styles.row}>
+        <Text style={styles.description}>DESCUENTO</Text>
+        <Text style={styles.total}>{Number.parseFloat(String(order.discount)).toFixed(2)}</Text>
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.description}>TOTAL</Text>
+        <Text style={styles.total}>{Number.parseFloat(String(order.total)).toFixed(2)}</Text>
+      </View>
+
     </>
   )
 };

@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 
 import { resetActiveOrder, selectOrders } from '../../../../redux';
 
-import { SocketContext } from '../../../../context/';
+import { SocketContext } from '../../../../context';
 import { PageTitle, PageTitleWrapper } from '../../../../components/ui';
 import { Order } from '../components';
 import { FilterOrders } from '../../Reports/components/FilterOrders';
@@ -58,7 +58,6 @@ export const Clock: FC = () => {
       {
         format(new Date(), 'EEEE dd MMMM yyyy HH:mm ',
           {
-
             locale: es
           })
       }
@@ -72,10 +71,6 @@ export const Clock: FC = () => {
 export const ListOrders = () => {
 
   const [view, setView] = useState('list');
-
-  const handleChange = (event: React.MouseEvent<HTMLElement>, nextView: string) => {
-    setView(nextView);
-  };
 
   const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
 
@@ -95,13 +90,13 @@ export const ListOrders = () => {
 
   const filterOrders = () => {
 
-    if(!statusOrderFilter) {
+    if (!statusOrderFilter) {
       setOrdersFiltered(orders);
     } else {
       setOrdersFiltered(orders.filter(order => order.status === statusOrderFilter))
     }
 
-        
+
 
   }
 
@@ -111,69 +106,56 @@ export const ListOrders = () => {
 
   }, [orders, statusOrderFilter])
 
-
-
-
   return (
 
     <>
 
-      <Grid container >
-        <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
-         {/*  <Grid item>
+      <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
-            <Card >
-              <CardHeader title='Pedidos' />
-              <CardContent>
-
-                <Typography variant="h6"> {orders.length}</Typography>
-
-              </CardContent>
-            </Card>
-          </Grid> */}
-          <Grid item>
-            <Card >
-              <CardContent>
-                <Typography variant="h5"><Clock /></Typography>
-
-              </CardContent>
-
-            </Card>
-
-          </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => addOrder()}
-            >Añadir Pedido</Button>
-          </Grid>
+        <Grid item>
+          <Card>
+            <CardContent>
+              <Typography variant='h5'>Pedidos</Typography>
+              <Typography>{orders.length}</Typography>
+            </CardContent>
+          </Card>
         </Grid>
 
-
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => addOrder()}
+          >Añadir Pedido</Button>
+        </Grid>
       </Grid>
 
-      <Card sx={{my: 2}}>
 
-        <CardContent>
+
+
+      <Card sx={{ my: 2, }}>
+
+        <CardContent sx={{ overFlowX: 'auto' }}>
           <Typography variant="h5">Filtrar pedidos por estado</Typography>
 
           <Tabs
             onChange={(e, value) => setStatusOrderFilter(value)}
             value={statusOrderFilter}
-            variant="scrollable"
+            variant="fullWidth"
             textColor='primary'
             scrollButtons
             indicatorColor='primary'
             allowScrollButtonsMobile
+
             sx={{
               [`& .${tabsClasses.scrollButtons}`]: {
                 '&.Mui-disabled': { opacity: 0.3 },
               },
               width: '100%',
               my: 1,
-              fontSize: '1rem'
+              fontSize: '1rem',
+
             }}
           >
 

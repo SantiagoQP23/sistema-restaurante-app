@@ -49,7 +49,7 @@ export const CountOrders:FC<Props> = ({orders}) => {
               >
                 Activos
               </Typography>
-              <Typography variant="h2">{orders.filter(p => p.isDelivered).length}</Typography>
+              <Typography variant="h2">{orders.length}</Typography>
             </Box>
             <Box>
               <Typography
@@ -59,7 +59,7 @@ export const CountOrders:FC<Props> = ({orders}) => {
               >
                 Entregados
               </Typography>
-              <Typography variant="h2">{orders.filter(p => !p.isDelivered).length}</Typography>
+              <Typography variant="h2">{orders.length}</Typography>
             </Box>
           </Box>
         </Box>

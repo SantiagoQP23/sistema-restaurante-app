@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useParams, Navigate, useNavigate } from 'react-router-dom';
+import {  useEffect } from 'react'
+import {  useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Material UI
-import { Typography, Box, Grid, Button, InputLabel, MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider } from '@mui/material/'
+import { Typography, Box, Grid, Button,  MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider } from '@mui/material/'
 
 // Iconos
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
 
-import { useContext } from 'react';
-import { MenuContext } from '../../../../../context/MenuContext';
 
 // Component
 import { Category } from './Category.component';
@@ -99,14 +97,15 @@ export function EditCategories() {
       <Grid container display='flex' justifyContent='space-between' >
         <Grid item display='flex' alignItems='center'>
           <Button
-
-            startIcon={<ArrowBackIcon />}
             onClick={backRoute}
+            variant='outlined'
+            size='small'
           >
+            <ArrowBackIcon />
           </Button>
 
 
-          <Typography align="center" variant="h6" color="initial">Categorías</Typography>
+          <Typography align="center" variant="h4" >Categorías de {activeSection?.name}</Typography>
 
         </Grid>
         <Grid item>
@@ -129,8 +128,7 @@ export function EditCategories() {
       <Grid container spacing={1} sx={{ my: 2 }}>
 
       <Grid item xs={12} sm={3}>
-          <Card>
-            <CardContent>
+        
 
           <Typography variant='body2'>Sección</Typography>
           <Select
@@ -147,9 +145,7 @@ export function EditCategories() {
               ))
             }
           </Select>
-          </ CardContent>
-          </Card>
-
+          
         </Grid>
 
         <Grid item xs={12} sm={3}>
@@ -157,7 +153,7 @@ export function EditCategories() {
           <Card>
             <CardContent>
               <Typography variant='body2'>Categorías</Typography>
-              <Typography variant='h6'>{activeSection?.categories.length}</Typography>
+              <Typography variant='h4'>{activeSection?.categories.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -166,17 +162,6 @@ export function EditCategories() {
        
 
       </Grid>
-
-
-
-
-
-
-
-
-
-
-
 
       {
         activeSection!.categories.length === 0 && (

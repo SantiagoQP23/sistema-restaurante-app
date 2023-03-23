@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, useContext } from "react";
 
-import { Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
+import { Typography, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
 import { DriveFileRenameOutlineOutlined } from "@mui/icons-material";
 import { InputSearch } from "../../../../components/ui";
 import { useFetchAndLoad } from "../../../../hooks";

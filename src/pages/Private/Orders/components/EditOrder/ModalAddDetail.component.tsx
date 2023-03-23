@@ -7,7 +7,6 @@ import {
   DialogTitle, FormControl, FormHelperText
 } from '@mui/material/'
 
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { ICreateOrderDetail } from '../../../../../models/orders.model';
 import { SocketContext } from '../../../../../context';
 import { sharingInformationService } from '../../services/sharing-information.service';
@@ -16,9 +15,7 @@ import { OrderContext } from '../../context/Order.context';
 
 
 interface Props {
-  // handleClose: () => void;
-  // open: boolean;
-  // detalle: ICreateOrderDetail;
+  
 }
 
 
@@ -37,9 +34,6 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
   const {addDetail, updateDetail} = useContext(OrderContext);
 
 
- //const { product, quantity } = detalle;
-
-  // const total = useSelector(selectPedidos).pedidoActivo?.total;
 
   const dispatch = useDispatch();
 
@@ -49,26 +43,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
     updateDetail({...detail!, description})
 
-    //const detalle = { idProducto: producto.idProducto, cantidad, descripcion, idPedido };
-
-    /* socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}:) => {
-       
-      if(ok){
-
-        console.log("Añadiendo un nuevo detalle al pedido");
-        // TODO recibir el detalle de pedido en el callback
-        const { pedido, ...detalle } = nuevoDetalle;
-        
-        // TODO aniadir el detalle de pedido recibido
-        //dispatch(pedidoDetalleAddNew(detalle));
-        
-        //dispatch(pedidoUpdateTotal(Number(total) + Number(detalle.subtotal)));
-
-
-      }
-
-
-    }) */
+   
 
 
     setOpen(false)

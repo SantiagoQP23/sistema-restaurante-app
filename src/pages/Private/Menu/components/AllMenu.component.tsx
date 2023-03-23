@@ -1,8 +1,8 @@
 import { FC } from "react";
 
-import { Grid, Card, CardContent, Typography } from "@mui/material";
-import { useSelector, useDispatch } from 'react-redux';
-import { selectMenu, setActiveSection } from "../../../../redux";
+import { Grid, } from "@mui/material";
+import { useSelector,  } from 'react-redux';
+import { selectMenu,  } from "../../../../redux";
 import { Sections } from "./Sections.component";
 import { Categories } from './Categories.compontent';
 import { ListProducts } from './ListProducts.component';
@@ -11,11 +11,11 @@ export const AllMenu: FC = () => {
 
 
 
-  const { sections, activeSection, categories, activeCategory } = useSelector(selectMenu);
+  const { sections, activeSection,  activeCategory } = useSelector(selectMenu);
 
   return (
     <>
-      <Grid container xs={12} spacing={2}>
+      <Grid container item xs={12} spacing={2}>
 
         <Grid item xs={12}  >
 

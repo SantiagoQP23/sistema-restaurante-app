@@ -12,6 +12,21 @@ export interface IRole {
   description: string
 }
 
+export enum Roles {
+
+  admin = 'Administrador',
+  mesero = 'Mesero',
+  despachador = 'Despachador',
+}
+
+export enum ValidRoles {
+
+  admin = 'admin',
+  despachador = 'despachador',
+  mesero = 'mesero',
+
+}
+
 
 export interface IUser {
   id: string,
@@ -19,6 +34,7 @@ export interface IUser {
   person: IPerson,
   online: boolean,
   role: IRole,
+  isActive: boolean
 }
 
 

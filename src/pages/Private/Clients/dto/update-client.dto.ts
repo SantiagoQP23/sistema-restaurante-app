@@ -4,8 +4,10 @@ export interface UpdateClientDto{
   lastName?: string;
   email?: string;
   phone?: string;
-  typeIdentification: TypeIdentification;
-  numberIdentification: string;
+  typeIdentification?: TypeIdentification;
+  numberIdentification?: string;
   address?: string;
+  isActive?: boolean;
+
 }
 

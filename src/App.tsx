@@ -1,16 +1,18 @@
 import { Suspense, lazy } from 'react';
+
 import { BrowserRouter } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
 
 import { CssBaseline } from '@mui/material'
 
-
-import { AppRouter } from './routers';
-import { SuspenseLoader } from './components/ui/';
-import ThemeProvider from './theme/ThemeProvider';
-import { useSelector } from 'react-redux';
 import { selectAuth } from './redux';
 
 
+import ThemeProvider from './theme/ThemeProvider';
+import { SuspenseLoader } from './components/ui/';
+
+import { AppRouter } from './routers';
 
 
 function App() {

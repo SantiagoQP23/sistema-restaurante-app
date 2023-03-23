@@ -2,17 +2,16 @@ import { FC } from 'react'
 
 import { useSelector } from 'react-redux';
 
-import { Card, Box, Typography, Divider, styled, LinearProgress, Container, ListItemButton, Tooltip, IconButton, useTheme } from '@mui/material';
+import { Box, Typography, styled, LinearProgress, Tooltip, IconButton, useTheme } from '@mui/material';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
-// import { IDetallePedido } from '../../interfaces';
-// import { Text } from '../ui/';
-// import { selectAuth } from '../../reducers';
+
 import { IOrderDetail } from '../../../../../models';
 import { selectAuth } from '../../../../../redux';
 import { Text } from '../../../components';
 import { statusModalDispatchDetail } from '../../services/orders.service';
+import { Label } from '../../../../../components/ui';
 
 
 const LinearProgressWrapper = styled(LinearProgress)(
@@ -36,12 +35,9 @@ interface Props {
 
 
 
-export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
+export const PendingDetail: FC<Props> = ({ detail, orderId }) => {
 
   const { user } = useSelector(selectAuth);
-
-
-
 
   const theme = useTheme();
 
@@ -59,48 +55,89 @@ export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
       <Box mb={1} component='div'
         sx={{
 
-          padding: '8px 3px',
-          width: '100%'
+          px: 1,
+          width: '100%',
+
         }}
       >
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box >
-            <Typography variant="h5" noWrap gutterBottom>
-              <Text color="success">{detail.qtyDelivered}</Text> de {' '}
-              <Text color="info">{detail.quantity}</Text> {' '}
-              {`${detail.product.name}`}
-            </Typography>
-            <Typography variant="h6" color='blue'>
-              {detail.description}
-            </Typography>
-          </Box>
-          <Box display='flex'>
-            {
+        {
+          detail.qtyDelivered === detail.quantity
+            ? <>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+               
+                  <Typography variant='h4' color='gray'>
+                    {`${detail.quantity}`} - {`${detail.product.name}`}
 
-              user?.role.name === 'admin' && (
-                <Tooltip title="Editar detalle" arrow>
-                  <IconButton
-                    sx={{
-                      '&:hover': {
-                        background: theme.colors.primary.lighter
-                      },
-                      color: theme.palette.primary.main
-                    }}
-                    color="inherit"
-                    size="small"
-                    onClick={() => despacharDetalle()}
-                  >
-                    <EditTwoToneIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              )}
-          </Box>
-        </Box>
-        <LinearProgressWrapper
-          value={(detail.qtyDelivered * 100) / detail.quantity}
-          color="primary"
-          variant="determinate"
-        />
+                  </Typography>
+                  <Tooltip title="Editar detalle" arrow>
+                    <IconButton
+                      sx={{
+                        '&:hover': {
+                          background: theme.colors.primary.lighter
+                        },
+                        color: theme.palette.primary.main
+                      }}
+                      color="inherit"
+                      size="small"
+                      onClick={() => despacharDetalle()}
+                    >
+                      <EditTwoToneIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+
+               
+              </Box>
+            </>
+            :
+            <>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box >
+                  <Typography variant='h4'>
+                    {`${detail.quantity} -  ${detail.product.name}`}
+
+                  </Typography>
+                  <Typography variant="h6" >
+                    {detail.description}
+                  </Typography>
+                </Box>
+                <Box display='flex'>
+                  <Box>
+                    {/* <Typography variant="h5" >
+                      Entregado {detail.qtyDelivered} de {' '}
+                      <Text color="info">{detail.quantity}</Text> {' '}
+                    </Typography> */}
+                    <Label color='success' >{detail.qtyDelivered}</Label>
+
+                  </Box>
+                  {
+
+                    user?.role.name === 'admin' && (
+                      <Tooltip title="Editar detalle" arrow>
+                        <IconButton
+                          sx={{
+                            '&:hover': {
+                              background: theme.colors.primary.lighter
+                            },
+                            color: theme.palette.primary.main
+                          }}
+                          color="inherit"
+                          size="small"
+                          onClick={() => despacharDetalle()}
+                        >
+                          <EditTwoToneIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                </Box>
+              </Box>
+              <LinearProgressWrapper
+                value={(detail.qtyDelivered * 100) / detail.quantity}
+                color="primary"
+                variant="determinate"
+              />
+            </>
+
+        }
       </Box>
 
 
@@ -109,5 +146,5 @@ export const PendingDetail: FC<Props> = ({ detail, orderId}) => {
     </>
 
 
-)
+  )
 }

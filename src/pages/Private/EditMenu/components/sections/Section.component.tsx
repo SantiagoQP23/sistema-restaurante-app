@@ -3,11 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, Tooltip } from '@mui/material';
 
-import { EditOutlined, DeleteOutlined } from '@mui/icons-material';
+import { EditOutlined, DeleteOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { ISection } from '../../../../../models';
 
-import { setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection } from '../../../../../redux';
+import { setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection, updateSection } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
+import { Label } from '../../../../../components/ui';
+import Switch from '@mui/material/Switch';
+import { useSnackbar } from 'notistack';
+import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
+import { updateSection as updateSectionS } from '../../services/sections.service';
 
 interface Props {
   seccion: ISection,
@@ -21,6 +26,10 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const {loading, callEndpoint} = useFetchAndLoad();
 
   const editarCategorias = () => {
     dispatch(setActiveSection(seccion));
@@ -50,14 +59,41 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
     navigate(`seccion`);
   }
 
+  const changeStatusSection = async (seccion: ISection) => {
+
+    await callEndpoint(updateSectionS(seccion.id, {isActive: !seccion.isActive}))
+    .then((resp) => {
+      const { data } = resp;
+      console.log(data.section)
+
+      dispatch(updateSection({...seccion, isActive: !seccion.isActive}))
+
+    })
+    .catch((err) => {
+
+      enqueueSnackbar('Ya existe', { variant: 'error' })
+
+    });
+
+  }
+
 
   return (
     <>
 
       <Card >
         <CardContent>
-          <Typography variant="h5" >{seccion.name}</Typography>
-          <Typography variant="subtitle2" color="orange">Categorias: {seccion.categories.length}</Typography>
+        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography variant="h4">{seccion.name}</Typography>
+            <Label color={seccion.isActive ? 'success' : 'error' }>{seccion.isActive ? 'Activo' : 'Eliminado' }</Label>
+          </Box>
+          <Typography variant="h6" >Categorías: {seccion.categories.length}</Typography>
+
+          {
+            // seccion.categories.map((categoria, index) => (
+            //   <Typography key={index} variant="h6" >{categoria.name}</Typography>
+            // ))
+          }
 
         </CardContent>
 
@@ -82,14 +118,31 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title='Eliminar' >
+            <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} />
 
-              <IconButton color='error'
-                onClick={() => { eliminarSeccion(seccion) }}
-              >
-                <DeleteOutlined />
-              </IconButton>
-            </Tooltip>
+            {
+            //   seccion.isActive
+            //   ? 
+            // <Tooltip title='Eliminar' >
+
+            //   <IconButton 
+            //   color='success'
+            //     onClick={() => { activateSection(seccion) }}
+            //     >
+            //   <ToggleOn />
+            //   </IconButton>
+            // </Tooltip>
+            // : 
+            // <Tooltip title='Activar' >
+            //   <IconButton 
+            //   color='error'
+            //     onClick={() => { activateSection(seccion) }}
+            //   >
+            //   <ToggleOff />
+            //   </IconButton>
+            // </Tooltip>
+
+            }
 
 
           </Box>

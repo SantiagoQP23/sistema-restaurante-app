@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectCategories, selectMenu } from "../../../../../redux";
+import {  selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 import { useSnackbar } from 'notistack';

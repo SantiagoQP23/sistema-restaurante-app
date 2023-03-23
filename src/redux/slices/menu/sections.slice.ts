@@ -62,6 +62,6 @@ export const {
   resetSections */
 } = sectionsSlice.actions;
 
-export const selectSections = (state: RootState) => state.sections;
+// export const selectSections = (state: RootState) => state.sections;
 
 export default sectionsSlice.reducer;

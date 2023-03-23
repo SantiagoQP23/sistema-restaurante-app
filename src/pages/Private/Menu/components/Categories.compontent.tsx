@@ -1,8 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { ICategory } from '../../../../models/menu.model';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { MenuBook } from '@mui/icons-material';
-import { Product } from './Product.component';
+import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMenu, setActiveCategory } from '../../../../redux/slices/menu/menu.slice';
 import { useAppDispatch } from '../../../../hooks/useRedux';
@@ -17,7 +15,7 @@ interface Props {
 
 export const Categories: FC<Props> = ({ categories }) => {
 
-  const { activeSection, activeCategory } = useSelector(selectMenu);
+  const { activeCategory } = useSelector(selectMenu);
 
   const dispatch = useDispatch();
 
@@ -34,39 +32,46 @@ export const Categories: FC<Props> = ({ categories }) => {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
-        {
-          categories.map((category, index) => (
+      {/* <Box sx={{ display: 'flex', flexDirection: {xs: 'column', md: 'row'} }}> */}
 
-            /*  <Box key={category.id} sx={{border: 1, p: 2 , borderRadius: 2, mr: 3}}>
- 
-               {category.name}
-               
-               </Box> */
-            <Button
-              variant={activeCategory.id === category.id ? "contained" : "outlined"}
-              key={category.id}
-              sx={{
-                mr: 3,
-                
-                '&:hover': {
-                  backgroundColor: 'primary.main',
-                  color: 'white'
-                }
+      <Card>
 
-              }}
-              onClick={() => changeCategory(category)}
 
-            >
-              {category.name}
-            </Button>
+        <Box sx={{ display: 'flex', overflowX: 'auto', p: 1 }}>
+          {
+            categories.map((category, index) => {
 
-          ))
+              if (category.isActive)
+                return (
 
-        }
-      </Box>
 
-  
+                  <Button
+                    variant={activeCategory.id === category.id ? "contained" : "outlined"}
+                    key={category.id}
+                    sx={{
+                      mr: 3,
+
+                      '&:hover': {
+                        backgroundColor: 'primary.main',
+                        color: 'white'
+                      },
+                      px: 2,
+                    }}
+                    onClick={() => changeCategory(category)}
+
+                  >
+                    {category.name}
+                  </Button>
+                )
+            }
+            )
+
+          }
+
+        </Box>
+      </Card>
+
+
 
     </>
   )

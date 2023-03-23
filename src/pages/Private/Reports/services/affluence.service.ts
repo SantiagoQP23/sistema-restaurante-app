@@ -29,8 +29,6 @@ export const getAffluenceDate = (date: string) => {
 }
 
 
-
-
 export const getPredictionAffuence = () => {
 
   const controller = loadAbort();
@@ -90,7 +88,7 @@ export const updateSimulationAffluence = () => {
     const controller = loadAbort();
   
     return {
-      call: restauranteApi.get<IDay[]>(`affluence/simulation/update`,
+      call: restauranteApi.get<IDay[]>(`simulation/update`,
   
         { signal: controller.signal }),
       controller

@@ -1,16 +1,19 @@
 import { ChangeEvent, FC, useState } from "react";
 
-import { Box, Card, Checkbox, IconButton, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from "@mui/material";
+import { Box, Card, Checkbox, IconButton, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from "@mui/material";
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectUsers, setActiveUser } from '../../../../../redux/slices/users/users.slice';
+import { selectUsers, setActiveUser, updateUser } from '../../../../../redux/slices/users/users.slice';
 import { useSelector, useDispatch } from 'react-redux';
-import { IUser } from '../../../../../models/auth.model';
+import { IUser, Roles } from '../../../../../models/auth.model';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/';
-import { statusModalDeleteUser } from '../../services/users.service';
-import useEffect from 'react';
+import { statusModalDeleteUser, updateUser as updateUserS } from '../../services/users.service';
+import { Label } from "../../../../../components/ui";
+import { IClient } from '../../../../../models/client.model';
+import { useSnackbar } from 'notistack';
+import { ValidRoles } from "../../../router";
 
 
 
@@ -18,6 +21,10 @@ import useEffect from 'react';
 export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
 
   const navigate = useNavigate();
+
+  const { loading, callEndpoint } = useFetchAndLoad();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const dispatch = useDispatch();
 
@@ -30,15 +37,38 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
 
   const deleteUser = () => {
     statusModalDeleteUser.setSubject(true, user);
+
+
+  }
+
+  const submitChangeStatus = async (user: IUser) => {
+
+    await callEndpoint(updateUserS(user.id, { isActive: !user.isActive }))
+      .then((res) => {
+        console.log(res);
+        dispatch(updateUser({ ...user, isActive: !user.isActive }));
+
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar('Error al actualizar el estado del usuario', { variant: 'error' })
+      })
+
+
+
+
+
   }
 
 
- 
+
   return (
     <TableRow>
       <TableCell padding='checkbox'>
-        <Checkbox
-          color="primary"
+        <Switch
+          checked={user.isActive}
+          color={user.isActive ? 'success' : 'warning'}
+          onChange={() => submitChangeStatus(user)}
         />
 
       </TableCell>
@@ -53,8 +83,8 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
           {user.person.lastName} {user.person.firstName}
         </Typography>
       </TableCell>
-      
-     
+
+
       <TableCell>
         <Typography
           variant="body1"
@@ -88,6 +118,27 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
           {user.person.email}
         </Typography>
       </TableCell>
+      <TableCell>
+        <Typography
+          variant="body1"
+
+          color="text.primary"
+          gutterBottom
+          noWrap
+        >
+          <Label color={
+            user?.role.name === ValidRoles.admin
+              ? 'info'
+              : user?.role.name === ValidRoles.mesero
+                ? 'success'
+                : 'warning'
+          }>
+            {Roles[`${user?.role.name! as ValidRoles}`]}
+          </Label>
+        </Typography>
+      </TableCell>
+
+
 
       <TableCell align="right">
         <Tooltip title="Edit Order" arrow>
@@ -105,7 +156,7 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
             <EditTwoToneIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete Order" arrow>
+        {/*   <Tooltip title="Delete Order" arrow>
           <IconButton
             sx={{
               '&:hover': { background: theme.colors.error.lighter },
@@ -117,7 +168,7 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
           >
             <DeleteTwoToneIcon fontSize="small" />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </TableCell>
 
     </TableRow>
@@ -174,15 +225,13 @@ export const UsersTable: FC<Props> = ({ users, user }) => {
 
               <TableRow>
                 <TableCell padding="checkbox">
-                  <Checkbox
-                    color="primary"
-
-                  />
+                  Estado
                 </TableCell>
                 <TableCell>Apellidos y nombres</TableCell>
                 <TableCell>Número de identificación</TableCell>
                 <TableCell>Nombre de usuario</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Rol</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
 

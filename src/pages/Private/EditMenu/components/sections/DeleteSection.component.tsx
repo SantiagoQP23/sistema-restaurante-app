@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ICategory } from "../../../../../models";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { deleteSection, selectCategories, selectMenu, selectSections } from "../../../../../redux";
+import { deleteSection,  selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { deleteSection as deleteSectionS } from "../../services/sections.service";

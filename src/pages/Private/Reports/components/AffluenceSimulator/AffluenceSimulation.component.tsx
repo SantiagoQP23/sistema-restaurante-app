@@ -180,18 +180,18 @@ export const AffluenceSimulation = () => {
   }
 
   const submitUpdateSimulation = async () => {
-    await callEndpoint(updateSimulationAffluence())
-      .then(async () => {
-        enqueueSnackbar('Simulación actualizada', { variant: 'success' });
-        await callEndpoint(getAffluence())
-          .then((resp) => {
-            setDays(resp.data);
-          })
+    // await callEndpoint(updateSimulationAffluence())
+    //   .then(async () => {
+    //     enqueueSnackbar('Simulación actualizada', { variant: 'success' });
+    //     await callEndpoint(getAffluence())
+    //       .then((resp) => {
+    //         setDays(resp.data);
+    //       })
 
-      })
-      .catch(() => {
+    //   })
+    //   .catch(() => {
 
-      })
+    //   })
 
 
   }
@@ -206,7 +206,7 @@ export const AffluenceSimulation = () => {
 
 
 
- 
+
 
 
   return (
@@ -221,7 +221,7 @@ export const AffluenceSimulation = () => {
               <ArrowBack />
             </Button>
 
-            <Typography variant="h6">Simulación de afluencia {year}</Typography>
+            <Typography variant="h3">Simulación de afluencia {year}</Typography>
 
           </Stack>
         </Box>
@@ -229,8 +229,8 @@ export const AffluenceSimulation = () => {
         <Stack direction='row' spacing={2}>
 
 
-          <LoadingButton loading={loading} variant="contained" onClick={submitUpdateSimulation}>
-            Actualizar simulación
+          <LoadingButton loading={loading} variant="contained" onClick={() => navigate('/reports/simulator')}>
+            Parámetros de simulación
           </LoadingButton>
           {
             // days.length > 0 &&
@@ -301,6 +301,7 @@ export const AffluenceSimulation = () => {
                   </MenuItem>
                 ))}
               </Select>
+
             </Grid>
 
 
@@ -333,9 +334,9 @@ export const AffluenceSimulation = () => {
                 } />
                 <CardContent>
                   {
-                    days.length > 0 
-                    ? <Line data={dataMonth} ></Line>
-                    : <CircularProgress />
+                    days.length > 0
+                      ? <Line data={dataMonth} ></Line>
+                      : <CircularProgress />
 
                   }
 

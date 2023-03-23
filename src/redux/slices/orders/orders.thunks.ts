@@ -1,3 +1,9 @@
+
+export const pedidoStart = () => {
+  console.log('pedidoStart');
+};
+
+
 /* 
 import { restauranteApi } from "../../../api";
 import { AppThunk } from "../../store";

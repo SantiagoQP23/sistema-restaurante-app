@@ -10,18 +10,18 @@ interface Props {
   user: CreateUser;
   onSubmit: (form: CreateUser) => void;
   loading: boolean;
-  msg?: string;
-
+  isNew: boolean;
+  onReset?: () => void;
 }
 
 
-export const FormUser: FC<Props> = ({ user, onSubmit, loading, msg }) => {
+export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset }) => {
 
   const { register, handleSubmit, formState: { errors }, control } = useForm<CreateUser>({
     defaultValues: user
   });
 
-  const identification = useWatch({ control, name: 'identification'});
+  const identification = useWatch({ control, name: 'identification' });
 
   const lenghtIdentification = identification.type === TypeIdentification.CEDULA ? 10 : 13;
 
@@ -128,11 +128,20 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, msg }) => {
               ...register('firstName', {
                 required: 'Este campo es requerido',
                 minLength: { value: 2, message: 'Minimo 2 caracteres' },
-               
+
 
               })
               }
               helperText={<Typography color="red">{errors.firstName?.message} </ Typography>}
+
+              onKeyDown={(e) => {
+
+
+                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }
+              }
             />
           </Grid>
 
@@ -145,18 +154,27 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, msg }) => {
               {
               ...register('lastName', {
                 required: 'Este campo es requerido',
-                minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                minLength: { value: 2, message: 'Mínimo 2 caracteres' },
                 // validar que solo entre texto
-             
-                
+
+
 
 
 
               })
               }
 
-              
+
               helperText={<Typography color="red">{errors.lastName?.message} </ Typography>}
+
+              onKeyDown={(e) => {
+
+
+                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }
+              }
             />
           </Grid>
 
@@ -210,7 +228,7 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, msg }) => {
               type='submit'
               loading={loading}
             >
-              {msg || 'Guardar'}
+              {isNew ? 'Crear' : 'Actualizar'}
             </LoadingButton>
 
             {
@@ -219,6 +237,19 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, msg }) => {
                 color='error'
                 variant='outlined'
               >Cancelar</Button>
+            }
+
+            {
+              !isNew &&
+              <LoadingButton
+                variant='contained'
+                onClick={onReset}
+                loading={loading}
+                
+
+              >
+                Restablecer contraseña
+              </LoadingButton>
             }
           </Grid>
 

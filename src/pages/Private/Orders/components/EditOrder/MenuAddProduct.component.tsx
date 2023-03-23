@@ -1,39 +1,18 @@
-import { FC, useState, useEffect, useContext } from "react";
+import { FC, useState, useEffect, } from "react";
 
-import { AddCircleOutline, ExpandMore, RemoveCircleOutline } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Box, Card, CardContent, Grid, IconButton, Typography, Divider, Button } from '@mui/material';
+import { Box, Grid, Typography, Button, Card } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { InputSearch } from "../../../../../components/ui";
 import { IProduct, ICategory } from "../../../../../models";
 import { selectMenu, setActiveCategory, setActiveSection } from "../../../../../redux";
 import { Sections } from "../../../Menu/components";
-import { useCounter } from "../../hooks";
-import { sharingInformationService } from "../../services/sharing-information.service";
 
-
-
-
-
-
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { findProductsByName, getProducts } from "../../../../../helpers";
-import { useAppSelector, useModal } from "../../../../../hooks";
-import { ICreateOrderDetail, IOrderDetail } from '../../../../../models/orders.model';
+import { useModal } from "../../../../../hooks";
+import { ICreateOrderDetail } from '../../../../../models/orders.model';
 import { ModalAddDetail } from './ModalAddDetail.component';
-import { OrderContext } from '../../context/Order.context';
-import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
-import { SocketContext } from '../../../../../context/SocketContext';
-import { useSnackbar } from 'notistack';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
-import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
-import { CreateOrderDetailDto } from '../../dto/create-order-detail.dto';
-import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
-import { ProductAddToOrder } from './MenuAddProduct/ProductAddToOrder.component';
+
 import { ProductListAddToOrder } from './MenuAddProduct/ProductListAddToOrder.component';
-
-
-
 
 
 interface Props {
@@ -61,37 +40,40 @@ export const Categories: FC<Props> = ({ categories }) => {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
-        {
-          categories.map((category, index) => (
+      <Card>
 
-            /*  <Box key={category.id} sx={{border: 1, p: 2 , borderRadius: 2, mr: 3}}>
- 
-               {category.name}
-               
-               </Box> */
-            <Button
-              variant={activeCategory.id === category.id ? "contained" : "outlined"}
-              key={category.id}
-              sx={{
-                mr: 3,
+        <Box sx={{ display: 'flex', overflowX: 'auto', p: 1 }}>        {
+          categories.map((category, index) => {
 
-                '&:hover': {
-                  backgroundColor: 'primary.main',
-                  color: 'white'
-                }
+            if (category.isActive)
+              return (
 
-              }}
-              onClick={() => changeCategory(category)}
 
-            >
-              {category.name}
-            </Button>
+                <Button
+                  variant={activeCategory.id === category.id ? "contained" : "outlined"}
+                  key={category.id}
+                  sx={{
+                    mr: 3,
 
-          ))
+                    '&:hover': {
+                      backgroundColor: 'primary.main',
+                      color: 'white'
+                    }
+
+                  }}
+                  onClick={() => changeCategory(category)}
+
+                >
+                  {category.name}
+                </Button>
+
+              )
+          })
 
         }
-      </Box>
+        </Box>
+      </Card>
+
 
 
 
@@ -102,47 +84,7 @@ export const Categories: FC<Props> = ({ categories }) => {
 
 
 
-// const Category: FC<PropsCategory> = ({ category }) => {
 
-//   return (
-//     <>
-//       <Card>
-//         <Accordion>
-
-//           <AccordionSummary
-//             expandIcon={<ExpandMore />}
-//             aria-controls="panel1a-content"
-//             id="panel1a-header"
-//           >
-//             <Typography>{category.name}</Typography>
-//           </AccordionSummary>
-//           <AccordionDetails>
-
-
-//             {
-//               category.products.length > 0 && (
-//                 <Grid container spacing={1}>
-//                   {
-//                     category.products.map(product => (
-//                       <Grid key={product.id} item xs={12} md={4}>
-//                         <Product product={product} />
-
-//                       </Grid>
-//                     ))
-//                   }
-//                 </Grid>
-
-//               )
-//             }
-//           </AccordionDetails>
-//         </Accordion>
-//       </Card>
-
-//     </>
-//   )
-
-
-// }
 
 
 const AllMenu: FC = () => {
@@ -190,40 +132,6 @@ const AllMenu: FC = () => {
           }
         </Grid>
       </Grid>
-
-      {/* <Grid item>
-
-        {
-          sections?.length === 0
-            ? <>No se ha creado un menu</>
-            : <>
-              {
-                categories.length > 0
-                  ?
-                  <>
-
-                    <Grid container spacing={1} >
-
-                      {
-                        activeSection?.categories.map(category => (
-                          <Grid key={category.id} item xs={12}>
-                            <Category category={category} />
-
-                          </Grid>
-
-                        ))
-                      }
-
-                    </Grid>
-
-                  </>
-                  : <><Typography variant='body1' textAlign='center'>Sin categorías</Typography></>
-              }
-            </>
-
-
-        }
-      </Grid> */}
 
 
 

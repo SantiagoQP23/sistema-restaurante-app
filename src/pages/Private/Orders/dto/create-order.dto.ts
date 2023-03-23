@@ -1,3 +1,4 @@
+import { TypeOrder } from "../../../../models";
 
 
 export interface CreateOrderDto {
@@ -5,6 +6,7 @@ export interface CreateOrderDto {
   tableId?: string;
   details?: CreateOrderDetailDto[];
   people?: number;
+  typeOrder?: TypeOrder;
 }
 
 

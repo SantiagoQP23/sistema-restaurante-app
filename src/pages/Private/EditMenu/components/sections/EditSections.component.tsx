@@ -14,7 +14,7 @@ import { ISection } from '../../../../../models';
 
 import { Section } from './Section.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetActiveSection, selectMenu, selectSections, setActiveSection } from '../../../../../redux';
+import { resetActiveSection, selectMenu, setActiveSection } from '../../../../../redux';
 import { useModal } from '../../../../../hooks';
 import { DeleteSection } from './DeleteSection.component';
 

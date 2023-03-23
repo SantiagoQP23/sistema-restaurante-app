@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ICreateClient } from '../../../../models/client.model';
-import { Controller, useForm, useFormState, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Select, MenuItem, TextField, Typography, Button } from '@mui/material';
 import { TypeIdentification } from '../../../../models/common.model';
@@ -18,11 +18,20 @@ interface Props {
 export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
 
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<ICreateClient>({
+  const { register, handleSubmit, formState: { errors }, control, } = useForm<ICreateClient>({
     defaultValues: client
   });
 
-  const identification = useWatch({ control, name: 'identification'});
+  const identification = useWatch({ control, name: 'identification' });
+
+  const validateNoNumbers = (value: any) => {
+    if (!isNaN(value)) {
+      return {
+        type: 'validation',
+        message: 'No se permiten números en este campo'
+      };
+    }
+  };
 
   const lenghtIdentification = identification.type === TypeIdentification.CEDULA ? 10 : 13;
 
@@ -86,15 +95,25 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               ...register('firstName', {
                 required: 'Este campo es requerido',
                 minLength: { value: 2, message: 'Minimo 2 caracteres' },
-                pattern: {
-                  value: /^[A-Za-z] *$/,
-                  message: 'Nombre inválido'
-                }   
+                validate: (value: any) => {
+                  if (!isNaN(value)) {
+                    return 'No se permiten números en este campo';
+                  }
+                }
+
 
 
               })
               }
               helperText={<Typography color="red">{errors.firstName?.message} </ Typography>}
+              onKeyDown={(e) => {
+
+
+                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }
+              }
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -107,14 +126,31 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               ...register('lastName', {
                 required: 'Este campo es requerido',
                 minLength: { value: 2, message: 'Minimo 2 caracteres' },
-                pattern: {
-                  value: /^[A-Za-z] *$/,
-                  message: 'Apellido inválido'
-                }  
+
+               
+
+
+                validate: (value: any) => {
+                  if (!isNaN(Number(value))) return 'No se permiten números en este campo';
+                  return true;
+                },
+
+
 
               })
+
+
               }
+
               helperText={<Typography color="red">{errors.lastName?.message} </ Typography>}
+              onKeyDown={(e) => {
+
+
+                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }
+              }
             />
           </Grid>
 

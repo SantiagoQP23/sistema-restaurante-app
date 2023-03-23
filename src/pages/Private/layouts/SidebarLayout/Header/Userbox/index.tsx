@@ -28,6 +28,11 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import { startLogout, selectAuth } from '../../../../../../redux/slices/auth';
 import { useAppDispatch, useAppSelector } from '../../../../../../hooks';
+import { Roles } from '../../../../../../models/auth.model';
+import { Circle } from '@mui/icons-material';
+import { useSocket } from '../../../../../../hooks/useSocket';
+import { SocketContext } from '../../../../../../context/SocketContext';
+import { ValidRoles } from '../../../../router';
 
 
 const UserBoxButton = styled(Button)(
@@ -70,12 +75,13 @@ export const Userbox = () => {
   const { user: userState } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
+  const { online} = useContext(SocketContext)
 
   const user =
   {
     name: userState?.person.firstName! + " " + userState?.person.lastName!,
     avatar: '/static/images/avatars/2.jpg',
-    jobtitle: userState?.role.name
+    jobtitle: Roles[`${userState?.role.name! as ValidRoles}`]   
   };
 
   const ref = useRef<any>(null);
@@ -100,17 +106,18 @@ export const Userbox = () => {
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
-        <Hidden mdDown>
+       
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            
+            <UserBoxLabel variant="body1"> <Circle sx={{fontSize: 10}} color={online ? 'success': 'error'} /> {user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
               {user.jobtitle}
             </UserBoxDescription>
           </UserBoxText>
-        </Hidden>
-        <Hidden smDown>
+       
+        
           <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-        </Hidden>
+        
       </UserBoxButton>
       <Popover
         anchorEl={ref.current}
@@ -136,7 +143,7 @@ export const Userbox = () => {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
+          {/* <ListItem button to="/management/profile/details" component={NavLink}>
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="My Profile" />
           </ListItem>
@@ -148,14 +155,16 @@ export const Userbox = () => {
             <InboxTwoToneIcon fontSize="small" />
             <ListItemText primary="Messenger" />
           </ListItem>
-          <ListItem
-            button
+        */}
+          {/* <ListItem
+            
             to="/management/profile/settings"
             component={NavLink}
+           
           >
             <AccountTreeTwoToneIcon fontSize="small" />
-            <ListItemText primary="Account Settings" />
-          </ListItem>
+            <ListItemText primary="Ver perfil" />
+          </ListItem>  */}
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

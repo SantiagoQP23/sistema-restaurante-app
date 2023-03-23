@@ -5,7 +5,12 @@ import { getEnvVariables } from '../helpers';
 const { VITE_API_URL } = getEnvVariables();
 
 const restauranteApi = axios.create({
-  baseURL: VITE_API_URL
+  baseURL: VITE_API_URL,
+  //withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  
+  }
 });
 
 
@@ -15,7 +20,8 @@ restauranteApi.interceptors.request.use(config => {
 
   config.headers = {
     ...config.headers,
-    Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+    Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+    
 
   }
 

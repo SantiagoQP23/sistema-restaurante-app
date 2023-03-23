@@ -1,16 +1,12 @@
-import { Grid, Box, Typography, Button, InputLabel, MenuItem, Select, Container, Card, CardContent, CardHeader } from '@mui/material';
-import { Text } from '../../../components/Text.component';
-import { TextField } from '@mui/material/';
-import { LoadingButton } from '@mui/lab';
-import { ActionFunctionArgs, redirect, useNavigate, useParams } from 'react-router-dom';
+import { Grid,  Typography, Button, Container, Card, CardContent,  } from '@mui/material';
+
+import {  useNavigate,  } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { getClient } from '../../services';
-import { useAsync } from '../../../../../hooks/useAsync';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { addClient, selectClients, updateClient } from '../../../../../redux/slices/clients/clients.slice';
 import { ArrowBack } from '@mui/icons-material';
 import { ICreateClient } from '../../../../../models/client.model';
-import { Controller, useForm } from 'react-hook-form';
 import { createClient, updateClient as updateClientS } from '../../services/clients.service';
 import { useSnackbar } from 'notistack';
 import { TypeIdentification, CreatePerson } from '../../../../../models/common.model';

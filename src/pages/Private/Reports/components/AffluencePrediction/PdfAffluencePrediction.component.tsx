@@ -1,7 +1,10 @@
 import { FC } from "react"
 
-import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, View, Text, StyleSheet, Image } from '@react-pdf/renderer';
 import { IDay, TypeAffluence } from "../../models/day.interface";
+
+import logo from '../../../../../assets/logo.png'
+
 
 interface Props {
   days: IDay[]
@@ -29,11 +32,13 @@ export const PdfAffluencePrediction: FC<Props> = ({ days }) => {
   return (
     <Document  >
       <Page size="A4" style={{ padding: 30 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: 'bold' }}>Predicción de afluencia</Text>
+          <Image src={logo} style={{ width: 100, height: 100 }} />
+        </View>
 
         <View>
-          <Text style={{textAlign: 'center', fontSize: 18, marginBottom: 2}}>Restaurante DOÑA YOLI</Text>
-
-          <Text style={{textAlign: 'center', fontSize: 16, marginBottom: 5}}>Predicción de afluencia</Text>
+          <Text style={{ textAlign: 'center', fontSize: 16, marginBottom: 5, fontWeight: 'bold' }}>Restaurante Doña Yoli</Text>
 
           <Text style={{fontSize: 12, marginBottom: 2 }}>Predicción de afluencia de {days[0].date} hasta {days[days.length - 1].date}   </Text>
         </View>

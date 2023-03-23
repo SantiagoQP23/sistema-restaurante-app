@@ -10,8 +10,9 @@ import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { SocketContext } from '../../../../../context/SocketContext';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { TypeOrder } from '../../../../../models/orders.model';
 
-interface Props{
+interface Props {
 
 }
 
@@ -66,24 +67,24 @@ export const OrderTable: FC<Props> = () => {
 
   }
 
-  const emitUpdateTable = (updateOrderDto: UpdateOrderDto ) => {
+  const emitUpdateTable = (updateOrderDto: UpdateOrderDto) => {
     socket?.emit(EventsEmitSocket.updateOrder, updateOrderDto, (res: SocketResponseOrder) => {
 
       console.log('response', res);
-      
-      if (res.ok){
-        
+
+      if (res.ok) {
+
         dispatch(setActiveOrder(res.order!));
-      } 
-      
-      else{
+      }
+
+      else {
         enqueueSnackbar(res.msg, { variant: 'error' });
       }
 
     });
 
 
-    
+
 
 
   }
@@ -92,13 +93,13 @@ export const OrderTable: FC<Props> = () => {
     socket?.emit(EventsEmitSocket.changeTable, tablesId, ({ ok, msg, order }: SocketResponseOrder) => {
 
       console.log('response', ok);
-      
-      if (ok){
-      
-       
-      } 
-      
-      else{
+
+      if (ok) {
+
+
+      }
+
+      else {
         enqueueSnackbar(msg, { variant: 'error' });
       }
     })
@@ -111,52 +112,43 @@ export const OrderTable: FC<Props> = () => {
   useEffect(() => {
 
     setTable(activeOrder?.table);
-    
+
   }, [activeOrder]);
 
 
 
 
   return (
-    <Accordion sx={{ p: 0, m: 0 }}>
-      <AccordionSummary
-        expandIcon={<DriveFileRenameOutlineOutlined />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        sx={{ p: 0, m: 0 }}
-      >
-        <Typography variant='body1'>Mesa <b>{table ? table.name : 'N.A.'}</b></Typography>
-      </AccordionSummary>
-      <AccordionDetails sx={{ p: 0, m: 0 }}>
-        {
-          tables.length === 0
-            ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
-            : <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={table?.id}
-                label="Mesa del pedido"
+    <>
+      {
+        tables.length === 0
+          ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
+          : <FormControl sx={{width: 200}}>
+            <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={table?.id}
+              label="Mesa del pedido"
 
-                onChange={(e) => changeTable(e.target.value)}
+              onChange={(e) => changeTable(e.target.value)}
+              disabled={TypeOrder[`${activeOrder!.type}` as keyof typeof TypeOrder] !== TypeOrder.IN_PLACE}
 
-              >
-                {
-                  tables.map(table => (
+            >
+              {
+                tables.map(table => (
 
-                    <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
+                  <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
 
-                  ))
-                }
+                ))
+              }
 
-              </Select>
-            </FormControl>
-        }
+            </Select>
+          </FormControl>
+      }
 
+    </>
 
-      </AccordionDetails>
-    </Accordion>
 
   )
 }

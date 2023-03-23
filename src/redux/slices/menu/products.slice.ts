@@ -64,7 +64,7 @@ export const {
   resetProducts */
 } = productsSlice.actions;
 
-export const selectProducts = (state: RootState) => state.products;
+//export const selectProducts = (state: RootState) => state.products;
 
 
 export default productsSlice.reducer;

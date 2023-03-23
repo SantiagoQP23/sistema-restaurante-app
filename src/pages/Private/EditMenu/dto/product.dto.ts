@@ -1,3 +1,4 @@
+import { ProductStatus } from '../../../../models/menu.model';
 
 
 export interface CreateProductDto {
@@ -6,7 +7,8 @@ export interface CreateProductDto {
   price: number;
   //image: string;
   categoryId: string;
-  stock: number;
+  status: ProductStatus;
+  
 }
 
 
@@ -16,5 +18,6 @@ export interface UpdateProductDto {
   price?: number;
   //image: string;
   categoryId?: string;
-  stock?: number;
+  status?: ProductStatus;
+  isActive?: boolean;
 }

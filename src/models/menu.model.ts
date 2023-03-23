@@ -2,6 +2,7 @@ export interface ISection {
   id: string;
   name: string;
   categories: ICategory[];
+  isActive: boolean;
 
 }
 
@@ -26,6 +27,7 @@ export interface ICategory {
   name: string;
   products: IProduct[]
   section: ISectionCategory;
+  isActive: boolean;
 
 }
 
@@ -45,8 +47,13 @@ export interface ICreateCategory {
 
 export enum ProductStatus {
   AVAILABLE = 'AVAILABLE',
-  OUTOFSTOCK = 'OUT_OF_STOCK',
-  OUTOFSEASON = 'OUT_OF_SEASON',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  OUT_OF_SEASON = 'OUT_OF_SEASON',
+}
+export enum ProductStatusSpanish {
+  AVAILABLE = 'DISPONIBLE',
+  OUT_OF_STOCK = 'NO DISPONIBLE',
+  OUT_OF_SEASON = 'FUERA DE TEMPORADA',
 }
 
 export interface IProduct {
@@ -56,6 +63,7 @@ export interface IProduct {
   description: string;
   images: string;
   status: ProductStatus;
+  isActive: boolean;
   
   category: ICategoryProduct;
   
@@ -67,7 +75,7 @@ export interface ICreateProduct{
   name: string;
   price: number;
   description: string;
-  stock: number;
   categoryId: string;
+  status: ProductStatus;
   
 }

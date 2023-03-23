@@ -1,7 +1,7 @@
 import { loadAbort } from '../../../../helpers/load-abort-axios.helper';
 import { IUser } from '../../../../models/auth.model';
 import restauranteApi from '../../../../api/restauranteApi';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { UpdateUserDto, ResetPasswordUserDto } from '../dto/update-user.dto';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { SubjectDeleteUser } from '../helpers/subjects-users.helper';
 
@@ -35,6 +35,15 @@ export const updateUser = (id: string, data: UpdateUserDto) => {
   const controller = loadAbort();
   return {
     call: restauranteApi.patch<IUser>(`users/${id}`,
+      data,
+      { signal: controller.signal }),
+    controller
+  }
+}
+export const resetPasswordUser = (data: ResetPasswordUserDto) => {
+  const controller = loadAbort();
+  return {
+    call: restauranteApi.patch<IUser>(`auth/reset-password-user`,
       data,
       { signal: controller.signal }),
     controller

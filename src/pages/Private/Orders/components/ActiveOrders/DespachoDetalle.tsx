@@ -1,17 +1,13 @@
-import React, { FC, useEffect, useState, useContext } from 'react'
+import  { FC, useEffect, useState, useContext } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { AddCircleOutline, RemoveCircleOutline, SaveOutlined } from '@mui/icons-material';
-/* import { useCounter } from '../../hooks/useCounter';
-import { IDetallePedido } from '../../interfaces';
+import { AddCircleOutline, CheckOutlined, RemoveCircleOutline } from '@mui/icons-material';
 
-import { SocketContext } from '../../context/SocketContext'; */
 import { IOrderDetail } from '../../../../../models';
 import { useCounter } from '../../hooks';
 import { statusModalDispatchDetail } from '../../services/orders.service';
 import { SocketContext } from '../../../../../context/SocketContext';
 import { useSnackbar } from 'notistack';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
@@ -23,77 +19,62 @@ interface Props {
 
 export const DespachoDetalle: FC<Props> = ({ }) => {
 
-  //const { socket } = useContext(SocketContext);
-
-  // const { idPedido, idDetallePedido } = detalle;
+ 
   const subscription$ = statusModalDispatchDetail.getSubject();
 
   const [detail, setDetail] = useState<IOrderDetail>()
 
-  const { state: counter, increment, decrement, setCounter } = useCounter(0, detail?.quantity);
+  const { state: counter, increment, decrement, setCounter } = useCounter(0, 1,  detail?.quantity);
 
   const [open, setOpen] = useState(false);
 
   const [orderId, setorderId] = useState('')
 
-  const { activeOrder } = useSelector(selectOrders);
-
-
-
   const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  // const { state: counter, increment, decrement } = useCounter(
-  //   detalle.cantEntregada, detalle.cantidad, detalle.cantEntregada);
 
 
 
-
-
-  const despacharDetalle = () => {
+  const updateDetail = () => {
 
     console.log('Despachando detalle')
 
-    const data: UpdateOrderDetailDto = {
-      orderId,
-      id: detail!.id,
-      qtyDelivered: counter
-
-    }
-
-    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, msg, order }: SocketResponseOrder) => {
-
-      if (!ok) {
-        enqueueSnackbar(msg, { variant: 'error' });
-      }
-
-    })
-
-
-    //console.log('Despachando', counter, detalle.producto.nombre);
-
-    /*  socket?.emit(
-       'despacharDetalle',
-       { idPedido, idDetallePedido, cantidad: counter } as { idPedido: number, idDetallePedido: number, cantidad: number },
-       ({ ok }: { ok: boolean }) => {
- 
-         if (!ok) {
-           toast.error("No se pudo despachar el detalle");
-         }
-       }) */
-
-
+    dispatchDetail(counter)
 
     setOpen(false)
   }
+
+  const dispatchDetail = (quantity: number) => {
+      
+      const data: UpdateOrderDetailDto = {
+        orderId,
+        id: detail!.id,
+        qtyDelivered: quantity
+  
+      }
+  
+      socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, msg, order }: SocketResponseOrder) => {
+  
+        if (!ok) {
+          enqueueSnackbar(msg, { variant: 'error' });
+        }
+  
+      })
+  
+      setOpen(false)
+
+  }
+
+
+
 
 
   useEffect(() => {
 
     subscription$.subscribe((data) => {
 
-      console.log('Despachando detalle')
       setDetail(data.detalle);
       setOpen(data.value)
       setorderId(data.orderId)
@@ -143,7 +124,16 @@ export const DespachoDetalle: FC<Props> = ({ }) => {
 
         <DialogActions>
           <Button variant='outlined' onClick={() => { setOpen(false) }}>Cancelar</Button>
-          <Button type='submit' variant='contained' onClick={despacharDetalle} disabled={false}>Despachar</Button>
+          <Button type='submit' variant='contained' onClick={updateDetail} disabled={false}>Actualizar</Button>
+          <Button
+            variant='contained'
+            onClick={() => {
+              dispatchDetail(detail?.quantity!)
+              setOpen(false)
+            }}
+          >
+            <CheckOutlined />
+          </Button>
           {/* <Button type='submit' variant='contained' onClick={despacharDetalle} disabled={counter > detalle.cantidad || counter <= detalle.cantEntregada}>Despachar</Button> */}
 
         </DialogActions>

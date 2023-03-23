@@ -12,7 +12,7 @@ import { TableOrder } from '../components/ReceiptOrder/TableOrder.component';
 import { useContext } from 'react';
 import { Add, ArrowBack, EditOutlined } from '@mui/icons-material';
 import { CardHeader, Box, } from "@mui/material"
-import { OrderDetail } from "./../components"
+import { OrderDetail } from "../components"
 import { OrderContext } from '../context/Order.context';
 import { NewOrderDetail } from '../components/AddOrder/NewOrderDetail.component';
 import { SocketContext } from '../../../../context/SocketContext';
@@ -20,6 +20,7 @@ import { CreateOrderDto } from '../dto/create-order.dto';
 import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
 import { useSnackbar } from 'notistack';
+import { TypeOrder } from '../../../../models';
 
 
 
@@ -64,7 +65,7 @@ export const OrderDetails = () => {
           variant='contained'
           color='primary'
           onClick={() => navigate('products')}
-          sx={{display: { xs: 'flex', md: 'none' }}}
+          sx={{ display: { xs: 'flex', md: 'none' } }}
         >
           <Add />
         </Button>
@@ -99,7 +100,7 @@ export const AddOrder = () => {
 
   const { socket } = useContext(SocketContext);
 
-  const { amount, reset, getOrder, details } = useContext(OrderContext);
+  const { amount, reset, getOrder, details, setTypeOrder, typeOrder } = useContext(OrderContext);
 
   const cancelOrder = () => {
     navigate(-1);
@@ -135,18 +136,18 @@ export const AddOrder = () => {
   return (
     <>
       <Grid container spacing={1} >
-        <Grid container item xs={12} md={7} spacing={1} justifyContent='space-between' >
+        <Grid container item xs={12} md={7} spacing={1} justifyContent='space-between' alignContent='start'>
 
-          <Grid item display='flex' xs={12} alignContent='start'>
+          <Grid item display='flex' xs={12} alignItems='center'>
 
             <Button onClick={() => { navigate('/orders') }}>
               <ArrowBack />
             </Button>
-            <Typography variant='h3'>Nuevo pedido</Typography>
+            <Typography variant='h4'>Nuevo pedido</Typography>
           </Grid>
 
           <Grid item xs={12} sx={{
-            display: {xs: 'none', md: 'flex'},
+            display: { xs: 'none', md: 'flex' },
           }}>
             <MenuAddProduct />
 
@@ -155,20 +156,49 @@ export const AddOrder = () => {
 
         </Grid>
 
-        <Grid container item xs={12} md={5} spacing={1} alignItems='start'>
+        <Grid container item xs={12} md={5} spacing={1} >
 
           <Grid item xs={12}>
 
             <Card>
+
+              <CardHeader title='Datos del pedido' />
               <CardContent>
 
+                <Box display='flex' gap={1}>
+
+
+                  {
+                    Object.keys(TypeOrder).map((key) => (
+                      <Button
+                        variant={typeOrder === key ? "contained" : "outlined"}
+                        key={key}
+                        sx={{
+                          mr: 3,
+                          '&:hover': {
+                            backgroundColor: 'primary.main',
+                            color: 'white'
+                          }
+
+                        }}
+
+                        onClick={() => setTypeOrder(key as TypeOrder)}
+
+
+                      >
+                        {TypeOrder[`${key}` as keyof typeof TypeOrder]}
+                      </Button>
+                    ))
+                  }
+
+                </Box>
+
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
-                  <Typography variant='h5' fontWeight='bold'>Nuevo pedido</Typography>
+
 
                   <Box>
                     {/* <Typography variant='subtitle1' >Mesa</Typography>
                     <Typography variant='h5' fontWeight='bold' align='right'>12</Typography> */}
-                    <TableOrder />
 
                   </Box>
 
@@ -189,8 +219,9 @@ export const AddOrder = () => {
 
 
 
-                <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-                  <Typography variant='h5' fontWeight='bold'>Personas</Typography>
+                <Box display='flex' gap={1} alignItems='center' my={2}>
+                  <TableOrder />
+
 
                   <People />
 
@@ -220,7 +251,7 @@ export const AddOrder = () => {
 
 
                 <Box mt={2}>
-                  <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth > Create Order</Button>
+                  <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth >Crear pedido</Button>
 
                 </Box>
 

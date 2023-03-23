@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { MenuContext } from '../../../../../context/MenuContext';
 import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
-import { resetActiveProduct, selectMenu, selectProducts, setActiveCategory, setActiveProduct, setActiveProducts } from '../../../../../redux';
+import { resetActiveProduct, selectMenu,  setActiveCategory, setActiveProduct, setActiveProducts } from '../../../../../redux';
 import { DeleteProduct } from './DeleteProduct.component';
 import { useModal } from '../../../../../hooks';
 
@@ -92,7 +92,7 @@ export const EditProducts: FC<Props> = () => {
           </Button>
 
 
-          <Typography align="center" variant="h6" color="initial">{activeCategory && activeCategory!.name}</Typography>
+          <Typography align="center" variant="h4" >{activeCategory && activeCategory!.name}</Typography>
 
         </Grid>
 
@@ -115,7 +115,7 @@ export const EditProducts: FC<Props> = () => {
       <Card>
           <CardContent>
             <Typography variant='body2'>Productos</Typography>
-            <Typography variant='h6'>{activeCategory?.products.length}</Typography>
+            <Typography variant='h4'>{activeCategory?.products.length}</Typography>
           </CardContent>
         </Card>
         <Box>
@@ -144,7 +144,7 @@ export const EditProducts: FC<Props> = () => {
 
 
 
-      <Box >
+      <Box mt={1}>
 
         <Grid container rowSpacing={1} spacing={1}>
           {

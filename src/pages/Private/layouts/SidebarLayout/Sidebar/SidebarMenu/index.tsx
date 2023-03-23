@@ -327,7 +327,7 @@ function SidebarMenu() {
           </SubMenuWrapper>
         </List>
 
-        <List
+        {/* <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -336,8 +336,8 @@ function SidebarMenu() {
           }
         >
           <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
+            <List component="div"> */}
+              {/* <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
@@ -347,7 +347,7 @@ function SidebarMenu() {
                 >
                   Perfil de usuario
                 </Button>
-              </ListItem>
+              </ListItem> */}
               {/*  <ListItem component="div">
                 <Button
                   disableRipple
@@ -359,9 +359,9 @@ function SidebarMenu() {
                   Configuración de cuenta
                 </Button>
               </ListItem> */}
-            </List>
+            {/* </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
         {/* <List
           component="div"
           subheader={

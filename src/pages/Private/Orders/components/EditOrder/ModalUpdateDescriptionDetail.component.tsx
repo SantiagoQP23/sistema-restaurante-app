@@ -7,13 +7,10 @@ import {
   DialogTitle, FormControl, FormHelperText
 } from '@mui/material/'
 
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { ICreateOrderDetail, IOrderDetail } from '../../../../../models/orders.model';
+import { IOrderDetail } from '../../../../../models/orders.model';
 import { SocketContext } from '../../../../../context';
-import { sharingInformationService } from '../../services/sharing-information.service';
 import { OrderContext } from '../../context/Order.context';
 import { statusModalDescriptionDetail } from '../../services/orders.service';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { useSnackbar } from 'notistack';
@@ -23,76 +20,45 @@ import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 
 
 interface Props {
-  // handleClose: () => void;
-  // open: boolean;
-  // detalle: ICreateOrderDetail;
+
 }
 
 
 export const ModalUpdateDetail: FC<Props> = ({ }) => {
 
   const { idPedido } = useParams();
-  
+
   const subscription$ = statusModalDescriptionDetail.getSubject();
 
   const [open, setOpen] = useState(false);
-  
+
   const [detail, setDetail] = useState<IOrderDetail>();
-  
+
   const [description, setDescription] = useState(detail?.description || '');
+  const [discount, setDiscount] = useState(detail?.discount || 0);
 
-  const {} = useContext(OrderContext);
+  const { } = useContext(OrderContext);
 
 
- //const { product, quantity } = detalle;
-
-  // const total = useSelector(selectPedidos).pedidoActivo?.total;
 
   const dispatch = useDispatch();
 
   const { socket } = useContext(SocketContext);
 
-  const {activeOrder} = useSelector(selectOrders);
+  const { activeOrder } = useSelector(selectOrders);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  /*
-  const crearDetalle = () => {
-
-    updateDetail({...detail!, description})
-
-    //const detalle = { idProducto: producto.idProducto, cantidad, descripcion, idPedido };
-
-     socket?.emit('nuevoDetalle', {detalle}, ({nuevoDetalle, ok}:) => {
-       
-      if(ok){
-
-        console.log("Añadiendo un nuevo detalle al pedido");
-        // TODO recibir el detalle de pedido en el callback
-        const { pedido, ...detalle } = nuevoDetalle;
-        
-        // TODO aniadir el detalle de pedido recibido
-        //dispatch(pedidoDetalleAddNew(detalle));
-        
-        //dispatch(pedidoUpdateTotal(Number(total) + Number(detalle.subtotal)));
 
 
-      }
-
-
-    }) 
-    
-    
-    setOpen(false)
-  }
-  */
 
   const updateDescriptionDetail = () => {
 
     const data: UpdateOrderDetailDto = {
       orderId: activeOrder!.id,
-        id: detail!.id,
-        description
+      id: detail!.id,
+      description,
+      discount
     }
 
     console.log(data)
@@ -119,7 +85,7 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
 
       setDetail(data.detalle)
       setOpen(!!data.value);
-      
+
     })
   }, [])
 
@@ -160,6 +126,30 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
               }
 
               autoFocus
+
+            />
+
+            <TextField
+              id="descripcion-pedido"
+              label="Descuento"
+              margin="dense"
+              type='number'
+              defaultValue={detail?.discount}
+              sx={{ width: 300 }}
+              onBlur={(e) => {
+                console.log(e.target.value);
+                setDiscount(Number(e.target.value));
+
+              }
+              }
+
+              inputProps={{
+                min: 0,
+                max: detail?.product.price,
+                step: 0.25
+              }}
+
+
 
             />
 

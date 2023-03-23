@@ -6,8 +6,9 @@ import { ArrowBack } from '@mui/icons-material';
 import { Container, Grid, Button, Typography, Card, CardContent } from '@mui/material';
 import { CreateUser } from '../../models/create-user.model';
 import { FormUser } from '../FormUser.component';
-import { updateUser as updateUserS } from '../../services/users.service';
+import { updateUser as updateUserS, resetPasswordUser } from '../../services/users.service';
 import { useSnackbar } from 'notistack';
+import { ResetPasswordUserDto } from '../../dto/update-user.dto';
 
 
 export const EditUser = () => {
@@ -68,6 +69,29 @@ export const EditUser = () => {
   }
 
 
+  async function onReset() {
+
+    const data : ResetPasswordUserDto = {
+      userId: activeUser!.id,
+    }
+
+    console.log({data})
+    await callEndpoint(resetPasswordUser( data))
+
+      .then((resp) => {
+        const { data } = resp;
+        console.log(data)
+        enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
+      }
+      )
+
+  }
+
+
   return (
 
     <>
@@ -90,7 +114,13 @@ export const EditUser = () => {
         <Card>
           <CardContent>
 
-            <FormUser onSubmit={onSubmit} user={user} loading={loading} msg={'Editar'} />
+            <FormUser
+              onSubmit={onSubmit}
+              user={user}
+              loading={loading}
+              isNew={false}
+              onReset={onReset}
+            />
 
             {/* <FormClient onSubmit={onSubmit} client={client} loading={loading} msg={'Editar'} /> */}
 

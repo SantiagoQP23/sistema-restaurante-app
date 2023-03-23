@@ -1,10 +1,15 @@
 import { ChangeEvent, FC, useState } from 'react';
 
-import { Box, Card, Checkbox, IconButton, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, useTheme } from '@mui/material/';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { useDispatch, useSelector } from 'react-redux';
-import { useFetchAndLoad, useAsync } from '../../../../../hooks';
-import { loadClients, selectClients, setActiveClient } from '../../../../../redux/slices/clients/clients.slice';
+import {
+  Box, Card, Checkbox, IconButton,
+  LinearProgress, Switch, Table, TableBody, TableCell,
+  TableContainer, TableHead, TablePagination, TableRow,
+  Tooltip, Typography, useTheme
+} from '@mui/material/';
+
+import { useDispatch, } from 'react-redux';
+import { useFetchAndLoad, } from '../../../../../hooks';
+import { loadClients, setActiveClient, updateClient } from '../../../../../redux/slices/clients/clients.slice';
 import { getClients } from '../../services';
 
 import { IClient } from '../../../../../models/client.model';
@@ -12,11 +17,12 @@ import { IClient } from '../../../../../models/client.model';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useNavigate } from 'react-router-dom';
-import { statusModalDeleteClient } from '../../services/clients.service';
+import { statusModalDeleteClient, updateClient as updateClientS } from '../../services/clients.service';
+import { useSnackbar } from 'notistack';
 
 
 interface Props {
-  client?: IClient;
+  clientFound?: IClient;
   clients: IClient[];
 }
 
@@ -28,25 +34,49 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 
   const dispatch = useDispatch();
 
+  const { loading, callEndpoint } = useFetchAndLoad();
+
   const theme = useTheme();
+
+  const {enqueueSnackbar} = useSnackbar();
 
   const editClient = (client: IClient) => {
     dispatch(setActiveClient(client));
     navigate('edit')
   }
 
+
+
   const deleteClient = () => {
     console.log('deleteClient')
     statusModalDeleteClient.setSubject(true, client);
   }
 
+  const submitChangeStatus = async (client: IClient) => {
+
+    await callEndpoint(updateClientS( client.id, {isActive: !client.isActive}))
+    .then((res) => {
+      console.log(res);
+      dispatch(updateClient({...client, isActive: !client.isActive}));
+
+    })  
+    .catch((err) => {
+      console.log(err);
+      enqueueSnackbar('Error al actualizar el estado del usuario', {variant: 'error'})
+    })
+
+
+
+  }
+
+
+
 
   return (
     < TableRow >
       <TableCell padding='checkbox'>
-        <Checkbox
-          color="primary"
-        />
+        <Switch checked={client.isActive} onClick={() => submitChangeStatus(client)} color={client.isActive ? 'success' : 'warning'} />
+
 
       </TableCell>
       <TableCell>
@@ -57,24 +87,13 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           gutterBottom
           noWrap
         >
-          {client.person.firstName}
+          {client.person?.lastName} {client.person?.firstName}
         </Typography>
       </TableCell>
       <TableCell>
         <Typography
           variant="body1"
           fontWeight="bold"
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
-          {client.person.lastName}
-        </Typography>
-      </TableCell>
-      <TableCell>
-        <Typography
-          variant="body1"
-
           color="text.primary"
           gutterBottom
           noWrap
@@ -90,9 +109,11 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           gutterBottom
           noWrap
         >
-          {client.person.identification.num}
+          {client.person?.identification.num}
+
         </Typography>
       </TableCell>
+
       <TableCell>
         <Typography
           variant="body1"
@@ -104,6 +125,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           {client.address}
         </Typography>
       </TableCell>
+     
       <TableCell>
         <Typography
           variant="body1"
@@ -112,7 +134,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           gutterBottom
           noWrap
         >
-          {client.person.email}
+          {client.person?.email}
         </Typography>
       </TableCell>
 
@@ -132,7 +154,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
             <EditTwoToneIcon fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete Order" arrow>
+        {/* <Tooltip title="Delete Order" arrow>
           <IconButton
             sx={{
               '&:hover': { background: theme.colors.error.lighter },
@@ -144,9 +166,8 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           >
             <DeleteTwoToneIcon fontSize="small" />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </TableCell>
-
 
 
 
@@ -156,17 +177,10 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 }
 
 
-export const ClientsTable: FC<Props> = ({ client, clients }) => {
-
-
-  const dispatch = useDispatch();
-
+export const ClientsTable: FC<Props> = ({ clientFound, clients }) => {
 
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
-
-  const { loading, callEndpoint } = useFetchAndLoad();
-
 
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
@@ -179,23 +193,11 @@ export const ClientsTable: FC<Props> = ({ client, clients }) => {
 
 
 
-  const getClientsCall = async () => await callEndpoint(getClients())
-
-  const loadClientsState = (data: IClient[]) => { dispatch(loadClients(data)); }
-
-  //useAsync(getClientsCall, loadClientsState, () => { }, []);
-
-
-
 
 
   return (
     <Box sx={{ height: 400, width: '100%', my: 1 }} >
 
-      {
-        loading &&
-        <LinearProgress />
-      }
       <Card>
 
         <TableContainer>
@@ -204,12 +206,8 @@ export const ClientsTable: FC<Props> = ({ client, clients }) => {
 
               <TableRow>
                 <TableCell padding="checkbox">
-                  <Checkbox
-                    color="primary"
-
-                  />
+                  Estado
                 </TableCell>
-                <TableCell>Apellidos</TableCell>
                 <TableCell>Nombres</TableCell>
                 <TableCell>Tipo de identificación</TableCell>
                 <TableCell>Número de identificación</TableCell>
@@ -221,8 +219,8 @@ export const ClientsTable: FC<Props> = ({ client, clients }) => {
             </TableHead>
             <TableBody>
               {
-                client
-                  ? <TableRowClient client={client} />
+                clientFound
+                  ? <TableRowClient client={clientFound} />
                   : clients.length > 0 && clients.map(client => (
 
                     <TableRowClient client={client} key={client.id} />))

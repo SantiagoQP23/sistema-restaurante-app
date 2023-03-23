@@ -1,148 +1,67 @@
-import { FC, useContext, useEffect, useState } from 'react'
+import { FC, useContext, } from 'react'
 import { formatDistance } from 'date-fns';
 
-import { Card, CardHeader, Grid, CardContent, Box, Divider, Typography } from '@mui/material';
-import { IOrder, IOrderDetail } from '../../../../models';
+import { Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Button } from '@mui/material';
+import { IOrder } from '../../../../models';
 import { PendingDetail } from '../../Orders/components/ActiveOrders/PendingDetail.component';
 import { Label } from '../../../../components/ui';
-import { useModal } from '../../../../hooks';
-import { DespachoDetalle } from '../../Orders/components/ActiveOrders/DespachoDetalle';
 import { es } from 'date-fns/locale';
-/* 
-import { IPedido } from '../../interfaces'
-import { IDetallePedido } from '../../interfaces/pedidos';
+import CardActions from '@mui/material/CardActions';
+import { SocketContext } from '../../../../context';
+import { UpdateOrderDto } from '../../Orders/dto/update-order.dto';
+import { OrderStatus } from '../../../../models/orders.model';
+import { useSnackbar } from 'notistack';
+import { EventsEmitSocket } from '../../Orders/interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../../Orders/interfaces/responses-sockets.interface';
+import { useDispatch } from 'react-redux';
+import { setActiveOrder } from '../../../../redux';
+import { ArrowBack, EditOutlined } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-import { useModal } from '../../hooks';
-
-import { Modal } from '../EditarMenu';
-import { DetallePendiente, DespachoDetalle } from '.';
-import { SocketContext } from '../../context/SocketContext';
-import { IActualizarCantidadDetalle, IEliminarDetalle } from '../../interfaces/sockets';
-import { pedidoSetActive } from '../../reducers';
-import { ActiveOrder } from './PendingDetail.component';
-
- */
 
 interface Props {
   order: IOrder;
+  setStatusFilter: (status: OrderStatus) => void;
 }
 
-export const ActiveOrder: FC<Props> = ({ order }) => {
+
+
+
+export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
 
   const { details } = order;
 
+  const { socket } = useContext(SocketContext);
 
-  //const { socket } = useContext(SocketContext);
-  /* 
-    const [detalleActivo, setDetalleActivo] = useState<null | IDetallePedido>(null);
-  
-    const [detalles, setDetalles] = useState<IDetallePedido[]>(pedido.detalles);
-  
-    const { isOpen, handleClose, handleClickOpen } = useModal();
-   */
-  const { isOpen, handleOpen, handleClose } = useModal();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
 
-  const despacharDetalle = (detalle: IOrderDetail) => {
-    /*   setDetalleActivo(detalle);
-      handleClickOpen();
-   */
+  const changeStatusOrder = (status: OrderStatus) => {
 
+    const data: UpdateOrderDto = {
+      id: order.id,
+      status
+    }
 
-
+    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
+      console.log(res);
+      if (res.ok) {
+        dispatch(setActiveOrder(res.order!));
+      } else {
+        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
+      }
+    });
 
   }
 
-  /*   useEffect(() => {
-  
-      socket?.on('nuevoDetalle', ({ nuevoDetalle }: { nuevoDetalle: IDetallePedido }) => {
-  
-        if (pedido.idPedido === nuevoDetalle.idPedido) {
-          setDetalles(detalles => [...detalles, nuevoDetalle]);
-  
-        }
-  
-      });
-  
-      return () => {
-        socket?.off('nuevoDetalle');
-      }
-  
-    }, [socket]);
-  
-  
-    useEffect(() => {
-  
-      socket?.on('eliminarDetalle', ({ idDetallePedido, idPedido }: { idDetallePedido: number, idPedido: number }) => {
-  
-        console.log("Eliminando un detalle pedido");
-        if (pedido.idPedido === idPedido) {
-          setDetalles(detalles => detalles.filter(detalle => detalle.idDetallePedido !== idDetallePedido));
-  
-        }
-  
-      });
-  
-      return () => {
-        socket?.off('eliminarDetalle');
-      }
-  
-    }, [socket]);
-  
-  
-    useEffect(() => {
-  
-      socket?.on('actualizarCantidadDetalle', ({ detalle }: { detalle: IDetallePedido }) => {
-  
-        console.log("Actualizando");
-  
-        const { idDetallePedido } = detalle;
-        if (pedido.idPedido === detalle.idPedido) {
-  
-          setDetalles(detalles => detalles.map(det => {
-            if (det.idDetallePedido === idDetallePedido) {
-              return detalle
-            }
-            return det
-          }));
-  
-        }
-  
-        return () => {
-          socket?.off('actualizarCantidadDetalle');
-        }
-  
-      });
-  
-    }, [socket]);
-  
-    useEffect(() => {
-  
-      socket?.on('despacharDetalle', ({ detalle }: { detalle: IDetallePedido }) => {
-  
-        console.log("Actualizando");
-  
-        const { idDetallePedido } = detalle;
-        if (pedido.idPedido === detalle.idPedido) {
-  
-          setDetalles(detalles => detalles.map(det => {
-            if (det.idDetallePedido === idDetallePedido) {
-              return detalle
-            }
-            return det
-          }));
-  
-        }
-  
-        return () => {
-          socket?.off('despacharDetalle');
-        }
-  
-      });
-  
-    }, [socket]);
-  
-   */
+
+
+
+
 
   return (
     <>
@@ -173,31 +92,90 @@ export const ActiveOrder: FC<Props> = ({ order }) => {
         />
         <Divider />
         <CardContent>
+
           <Grid container spacing={1}>
             {
-              details.map(detail => (
-                <Grid key={detail.id} item xs={12} >
-                  <PendingDetail detail={detail} orderId={order.id}/>
-                </Grid>
+              order.status === OrderStatus.IN_PROGRESS
+                ?
+                details.map(detail => (
+                  <Grid key={detail.id} item xs={12} >
+                    <PendingDetail detail={detail} orderId={order.id} />
+                  </Grid>
+                ))
+                :
+                details.map(detail => (
+                  <Grid key={detail.id} item xs={12} >
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Box>
+                        <Typography variant='h4' color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
+                          {`${detail.quantity - detail.qtyDelivered}`} - {`${detail.product.name}`}
+                        </Typography>
 
-              ))
+                        <Typography variant="h6" color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
+                          {detail.description}
+                        </Typography>
+
+                      </Box>
+                    </Box>
+                  </Grid>
+                )
+                )
             }
 
-          
+
           </Grid>
 
-          {/* {detalles.length > 0 && detalles!.map(det => (
 
-              <DetallePendiente detalle={det} key={det.idDetallePedido} despachar={despacharDetalle} />
-
-            ))} */}
         </CardContent>
+
+        <Divider />
+
+        <CardActions>
+          {
+            order.status === OrderStatus.PENDING
+              ? <Button variant='contained' fullWidth onClick={() => {
+                changeStatusOrder(OrderStatus.IN_PROGRESS)
+                setStatusFilter(OrderStatus.IN_PROGRESS)
+
+              }}>Iniciar</Button>
+              : order.status === OrderStatus.IN_PROGRESS
+              &&
+              < >
+                <Button
+                  startIcon={<ArrowBack />}
+                  variant='outlined'
+                  onClick={() => {
+                    changeStatusOrder(OrderStatus.PENDING)
+                    setStatusFilter(OrderStatus.PENDING)
+
+                  }}
+                >
+                  Pendiente
+                </Button>
+                <Button
+                  startIcon={<EditOutlined />}
+                  variant='contained'
+                  onClick={() => {
+                    navigate(`/orders/edit/${order.id}`)
+                  }}
+                >
+                  Editar pedido
+                </Button>
+                {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
+
+              </ >
+
+
+
+
+          }
+        </CardActions>
 
 
 
       </Card>
 
-   
+
     </>
 
   )

@@ -12,15 +12,14 @@ export const addCategory = (category: ICategory): AppThunk => async (
   dispatch,
   getState) => {
 
-  const { section } = category;
+  const { activeSection, sections } = getState().menu;
 
-  const { activeSection } = getState().menu;
+  //Find section
+  const section = sections.find(sec => sec.id === category.section.id);
 
-  let newSection = { ...activeSection, categories: [...activeSection?.categories!, category] }! as ISection;
-
+  let newSection = { ...section, categories: [...activeSection?.categories!, category] }! as ISection;
 
   dispatch(updateSection(newSection));
-
 
 
 };
@@ -33,15 +32,25 @@ export const updateCategory = (category: ICategory): AppThunk => async (
 
   const { activeSection } = getState().menu;
 
-  const newCategories = activeSection?.categories.map(cate => {
-    if (cate.id === category.id)
-      return { ...cate, ...category }
-    return cate
-  })
+  if (activeSection!.id !== category.section.id) {
 
-  let newSection = { ...activeSection, categories: newCategories }! as ISection;
+    dispatch(addCategory(category));
+    dispatch(deleteCategory(category));
 
-  dispatch(updateSection(newSection));
+  } else {
+
+    const newCategories = activeSection?.categories.map(cate => {
+      if (cate.id === category.id)
+        return { ...cate, ...category }
+      return cate
+    })
+  
+    let newSection = { ...activeSection, categories: newCategories }! as ISection;
+  
+    dispatch(updateSection(newSection));
+  }
+
+
 
 };
 
@@ -49,13 +58,14 @@ export const deleteCategory = (category: ICategory): AppThunk => async (
   dispatch,
   getState) => {
 
-  const { section } = category;
+    const { activeSection, sections } = getState().menu;
 
-  const { activeSection } = getState().menu;
+  const section = sections.find(sec => sec.id === category.section.id);
 
-  const newCategories = activeSection?.categories.filter(cate => cate.id !== category.id)
 
-  let newSection = { ...activeSection, categories: newCategories }! as ISection;
+  const newCategories = section?.categories.filter(cate => cate.id !== category.id)
+
+  let newSection = { ...section, categories: newCategories } as ISection;
 
   dispatch(updateSection(newSection));
 

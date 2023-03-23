@@ -105,6 +105,7 @@ export const AddUser = () => {
               user={user}
               onSubmit={onSubmit}
               loading={loading}
+              isNew={true}
             />
 
           </CardContent>

@@ -8,4 +8,5 @@ export interface UpdateOrderDetailDto {
   description?: string;
   status?: DetailStatus;
   orderId: string;
+  discount?: number;
 }

@@ -1,6 +1,8 @@
 import { Card, CardContent, Typography, CardMedia, Box, Button, Grid } from '@mui/material/';
 import { FC } from 'react';
+import { Label } from '../../../../components/ui';
 import { IProduct } from '../../../../models';
+import { ProductStatus, ProductStatusSpanish } from '../../../../models/menu.model';
 
 
 interface Props {
@@ -9,6 +11,10 @@ interface Props {
 
 
 export const Product: FC<Props> = ({ product }) => {
+
+
+
+  
   return (
     < >
 
@@ -28,11 +34,23 @@ export const Product: FC<Props> = ({ product }) => {
 
 
               <Grid item xs={12}>
-                <Typography variant="h4"  align='center'>{product.name}</Typography>
+                <Typography variant="h4" align='center'>{product.name}</Typography>
+
+                {
+                  product.status !== ProductStatus.AVAILABLE &&
+                  <Typography align='center'>
+                    <Label color='info'>
+
+                      {ProductStatusSpanish[`${product.status as ProductStatus}`]}
+
+                    </Label>
+
+                  </Typography>
+                }
 
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle1"  align='center'>
+                <Typography variant="subtitle1" align='center'>
 
                   {
                     product.description ? product.description : 'Sin descripción'

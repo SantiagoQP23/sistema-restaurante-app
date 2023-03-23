@@ -1,12 +1,11 @@
-import { FC, useContext, useEffect } from 'react';
-import { Tabs, Tab, Box, Card, CardContent, tabsClasses } from '@mui/material/';
+import { FC, useEffect } from 'react';
+import { Tabs, Tab, Box, tabsClasses } from '@mui/material/';
 
 import { ISection } from '../../../../models';
 
-import { useAppSelector, useProducts } from '../../../../hooks/';
-import { MenuContext } from '../../../../context/MenuContext';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectMenu, setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection } from '../../../../redux';
+import { useAppSelector } from '../../../../hooks/';
+import { useDispatch, } from 'react-redux';
+import { selectMenu, setActiveCategory, setActiveSection } from '../../../../redux';
 
 
 interface Props {
@@ -29,17 +28,7 @@ export const Sections: FC<Props> = ({ sections }) => {
 
     dispatch(setActiveCategory(section!.categories[0]))
 
-    // dispatch(setActiveCategories(section!.categories))
 
-    // if (section!.categories.length > 0) {
-    //   dispatch(setActiveCategory(section!.categories[0]))
-
-    //   dispatch(setActiveProducts(section!.categories[0].products))
-
-    // } else {
-
-    //   dispatch(setActiveProducts([]))
-    // }
 
 
 
@@ -51,17 +40,18 @@ export const Sections: FC<Props> = ({ sections }) => {
 
   return (
     <>
-      <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }} >
+      <Box sx={{ bgcolor: 'background.paper' }} >
         {
           activeSection &&
           <Tabs
             onChange={(e, value) => changeSection(value)}
             value={activeSection.id}
-            variant="scrollable"
+            variant="fullWidth"
             scrollButtons
             allowScrollButtonsMobile
             indicatorColor='primary'
             
+
             sx={{
               [`& .${tabsClasses.scrollButtons}`]: {
                 '&.Mui-disabled': { opacity: 0.3 },
@@ -70,15 +60,20 @@ export const Sections: FC<Props> = ({ sections }) => {
             }}
           >
             {
-              sections.map(section => (
-                <Tab
-                  key={section.id}
-                  value={section.id}
-                  label={section.name}
-                  wrapped
-                />
+              sections.map(section => {
 
-              ))
+                if (section.categories.length > 0 && section.isActive)
+                  return (
+                    <Tab
+                      key={section.id}
+                      value={section.id}
+                      label={section.name}
+                      wrapped
+                    />
+
+                  )
+              }
+              )
             }
 
           </Tabs>

@@ -1,20 +1,22 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 // Material UI
 import { Typography, Grid, Box, Button, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, CardActions, Tooltip } from '@mui/material/';
 
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-
 
 import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { ICategory } from '../../../../../models';
-import { useAppDispatch, useModal } from '../../../../../hooks';
 import { setActiveCategory, setActiveProducts } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
-import { DeleteCategory } from './DeleteCategory.component';
+import { Label } from '../../../../../components/ui';
+import Switch from '@mui/material/Switch';
+import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
+import { useSnackbar } from 'notistack';
+import { updateCategory as updateCategoryS } from '../../services/sections.service';
+import { updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
+import { useAppDispatch } from '../../../../../hooks/useRedux';
 
 interface Props {
   categoria: ICategory;
@@ -27,7 +29,13 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+
+
+  const {loading, callEndpoint} = useFetchAndLoad();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const establecerCategoria = () => {
     navigate(`${categoria.name.toLowerCase()}`,);
@@ -53,12 +61,38 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
     navigate('../category');
   }
 
+
+  const changeStatusCategory = async (categoria: ICategory) => {
+
+    await callEndpoint(updateCategoryS(categoria.id, {isActive: !categoria.isActive}))
+    .then((resp) => {
+      const { data } = resp;
+
+      dispatch(updateCategory({ ...categoria, isActive: !categoria.isActive }));
+      //dispatch(setActiveCategory({ ...categoria, ...data.category }))
+      enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
+
+    })
+    .catch((err) => {
+      console.log(err)
+      enqueueSnackbar('Ya existe', { variant: 'error' })
+
+    });
+
+
+  }
+
   return (
     <>
 
       <Card>
         <CardContent>
-          <Typography variant="h5">{categoria.name}</Typography>
+
+          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography variant="h4">{categoria.name}</Typography>
+            <Label color={categoria.isActive ? 'success' : 'error' }>{categoria.isActive ? 'Activo' : 'Eliminado' }</Label>
+          </Box>
+
           <Typography variant="body2" color="orange">Productos: {categoria.products.length}</Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -83,7 +117,9 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
               </IconButton>
             </Tooltip>
-            <Tooltip title="Eliminar">
+            <Switch checked={categoria.isActive} onClick={() => changeStatusCategory(categoria)} color={categoria.isActive ? 'success' : 'error'} />
+
+            {/* <Tooltip title="Eliminar">
 
               <IconButton
                 color='error'
@@ -93,7 +129,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
                 <DeleteOutlined />
 
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Box>
         </CardActions>
       </Card>
@@ -105,19 +141,3 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
   )
 }
 
-/*  <Button variant='text' size='small'
-   color='error'
-   onClick={() => eliminarCategoria(categoria)}
- >
-
-   <DeleteOutlined />
-   Eliminar
- </Button>
-
- <Button variant='text' size='small'
-   onClick={() => editarCategoria()}
- >
-
-   <EditOutlined />
-   Editar
- </Button> */

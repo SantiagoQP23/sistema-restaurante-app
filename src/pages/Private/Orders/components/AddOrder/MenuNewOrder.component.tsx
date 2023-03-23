@@ -1,6 +1,5 @@
-import { FC, useContext, useState,  } from 'react'
+import { FC, useContext,  } from 'react'
 import { useNavigate,  } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { Grid, Typography, Button,  } from '@mui/material';
 
@@ -14,7 +13,7 @@ import { OrderContext } from '../../context/Order.context';
 export const MenuNewOrder: FC = () => {
   const navigate = useNavigate();
 
-  const { amount, reset, getOrder, details } = useContext(OrderContext);
+  const { amount, } = useContext(OrderContext);
 
 
 

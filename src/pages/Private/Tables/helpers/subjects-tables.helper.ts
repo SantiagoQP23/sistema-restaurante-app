@@ -1,5 +1,4 @@
 import { Subject } from "rxjs";
-import { IClient } from '../../../../models/client.model';
 import { ITable } from '../../../../models/table.model';
 
 

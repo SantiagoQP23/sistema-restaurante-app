@@ -17,8 +17,8 @@ import { ArrowBack, AttachMoney } from '@mui/icons-material';
 import { Controller, useForm } from 'react-hook-form';
 
 
-import { resetActiveProduct, selectCategories, selectMenu, selectProducts, setActiveProduct } from '../../../../../redux';
-import { ICreateProduct, IProduct } from '../../../../../models/menu.model';
+import { resetActiveProduct,  selectMenu,  setActiveProduct } from '../../../../../redux';
+import { ICreateProduct, IProduct, ProductStatus } from '../../../../../models/menu.model';
 import { LoadingButton } from '@mui/lab';
 import { BtnCancel } from '../../../components';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
@@ -42,7 +42,7 @@ const initialProduct = {
   name: '',
   price: 0,
   description: '',
-  stock: 9999,
+  status: ProductStatus.AVAILABLE,
 }
 
 
@@ -99,12 +99,12 @@ interface IFormProductImage {
 
 export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
 
-  const { register, handleSubmit, formState: { errors }, control, reset, watch} = useForm<{file: FileList}>({
+  const { register, handleSubmit, formState: { errors }, control, reset, watch } = useForm<{ file: FileList }>({
   });
 
   const [image, setImage] = useState<string>();
 
-  const {loading, callEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint } = useFetchAndLoad();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -116,31 +116,31 @@ export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-        setImage(reader.result?.toString())
+      setImage(reader.result?.toString())
     }
 
     reader.readAsDataURL(file);
   }
 
-  
 
 
 
-  const onSubmit = async (data: {file: FileList}) => {
-    console.log({data});
 
-    if(data.file.length === 0) {
+  const onSubmit = async (data: { file: FileList }) => {
+    console.log({ data });
+
+    if (data.file.length === 0) {
       enqueueSnackbar('Debe seleccionar una imagen', { variant: 'error' });
       return;
     }
 
     convert2base64(data.file[0]);
 
-    await callEndpoint(updateProductImage(product.id, {file: data.file[0]}))
+    await callEndpoint(updateProductImage(product.id, { file: data.file[0] }))
       .then((resp) => {
         console.log(resp);
 
-        const {data} = resp;
+        const { data } = resp;
 
 
         dispatch(updateProduct(data.product))
@@ -149,14 +149,14 @@ export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
       })
       .catch((err) => {
         console.log(err);
-        enqueueSnackbar('Error al actualizar la imagen', { variant: 'error' });   
+        enqueueSnackbar('Error al actualizar la imagen', { variant: 'error' });
       })
 
-    
+
   }
 
   useEffect(() => {
-    if(watch('file')?.length === 0) return;
+    if (watch('file')?.length === 0) return;
 
     convert2base64(watch('file')[0]);
   }, [watch('file')])
@@ -171,10 +171,10 @@ export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
           <input
 
             id="icon-button-file"
-            
+
             type="file"
             accept="image/*"
-            
+
 
             {...register('file')}
 
@@ -379,25 +379,30 @@ export const EditProduct: FC<Props> = ({ }) => {
 
                         />
                       </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <TextField
-                          label="Stock"
-                          margin='dense'
-                          fullWidth
-                          type='number'
-                          {
-                          ...register('stock', {
-                            required: 'Este campo es requerido',
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name='status'
+                          control={control}
+                          render={({ field: { onChange, onBlur, value } }) =>
+                            <>
+                              <InputLabel id='select-estado'>Estado</InputLabel>
 
-                            min: { value: 0, message: 'El valor debe ser mayor a 0' },
-                            valueAsNumber: true
-
-                          })
-                          }
-                          helperText={<Typography color="red">{errors.stock?.message} </ Typography>}
-
-                        />
-
+                              <Select
+                                labelId="select-estado"
+                                label="Tipo de identificación"
+                                fullWidth
+                                margin='dense'
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                error={!!errors.status?.type}
+                              >
+                                <MenuItem value={ProductStatus.AVAILABLE}>Disponible</MenuItem>
+                                <MenuItem value={ProductStatus.OUT_OF_SEASON}>Fuera de temporada</MenuItem>
+                                <MenuItem value={ProductStatus.OUT_OF_STOCK}>Fuera de stock</MenuItem>
+                              </Select>
+                            </>
+                          } />
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <Controller

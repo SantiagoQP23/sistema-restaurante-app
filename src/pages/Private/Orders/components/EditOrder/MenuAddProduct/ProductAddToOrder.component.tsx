@@ -13,6 +13,7 @@ import { useCounter } from "../../../hooks";
 import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
 import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { ProductStatus } from '../../../../../../models/menu.model';
 
 
 interface PropsProduct {
@@ -22,7 +23,7 @@ interface PropsProduct {
 
 
 export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
-  const { state: counter, increment, decrement } = useCounter(1);
+  const { state: counter, increment, decrement } = useCounter(1,);
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -105,6 +106,7 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
     else {
 
       addDetail({ product, quantity: counter })
+      enqueueSnackbar(`${product.name} agregado`, { variant: 'success' })
     }
 
 
@@ -120,65 +122,60 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
 
         <CardContent sx={{ flex: '1 0 auto' }} >
 
-
           <Typography variant="h5" textAlign='center' mb={1}>{product.name}</Typography>
 
-
-          {/* <Typography variant="subtitle1" >
-
-            {
-              product.description ? product.description : 'Sin descripción'
-            }
-          </Typography> */}
           <Typography variant="body1" textAlign='center'>$ {product.price}</Typography>
-
-
 
           <Box display='flex' justifyContent='center' alignItems='center' p={1}>
 
-
-
-
-            <Box display='flex' justifyContent='center' alignItems='center'>
-
-              <IconButton
-                size="small"
-                onClick={decrement}
-              >
-                <RemoveCircleOutline />
-              </IconButton>
-
-              <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
-              <IconButton
-                size="small"
-                onClick={increment}
-              >
-                <AddCircleOutline />
-              </IconButton>
-
-              {
-                !activeOrder?.details.find(det => det.product.id === product.id)
+            {
+              product.status === ProductStatus.AVAILABLE
                 ?
-              <Button
-                disabled={counter <= 0}
-                color='primary'
-                onClick={() => {
-                  createNewDetail();
-                  /* newDetail({product, quantity: counter}) */
-                }}
-                variant='outlined'
-                size='small'
-              >
-                <ShoppingCartIcon />
 
-              </Button>
-              : <Button
-               disabled
-              
-              >Añadido</Button>
+                <Box display='flex' justifyContent='center' alignItems='center'>
 
-              }
-            </Box>
+                  <IconButton
+                    size="small"
+                    onClick={decrement}
+                  >
+                    <RemoveCircleOutline />
+                  </IconButton>
+
+                  <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+                  <IconButton
+                    size="small"
+                    onClick={increment}
+                  >
+                    <AddCircleOutline />
+                  </IconButton>
+
+                  {
+                    !activeOrder?.details.find(det => det.product.id === product.id)
+                      ?
+                      <Button
+                        disabled={counter <= 0}
+                        color='primary'
+                        onClick={() => {
+                          createNewDetail();
+                          /* newDetail({product, quantity: counter}) */
+                        }}
+
+                        size='small'
+                      >
+                        <ShoppingCartIcon />
+
+                      </Button>
+                      : <Button
+                        disabled
+
+                      >Añadido</Button>
+
+                  }
+                </Box>
+                : <Typography variant='h6' color='info' align="center">Producto no disponible</Typography>
+            }
+
+
 
           </Box>
 

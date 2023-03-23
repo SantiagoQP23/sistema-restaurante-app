@@ -2,13 +2,9 @@ import { FC, useContext } from 'react';
 
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
-import { Box, IconButton, Typography, TextField, Button, ButtonGroup, Grid, Card, CardContent } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, IconButton, Typography, Button, } from '@mui/material';
+
 import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../models';
 import { useCounter } from '../../hooks';
@@ -16,14 +12,7 @@ import { useCounter } from '../../hooks';
 import { Label } from '../../../../../components/ui';
 import { SocketContext } from '../../../../../context/SocketContext';
 
-/* import { useCounter } from '../../hooks/useCounter';
 
-import { SocketContext } from '../../context/SocketContext';
-import { IDetallePedido, INuevoDetallePedido } from '../../interfaces';
-import { ICallbackSocket } from '../../interfaces/sockets';
-import { detalleDeleted, detalleSetActive, detalleUpdatedCantidad, pedidoDetalleActivo, pedidoDetalleCantidad, pedidoDetalleDeleted, pedidoUpdateTotal } from '../../reducers';
-*/
-import { UpdateOrderDto } from '../../dto/update-order.dto';
 import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
@@ -111,8 +100,9 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
         >
 
-          {detail.product.name}
+          {detail.product.name} - $ {detail.product.price}
         </Typography>
+
 
         {/* 
             */}
@@ -141,31 +131,31 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
 
       </Box>
-      <Typography variant="body2" color={detail.description ? "orange" : ""}>
-        {detail.description && detail.description}
-        {
-          !(detail.qtyDelivered === detail.quantity) &&
-          <Button
-            onClick={editDescription}
-            variant="text"
-          >
-            {!detail.description
-              ? 'Añadir descripción'
-              : <EditOutlined />
 
-            }
-          </Button>
-
-        }
-
-      </Typography>
 
       <Box sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: 1 }} mt={2}>
-          <Typography variant="body1" color="initial">
-            $ {detail.product.price}
+        <Box sx={{ flexGrow: 1 }} >
+
+          <Typography variant="body2" color={detail.description ? "orange" : ""}>
+            {detail.description && detail.description}
+            {
+             
+              <Button
+                onClick={editDescription}
+                variant="text"
+              >
+                {
+                  !detail.description
+                    ? 'Editar'
+                    : <EditOutlined />
+
+                }
+              </Button>
+
+            }
 
           </Typography>
+
 
         </Box>
 
@@ -205,41 +195,3 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
   )
 }
 
-
-{/*   <ButtonGroup size='large' variant="text" >
-                    <Button
-                      aria-label=""
-                      onClick={decrement}
-                      color='primary'
-                      variant='outlined'
-
-                    >
-                      <RemoveIcon color='primary' />
-
-                    </Button> */}
-
-{/*  <Box sx={{ width: 60, display: "inline-block" }} >
-                      <TextField
-                        id="cantidad"
-                        value={counter}
-                        type="number"
-                        inputProps={{ min: 0, style: { textAlign: 'center', border: 'none' } }}
-
-                      />
-
-                    </Box>
- */}
-{/*     <Button
-                      aria-label=""
-                      onClick={increment}
-                      color='primary'
-                      variant='outlined'
-
-                    >
-                      <AddIcon color='primary' />
-                    </Button> */}
-
-
-
-
-{/* </ButtonGroup> */ }

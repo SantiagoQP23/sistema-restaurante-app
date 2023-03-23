@@ -20,7 +20,7 @@ export const ModalDeleteOrder: FC = () => {
 
   const subscription$ = statusModalDeleteOrder.getSubject();
 
-  const {socket} = useContext(SocketContext); 
+  const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -34,18 +34,20 @@ export const ModalDeleteOrder: FC = () => {
 
 
 
-  
-      socket?.emit(EventsEmitSocket.deleteOrder, order!.id, (response: SocketResponseOrder) => {
 
-        if (response.ok) {
-        
-          navigate('/orders');
-        } else {
-          enqueueSnackbar(response.msg, { variant: 'error' })
-        }
-        
-      })
-    
+    socket?.emit(EventsEmitSocket.deleteOrder, order!.id, (response: SocketResponseOrder) => {
+
+      if (response.ok) {
+
+        navigate('/orders');
+      } else {
+        enqueueSnackbar(response.msg, { variant: 'error' })
+      }
+
+    })
+
+    setOpen(false);
+
 
   }
 
@@ -55,7 +57,7 @@ export const ModalDeleteOrder: FC = () => {
       setOrder(data.order);
       setOpen(!!data.value);
     })
-    
+
   }, [])
 
 
@@ -70,15 +72,15 @@ export const ModalDeleteOrder: FC = () => {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {`¿Esta seguro de eliminar la orden?`}
-          
+
         </DialogContentText>
         <DialogContentText id="alert-dialog-description">
           <b>Cliente: </b>{`${order?.client?.person.firstName} ${order?.client?.person.lastName}`}
-          
+
         </DialogContentText>
         <DialogContentText id="alert-dialog-description">
           <b>Mesa: </b>{`${order?.table?.name}`}
-          
+
         </DialogContentText>
       </DialogContent>
       <DialogActions>

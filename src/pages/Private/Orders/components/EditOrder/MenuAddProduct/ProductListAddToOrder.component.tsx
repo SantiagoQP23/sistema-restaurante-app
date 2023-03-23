@@ -16,12 +16,15 @@ export const ProductListAddToOrder: FC<ProductsListProps> = ({ products }) => {
     <>
       <Grid container spacing={1}>
         {
-          products.map(product => (
-            <Grid key={product.id} item xs={12} md={4}>
-              <ProductAddToOrder product={product} />
+          products.map(product => {
+            
+            if(product.isActive)
+              return (
+              <Grid key={product.id} item xs={12} md={4}>
+                <ProductAddToOrder product={product} />
 
-            </Grid>
-          ))
+              </Grid>
+          )})
         }
       </Grid>
 

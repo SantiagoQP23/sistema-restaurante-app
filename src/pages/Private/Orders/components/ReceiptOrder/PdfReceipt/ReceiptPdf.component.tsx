@@ -5,9 +5,12 @@ import { TableHeader } from '@david.kucsai/react-pdf-table/lib/TableHeader';
 import { TableCell } from '@david.kucsai/react-pdf-table/lib/TableCell';
 import { TableBody } from '@david.kucsai/react-pdf-table/lib/TableBody';
 
+import logo from '../../../../../../assets/logo.png'
 
 
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+
+
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 import { FC } from 'react';
 import { IOrder } from '../../../../../../models/orders.model';
 import { format } from 'date-fns';
@@ -80,9 +83,11 @@ export const ReceiptPdf: FC<Props> = ({ order }) => {
     <Document>
       <Page size="A4" style={styles.page}>
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.reportTitle}>Pedido</Text>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: 'bold' }}>Comprobante de pedido</Text>
+          <Image src={logo} style={{ width: 100, height: 100 }} />
         </View>
+
 
         <View style={styles.invoiceNoContainer}>
           <Text style={styles.label}>Pedido N°</Text>

@@ -4,7 +4,7 @@ import { ICategory, IProduct, ISection } from "../models";
 
 import { useEffect, useState } from 'react';
 
-import { resetActiveCategory, selectCategories, selectProducts, selectSections, setActiveCategory, setActiveSection } from '../redux/slices/menu';
+import { resetActiveCategory,  setActiveCategory, setActiveSection } from '../redux/slices/menu';
 import { useAppSelector } from '../hooks';
 import { useAppDispatch } from '../hooks/useRedux';
 import { useSelector } from 'react-redux';

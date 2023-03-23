@@ -62,7 +62,7 @@ export const {
   resetCategories */
 } = categoriesSlice.actions;
 
-export const selectCategories = (state: RootState) => state.categories;
+// export const selectCategories = (state: RootState) => state.categories;
 
 
 

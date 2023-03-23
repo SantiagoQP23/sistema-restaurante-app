@@ -1,17 +1,17 @@
 import { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {  useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
 
-import { DialogActions, TextField, DialogContent, DialogContentText, DialogTitle, Button, Select, MenuItem, Typography, InputLabel, Grid } from '@mui/material/';
+import {  TextField,  Button, Select, MenuItem, Typography, InputLabel, Grid } from '@mui/material/';
 // MOdal
 
 import { Controller, useForm } from 'react-hook-form';
-// import { selectSections, selectCategories, resetActiveCategory, setActiveCategory, updateCategory, selectMenu } from '../../../../../redux';
-import { ICreateCategory, ICategory } from '../../../../../models/menu.model';
-import { BtnCancel } from '../../../components';
+import { ICreateCategory } from '../../../../../models/menu.model';
+
 import { LoadingButton } from '@mui/lab';
+
 import { useAppDispatch, useFetchAndLoad } from '../../../../../hooks';
 import {
   createCategory,
@@ -63,7 +63,6 @@ export const EditCategory: FC<Props> = ({ }) => {
   } else { category = { name: '', sectionId: activeSection!.id } }
 
 
-  //const category = activeCategory ? { name: activeCategory.name, sectionId: activeCategory.section.id } : initialForm(activeSection!.id);
 
   const { register, handleSubmit, formState: { errors }, control, reset } = useForm<ICreateCategory>({
     defaultValues: category,
@@ -92,14 +91,7 @@ export const EditCategory: FC<Props> = ({ }) => {
 
     } else {
 
-      /*  const category: ICategory = {
-         id: '134124',
-         name: 'Ensaladas',
-         products: [],
-         section: { id: '13232', name: 'lajds' }
-       };
-       dispatch(addCategory(category));
-       reset(); */
+     
 
       await callEndpoint(createCategory(form))
         .then((resp) => {
@@ -118,15 +110,7 @@ export const EditCategory: FC<Props> = ({ }) => {
         });
     }
 
-    /*  if (!form.idCategoria) {
- 
-       dispatch(categoriaStartCreated(form as ICategoria));
-     } else {
-       dispatch(categoriaStartUpdate(form as ICategoria));
-     } */
-
-
-
+  
 
   }
 
@@ -200,7 +184,7 @@ export const EditCategory: FC<Props> = ({ }) => {
                   fullWidth
                   margin='dense'
                   disabled
-
+                  
                   value={value}
                   onChange={onChange}
                   onBlur={onBlur}
@@ -249,10 +233,6 @@ export const EditCategory: FC<Props> = ({ }) => {
 
 
 
-          {/*   <DialogActions>
-          <Button onClick={closeModal}>Cancelar</Button>
-          <Button type='submit'>{categoria ? "Guardar cambios" : "Añadir Categoria"}</Button>
-        </DialogActions> */}
         </form>
 
       </Container>

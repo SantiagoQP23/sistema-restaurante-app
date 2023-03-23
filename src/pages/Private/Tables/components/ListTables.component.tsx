@@ -1,8 +1,6 @@
-import { Add, Dialpad } from "@mui/icons-material";
-import { Button, Card, Grid, Typography } from "@mui/material"
-import { CardContent } from '@mui/material/';
+import { Add,  } from "@mui/icons-material";
+import { Button,  Grid, Typography } from "@mui/material"
 import { useDispatch, useSelector } from 'react-redux';
-import { createSection } from "../../EditMenu/services/sections.service";
 import { CardTable } from "./CardTable.component";
 import { useNavigate } from 'react-router-dom';
 import { resetactiveTable, selectTables } from "../../../../redux/slices/tables";

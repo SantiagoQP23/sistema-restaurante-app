@@ -18,8 +18,9 @@ import {
 import SidebarMenu from './SidebarMenu';
 import { LogoSign, Scrollbar } from '../../../components';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
-import { DarkMode, LightMode } from '@mui/icons-material';
+import { DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
+import Userbox from '../Header/Userbox';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -73,15 +74,22 @@ function Sidebar() {
       >
         <Scrollbar>
           <Box mt={3}>
-            <Box
+            {/* <Box
               mx={2}
               sx={{
                 width: 52
               }}
             >
               <LogoSign />
-            </Box>
+            </Box> */}
+
+            <Typography variant='h4' color='white' align='center'>Restaurante</Typography>
+            <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
+
           </Box>
+
+
+
           <Divider
             sx={{
               mt: theme.spacing(3),
@@ -137,15 +145,21 @@ function Sidebar() {
         >
           <Scrollbar>
             <Box mt={3}>
-              <Box
+              {/* <Box
                 mx={2}
                 sx={{
                   width: 52
                 }}
               >
                 <LogoSign />
-              </Box>
+              </Box> */}
+              <Typography variant='h3' color='white' align='center'>Restaurante</Typography>
+              <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
             </Box>
+
+            
+
+
             <Divider
               sx={{
                 mt: theme.spacing(3),
@@ -154,6 +168,8 @@ function Sidebar() {
               }}
             />
             <SidebarMenu />
+
+            </Scrollbar>
 
             <Divider
               sx={{
@@ -178,7 +194,6 @@ function Sidebar() {
               </ToggleButtonGroup>
 
             </Box>
-          </Scrollbar>
         </SidebarWrapper>
       </Drawer>
     </>

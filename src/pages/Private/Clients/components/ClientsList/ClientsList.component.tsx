@@ -1,18 +1,15 @@
-import { FormControl, InputLabel, Input, FormHelperText, Divider, IconButton, InputBase, Paper, Grid, Button, CircularProgress } from '@mui/material';
+import {  IconButton, InputBase, Paper, Grid, Button, CircularProgress } from '@mui/material';
 import { useState } from "react";
-import { TextField } from '@mui/material/';
-
 
 import SearchIcon from '@mui/icons-material/Search';
 import {ClientsTable} from "./ClientsTable.component";
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadClients, resetActiveClient } from '../../../../../redux/slices/clients';
+import { resetActiveClient } from '../../../../../redux/slices/clients';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { useAsync } from '../../../../../hooks';
-import { getClient, getClients } from '../../services';
+import { getClient } from '../../services';
 import { IClient } from '../../../../../models';
 import { useSnackbar } from 'notistack';
 import { selectClients } from '../../../../../redux/slices/clients/clients.slice';
@@ -130,29 +127,13 @@ export const ClientsList = () => {
 
       </Grid>
 
-      <ClientsTable clients={clients} client={client}/>
+      <ClientsTable clients={clients} clientFound={client}/>
 
       <DeleteClient />
 
     </>
 
-
-
-
-
   )
 }
 
-{/* <FormControl variant="standard" fullWidth>
-      <TextField
-        id="component-helper"
-        label="Nombre del cliente"
 
-        value={name}
-        onChange={handleChange}
-        aria-describedby="component-helper-text"
-      />
-      {/* <FormHelperText id="component-helper-text">
-        Some important helper text
-      </FormHelperText> 
-    </FormControl> */}
