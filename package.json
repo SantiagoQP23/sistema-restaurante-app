@@ -19,7 +19,7 @@
     "@mui/x-data-grid": "^5.17.8",
     "@mui/x-date-pickers": "^5.0.6",
     "@mui/x-date-pickers-pro": "^5.0.16",
-    "@react-pdf/renderer": "^3.0.3",
+    "@react-pdf/renderer": "^3.1.9",
     "@reduxjs/toolkit": "^1.8.5",
     "@types/nprogress": "^0.2.0",
     "axios": "^0.27.2",
