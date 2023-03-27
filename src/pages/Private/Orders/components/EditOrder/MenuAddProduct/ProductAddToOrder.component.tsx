@@ -14,6 +14,8 @@ import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
 import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { ProductStatus } from '../../../../../../models/menu.model';
+import { ICreateOrderDetail } from '../../../../../../models/orders.model';
+import { sharingInformationService } from '../../../services/sharing-information.service';
 
 
 interface PropsProduct {
@@ -110,9 +112,11 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
     }
 
 
-    /*  const detail:ICreateOrderDetail = {product, quantity: counter}
+    const detail:ICreateOrderDetail = {product, quantity: counter}
+    
+    sharingInformationService.setSubject(true, detail); 
+   
  
-     sharingInformationService.setSubject(true, detail); */
   }
 
 

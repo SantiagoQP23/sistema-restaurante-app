@@ -12,7 +12,6 @@ import { TableOrder } from '../../components/ReceiptOrder/TableOrder.component';
 import { useContext } from 'react';
 import { Add, ArrowBack, EditOutlined } from '@mui/icons-material';
 import { CardHeader, Box, } from "@mui/material"
-import { OrderDetail } from "../../components"
 import { OrderContext } from '../../context/Order.context';
 
 import { SocketContext } from '../../../../../context/SocketContext';
@@ -166,8 +165,7 @@ export const AddOrder = () => {
               <CardHeader title='Datos del pedido' />
               <CardContent>
 
-                <Box display='flex' gap={1}>
-
+                <Box display='flex' gap={2} justifyContent='center'>
 
                   {
                     Object.keys(TypeOrder).map((key) => (
@@ -175,7 +173,7 @@ export const AddOrder = () => {
                         variant={typeOrder === key ? "contained" : "outlined"}
                         key={key}
                         sx={{
-                          mr: 3,
+
                           '&:hover': {
                             backgroundColor: 'primary.main',
                             color: 'white'
@@ -194,55 +192,25 @@ export const AddOrder = () => {
 
                 </Box>
 
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <Box display='flex' gap={1} alignItems='center' my={2}>
+                  <TableOrder />
 
-
-                  <Box>
-                    {/* <Typography variant='subtitle1' >Mesa</Typography>
-                    <Typography variant='h5' fontWeight='bold' align='right'>12</Typography> */}
-
-                  </Box>
+                  <People />
 
                 </Box>
+
 
                 <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
                   <DataClient />
-                  {/* <Typography variant='h5' fontWeight='bold'>Cliente</Typography>
-                  <Box display='flex' alignItems='center'>
-                    <Typography variant='h5' fontWeight='bold'>Santiago Quirumbay </Typography>
-                    <IconButton size='small'>
-                      <EditOutlined />
-                    </IconButton>
-                  </Box> */}
-
                 </Box>
-
-
-
-                <Box display='flex' gap={1} alignItems='center' my={2}>
-                  <TableOrder />
-
-
-                  <People />
-
-                  {/* <Box display='flex' alignItems='center'>
-                    <Typography variant='h5' fontWeight='bold'>6</Typography>
-                    <IconButton size='small'>
-                      <EditOutlined />
-                    </IconButton>
-                  </Box> */}
-
-
-                </Box>
-
 
                 <Box >
                   <OrderDetails />
 
                 </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-                </Box>
+
+               
                 <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
                   <Typography variant='h4' fontWeight='bold'>Total </Typography>
@@ -264,20 +232,6 @@ export const AddOrder = () => {
 
           </Grid>
 
-          {/*  <Grid item xs={12} md={6}>
-            <TableOrder />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <People />
-          </Grid>
-
-          <Grid item xs={12} >
-            <DataClient />
-          </Grid>
-          <Grid item xs={12}>
-
-          </Grid> */}
         </Grid>
 
 

@@ -12,6 +12,7 @@ const { VITE_WS_URL } = getEnvVariables();
 interface ISocket{
   socket: Socket | null;
   online: boolean | undefined;
+  conectarSocket: () => void;
  
 }
 
@@ -58,7 +59,7 @@ export const SocketProvider:FC<Props> = ({children}) => {
 
   return (
 
-    <SocketContext.Provider value={{socket, online}}>
+    <SocketContext.Provider value={{socket, online, conectarSocket}}>
       {children}
     </ SocketContext.Provider>
 

@@ -43,9 +43,6 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
     updateDetail({...detail!, description})
 
-   
-
-
     setOpen(false)
   }
 

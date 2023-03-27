@@ -25,6 +25,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import { ModalDeleteOrder } from '../../components/EditOrder/ModalDeleteOrder.component';
 import { es } from 'date-fns/locale';
 import { OrderStatusSpanish, TypeOrder } from '../../../../../models/orders.model';
+import AddIcon from '@mui/icons-material/Add';
 
 
 interface resp {
@@ -72,7 +73,7 @@ export const ListOrders = () => {
 
   const [view, setView] = useState('list');
 
-  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
+  const [statusOrderFilter, setStatusOrderFilter] = useState<string>('all');
 
   const [filterWaiter, setFilterWaiter] = useState('all');
 
@@ -83,48 +84,67 @@ export const ListOrders = () => {
 
   const { user } = useSelector(selectAuth);
 
-  const [ordersFiltered, setOrdersFiltered] = useState<IOrder[]>([])
+  const [filteredOrders, setFilteredOrders] = useState<IOrder[]>([])
+
 
   const addOrder = () => {
-    dispatch(resetActiveOrder())
-
+    dispatch(resetActiveOrder());
     navigate('add');
-
   }
 
+  const filterOrders = (waiter: string, status: string) => {
 
-  const changeWaiter = (value: string) => {
-
-    if (value === 'all') {
-      setOrdersFiltered(orders)
-
-    } else {
-      setOrdersFiltered(orders.filter(order => order.user.id === value))
-
-    }
-    filterOrdersByStatus()
-
-    setFilterWaiter(value);
-  }
+    let ordersF: IOrder[] = orders;
 
 
-  const filterOrdersByStatus = () => {
-
-    if (!statusOrderFilter) {
-      setOrdersFiltered(orders);
-    } else {
-      setOrdersFiltered(orders.filter(order => order.status === statusOrderFilter))
+    if (waiter !== 'all') {
+      ordersF = orders.filter(order => order.user.id === waiter)
     }
 
 
+    if (status !== 'all') {
+
+      if (status === 'unpaid') {
+        ordersF = ordersF.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)
+      } else {
+        const orderStatus = status as OrderStatus;
+        ordersF = ordersF.filter(order => order.status === orderStatus)
+      }
+
+
+    }
+
+    setFilteredOrders(ordersF)
 
   }
+
+  const changeWaiter = (waiter: string) => {
+
+    setFilterWaiter(waiter);
+
+    filterOrders(waiter, statusOrderFilter);
+
+  }
+
+  const changeStatus = (status: string) => {
+
+    setStatusOrderFilter(status);
+
+    filterOrders(filterWaiter, status);
+
+  }
+
+
+
 
   useEffect(() => {
 
-    filterOrdersByStatus()
+    filterOrders(filterWaiter, statusOrderFilter);
 
-  }, [orders, statusOrderFilter])
+
+  }, [orders])
+
+
 
   return (
 
@@ -143,6 +163,7 @@ export const ListOrders = () => {
 
         <Grid item>
           <Button
+            startIcon={<AddIcon />}
             variant="contained"
             color="primary"
             onClick={() => addOrder()}
@@ -163,8 +184,8 @@ export const ListOrders = () => {
 
 
           <Grid container spacing={1}>
-
-            <Grid item xs={6}>
+            {/* Filtro por mesero */}
+            <Grid item xs={6} sm={4} lg={3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Mesero</InputLabel>
                 <Select
@@ -175,16 +196,16 @@ export const ListOrders = () => {
                   onChange={(e) => changeWaiter(e.target.value)}
                 >
                   <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
-                  <MenuItem key={user?.id} value={user?.id}>{user?.username}</MenuItem>
+                  <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
 
                 </Select>
               </FormControl>
 
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={6} sm={4} lg={3}>
 
-
+              {/* Filtro por estado */}
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                 <Select
@@ -193,13 +214,14 @@ export const ListOrders = () => {
                   value={statusOrderFilter}
                   label="Mesa del pedido"
 
-                  onChange={(e) => setStatusOrderFilter(e.target.value as OrderStatus)}
+                  onChange={(e) => changeStatus(e.target.value)}
                 >
-
-                  <MenuItem key={OrderStatus.PENDING} value={OrderStatus.PENDING}>PENDIENTE</MenuItem>
-                  <MenuItem key={OrderStatus.IN_PROGRESS} value={OrderStatus.IN_PROGRESS}>PREPARANDO</MenuItem>
-                  <MenuItem key={OrderStatus.DELIVERED} value={OrderStatus.DELIVERED}>ENTREGADO</MenuItem>
-                  <MenuItem key={OrderStatus.CANCELLED} value={OrderStatus.CANCELLED}>CANCELADO</MenuItem>
+                  <MenuItem key={'all'} value={'all'}>Todos</MenuItem>
+                  <MenuItem key={OrderStatus.PENDING} value={OrderStatus.PENDING}>Pendiente</MenuItem>
+                  <MenuItem key={OrderStatus.IN_PROGRESS} value={OrderStatus.IN_PROGRESS}>Preparando</MenuItem>
+                  <MenuItem key={OrderStatus.DELIVERED} value={OrderStatus.DELIVERED}>Entregado</MenuItem>
+                  <MenuItem key={'unpaid'} value={'unpaid'}>Por pagar</MenuItem>
+                  <MenuItem key={OrderStatus.CANCELLED} value={OrderStatus.CANCELLED}>Cancelado</MenuItem>
 
 
                 </Select>
@@ -218,8 +240,8 @@ export const ListOrders = () => {
       <Grid container spacing={1}>
 
         {
-          ordersFiltered.length > 0
-            ? ordersFiltered.map(order => (
+          filteredOrders.length > 0
+            ? filteredOrders.map(order => (
               <Grid key={order.id} item xs={12} md={6} lg={4}  >
 
                 <Order order={order} />
@@ -238,17 +260,6 @@ export const ListOrders = () => {
       </Grid>
 
 
-
-
-      {/* <Grid  mt={2} container spacing={1}>
-        {
-          orders.length > 0 &&
-          orders.map(p => (
-            <Order key={p.id} pedido={p} />
-            )
-            )
-          }
-      </Grid> */}
 
 
     </>

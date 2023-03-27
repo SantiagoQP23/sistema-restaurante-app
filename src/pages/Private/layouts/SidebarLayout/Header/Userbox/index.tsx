@@ -11,7 +11,9 @@ import {
   ListItem,
   ListItemText,
   Popover,
-  Typography
+  Typography,
+  ListItemButton,
+  ListItemIcon
 } from '@mui/material';
 
 import { grey } from '@mui/material/colors';
@@ -75,13 +77,13 @@ export const Userbox = () => {
   const { user: userState } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
-  const { online} = useContext(SocketContext)
+  const { online, conectarSocket } = useContext(SocketContext)
 
   const user =
   {
     name: userState?.person.firstName! + " " + userState?.person.lastName!,
     avatar: '/static/images/avatars/2.jpg',
-    jobtitle: Roles[`${userState?.role.name! as ValidRoles}`]   
+    jobtitle: Roles[`${userState?.role.name! as ValidRoles}`]
   };
 
   const ref = useRef<any>(null);
@@ -106,18 +108,18 @@ export const Userbox = () => {
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
-       
-          <UserBoxText>
-            
-            <UserBoxLabel variant="body1"> <Circle sx={{fontSize: 10}} color={online ? 'success': 'error'} /> {user.name}</UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user.jobtitle}
-            </UserBoxDescription>
-          </UserBoxText>
-       
-        
-          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-        
+
+        <UserBoxText>
+
+          <UserBoxLabel variant="body1"> <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} /> {user.name}</UserBoxLabel>
+          <UserBoxDescription variant="body2">
+            {user.jobtitle}
+          </UserBoxDescription>
+        </UserBoxText>
+
+
+        <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+
       </UserBoxButton>
       <Popover
         anchorEl={ref.current}
@@ -133,7 +135,7 @@ export const Userbox = () => {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-            {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
+          {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
@@ -143,10 +145,39 @@ export const Userbox = () => {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          {/* <ListItem button to="/management/profile/details" component={NavLink}>
-            <AccountBoxTwoToneIcon fontSize="small" />
-            <ListItemText primary="My Profile" />
-          </ListItem>
+         
+            <ListItemButton
+
+              to="/management/profile/details"
+              component={NavLink}
+            >
+              <ListItemIcon>
+                <AccountBoxTwoToneIcon fontSize="small" />
+
+              </ListItemIcon>
+              <ListItemText primary="Mi perfil" />
+            </ListItemButton>
+
+
+            <ListItemButton
+              onClick={() => !online && conectarSocket()}
+            >
+
+              <ListItemIcon>
+                <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
+                </ListItemIcon>
+
+              <ListItemText primary={online ? 'Conectado' : 'Conectar'} />
+
+
+            </ListItemButton>
+
+          
+
+
+         
+
+          {/* 
           <ListItem
             button
             to="/dashboards/messenger"
