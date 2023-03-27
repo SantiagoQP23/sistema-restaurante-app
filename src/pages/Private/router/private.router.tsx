@@ -12,19 +12,18 @@ import { EditProduct } from '../EditMenu/components/products/EditProduct.compone
 import { ListTables } from '../Tables/components';
 import { AddOrder, EditOrder, ListOrders } from '../Orders/subpages';
 import { EditTable } from '../Tables/components/EditTable.component';
-import { ListActiveOrders } from '../ActiveOrders/ListActiveOrders.component';
+import { ListActiveOrders } from '../Orders/subpages/ActiveOrders/components/ListActiveOrders.component';
 import { AddProductsOrder } from '../Orders/subpages/AddProductsOrder.component';
 import { AddClient } from '../Clients/components/AddClient/AddClient.component';
 import { UsersList } from '../Users/pages/UsersList.page';
 import { AddUser } from '../Users/components/AddUser/AddUser.component';
 import { EditUser } from '../Users/components/EditUser/EditUser.component';
-import { OrdersContainer } from '../Orders/OrdersContainer.page';
-import { ReceiptOrder } from '../Orders/subpages/ReceiptOrder.page';
+import { ReceiptOrder } from '../Orders/subpages/ReceiptOrder/ReceiptOrder.page';
 import { AffluenceSimulation } from '../Reports/components/AffluenceSimulator/AffluenceSimulation.component';
 import { AffluencePrediction } from '../Reports/components/AffluencePrediction/AffluencePrediction.component';
 import { DashboardReports } from '../Reports/components/DashboardReports/DashboardReports.component';
 import { StaffPlaning } from '../Reports/components/StaffPlanning/StaffPlaning.component';
-import { MenuNewOrder } from '../Orders/components/AddOrder/MenuNewOrder.component';
+import { MenuNewOrder } from '../Orders/subpages/AddOrder/components/MenuNewOrder.component';
 import { OrdersReports } from '../Reports/components/OrdersReports/OrdersReports.component';
 import { IncomesReports } from '../Reports/components/IncomesReports/IncomesReports.component';
 import { ReceiptOrderReport } from '../Reports/components/OrdersReports/ReceiptOrderReport.component';
@@ -39,7 +38,7 @@ const EditMenu = lazy(() => import('../EditMenu/EditMenu.page'))
 const Orders = lazy(() => import('../Orders/Orders.page'))
 const Clients = lazy(() => import('../Clients/Clients.page'))
 const Tables = lazy(() => import('../Tables/Tables.page'))
-const ActiveOrders = lazy(() => import('../Orders/subpages/ActiveOrders.page'))
+const ActiveOrders = lazy(() => import('../Orders/subpages/ActiveOrders/ActiveOrders.page'))
 const Users = lazy(() => import('../Users/Users.page'))
 
 const Reports = lazy(() => import('../Reports/Reports.page'))
@@ -133,10 +132,8 @@ export const routes: RouteObject[] = [
     path: PrivateRoutes.ORDERS,
     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
     children: [
-      {
-        path: '',
-        element: <OrdersContainer />,
-        children: [
+      
+       
           {
             path: '',
             element: <Orders />,
@@ -164,27 +161,27 @@ export const routes: RouteObject[] = [
               {
                 path: 'edit/:orderId/receipt',
                 element: <ReceiptOrder />
+              },
+              {
+                path: 'actives',
+                element: <ActiveOrders />,
+                children: [
+                  {
+                    path: '',
+                    element: <ListActiveOrders />
+                  }
+                ]
+    
               }
             ]
 
           },
-          {
-            path: 'actives',
-            element: <ActiveOrders />,
-            children: [
-              {
-                path: '',
-                element: <ListActiveOrders />
-              }
-            ]
-
-          }
 
 
         ]
 
-      },
-    ]
+      
+    
   },
 
   {

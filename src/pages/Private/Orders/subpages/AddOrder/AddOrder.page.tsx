@@ -4,23 +4,24 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Grid, Card, CardContent, Typography, TextField, IconButton, Divider } from '@mui/material';
 
-import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
-import { DataClient } from '../components';
-import { TableOrder } from '../components/ReceiptOrder/TableOrder.component';
+import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.component';
+import { DataClient } from '../../components';
+import { TableOrder } from '../../components/ReceiptOrder/TableOrder.component';
 
 
 import { useContext } from 'react';
 import { Add, ArrowBack, EditOutlined } from '@mui/icons-material';
 import { CardHeader, Box, } from "@mui/material"
-import { OrderDetail } from "../components"
-import { OrderContext } from '../context/Order.context';
-import { NewOrderDetail } from '../components/AddOrder/NewOrderDetail.component';
-import { SocketContext } from '../../../../context/SocketContext';
-import { CreateOrderDto } from '../dto/create-order.dto';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { OrderDetail } from "../../components"
+import { OrderContext } from '../../context/Order.context';
+
+import { SocketContext } from '../../../../../context/SocketContext';
+import { CreateOrderDto } from '../../dto/create-order.dto';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { TypeOrder } from '../../../../models';
+import { TypeOrder } from '../../../../../models';
+import { NewOrderDetail } from './components';
 
 
 

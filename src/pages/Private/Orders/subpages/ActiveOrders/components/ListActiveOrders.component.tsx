@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 
-import { ActiveOrder } from "./components/ActiveOrder.component"
 import { useSelector } from 'react-redux';
-import { selectOrders } from '../../../redux/slices/orders/orders.slice';
-import { IOrder, OrderStatus, OrderStatusSpanish } from '../../../models/orders.model';
+
+import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs } from '@mui/material';
 import { tabsClasses } from '@mui/material/Tabs';
-import { Tab, Tabs } from '@mui/material/';
+
+import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
+import { IOrder, OrderStatus, OrderStatusSpanish } from '../../../../../../models/orders.model';
+
+import { ActiveOrder } from "./ActiveOrder.component";
+
 
 export const ListActiveOrders = () => {
 
@@ -19,8 +22,6 @@ export const ListActiveOrders = () => {
   const filterActiveOrder = (status: OrderStatus) => {
     setActiveOrders(orders.filter(order => order.status === status));
   }
-
-
 
   useEffect(() => {
 
@@ -65,31 +66,34 @@ export const ListActiveOrders = () => {
             }}
           >
             <Tab key={OrderStatus.PENDING} label={OrderStatusSpanish[OrderStatus.PENDING]} value={OrderStatus.PENDING} />
-            <Tab key={OrderStatus.IN_PROGRESS} label={OrderStatusSpanish[OrderStatus.IN_PROGRESS]} value={OrderStatus.IN_PROGRESS} />
-            
-
+            <Tab key={OrderStatus.IN_PROGRESS} label={'PREPARANDO'} value={OrderStatus.IN_PROGRESS} />
 
           </Tabs>
 
+
         </CardContent>
       </Card>
-      
-          <Grid container spacing={1}>
-            {
-              activeOrders.length === 0
-                ? <Typography variant='h5' align="center">No hay pedidos</Typography>
-                : activeOrders.map(order => (
-                  <Grid key={order.id} item xs={12} sm={4}>
-                    <ActiveOrder order={order} setStatusFilter={setStatusOrderFilter} />
-                  </Grid>
 
-                ))
-            }
+      <Grid container spacing={1}>
+        {
+          activeOrders.length === 0
+            ? <Grid item xs={12}>
+              <Typography variant='h4' align="center">No hay pedidos</Typography>
 
-          </Grid>
+            </Grid>
+            : activeOrders.map(order => (
+              <Grid key={order.id} item xs={12} sm={4}>
+                <ActiveOrder order={order} setStatusFilter={setStatusOrderFilter} />
+              </Grid>
+
+            ))
+        }
+
+      </Grid>
 
 
-     
+
+
 
     </>
   )

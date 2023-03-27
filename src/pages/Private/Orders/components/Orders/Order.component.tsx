@@ -98,23 +98,15 @@ export const Order: FC<Props> = ({ order }) => {
         <Divider />
         <CardContent>
 
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-            <Typography variant="body1"  ><b>Cliente: </b>{client
-              ? `${client.person.firstName} ${client.person.lastName}`
-              : '-'}
+          {
+            client &&
+            <Typography variant="body1" >
+              <b>Cliente: </b>{`${client.person.firstName} ${client.person.lastName}`}
             </Typography>
+          }
 
+          <Typography variant="body2" ><b>Mesero: </b>{`${user.person.firstName} ${user.person.lastName}`}</Typography>
 
-          </Box>
-
-          <Box display='flex' >
-
-            <Typography variant="body2" ><b>Mesero: </b>{`${user.person.firstName} ${user.person.lastName}`}</Typography>
-
-
-
-          </Box>
         </CardContent>
 
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

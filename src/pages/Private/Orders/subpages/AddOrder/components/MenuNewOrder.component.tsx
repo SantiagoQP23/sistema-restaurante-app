@@ -5,8 +5,8 @@ import { Grid, Typography, Button,  } from '@mui/material';
 
 
 import { ShoppingCartOutlined, ArrowBack,  } from '@mui/icons-material';
-import { MenuAddProduct } from '../EditOrder/MenuAddProduct.component';
-import { OrderContext } from '../../context/Order.context';
+import { MenuAddProduct } from '../../../components/EditOrder/MenuAddProduct.component';
+import { OrderContext } from '../../../context/Order.context';
 
 
 

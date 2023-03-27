@@ -19,7 +19,7 @@ import { SocketResponseOrder } from '../../interfaces/responses-sockets.interfac
 import { useSnackbar } from 'notistack';
 import { setActiveOrder } from '../../../../../redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
-import { statusModalDescriptionDetail } from '../../services/orders.service';
+import { statusModalDescriptionDetail, statusModalEditOrderDetail } from '../../services/orders.service';
 import { DeleteOrderDetailDto } from '../../dto/delete-order-detail.dto';
 
 
@@ -65,6 +65,14 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
 
   }
+
+
+  const editDetail = () => {
+
+    statusModalEditOrderDetail.setSubject(true, detail, activeOrder!.id);
+  }
+
+
 
   const deleteDetail = () => {
 
@@ -141,7 +149,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
             {
              
               <Button
-                onClick={editDescription}
+                onClick={editDetail}
                 variant="text"
               >
                 {

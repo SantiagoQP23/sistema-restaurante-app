@@ -3,15 +3,15 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import Add from "date-fns/add";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
-import { Label } from "../../../../components/ui";
+import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
+import { Label } from "../../../../../components/ui";
 import { format } from "date-fns";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import { ReceiptPdf } from "../components/ReceiptOrder/PdfReceipt/ReceiptPdf.component";
-import { statusModalPayOrder, statusModalDiscountOrder } from '../services/orders.service';
-import { OrderStatus, OrderStatusSpanish } from '../../../../models/orders.model';
-import { DataClient, OrderDetails } from "../components";
-import { OrderTable } from "../components/EditOrder/OrderTable.component";
+import { ReceiptPdf } from "../../components/ReceiptOrder/PdfReceipt/ReceiptPdf.component";
+import { statusModalPayOrder, statusModalDiscountOrder } from '../../services/orders.service';
+import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
+import { DataClient, OrderDetails } from "../../components";
+import { OrderTable } from "../../components/EditOrder/OrderTable.component";
 import { Divider } from '@mui/material/';
 import { es } from "date-fns/locale";
 

@@ -4,6 +4,19 @@ import { Subject } from 'rxjs';
 import { IOrderDetail, IOrder } from '../../../../models/orders.model';
 
 
+export class SubjectEditOrderDetail {
+  subject$ = new Subject<{value: boolean, detalle: IOrderDetail, orderId: string}>();
+
+  getSubject(){
+
+    return this.subject$.asObservable();
+  }
+
+  setSubject(value: boolean, detalle: IOrderDetail, orderId: string){
+    this.subject$.next({value, detalle, orderId});
+  }
+}
+
 
 export class SubjectDescriptionDetail {
   subject$ = new Subject<{value: boolean, detalle: IOrderDetail}>();

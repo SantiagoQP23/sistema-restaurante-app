@@ -11,39 +11,39 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { DoneOutline, DeleteOutline, Done, Add } from '@mui/icons-material';
 
-import { selectOrders, setActiveOrder } from '../../../../redux';
+import { selectOrders, setActiveOrder } from '../../../../../redux';
 import { ArrowBack } from '@mui/icons-material';
-import { getClient } from '../../Clients/services';
-import { useAsync, useFetchAndLoad } from '../../../../hooks';
+import { getClient } from '../../../Clients/services';
+import { useAsync, useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
-import { InputSearch, Label } from '../../../../components/ui';
-import { OrderDetails } from '../components/EditOrder/OrderDetails.component';
+import { InputSearch, Label } from '../../../../../components/ui';
+import { OrderDetails } from '../../components/EditOrder/OrderDetails.component';
 
-import { IOrder, ITable } from '../../../../models';
+import { IOrder, ITable } from '../../../../../models';
 
-import { getOrder, statusModalDeleteOrder } from '../services/orders.service';
+import { getOrder, statusModalDeleteOrder } from '../../services/orders.service';
 import { format } from 'date-fns';
-import { TableOrder, DataClient } from '../components';
+import {  DataClient } from '../../components';
 
-import { OrderContext } from '../context/Order.context';
-import { ModalDeleteOrder } from '../components/EditOrder/ModalDeleteOrder.component';
+import { OrderContext } from '../../context/Order.context';
+import { ModalDeleteOrder } from '../../components/EditOrder/ModalDeleteOrder.component';
 import { Stack } from '@mui/system';
-import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
-import { OrderStatus, OrderStatusSpanish } from '../../../../models/orders.model';
-import { OrderTable } from '../components/EditOrder/OrderTable.component';
+import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.component';
+import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
+import { OrderTable } from '../../components/EditOrder/OrderTable.component';
 import { TextField } from '@mui/material';
-import { SocketContext } from '../../../../context/SocketContext';
-import { UpdateOrderDto } from '../dto/update-order.dto';
-import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
-import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
-import { SelectTypeOrder } from '../components/EditOrder/SelectTypeOrder.component';
+import { SocketContext } from '../../../../../context/SocketContext';
+import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
+import { SelectTypeOrder } from '../../components/EditOrder/SelectTypeOrder.component';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-import { PeopleOrder } from '../components/EditOrder';
+import { PeopleOrder } from '../../components/EditOrder';
 
 
 interface PropsOrder {
