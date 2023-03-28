@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { Label } from "../../../../../components/ui";
 import { OrderStatus, OrderStatusSpanish } from "../../../../../models";
 import { selectOrders } from "../../../../../redux";
-import { ReceiptPdf } from "../../../Orders/components/ReceiptOrder";
 import { statusModalDiscountOrder, statusModalPayOrder } from "../../../Orders/services/orders.service";
+import { PdfReceiptOrder } from '../../../Orders/components/ReceiptOrder/pdf/PdfReceiptOrder.component';
 
 
 
@@ -66,7 +66,7 @@ export const ReceiptOrderReport = () => {
 
         {
 
-          <PDFDownloadLink document={<ReceiptPdf order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
+          <PDFDownloadLink document={<PdfReceiptOrder order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
             <Button
               variant='contained'
             >Descargar PDF
@@ -214,7 +214,7 @@ export const ReceiptOrderReport = () => {
                   Descuento
                 </Button> */}
 
-                <PDFDownloadLink document={<ReceiptPdf order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
+                <PDFDownloadLink document={<PdfReceiptOrder order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
                   <Button
                     variant='contained'
                   >PDF

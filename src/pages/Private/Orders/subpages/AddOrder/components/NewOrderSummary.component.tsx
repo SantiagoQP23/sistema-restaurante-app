@@ -92,7 +92,7 @@ export const NewOrderSummary = () => {
 
   const { amount, reset, getOrder, details, setTypeOrder, typeOrder } = useContext(OrderContext);
 
-  const {socket} =  useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -123,73 +123,77 @@ export const NewOrderSummary = () => {
   return (
     <Card>
 
-    <CardHeader title='Datos del pedido' />
-    <CardContent>
+      <CardHeader title='Datos del pedido' />
+      <CardContent>
 
-      <Box display='flex' gap={2} justifyContent='center'>
+        <Box display='flex' gap={2} justifyContent='center'>
 
-        {
-          Object.keys(TypeOrder).map((key) => (
-            <Button
-              variant={typeOrder === key ? "contained" : "outlined"}
-              key={key}
-              sx={{
+          {
+            Object.keys(TypeOrder).map((key) => (
+              <Button
+                variant={typeOrder === key ? "contained" : "outlined"}
+                key={key}
+                sx={{
 
-                '&:hover': {
-                  backgroundColor: 'primary.main',
-                  color: 'white'
-                }
+                  '&:hover': {
+                    backgroundColor: 'primary.main',
+                    color: 'white'
+                  }
 
-              }}
+                }}
 
-              onClick={() => setTypeOrder(key as TypeOrder)}
-
-
-            >
-              {TypeOrder[`${key}` as keyof typeof TypeOrder]}
-            </Button>
-          ))
-        }
-
-      </Box>
-
-      <Box display='flex' gap={1} alignItems='center' my={2}>
-        <TableOrder />
-
-        <People />
-
-      </Box>
+                onClick={() => setTypeOrder(key as TypeOrder)}
 
 
-      <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+              >
+                {TypeOrder[`${key}` as keyof typeof TypeOrder]}
+              </Button>
+            ))
+          }
 
-        <DataClient />
-      </Box>
+        </Box>
 
-      <Box >
-        <OrderDetails />
+        <Box display='flex' gap={1} alignItems='center' my={2}>
 
-      </Box>
+          {
+            typeOrder === "IN_PLACE" as TypeOrder &&
+            <TableOrder />
+          }
 
-     
-      <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+          <People />
 
-        <Typography variant='h4' fontWeight='bold'>Total </Typography>
-        <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
-      </Box>
-
-
-
-      <Box mt={2}>
-        <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth >Crear pedido</Button>
-
-      </Box>
+        </Box>
 
 
-    </CardContent>
+        <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+
+          <DataClient />
+        </Box>
+
+        <Box >
+          <OrderDetails />
+
+        </Box>
 
 
-  </Card>
+        <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+
+          <Typography variant='h4' fontWeight='bold'>Total </Typography>
+          <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
+        </Box>
+
+
+
+        <Box mt={2}>
+          <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth >Crear pedido</Button>
+
+        </Box>
+
+
+      </CardContent>
+
+
+    </Card>
 
   )
 }

@@ -10,7 +10,7 @@ import { OrderDetails } from "./OrderDetails.component";
 import { OrderTable } from "./OrderTable.component";
 import { PeopleOrder } from "./PeopleOrder.component";
 import { SelectTypeOrder } from "./SelectTypeOrder.component";
-import { IOrder } from '../../../../../../models/orders.model';
+import { IOrder, TypeOrder } from '../../../../../../models/orders.model';
 import { Label } from "../../../../../../components/ui";
 
 
@@ -51,22 +51,22 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             <Box>
               <Typography variant='h4' fontWeight='bold'>Pedido N° {order.num}</Typography>
               {
-              !order.isPaid && order.status === OrderStatus.DELIVERED
-                ? <Label color='warning'>Por pagar</Label>
-                :
-                <Label color='info'>
+                !order.isPaid && order.status === OrderStatus.DELIVERED
+                  ? <Label color='warning'>Por pagar</Label>
+                  :
+                  <Label color='info'>
 
-                  {
-                    order.isPaid
-                      ? 'PAGADO'
-                      : OrderStatusSpanish[`${order.status as OrderStatus}`]
+                    {
+                      order.isPaid
+                        ? 'PAGADO'
+                        : OrderStatusSpanish[`${order.status as OrderStatus}`]
 
-                  }
-                </Label>
-                }
+                    }
+                  </Label>
+              }
             </Box>
 
-            <Box>
+            <Box display='flex' gap={1}>
               <Button
                 variant='contained'
                 color='error'
@@ -97,11 +97,20 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
             <Typography variant='h5'>Hora: {format(new Date(order?.createdAt), 'HH:mm')}</Typography>
-            <OrderTable />
+
+            {
+              order.type === "IN_PLACE" as TypeOrder &&
+              <OrderTable />
+
+            }
           </Box>
 
           <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-            <Typography variant='body1'>Mesero: <b>{order.user.person.firstName} {order.user.person.lastName} </b></Typography>
+            <Box>
+              <Typography variant='body1'>Mesero: </Typography>
+              <b>{order.user.person.firstName} {order.user.person.lastName} </b>
+
+            </Box>
             <Box sx={{ width: '100px' }}>
               <PeopleOrder people={order.people} />
 

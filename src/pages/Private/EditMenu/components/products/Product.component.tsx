@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { Typography, Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch } from '@mui/material/';
+import { Typography, Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch, CardHeader } from '@mui/material/';
 
 import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 
@@ -30,9 +30,9 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
 
   const navigate = useNavigate();
 
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const {loading, callEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint } = useFetchAndLoad();
 
 
   const editProduct = () => {
@@ -43,13 +43,13 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
 
   const changeStatusProduct = async (product: IProduct) => {
 
-    await callEndpoint(updateProductS(product.id, {isActive: !product.isActive}))
+    await callEndpoint(updateProductS(product.id, { isActive: !product.isActive }))
       .then((res) => {
-        dispatch(updateProduct({...product, isActive: !product.isActive}));
+        dispatch(updateProduct({ ...product, isActive: !product.isActive }));
 
       })
       .catch((err) => {
-        enqueueSnackbar(err.message, {variant: 'error'})
+        enqueueSnackbar(err.message, { variant: 'error' })
       })
 
 
@@ -60,70 +60,69 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
     <>
 
 
-      <Card sx={{ 
-        display: 'flex',
-         }} >
+      <Card
+      // sx={{ 
+      //   display: 'flex',
+      //    }} 
+      >
         {/* <CardMedia
           component="img"
           sx={{ width: 160 }}
           image={producto.images ? producto.images : '/static/images/products/no-image.png'}
           alt="Product"
         /> */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
 
-          <CardContent >
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Typography variant="h4" >{producto.name}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2" >{producto.description ? producto.description : 'No se ha añadido descripción'}</Typography>
-              </Grid>
-              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="body2" >$ {producto.price}</Typography>
-                <Typography variant="body1" >
+      
 
-                  {
-                    producto.isActive
-                      ? <Label color='info'>
 
-                        {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
+        <CardContent >
 
-                      </Label>
-                      : <Label color='error'>
-                        Eliminado
-                      </Label>
-                  }
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-              </Grid>
+          <Box display='flex' justifyContent='space-between'>
 
-            </Grid>
-            {/* <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography> */}
-          </CardContent>
+            <Typography variant='h4' >{producto.name}</Typography>
+            <Typography variant="body1" >
 
-          <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
+              {
+                producto.isActive
+                  ? <Label color='info'>
+
+                    {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
+
+                  </Label>
+                  : <Label color='error'>
+                    Eliminado
+                  </Label>
+              }
+            </Typography>
+          </Box>
+
+          <Typography variant="body1" >$ {producto.price}</Typography>
+          <Typography  >{producto.description ? producto.description : 'No se ha añadido descripción'}</Typography>
 
 
 
-            <Tooltip title='Editar'>
+          {/* <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography> */}
+        </CardContent>
 
-              <IconButton
-                color='primary'
-                onClick={() => editProduct()}
+        <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
 
-              >
-                <EditOutlined />
-              </IconButton>
-            </Tooltip>
-            <Switch checked={producto.isActive} onClick={() => changeStatusProduct(producto)} color={producto.isActive ? 'success' : 'error'} />
+          <Tooltip title='Editar'>
+
+            <IconButton
+              color='primary'
+              onClick={() => editProduct()}
+
+            >
+              <EditOutlined />
+            </IconButton>
+          </Tooltip>
+          <Switch checked={producto.isActive} onClick={() => changeStatusProduct(producto)} color={producto.isActive ? 'success' : 'error'} />
 
 
 
 
-          </CardActions>
-        </Box>
+        </CardActions>
+
 
 
 

@@ -94,15 +94,22 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
 
   const createNewDetail = () => {
 
+    sharingInformationService.setSubject(
+      true,
+      {
+        product,
+        quantity: counter
+      }
+    )
 
-    const detail = activeOrder!.details.find(det => det.product.id === product.id);
+    // const detail = activeOrder!.details.find(det => det.product.id === product.id);
 
-    if (detail) {
-      updateOrderDetail(detail);
+    // if (detail) {
+    //   updateOrderDetail(detail);
 
-    } else {
-      createOrderDetail();
-    }
+    // } else {
+    //   createOrderDetail();
+    // }
 
 
 

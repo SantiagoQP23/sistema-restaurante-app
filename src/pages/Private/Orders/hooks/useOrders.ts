@@ -4,6 +4,9 @@ import { SocketContext } from '../../../../context';
 import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
 import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
+import { CreateOrderDetailDto } from '../dto/create-order.dto';
+import { useDispatch } from 'react-redux';
+import { setActiveOrder } from '../../../../redux';
 
 
 
@@ -13,6 +16,8 @@ export const useOrders = () => {
   const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useDispatch();
 
 
   const updateOrderDetail = (updateOderDetailDto: UpdateOrderDetailDto) => {
@@ -27,10 +32,26 @@ export const useOrders = () => {
     })
   }
 
+  const createOrderDetail = (data: CreateOrderDetailDto) => {
+  
+
+    socket?.emit(EventsEmitSocket.addOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+
+      if (ok) {
+        dispatch(setActiveOrder(order!))
+
+      } else {
+        enqueueSnackbar(msg, { variant: 'error' });
+      }
+
+    });
+  }
+
 
 
   return {
-    updateOrderDetail
+    updateOrderDetail,
+    createOrderDetail
 
 
 

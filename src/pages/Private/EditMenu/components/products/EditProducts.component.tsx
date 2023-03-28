@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { MenuContext } from '../../../../../context/MenuContext';
 import { IProduct, PrivateRoutes } from '../../../../../models';
 import { Product } from './Product.component';
-import { resetActiveProduct, selectMenu,  setActiveCategory, setActiveProduct, setActiveProducts } from '../../../../../redux';
+import { resetActiveProduct, selectMenu, setActiveCategory, setActiveProduct, setActiveProducts } from '../../../../../redux';
 import { DeleteProduct } from './DeleteProduct.component';
 import { useModal } from '../../../../../hooks';
 
@@ -91,8 +91,13 @@ export const EditProducts: FC<Props> = () => {
           >
           </Button>
 
+          <Box>
+            <Typography variant="h4" >{activeCategory && activeCategory!.name}</Typography>
+            <Typography>
+              {activeCategory?.products.length} productos
 
-          <Typography align="center" variant="h4" >{activeCategory && activeCategory!.name}</Typography>
+            </Typography>
+          </Box>
 
         </Grid>
 
@@ -110,14 +115,9 @@ export const EditProducts: FC<Props> = () => {
 
 
 
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
+     
 
-      <Card>
-          <CardContent>
-            <Typography variant='body2'>Productos</Typography>
-            <Typography variant='h4'>{activeCategory?.products.length}</Typography>
-          </CardContent>
-        </Card>
+       
         <Box>
           <InputLabel id='select-categoria'>Categoria</InputLabel>
           <Select
@@ -140,7 +140,6 @@ export const EditProducts: FC<Props> = () => {
         </Box>
 
 
-      </Box>
 
 
 
@@ -156,7 +155,7 @@ export const EditProducts: FC<Props> = () => {
           {
             activeCategory!.products.length > 0 && activeCategory!.products.map(producto => (
               <Grid key={producto.id!}
-                item xs={12} sm={6} >
+                item xs={12} sm={6} lg={4}>
 
                 <Product
 

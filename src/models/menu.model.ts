@@ -52,7 +52,7 @@ export enum ProductStatus {
 }
 export enum ProductStatusSpanish {
   AVAILABLE = 'DISPONIBLE',
-  OUT_OF_STOCK = 'NO DISPONIBLE',
+  OUT_OF_STOCK = 'AGOTADO',
   OUT_OF_SEASON = 'FUERA DE TEMPORADA',
 }
 

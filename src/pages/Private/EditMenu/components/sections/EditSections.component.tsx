@@ -48,8 +48,11 @@ export const EditSections = () => {
       <Box mb={2} display='flex' justifyContent='space-between' alignItems='center'>
 
        
+        <Box>
+        <Typography align='center' variant="h4">Secciones ({sections.length})</Typography>
+        <Typography ></Typography>
 
-        <Typography align='center' variant="h4">Secciones</Typography>
+        </Box>
 
         <Button
           variant="contained"

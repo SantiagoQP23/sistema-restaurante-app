@@ -5,5 +5,4 @@ export * from './EditOrder/MenuAddProduct/ProductListAddToOrder.component';
 export * from './ModalEditOrderDetail.component';
 export * from './Orders/ContadorPedidos';
 export * from './Orders/Order.component';
-export * from './ReceiptOrder/PdfReceipt';
 export * from './ReceiptOrder';

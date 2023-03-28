@@ -1,17 +1,16 @@
 import { ArrowBack, Done, EditOutlined } from "@mui/icons-material";
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader, IconButton } from '@mui/material';
-import Add from "date-fns/add";
+import { Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader, IconButton } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 import { Label } from "../../../../../components/ui";
 import { format } from "date-fns";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import { ReceiptPdf } from "../../components/ReceiptOrder/PdfReceipt/ReceiptPdf.component";
 import { statusModalPayOrder, statusModalDiscountOrder } from '../../services/orders.service';
 import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
 import { Divider } from '@mui/material/';
 import { es } from "date-fns/locale";
+import { PdfReceiptOrder } from '../../components/ReceiptOrder/pdf/PdfReceiptOrder.component';
 
 
 const TAX_RATE = 0.07;
@@ -128,25 +127,28 @@ export const ReceiptOrder = () => {
               </Box>
               {
                 !activeOrder.isPaid && activeOrder.status === OrderStatus.DELIVERED
-                ? <Label color='warning'>Por pagar</Label>
-                :
-                <Label color='info'>
+                  ? <Label color='warning'>Por pagar</Label>
+                  :
+                  <Label color='info'>
 
-                  {
-                    activeOrder.isPaid
-                      ? 'PAGADO'
-                      : OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]
+                    {
+                      activeOrder.isPaid
+                        ? 'PAGADO'
+                        : OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]
 
-                  }
-                </Label>
+                    }
+                  </Label>
               }
             </Box>
 
             <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-              <Typography variant='body1'>Mesero: <b>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName} </b></Typography>
               <Box>
-                <Typography variant='h5' fontWeight='bold'>Personas</Typography>
-                <Typography variant='body1' align="right">{activeOrder?.people}</Typography>
+                <Typography variant='body1'>Mesero: </Typography>
+                <b>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName} </b>
+              </Box>
+              <Box>
+                <Typography variant='body1' >Personas</Typography>
+                <Typography variant='h5' align="right">{activeOrder?.people}</Typography>
               </Box>
             </Box>
 
@@ -247,7 +249,10 @@ export const ReceiptOrder = () => {
                   Descuento
                 </Button> */}
 
-                <PDFDownloadLink document={<ReceiptPdf order={activeOrder!} />} fileName={'pedido-' + activeOrder!.id}>
+                <PDFDownloadLink
+                  document={<PdfReceiptOrder order={activeOrder!} />}
+                  fileName={'pedido-' + activeOrder!.id}
+                >
                   <Button
                     variant='contained'
                   >PDF

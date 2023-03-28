@@ -11,6 +11,12 @@ import { SocketContext } from '../../../../../context';
 import { sharingInformationService } from '../../services/sharing-information.service';
 import { OrderContext } from '../../context/Order.context';
 import { useSnackbar } from 'notistack';
+import { useSelector } from 'react-redux';
+import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
+
+import { CreateOrderDetailDto } from "../../dto/create-order-detail.dto";
+import { useOrders } from '../../hooks/useOrders';
+
 
 
 
@@ -26,6 +32,8 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
   const subscription$ = sharingInformationService.getSubject();
 
+  const { activeOrder } = useSelector(selectOrders);
+
   const [open, setOpen] = useState(false);
 
   const [detail, setDetail] = useState<ICreateOrderDetail>();
@@ -35,10 +43,36 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const {createOrderDetail} = useOrders();
+
 
   const crearDetalle = () => {
 
-    addDetail({ ...detail!, description })
+    if(activeOrder){
+      const data: CreateOrderDetailDto = {
+        orderId: activeOrder.id,
+        productId: detail!.product.id,
+        quantity: detail!.quantity
+      }
+
+      if (description) {
+        data.description = description;
+      }
+
+      createOrderDetail(data);
+
+      
+
+
+
+    } else {
+
+      addDetail({ ...detail!, description })
+    }
+
+
+
+
 
     enqueueSnackbar(`${detail?.product.name} agregado`, { variant: 'success' })
 

@@ -1,3 +1,4 @@
-export * from './PdfReceipt/InvoiceItemsTable.component';
-
-export * from './PdfReceipt/ReceiptPdf.component';
+export * from './ModalDiscountOrder.component';
+export * from './ModalPayOrder.component';
+export * from './TableOrder.component';
+export * from './pdf/PdfReceiptOrder.component';

@@ -1,9 +1,9 @@
-import {  useEffect } from 'react'
-import {  useNavigate } from 'react-router-dom';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Material UI
-import { Typography, Box, Grid, Button,  MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider } from '@mui/material/'
+import { Typography, Box, Grid, Button, MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider } from '@mui/material/'
 
 // Iconos
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -98,14 +98,20 @@ export function EditCategories() {
         <Grid item display='flex' alignItems='center'>
           <Button
             onClick={backRoute}
-            variant='outlined'
+
             size='small'
           >
             <ArrowBackIcon />
           </Button>
 
-
-          <Typography align="center" variant="h4" >Categorías de {activeSection?.name}</Typography>
+          <Box>
+            <Typography variant="h4">
+              {activeSection?.name}
+            </Typography>
+            <Typography>
+              {activeSection?.categories.length} categorías
+            </Typography>
+          </Box>
 
         </Grid>
         <Grid item>
@@ -127,8 +133,8 @@ export function EditCategories() {
 
       <Grid container spacing={1} sx={{ my: 2 }}>
 
-      <Grid item xs={12} sm={3}>
-        
+        <Grid item xs={12} sm={3}>
+
 
           <Typography variant='body2'>Sección</Typography>
           <Select
@@ -145,21 +151,8 @@ export function EditCategories() {
               ))
             }
           </Select>
-          
+
         </Grid>
-
-        <Grid item xs={12} sm={3}>
-
-          <Card>
-            <CardContent>
-              <Typography variant='body2'>Categorías</Typography>
-              <Typography variant='h4'>{activeSection?.categories.length}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-
-       
 
       </Grid>
 
