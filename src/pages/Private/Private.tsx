@@ -74,7 +74,12 @@ export const Private = () => {
 
 
   return (
-    <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'center'}}>
+    <SnackbarProvider 
+    maxSnack={3} 
+    anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+    autoHideDuration={3000}
+    
+    >
 
       <SidebarProvider>
 

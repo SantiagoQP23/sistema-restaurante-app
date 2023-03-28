@@ -1,7 +1,7 @@
 
-import { Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-import { Container } from '@mui/material';
+import { Container, Button } from '@mui/material';
 
 import { PageTitleWrapper, PageTitle } from '../../../components/ui';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -24,6 +24,8 @@ import { SocketContext } from "../../../context";
 import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder } from "../../../redux";
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalEditOrderDetail } from "./components";
+import { Cached, Replay } from "@mui/icons-material";
+import { LoadingButton } from '@mui/lab';
 
 
 
@@ -37,11 +39,7 @@ export const Orders = () => {
   const { activeOrder } = useSelector(selectOrders)
 
 
-  const getOrdersCall = async () => await callEndpoint(getOrdersToday());
 
-  const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
-
-  useAsync(getOrdersCall, loadOrdersState, () => { }, []);
 
   const { socket } = useContext(SocketContext);
 
@@ -109,12 +107,38 @@ export const Orders = () => {
 
   }, [socket]);
 
+  const refreshOrders = () => {
+
+    callEndpoint(getOrdersToday())
+      .then((resp) => {
+
+        const { data } = resp;
+
+        dispatch(loadOrders(data));
+      })
+  }
+
+
+  const getOrdersCall = async () => await callEndpoint(getOrdersToday());
+
+  const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
+
+  useAsync(getOrdersCall, loadOrdersState, () => { }, []);
+
 
 
   return (
     <>
       <PageTitleWrapper>
-        <PageTitle heading='Pedidos ' />
+        <PageTitle heading='Pedidos ' docs={
+          <LoadingButton
+            variant="contained"
+            loading={loading}
+            onClick={refreshOrders}
+          >
+            <Cached />
+          </LoadingButton>
+        } />
         <Clock />
       </PageTitleWrapper>
 
@@ -131,7 +155,7 @@ export const Orders = () => {
         </OrderProvider>
 
       </Container>
-     
+
 
       <ModalDeleteOrder />
       <ModalDiscountOrder />

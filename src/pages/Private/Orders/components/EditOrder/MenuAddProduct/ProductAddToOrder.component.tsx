@@ -30,7 +30,7 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
   const { activeOrder } = useSelector(selectOrders);
 
   const [subtotal, setSubtotal] = useState(counter * product.price);
-  const { addDetail } = useContext(OrderContext);
+  const { addDetail, details } = useContext(OrderContext);
 
   useEffect(() => {
     setSubtotal(counter * product.price)
@@ -94,29 +94,20 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
 
   const createNewDetail = () => {
 
-    if (activeOrder) {
-      const detail = activeOrder.details.find(det => det.product.id === product.id);
 
-      if (detail) {
-        updateOrderDetail(detail);
+    const detail = activeOrder!.details.find(det => det.product.id === product.id);
 
-      } else {
-        createOrderDetail();
-      }
+    if (detail) {
+      updateOrderDetail(detail);
 
-    }
-    else {
-
-      addDetail({ product, quantity: counter })
-      enqueueSnackbar(`${product.name} agregado`, { variant: 'success' })
+    } else {
+      createOrderDetail();
     }
 
 
-    const detail:ICreateOrderDetail = {product, quantity: counter}
-    
-    sharingInformationService.setSubject(true, detail); 
-   
- 
+
+
+
   }
 
 

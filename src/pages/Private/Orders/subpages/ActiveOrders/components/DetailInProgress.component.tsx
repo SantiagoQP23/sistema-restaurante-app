@@ -65,7 +65,10 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
               {`${detail.quantity} -  ${detail.product.name}`}
 
             </Typography>
-            <Typography variant="h6" >
+            <Typography
+              variant="h6"
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
               {detail.description}
             </Typography>
           </Box>

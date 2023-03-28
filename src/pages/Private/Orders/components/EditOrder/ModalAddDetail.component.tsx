@@ -1,6 +1,5 @@
 import React, { FC, useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
 import {
   TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText,
@@ -11,11 +10,12 @@ import { ICreateOrderDetail } from '../../../../../models/orders.model';
 import { SocketContext } from '../../../../../context';
 import { sharingInformationService } from '../../services/sharing-information.service';
 import { OrderContext } from '../../context/Order.context';
+import { useSnackbar } from 'notistack';
 
 
 
 interface Props {
-  
+
 }
 
 
@@ -31,17 +31,20 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
   const [detail, setDetail] = useState<ICreateOrderDetail>();
 
 
-  const {addDetail, updateDetail} = useContext(OrderContext);
+  const { addDetail, updateDetail } = useContext(OrderContext);
 
+  const { enqueueSnackbar } = useSnackbar();
 
-
-  const dispatch = useDispatch();
-
-  const { socket } = useContext(SocketContext);
 
   const crearDetalle = () => {
 
-    updateDetail({...detail!, description})
+    addDetail({ ...detail!, description })
+
+    enqueueSnackbar(`${detail?.product.name} agregado`, { variant: 'success' })
+
+
+
+    // updateDetail({...detail!, description})
 
     setOpen(false)
   }
@@ -51,7 +54,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
       setDetail(data.detalle)
       setOpen(!!data.value);
-      
+
     })
   }, [])
 
@@ -83,7 +86,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
               multiline
               rows={4}
               defaultValue={description}
-              sx={{ width: 300 }}
+
               onBlur={(e) => {
                 console.log(e.target.value);
                 setDescription(e.target.value);
@@ -112,7 +115,11 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
             }}
 
           >Cancelar</Button>
-          <Button onClick={crearDetalle}>Pedir producto</Button>
+          <Button
+            onClick={crearDetalle}
+            variant="contained"
+            
+          >Pedir producto</Button>
         </DialogActions>
       </Dialog>
     </>

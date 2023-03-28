@@ -1,10 +1,10 @@
 import { FC, useContext } from 'react';
 import {  Box, Typography,  Grid, Divider } from '@mui/material';
-import { OrderDetail } from "./OrderDetail.component"
+import { OrderDetail } from "../../../components/EditOrder/OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
-import { OrderContext } from '../../context/Order.context';
-import { IOrderDetail } from '../../../../../models';
-import { ModalUpdateDetail } from './ModalUpdateDescriptionDetail.component';
+import { OrderContext } from '../../../context/Order.context';
+import { IOrderDetail } from '../../../../../../models';
+import { ModalUpdateDetail } from '../../../components/EditOrder/ModalUpdateDescriptionDetail.component';
 
 
 

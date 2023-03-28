@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 
 import { Box, Button } from "@mui/material"
-import { TypeOrder } from "../../../../../models"
+import { TypeOrder } from "../../../../../../models"
 import { useSelector } from 'react-redux';
-import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
-import { SocketContext } from "../../../../../context";
-import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
+import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
+import { SocketContext } from "../../../../../../context";
+import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
 import { useSnackbar } from 'notistack';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { UpdateOrderDto } from '../../../dto/update-order.dto';
 
 
 
@@ -45,7 +45,7 @@ export const SelectTypeOrder = () => {
 
 
   return (
-    <Box display='flex' sx={{gap: 2}}>
+    <Box display='flex' sx={{gap: 2}} justifyContent='center'>
 
 
       {

@@ -3,11 +3,11 @@ import { Box, TextField, IconButton } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { FC, useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SocketContext } from "../../../../../context";
-import { selectOrders, setActiveOrder } from "../../../../../redux";
-import { UpdateOrderDto } from "../../dto/update-order.dto";
-import { EventsEmitSocket } from "../../interfaces/events-sockets.interface";
-import { SocketResponseOrder } from "../../interfaces/responses-sockets.interface";
+import { SocketContext } from "../../../../../../context";
+import { selectOrders, setActiveOrder } from "../../../../../../redux";
+import { UpdateOrderDto } from "../../../dto/update-order.dto";
+import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
+import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
 
 interface Props {
   people: number;

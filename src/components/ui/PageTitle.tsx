@@ -5,13 +5,13 @@ import { Typography, Button, Grid } from '@mui/material';
 interface PageTitleProps {
   heading?: string;
   subHeading?: string;
-  docs?: string;
+  docs?: React.ReactNode;
 }
 
 export const PageTitle: FC<PageTitleProps> = ({
   heading = '',
   subHeading = '',
-  docs = '',
+  docs,
   ...rest
 }) => {
   return (
@@ -26,18 +26,10 @@ export const PageTitle: FC<PageTitleProps> = ({
       </Grid>
 
 
-     {/* docs &&  <Grid item>
-        <Button
-          href={docs}
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{ mt: { xs: 2, md: 0 } }}
-          variant="contained"
-          startIcon={<AddTwoToneIcon fontSize="small" />}
-        >
-          {heading} Documentation
-        </Button>
-      </Grid>  */}
+      <Grid item>
+        {docs}
+      </Grid>
+
     </Grid>
   );
 };

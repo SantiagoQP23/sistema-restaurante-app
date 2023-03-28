@@ -44,7 +44,12 @@ const PendingDetail: FC<{ detail: IOrderDetail }> = ({ detail }) => {
             {`${detail.quantity - detail.qtyDelivered}`} - {`${detail.product.name}`}
           </Typography>
 
-          <Typography variant="h6" color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
+          <Typography
+            variant="inherit"
+            
+            color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}
+            style={{ whiteSpace: 'pre-wrap' }}
+            >
             {detail.description}
           </Typography>
 
@@ -90,7 +95,7 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
             }}
             color="inherit"
             size="small"
-           onClick={() => editDetail()}
+            onClick={() => editDetail()}
           >
             <EditTwoTone fontSize="small" />
           </IconButton>

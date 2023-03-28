@@ -1,16 +1,16 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { ITable } from '../../../../../models/table.model';
+import { ITable } from '../../../../../../models/table.model';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTables } from '../../../../../redux/slices/tables/tables.slice';
-import { selectOrders, setActiveOrder } from '../../../../../redux/slices/orders/orders.slice';
+import { selectTables } from '../../../../../../redux/slices/tables/tables.slice';
+import { selectOrders, setActiveOrder } from '../../../../../../redux/slices/orders/orders.slice';
 import { useSnackbar } from 'notistack';
 import { Accordion, AccordionDetails, AccordionSummary, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
-import { UpdateOrderDto } from '../../dto/update-order.dto';
-import { SocketContext } from '../../../../../context/SocketContext';
-import { EventsEmitSocket } from '../../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../../interfaces/responses-sockets.interface';
-import { TypeOrder } from '../../../../../models/orders.model';
+import { UpdateOrderDto } from '../../../dto/update-order.dto';
+import { SocketContext } from '../../../../../../context/SocketContext';
+import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
+import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
+import { TypeOrder } from '../../../../../../models/orders.model';
 
 interface Props {
 

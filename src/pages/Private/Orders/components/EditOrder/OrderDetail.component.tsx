@@ -103,7 +103,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
         <Typography
-          variant="body1"
+          variant="h5"
           color="initial"
 
         >
@@ -144,10 +144,14 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
       <Box sx={{ display: "flex" }}>
         <Box sx={{ flexGrow: 1 }} >
 
-          <Typography variant="body2" color={detail.description ? "orange" : ""}>
+          <Typography
+            variant="body2"
+            color={detail.description ? "darkslateblue" : ""}
+            style={{ whiteSpace: 'pre-wrap' }}
+          >
             {detail.description && detail.description}
             {
-             
+
               <Button
                 onClick={editDetail}
                 variant="text"

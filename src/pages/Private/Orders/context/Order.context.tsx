@@ -55,7 +55,10 @@ export const OrderProvider: FC<Props> = ({ children }) => {
       setDetails((details) => [detail, ...details]);
       setAmount((amount) => amount + detail.product.price * detail.quantity);
 
+
+
     } else {
+      updateDetail(detail);
       console.log("Ya existe el detalle");
       //TODO: Snackbar "Ya existe el detalle"
     }
