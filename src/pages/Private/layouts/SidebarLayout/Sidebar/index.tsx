@@ -34,24 +34,26 @@ const SidebarWrapper = styled(Box)(
 `
 );
 
+
+const Title = () => {
+  return (
+    <>
+      <Typography variant='h5' color='white' align='center'>Restaurante</Typography>
+      <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
+      <Typography variant='subtitle2'  align='center'>v0.1.0</Typography>
+    </>
+  )
+}
+
+
+
 function Sidebar() {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
 
-  const curThemeName = localStorage.getItem('appTheme') || 'PureLightTheme';
 
   const closeSidebar = () => toggleSidebar();
   const theme = useTheme();
 
-  const setNameTheme = useContext(ThemeContext);
-
-  const handleTheme = (
-    event: React.MouseEvent<HTMLElement>,
-    newTheme: string | null,
-  ) => {
-    if (newTheme !== null) {
-      setNameTheme(newTheme);
-    }
-  };
 
   return (
     <>
@@ -83,8 +85,7 @@ function Sidebar() {
               <LogoSign />
             </Box> */}
 
-            <Typography variant='h4' color='white' align='center'>Restaurante</Typography>
-            <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
+          <Title />
 
           </Box>
 
@@ -105,21 +106,6 @@ function Sidebar() {
           }}
         />
         <Box p={2}>
-
-          <ToggleButtonGroup
-
-            onChange={handleTheme}
-            exclusive
-            value={curThemeName}
-          >
-            <ToggleButton value="PureLightTheme">
-              <LightMode />
-            </ToggleButton>
-            <ToggleButton value={"NebulaFighterTheme"}>
-              <DarkMode />
-            </ToggleButton>
-            <Typography variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
-          </ToggleButtonGroup>
 
 
 
@@ -145,19 +131,13 @@ function Sidebar() {
         >
           <Scrollbar>
             <Box mt={3}>
-              {/* <Box
-                mx={2}
-                sx={{
-                  width: 52
-                }}
-              >
-                <LogoSign />
-              </Box> */}
-              <Typography variant='h3' color='white' align='center'>Restaurante</Typography>
-              <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
+
+              <Title />
+
+
             </Box>
 
-            
+
 
 
             <Divider
@@ -169,31 +149,19 @@ function Sidebar() {
             />
             <SidebarMenu />
 
-            </Scrollbar>
+          </Scrollbar>
 
-            <Divider
-              sx={{
-                background: theme.colors.alpha.trueWhite[10]
-              }}
-            />
-            <Box p={2}>
+          <Divider
+            sx={{
+              background: theme.colors.alpha.trueWhite[10]
+            }}
+          />
+          <Box p={1} textAlign='center' >
 
-              <ToggleButtonGroup
+            <Typography>Desarrollado por </Typography>
+            <Typography variant='h5' >Santiago Quirumbay</Typography>
 
-                onChange={handleTheme}
-                exclusive
-                value={curThemeName}
-              >
-                <ToggleButton value="PureLightTheme">
-                  <LightMode />
-                </ToggleButton>
-                <ToggleButton value={"NebulaFighterTheme"}>
-                  <DarkMode />
-                </ToggleButton>
-                <Typography variant='body1' align='center'> Desarrollado por <b>Santiago Quirumbay</b></Typography>
-              </ToggleButtonGroup>
-
-            </Box>
+          </Box>
         </SidebarWrapper>
       </Drawer>
     </>
