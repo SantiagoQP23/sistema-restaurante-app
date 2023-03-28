@@ -40,7 +40,7 @@ const Title = () => {
     <>
       <Typography variant='h5' color='white' align='center'>Restaurante</Typography>
       <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
-      <Typography variant='subtitle2'  align='center'>v0.1.0</Typography>
+      <Typography variant='subtitle2' color='gray' align='center'>v0.1.0</Typography>
     </>
   )
 }
@@ -85,7 +85,7 @@ function Sidebar() {
               <LogoSign />
             </Box> */}
 
-          <Title />
+            <Title />
 
           </Box>
 
@@ -105,7 +105,11 @@ function Sidebar() {
             background: theme.colors.alpha.trueWhite[10]
           }}
         />
-        <Box p={2}>
+        <Box p={2} textAlign='center'>
+
+          <Typography>Desarrollado por </Typography>
+          <Typography variant='h5' >Santiago Quirumbay</Typography>
+
 
 
 
