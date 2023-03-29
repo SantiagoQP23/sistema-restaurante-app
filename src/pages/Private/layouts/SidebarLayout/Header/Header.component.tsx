@@ -17,8 +17,8 @@ import { SidebarContext } from '../../../contexts/SidebarContext';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 
 import HeaderButtons from './Buttons';
-import HeaderUserbox from './Userbox';
-import HeaderMenu from './Menu';
+import HeaderUserbox from './components/Userbox.component';
+import HeaderMenu from './components/Menu.component';
 
 // background-color: ${alpha(theme.header.background, 0.95)};
 const HeaderWrapper = styled(Box)(

@@ -1,49 +1,17 @@
 import { lazy } from 'react';
 
 import { Navigate, RouteObject } from "react-router-dom";
-import SidebarLayout from '../layouts/SidebarLayout/index';
-import Status404 from '../../Status/Status404/index';
+
+import SidebarLayout from '../layouts/SidebarLayout/SidebarLayout.component';
+
 import { PrivateRoutes } from "../../../models";
-import { EditSections } from '../EditMenu/components/sections/EditSections.component';
-import { ClientsList } from '../Clients/components';
-import { EditClient } from '../Clients/components/EditClient/EditClient.component';
-import { EditCategories, EditCategory, EditProducts, EditSection } from '../EditMenu/components';
-import { EditProduct } from '../EditMenu/components/products/EditProduct.component';
-import { ListTables } from '../Tables/components';
-import { AddOrder, EditOrder, ListOrders } from '../Orders/subpages';
-import { EditTable } from '../Tables/components/EditTable.component';
-import { ListActiveOrders } from '../Orders/subpages/ActiveOrders/components/ListActiveOrders.component';
-import { AddProductsOrder } from '../Orders/subpages/AddProductsOrder.component';
-import { AddClient } from '../Clients/components/AddClient/AddClient.component';
-import { UsersList } from '../Users/pages/UsersList.page';
-import { AddUser } from '../Users/components/AddUser/AddUser.component';
-import { EditUser } from '../Users/components/EditUser/EditUser.component';
-import { ReceiptOrder } from '../Orders/subpages/ReceiptOrder/ReceiptOrder.page';
-import { AffluenceSimulation } from '../Reports/components/AffluenceSimulator/AffluenceSimulation.component';
-import { AffluencePrediction } from '../Reports/components/AffluencePrediction/AffluencePrediction.component';
-import { DashboardReports } from '../Reports/components/DashboardReports/DashboardReports.component';
-import { StaffPlaning } from '../Reports/components/StaffPlanning/StaffPlaning.component';
-import { MenuNewOrder } from '../Orders/subpages/AddOrder/components/MenuNewOrder.component';
-import { OrdersReports } from '../Reports/components/OrdersReports/OrdersReports.component';
-import { IncomesReports } from '../Reports/components/IncomesReports/IncomesReports.component';
-import { ReceiptOrderReport } from '../Reports/components/OrdersReports/ReceiptOrderReport.component';
-import { SimulatorForms } from '../Reports/components/AffluenceSimulator/SimulatorForms/SimulatorForms.component';
-
-
-
-
-
-const Menu = lazy(() => import('../Menu/Menu.page'))
-const EditMenu = lazy(() => import('../EditMenu/EditMenu.page'))
-const Orders = lazy(() => import('../Orders/Orders.page'))
-const Clients = lazy(() => import('../Clients/Clients.page'))
-const Tables = lazy(() => import('../Tables/Tables.page'))
-const ActiveOrders = lazy(() => import('../Orders/subpages/ActiveOrders/ActiveOrders.page'))
-const Users = lazy(() => import('../Users/Users.page'))
-
-const Reports = lazy(() => import('../Reports/Reports.page'))
-
-
+import { OrderRouter } from '../Orders/router';
+import { MenuRouter } from '../Menu/router/Menu.router';
+import { MenuEditRouter } from '../EditMenu/router/MenuEdit.router';
+import { ClientsRouter } from '../Clients/router/Clients.router';
+import { TablesRouter } from '../Tables/router/Tables.router';
+import { UsersRouter } from '../Users/router/Users.router';
+import { ReportsRouter } from '../Reports/router/Reports.router';
 
 export enum ValidRoles {
   admin = 'admin',
@@ -52,265 +20,243 @@ export enum ValidRoles {
 }
 
 
-export const routes: RouteObject[] = [
+export const PrivateRouter: RouteObject[] = [
 
   {
-    path: '/',
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+    path: "/",
+    element: <SidebarLayout />,
     children: [
+      MenuRouter,
+      OrderRouter,
+      MenuEditRouter,
+      ClientsRouter,
+      TablesRouter,
+      UsersRouter,
+      ReportsRouter,
       {
-        path: '',
+        path: '/auth/login',
         element: <Navigate to='/menu' />
       },
-    ],
-
-  },
-  {
-    path: '/auth/login',
-    element: <Navigate to='/menu' />
-  },
-  {
-    path: PrivateRoutes.MENU,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
       {
-        path: '',
-        element: <Menu />
+        path: "",
+        element: <Navigate to={PrivateRoutes.MENU} />
       },
-
-    ]
-  },
-  {
-    path: PrivateRoutes.MENU_EDIT,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
       {
-        path: '',
-        element: <EditMenu />,
-        children: [
-
-          {
-            path: '',
-            element: <EditSections />,
-
-          },
-          {
-            path: 'seccion',
-            element: <EditSection />,
-
-          },
-          {
-            path: ':nameSection',
-            element: <EditCategories />,
-
-          },
-          {
-            path: 'category',
-            element: <EditCategory />,
-
-          },
-          {
-            path: ':nameSection/:nameCategory',
-            element: <EditProducts />
-          },
-          {
-            path: 'product',
-            element: <EditProduct />,
-
-          },
-
-
-        ]
-
-      },
-
-
-    ]
-  },
-
-  {
-    path: PrivateRoutes.ORDERS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
-      
-       
-          {
-            path: '',
-            element: <Orders />,
-            children: [
-              {
-                path: '',
-                element: <ListOrders />
-              },
-              {
-                path: 'edit/:orderId',
-                element: <EditOrder />
-              },
-              {
-                path: 'edit/:orderId/products',
-                element: <AddProductsOrder />
-              },
-              {
-                path: 'add',
-                element: <AddOrder />
-              },
-              {
-                path: 'add/products',
-                element: <MenuNewOrder />
-              },
-              {
-                path: 'edit/:orderId/receipt',
-                element: <ReceiptOrder />
-              },
-              {
-                path: 'actives',
-                element: <ActiveOrders />,
-                children: [
-                  {
-                    path: '',
-                    element: <ListActiveOrders />
-                  }
-                ]
-    
-              }
-            ]
-
-          },
-
-
-        ]
-
-      
-    
-  },
-
-  {
-    path: PrivateRoutes.CLIENTS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
-      {
-        path: '',
-        element: <Clients />,
-        children: [
-          {
-            path: '',
-            element: <ClientsList />
-          },
-
-          {
-            path: 'edit',
-            element: <EditClient />
-          },
-          {
-            path: 'add',
-            element: <AddClient />
-          },
-
-
-        ]
-      },
-    ]
-  },
-  {
-    path: PrivateRoutes.TABLES,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
-    children: [
-      {
-        path: '',
-        element: <Tables />,
-        children: [
-          {
-            path: '',
-            element: <ListTables />
-          },
-          {
-            path: 'edit',
-            element: <EditTable />
-          }
-
-
-        ]
-      },
-    ]
-  },
-  {
-    path: PrivateRoutes.USERS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin]} />,
-    children: [
-      {
-        path: '',
-        element: <Users />,
-        children: [
-          {
-            path: '',
-            element: <UsersList />
-          },
-          {
-            path: 'edit',
-            element: <EditUser />
-          },
-          {
-            path: 'add',
-            element: <AddUser />
-          },
-        ]
+        path: "*",
+        element: <Navigate to={PrivateRoutes.MENU} />
       }
 
-
-
-
     ]
-  },
-  {
-    path: PrivateRoutes.REPORTS,
-    element: <SidebarLayout allowedRoles={[ValidRoles.admin]} />,
-    children: [
-      {
-        path: '',
-        element: <Reports />,
-        children: [
-          {
-            path: '',
-            element: <DashboardReports />
-          },
-          {
-            path: 'simulation',
-            element: <AffluenceSimulation />
-
-          },
-          {
-            path: 'simulator',
-            element: <SimulatorForms />
-
-          },
-          {
-            path: 'prediction',
-            element: <AffluencePrediction />
-          },
-          {
-            path: 'staff-planning',
-            element: <StaffPlaning />
-          },
-          {
-            path: 'orders',
-            element: <OrdersReports />,
-          },
-          {
-            path: 'orders/receipt',
-            element: <ReceiptOrderReport />
-          },
-          {
-            path: 'incomes',
-            element: <IncomesReports />
-          }
-        ]
-      },
-
-    ]
-  },
-  {
-    path: '*',
-    element: <Status404 />
 
   }
 ]
+
+
+
+
+
+//   {
+//     path: '/',
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Navigate to='/menu' />
+//       },
+//     ],
+
+//   },
+//   {
+//     path: '/auth/login',
+//     element: <Navigate to='/menu' />
+//   },
+//   {
+//     path: PrivateRoutes.MENU,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Menu />
+//       },
+
+//     ]
+//   },
+//   {
+//     path: PrivateRoutes.MENU_EDIT,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <EditMenu />,
+//         children: [
+
+//           {
+//             path: '',
+//             element: <EditSections />,
+
+//           },
+//           {
+//             path: 'seccion',
+//             element: <EditSection />,
+
+//           },
+//           {
+//             path: ':nameSection',
+//             element: <EditCategories />,
+
+//           },
+//           {
+//             path: 'category',
+//             element: <EditCategory />,
+
+//           },
+//           {
+//             path: ':nameSection/:nameCategory',
+//             element: <EditProducts />
+//           },
+//           {
+//             path: 'product',
+//             element: <EditProduct />,
+
+//           },
+
+
+//         ]
+
+//       },
+
+
+//     ]
+//   },
+
+  
+//   {
+//     path: PrivateRoutes.CLIENTS,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Clients />,
+//         children: [
+//           {
+//             path: '',
+//             element: <ClientsList />
+//           },
+
+//           {
+//             path: 'edit',
+//             element: <EditClient />
+//           },
+//           {
+//             path: 'add',
+//             element: <AddClient />
+//           },
+
+
+//         ]
+//       },
+//     ]
+//   },
+//   {
+//     path: PrivateRoutes.TABLES,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Tables />,
+//         children: [
+//           {
+//             path: '',
+//             element: <ListTables />
+//           },
+//           {
+//             path: 'edit',
+//             element: <EditTable />
+//           }
+
+
+//         ]
+//       },
+//     ]
+//   },
+//   {
+//     path: PrivateRoutes.USERS,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Users />,
+//         children: [
+//           {
+//             path: '',
+//             element: <UsersList />
+//           },
+//           {
+//             path: 'edit',
+//             element: <EditUser />
+//           },
+//           {
+//             path: 'add',
+//             element: <AddUser />
+//           },
+//         ]
+//       }
+
+
+
+
+//     ]
+//   },
+//   {
+//     path: PrivateRoutes.REPORTS,
+//     element: <SidebarLayout allowedRoles={[ValidRoles.admin]} />,
+//     children: [
+//       {
+//         path: '',
+//         element: <Reports />,
+//         children: [
+//           {
+//             path: '',
+//             element: <DashboardReports />
+//           },
+//           {
+//             path: 'simulation',
+//             element: <AffluenceSimulation />
+
+//           },
+//           {
+//             path: 'simulator',
+//             element: <SimulatorForms />
+
+//           },
+//           {
+//             path: 'prediction',
+//             element: <AffluencePrediction />
+//           },
+//           {
+//             path: 'staff-planning',
+//             element: <StaffPlaning />
+//           },
+//           {
+//             path: 'orders',
+//             element: <OrdersReports />,
+//           },
+//           {
+//             path: 'orders/receipt',
+//             element: <ReceiptOrderReport />
+//           },
+//           {
+//             path: 'incomes',
+//             element: <IncomesReports />
+//           }
+//         ]
+//       },
+
+//     ]
+//   },
+//   {
+//     path: '*',
+//     element: <Status404 />
+
+//   }
+// ]

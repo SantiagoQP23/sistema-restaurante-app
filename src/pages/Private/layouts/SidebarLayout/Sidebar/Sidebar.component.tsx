@@ -15,12 +15,12 @@ import {
   Typography
 } from '@mui/material';
 
-import SidebarMenu from './SidebarMenu';
+import SidebarMenu from './SidebarMenu/SidebarMenu.component';
 import { LogoSign, Scrollbar } from '../../../components';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
-import Userbox from '../Header/Userbox';
+import Userbox from '../Header/components/Userbox.component';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `

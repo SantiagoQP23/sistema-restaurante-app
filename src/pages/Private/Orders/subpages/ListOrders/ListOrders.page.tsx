@@ -178,6 +178,8 @@ export const ListOrders = () => {
 
         <CardHeader
           title='Filtrar pedidos'
+          subheader={`${filteredOrders.length} pedido(s) `}
+          
         />
 
         <CardContent sx={{ overFlowX: 'auto' }}>
@@ -227,11 +229,14 @@ export const ListOrders = () => {
                 </Select>
               </FormControl>
 
+
             </Grid>
 
 
 
           </Grid>
+
+        
 
 
         </CardContent>

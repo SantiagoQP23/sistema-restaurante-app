@@ -2,8 +2,8 @@ import { FC, ReactNode } from 'react';
 import { Box, alpha, lighten, useTheme, Breadcrumbs, Link} from '@mui/material';
 import { Outlet} from 'react-router-dom';
 
-import Sidebar from './Sidebar';
-import Header from './Header';
+import Sidebar from './Sidebar/Sidebar.component';
+import Header from './Header/Header.component';
 import { BreadcrumbsRouter } from './BreadcrumbsRouter.component';
 import { ValidRoles } from '../../router';
 import { useSelector } from 'react-redux';
@@ -12,10 +12,10 @@ import { UnauthorizedPage } from '../../../Status/Unauthorized.page';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
-  allowedRoles: string[];
+  allowedRoles?: string[];
 }
 
-const SidebarLayout: FC<SidebarLayoutProps> = ({allowedRoles}) => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({}) => {
   const theme = useTheme();
 
   const {user} = useSelector(selectAuth);
@@ -65,12 +65,13 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({allowedRoles}) => {
         >
           <Box display="block">
             {/* <BreadcrumbsRouter /> */}
-              {
+            <Outlet />
+              {/* {
                 user && allowedRoles.includes(user.role.name) 
                 ? <Outlet />
                 : <UnauthorizedPage />
 
-              }
+              } */}
           </Box>
         </Box>
       </Box>

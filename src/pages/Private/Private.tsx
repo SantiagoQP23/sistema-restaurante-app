@@ -13,7 +13,7 @@ import { useDispatch } from 'react-redux';
 import { loadMenu, loadTables, updateTable } from "../../redux"
 import { IProduct, ICategory } from '../../models/menu.model';
 import BaseLayout from "./layouts/BaseLayout"
-import { routes } from "./router"
+import { PrivateRouter } from "./router"
 import { SidebarProvider } from "./contexts/SidebarContext"
 
 import { SnackbarProvider } from 'notistack'
@@ -27,7 +27,7 @@ import { SocketResponseTable } from './Orders/interfaces/responses-sockets.inter
 
 export const Private = () => {
 
-  const content = useRoutes(routes);
+  const content = useRoutes(PrivateRouter);
 
   const dispatch = useDispatch();
 

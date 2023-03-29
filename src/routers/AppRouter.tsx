@@ -29,8 +29,8 @@ export const AppRouter = () => {
 
     <Routes>
       {
-        (status === 'checking' || status === 'not-authenticated')
-          ? (
+        (status === 'not-authenticated')
+          ? 
             <>
 
               <Route path={ PublicRoutes.LOGIN} element={<Login />}></Route>
@@ -39,12 +39,10 @@ export const AppRouter = () => {
               <Route path={ PublicRoutes.RESET_PASSWORD} element={<ResetPassword />}></Route>
               <Route path='/*' element={<Navigate to={PublicRoutes.LOGIN} />} />
             </>
-          )
-          : (
+          
+          : <Route path='/*' element={<Private />} />
 
-            <Route path='/*' element={<Private />} />
-
-          )
+          
       }
 
     </Routes>
