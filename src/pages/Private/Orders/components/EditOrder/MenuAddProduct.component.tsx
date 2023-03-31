@@ -188,6 +188,8 @@ export const MenuAddProduct = () => {
             handleChange={handleChange}
             search={searchProduct}
             placeholder={'Nombre del producto'}
+            value={nameProduct}
+            reset={() => setNameProduct('')}
           />
 
         </Grid>

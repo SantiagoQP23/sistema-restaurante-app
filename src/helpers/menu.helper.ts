@@ -21,11 +21,11 @@ export const getProducts= (sections: ISection[]) :IProduct[]  => {
 
 export const findProductsByName = (name: string, listProducts: IProduct[]): IProduct[] => {
 
-  let products: IProduct[] |  undefined = [];
+  let products: IProduct[] ;
 
-  products = listProducts.filter(product => product.name.toLowerCase().includes(name.toLowerCase())) ;
+  products = listProducts.filter(product => product.name.toLowerCase().includes(name.toLowerCase())) || [] ;
 
 
-  return products || [];
+  return products;
 
 }

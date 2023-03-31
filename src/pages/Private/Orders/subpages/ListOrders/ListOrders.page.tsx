@@ -198,7 +198,10 @@ export const ListOrders = () => {
                   onChange={(e) => changeWaiter(e.target.value)}
                 >
                   <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
+                  {
+                    user && 
                   <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
+                  }
 
                 </Select>
               </FormControl>

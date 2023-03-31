@@ -1,16 +1,18 @@
 import { ChangeEvent, FC } from "react"
 
 import { Typography, Paper, InputBase, IconButton, CircularProgress } from "@mui/material"
-import { Search } from "@mui/icons-material"
+import { Close, Search } from "@mui/icons-material"
 
 interface Props {
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void,
   search: () => void,
   placeholder: string,
-  loading?: boolean
+  loading?: boolean,
+  value?: string,
+  reset?: () => void,
 }
 
-export const InputSearch: FC<Props> = ({ handleChange, search, placeholder, loading = false }) => {
+export const InputSearch: FC<Props> = ({ handleChange, search, placeholder, loading = false, value, reset }) => {
   return (
     <>
       <Paper
@@ -24,12 +26,23 @@ export const InputSearch: FC<Props> = ({ handleChange, search, placeholder, load
           sx={{ ml: 1, flex: 1 }}
           placeholder={placeholder}
           inputProps={{ 'aria-label': 'Buscar' }}
-          onSubmit={(e) => { 
+          onSubmit={(e) => {
             e.preventDefault();
             search()
-           }}
+          }}
+          value={value}
 
         />
+
+        {
+          value && reset 
+          && value?.length > 0 &&
+          <IconButton
+            onClick={ reset }
+          >
+            <Close />
+          </IconButton>
+          }
 
         <IconButton
           type="button"
@@ -38,7 +51,7 @@ export const InputSearch: FC<Props> = ({ handleChange, search, placeholder, load
           onClick={search}
         >
           {
-            loading 
+            loading
               ? <CircularProgress size='small' />
               : <Search />
           }

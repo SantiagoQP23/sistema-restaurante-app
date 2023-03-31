@@ -10,6 +10,7 @@ export interface PedidosState {
   activeOrder: IOrder | null;
   date: string;
   detailActive: IOrderDetail | null;
+  
 }
 
 const initialState: PedidosState = {
@@ -24,7 +25,7 @@ export const ordersSlice = createSlice({
   initialState,
   reducers: {
 
-    setActiveOrder: (state, action: PayloadAction<IOrder>) => {
+    setActiveOrder: (state, action: PayloadAction<IOrder | null >) => {
       state.activeOrder = action.payload;
     },
 

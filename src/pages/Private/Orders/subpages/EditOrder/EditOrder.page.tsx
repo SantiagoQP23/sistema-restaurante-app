@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Material UI
 import {
-  Grid, Typography, Button, 
+  Grid, Typography, Button, CircularProgress,
+  LinearProgress,
 
 } from '@mui/material';
 
@@ -41,18 +42,19 @@ export const EditOrder = () => {
 
   const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
 
+  const { loading, callEndpoint } = useFetchAndLoad();
 
   const dispatch = useDispatch();
 
-  const { loading, callEndpoint } = useFetchAndLoad();
 
   const getOrderCall = async () => await callEndpoint(getOrder(orderId!));
 
-  const loadOrderState = (data: IOrder) => {
-    dispatch(setActiveOrder(data))
+  const loadOrderState = async () => {
+    console.log('loadOrderState')
+    const resp = await getOrderCall();
+    dispatch(setActiveOrder(resp.data))
 
   }
-  useAsync(getOrderCall, loadOrderState, () => { });
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -70,9 +72,11 @@ export const EditOrder = () => {
 
 
   useEffect(() => {
+    loadOrderState();
 
     return () => {
       reset();
+      setActiveOrder(null);
     }
   }, [])
 
@@ -97,22 +101,32 @@ export const EditOrder = () => {
 
       </Grid>
 
+    
+      {
+        loading
+          ?
+          <>
+            <CircularProgress />
+          </>
+          :
+          <Grid container spacing={1}>
 
-      <Grid container spacing={1}>
+            <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
+              display: { xs: 'none', md: 'flex' },
+            }}>
+              <MenuAddProduct />
+            </Grid>
 
-        <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
-          display: { xs: 'none', md: 'flex' },
-        }}>
-          <MenuAddProduct />
-        </Grid>
+            <Grid item xs={12} sm={5} >
 
-        <Grid item xs={12} sm={5}>
-          <OrderSummary order={activeOrder} />
+              <OrderSummary order={activeOrder} />
 
-        </Grid>
 
-      </Grid>
 
+            </Grid>
+
+          </Grid>
+      }
 
 
 

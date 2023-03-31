@@ -11,6 +11,7 @@ export const ListTables = () => {
 
   const { tables } = useSelector(selectTables);
 
+ 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ export const ListTables = () => {
     dispatch(resetactiveTable())
     navigate('edit');;
   }
+
+
 
   return (
     <>
@@ -46,7 +49,8 @@ export const ListTables = () => {
           ? <Typography>No se han registrado mesas</Typography>
           : <Grid container spacing={2}>
             {
-              tables.map(table => (
+             tables
+              .map(table => (
                 <Grid item xs={6} sm={2} key={table.id}>
 
                   <CardTable table={table} />

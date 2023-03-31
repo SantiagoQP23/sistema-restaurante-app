@@ -60,11 +60,6 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
       }
 
       createOrderDetail(data);
-
-      
-
-
-
     } else {
 
       addDetail({ ...detail!, description })
@@ -80,6 +75,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
     // updateDetail({...detail!, description})
 
+    setDescription('');
     setOpen(false)
   }
 

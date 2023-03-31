@@ -16,7 +16,7 @@ interface Props {
   table?: ITable;
 }
 
-export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
+export const TableOrder: FC<Props> = ({ table: tableOrder  = {id: '', name: ''}}) => {
 
 
   const { setTable, table } = useContext(OrderContext);
@@ -166,7 +166,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder }) => {
 
             >
               <MenuItem value="">
-                <em>None</em>
+                Ninguno
               </MenuItem>
               {
                 tables.map(table => (

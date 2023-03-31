@@ -9,7 +9,7 @@ import { ISection, PrivateRoutes } from "../../models"
 
 import { getSections, getCategories, getProducts, getMenu } from "../../services"
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadMenu, loadTables, updateTable } from "../../redux"
 import { IProduct, ICategory } from '../../models/menu.model';
 import BaseLayout from "./layouts/BaseLayout"
@@ -23,6 +23,7 @@ import { ITable } from '../../models/table.model';
 import { SocketContext } from '../../context/SocketContext';
 import { EventsOnSocket } from './Orders/interfaces/events-sockets.interface';
 import { SocketResponseTable } from './Orders/interfaces/responses-sockets.interface';
+import { selectAuth } from '../../redux/slices/auth/auth.slice';
 
 
 export const Private = () => {
@@ -33,7 +34,9 @@ export const Private = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
-  const {socket} = useContext(SocketContext);
+  const { user } = useSelector(selectAuth);
+
+  const { socket } = useContext(SocketContext);
 
   const getMenuCall = async () => await callEndpoint(getMenu());
 
@@ -45,10 +48,10 @@ export const Private = () => {
     dispatch(loadTables(data));
   }
 
-  useAsync(getTablesCall, loadTablesState, () => {}, []);
+  useAsync(getTablesCall, loadTablesState, () => { }, []);
 
 
-  useAsync(getMenuCall, loadMenuState, () => {}, [] );
+  useAsync(getMenuCall, loadMenuState, () => { }, []);
 
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export const Private = () => {
 
       console.log('Se ha actualizado una mesa', table)
       dispatch(updateTable(table!));
- 
+
       //dispatch(pedidoAddNew(pedido))
 
     });
@@ -68,30 +71,25 @@ export const Private = () => {
     }
 
 
-    }, [socket]);
+  }, [socket]);
 
-
+  if (loading)
+    return <CircularProgress />
 
 
   return (
-    <SnackbarProvider 
-    maxSnack={3} 
-    anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
-    autoHideDuration={3000}
-    
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      autoHideDuration={3000}
+
     >
 
       <SidebarProvider>
 
-        {
-          loading
-            ? <CircularProgress />
-              
-            :
-            <>
-              {content}
-            </>
-        }
+        <>
+          {content}
+        </>
 
       </ SidebarProvider>
     </SnackbarProvider>
