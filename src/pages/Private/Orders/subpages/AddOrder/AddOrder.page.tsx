@@ -35,7 +35,7 @@ export const AddOrder = () => {
             <Button onClick={() => { navigate('/orders') }}>
               <ArrowBack />
             </Button>
-            <Typography variant='h3'>Nuevo pedido</Typography>
+            <Typography variant='h4'>Nuevo pedido</Typography>
 
             <Button
               

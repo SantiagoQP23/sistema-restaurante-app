@@ -53,7 +53,7 @@ export const OrderDetails = () => {
 
       <Box display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
-        <Typography variant="h3" fontWeight='bold'>Productos</Typography>
+        <Typography variant="h4" >Productos</Typography>
         <Button
           variant='contained'
           color='primary'

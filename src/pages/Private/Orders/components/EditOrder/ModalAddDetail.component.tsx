@@ -124,8 +124,6 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
               }
               }
 
-              autoFocus
-
             />
 
 

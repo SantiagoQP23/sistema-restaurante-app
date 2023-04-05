@@ -31,7 +31,7 @@ export const AddProductsOrder: FC = () => {
   return (
     <>
 
-      <Grid container display='flex' justifyContent='space-between' alignItems='center' mb={2}>
+      <Grid container display='flex' justifyContent='space-between' alignItems='center' mb={2} mt={1}>
         <Grid item display='flex' justifyContent='left' alignItems='center'>
           <Button onClick={() => navigate(-1)}>
             <ArrowBack />

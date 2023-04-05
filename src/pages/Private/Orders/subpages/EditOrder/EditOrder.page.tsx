@@ -95,7 +95,7 @@ export const EditOrder = () => {
             <ArrowBack />
           </Button>
 
-          <Typography variant="h3" >Editar pedido</Typography>
+          <Typography variant="h4" >Editar pedido</Typography>
 
         </Grid>
 
