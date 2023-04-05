@@ -60,7 +60,7 @@ export const ReceiptOrder = () => {
 
   return (
     <>
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
+      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center' mt={1}>
 
         <Button
           startIcon={<ArrowBack />}

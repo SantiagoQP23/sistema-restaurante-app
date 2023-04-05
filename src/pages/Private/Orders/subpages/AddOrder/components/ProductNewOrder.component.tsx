@@ -33,13 +33,13 @@ export const ProductNewOrder: FC<Props> = ({ product }) => {
   return (
     <Card>
 
-      <CardContent sx={{ flex: '1 0 auto' }} >
+      <CardContent  >
 
-        <Typography variant="h5" textAlign='center' mb={1}>{product.name}</Typography>
+        <Typography variant="h5" >{product.name}</Typography>
 
-        <Typography variant="body1" textAlign='center'>$ {product.price}</Typography>
+        <Typography variant="body1" >$ {product.price}</Typography>
 
-        <Box display='flex' justifyContent='center' alignItems='center' p={1}>
+        <Box display='flex' justifyContent='right' alignItems='center'>
 
           {
             product.status === ProductStatus.AVAILABLE

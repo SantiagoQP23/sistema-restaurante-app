@@ -21,7 +21,7 @@ export enum TypeOrder {
 
 export enum OrderStatusSpanish {
   PENDING = 'PENDIENTE',
-  IN_PROGRESS = 'EN PROCESO',
+  IN_PROGRESS = 'PREPARANDO',
   READY = 'LISTO',
   DELIVERED = 'ENTREGADO',
   CANCELLED = 'CANCELADO',

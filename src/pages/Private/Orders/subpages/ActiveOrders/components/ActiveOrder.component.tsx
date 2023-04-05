@@ -150,8 +150,13 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
     <>
 
 
-      <Card>
+      <Card
+
+>
         <CardHeader
+            sx={{
+              backgroundColor: 'success', 
+            }}
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
@@ -196,7 +201,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                         </Grid>
                       ))
 
-                  },
+                  }
                   {
                     details.filter(detail => detail.quantity === detail.qtyDelivered)
                       .map(detail => (
@@ -248,6 +253,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                     setStatusFilter(OrderStatus.PENDING)
 
                   }}
+                  color='success'
                 >
                   Pendiente
                 </Button>

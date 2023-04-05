@@ -129,18 +129,7 @@ export const Orders = () => {
 
   return (
     <>
-      <PageTitleWrapper>
-        <PageTitle heading='Pedidos ' docs={
-          <LoadingButton
-            variant="contained"
-            loading={loading}
-            onClick={refreshOrders}
-          >
-            <Cached />
-          </LoadingButton>
-        } />
-        <Clock />
-      </PageTitleWrapper>
+      
 
 
       <Container maxWidth="lg">

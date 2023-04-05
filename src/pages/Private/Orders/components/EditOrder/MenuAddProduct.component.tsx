@@ -40,20 +40,29 @@ export const Categories: FC<Props> = ({ categories }) => {
 
   return (
     <>
-      <Card>
+     
 
-        <Box sx={{ display: 'flex', overflowX: 'auto', p: 1 }}>        {
+        <Box sx={{ display: 'flex', overflowX: 'auto',   gap: 2 }} alignItems='center'>        {
           categories.map((category, index) => {
 
             if (category.isActive)
               return (
 
 
-                <Button
-                  variant={activeCategory.id === category.id ? "contained" : "outlined"}
+                <Box
+
+                
+                  // variant={activeCategory.id === category.id ? "contained" : "outlined"}
                   key={category.id}
                   sx={{
-                    mr: 3,
+                    
+                    border: '5%',
+                    borderRadius: 2,
+                    borderColor: 'primary.main',
+                    color: activeCategory.id === category.id ? 'white' : 'primary.main',
+                    backgroundColor: activeCategory.id === category.id ? 'primary.main' : 'white',
+                    
+                    p: 1,
 
                     '&:hover': {
                       backgroundColor: 'primary.main',
@@ -62,17 +71,18 @@ export const Categories: FC<Props> = ({ categories }) => {
 
                   }}
                   onClick={() => changeCategory(category)}
+                  textAlign='center'
 
                 >
-                  {category.name}
-                </Button>
+                  <Typography variant='h5' textAlign='center'>{category.name}</Typography>
+                </Box>
 
               )
           })
 
         }
         </Box>
-      </Card>
+      
 
 
 

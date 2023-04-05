@@ -89,13 +89,13 @@ export const EditOrder = () => {
   return (
     <>
 
-      <Grid container spacing={2} display='flex' justifyContent='space-between' alignItems='center' sx={{ pb: 2 }}>
+      <Grid container spacing={2} display='flex' justifyContent='space-between' alignItems='center' sx={{ pb: 2, mt: 1 }}>
         <Grid item display='flex' md={6} alignItems='center'>
           <Button onClick={() => { navigate('/orders') }}>
             <ArrowBack />
           </Button>
 
-          <Typography variant="h4" >Editar pedido</Typography>
+          <Typography variant="h3" >Editar pedido</Typography>
 
         </Grid>
 

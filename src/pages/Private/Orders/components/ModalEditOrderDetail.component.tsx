@@ -102,29 +102,29 @@ export const ModalEditOrderDetail = () => {
   return (
     <Dialog open={open} onClose={closeModal}>
 
-      <DialogTitle><b>{detail?.product.name}</b></DialogTitle>
+      <DialogTitle
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      ><b>{detail?.product.name}</b>
+        <Button
+          startIcon={<CheckOutlined />}
+          variant='contained'
+          onClick={deliverDetail}
+          disabled={counterQtyDelivered === detail?.quantity}
+          size='small'
+        >{
+            counterQtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
+          }</Button>
+      </DialogTitle>
       <Divider />
       <DialogContent>
+
+
         <Grid container spacing={2}>
-          <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography variant='h5'>Cantidad: </Typography>
-            <Box display='flex' alignItems='center'>
 
-              <IconButton
-                onClick={decrementQty}
-              >
-                <RemoveCircleOutline />
-              </IconButton>
-
-              <Typography sx={{ width: 40, textAlign: 'center' }}>{counterQty}</Typography>
-              <IconButton
-                onClick={incrementQty}
-              >
-                <AddCircleOutline />
-              </IconButton>
-            </Box>
-
-          </ Grid>
 
           <Grid item xs={12}>
             <FormHelperText>Ingrese aquí los pedidos especiales del cliente</FormHelperText>
@@ -144,7 +144,7 @@ export const ModalEditOrderDetail = () => {
               }
               }
 
-            
+
 
             />
           </Grid>
@@ -177,7 +177,27 @@ export const ModalEditOrderDetail = () => {
 
           </Grid>
 
-          <Grid item xs={12} >
+          <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
+            <Typography variant='h5'>Cantidad: </Typography>
+            <Box display='flex' alignItems='center'>
+
+              <IconButton
+                onClick={decrementQty}
+              >
+                <RemoveCircleOutline />
+              </IconButton>
+
+              <Typography sx={{ width: 40, textAlign: 'center' }}>{counterQty}</Typography>
+              <IconButton
+                onClick={incrementQty}
+              >
+                <AddCircleOutline />
+              </IconButton>
+            </Box>
+
+          </ Grid>
+
+          <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
             <Typography>Cantidad entregada: </Typography>
 
 
@@ -200,14 +220,7 @@ export const ModalEditOrderDetail = () => {
               </Box>
 
 
-              <Button
-                startIcon={<CheckOutlined />}
-                variant='contained'
-                onClick={deliverDetail}
-                disabled={counterQtyDelivered === detail?.quantity}
-              >{
-                  counterQtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
-              }</Button>
+
             </Box>
 
 

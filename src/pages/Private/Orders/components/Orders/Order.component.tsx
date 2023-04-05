@@ -53,50 +53,53 @@ export const Order: FC<Props> = ({ order }) => {
 
 
       <Card>
-        <CardHeader
-          title={
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-              <Typography variant="body1" fontWeight='bold'>Mesa {table?.name}</Typography>
-
-
-
-              {
-                !order.isPaid && order.status === OrderStatus.DELIVERED
-                  ? <Label color='warning'>Por pagar</Label>
-                  :
-                  <Label color='info'>
-
-                    {
-                      order.isPaid
-                        ? 'PAGADO'
-                        : OrderStatusSpanish[`${order.status as OrderStatus}`]
-
-                    }
-                  </Label>
-              }
-
-
-            </Box>}
-
-
-          subheader={
-            <Typography variant="subtitle1">
-              {
-                // formatDistance(new Date(order.createdAt), new Date(), {
-                //   addSuffix: true,
-                //   includeSeconds: true,
-                //   locale: es
-                // })
-                format(new Date(order.createdAt), 'dd MMMM HH:mm:ss', { locale: es })
-
-              }
-            </Typography>
-          }
-
-        />
-        <Divider />
         <CardContent>
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+            <Box>
+              <Typography variant="body1" fontWeight='bold'>Mesa {table?.name}</Typography>
+              <Typography variant="subtitle1">
+                {
+                  // formatDistance(new Date(order.createdAt), new Date(), {
+                  //   addSuffix: true,
+                  //   includeSeconds: true,
+                  //   locale: es
+                  // })
+                  format(new Date(order.createdAt), 'dd MMMM HH:mm:ss', { locale: es })
+
+                }
+              </Typography>
+
+            </Box>
+
+
+            {
+              <Label
+                color={
+                  order.status === OrderStatus.PENDING
+                    ? 'success'
+                    : order.status === OrderStatus.DELIVERED && !order.isPaid
+                      ? 'warning'
+
+                      : order.status === OrderStatus.CANCELLED
+                        ? 'error'
+                        : order.status === OrderStatus.DELIVERED && order.isPaid
+                          ? 'info'
+                          : 'primary'
+                }
+              >
+                {
+                  order.status === OrderStatus.DELIVERED && !order.isPaid
+                  ? 'POR PAGAR'
+                  : OrderStatusSpanish[order.status]}
+              </Label>
+            }
+
+
+          </Box>
+
+
 
           {
             client &&
@@ -105,12 +108,16 @@ export const Order: FC<Props> = ({ order }) => {
             </Typography>
           }
 
+          <Divider sx={{ my: 1 }} />
           <Typography variant="body2" ><b>Mesero: </b>{`${user.person.firstName} ${user.person.lastName}`}</Typography>
+          <Typography variant="body1" ><b>Total: </b> $ {order.total}</Typography>
+
+
 
         </CardContent>
-
-        <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
+        <CardActions
+          sx={{ justifyContent: 'right' }}
+        >
 
           <Box>
 
@@ -150,10 +157,9 @@ export const Order: FC<Props> = ({ order }) => {
 
             }
           </Box>
-
-          <Typography variant="body1" >$ {order.total}</Typography>
-
         </CardActions>
+
+
       </Card>
 
 

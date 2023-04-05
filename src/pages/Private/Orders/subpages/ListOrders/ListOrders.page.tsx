@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 // Componentes
 
-import { resetActiveOrder, selectAuth, selectOrders } from '../../../../../redux';
+import { loadOrders, resetActiveOrder, selectAuth, selectOrders } from '../../../../../redux';
 
 import { SocketContext } from '../../../../../context';
 import { PageTitle, PageTitleWrapper } from '../../../../../components/ui';
@@ -18,7 +18,7 @@ import { Order } from '../../components';
 import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
-import { ExpandMore } from '@mui/icons-material';
+import { Cached, ExpandMore } from '@mui/icons-material';
 
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -26,6 +26,9 @@ import { ModalDeleteOrder } from '../../components/EditOrder/ModalDeleteOrder.co
 import { es } from 'date-fns/locale';
 import { OrderStatusSpanish, TypeOrder } from '../../../../../models/orders.model';
 import AddIcon from '@mui/icons-material/Add';
+import { LoadingButton } from '@mui/lab';
+import { useFetchAndLoad } from '../../../../../hooks';
+import { getOrdersToday } from '../../services/orders.service';
 
 
 interface resp {
@@ -79,6 +82,8 @@ export const ListOrders = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { callEndpoint, loading } = useFetchAndLoad();
 
   const { orders } = useSelector(selectOrders);
 
@@ -135,6 +140,18 @@ export const ListOrders = () => {
   }
 
 
+  const refreshOrders = () => {
+
+    callEndpoint(getOrdersToday())
+      .then((resp) => {
+
+        const { data } = resp;
+
+        dispatch(loadOrders(data));
+      })
+  }
+
+
 
 
   useEffect(() => {
@@ -149,6 +166,21 @@ export const ListOrders = () => {
   return (
 
     <>
+
+      <PageTitleWrapper>
+        <PageTitle
+          heading='Pedidos'
+          docs={
+            <LoadingButton
+              variant="contained"
+              loading={loading}
+              onClick={refreshOrders}
+            >
+              <Cached />
+            </LoadingButton>
+          } />
+        <Clock />
+      </PageTitleWrapper>
 
 
       <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
@@ -179,7 +211,7 @@ export const ListOrders = () => {
         <CardHeader
           title='Filtrar pedidos'
           subheader={`${filteredOrders.length} pedido(s) `}
-          
+
         />
 
         <CardContent sx={{ overFlowX: 'auto' }}>
@@ -199,8 +231,8 @@ export const ListOrders = () => {
                 >
                   <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
                   {
-                    user && 
-                  <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
+                    user &&
+                    <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
                   }
 
                 </Select>
@@ -239,7 +271,7 @@ export const ListOrders = () => {
 
           </Grid>
 
-        
+
 
 
         </CardContent>
