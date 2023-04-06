@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, IconButton, Typography, Button, } from '@mui/material';
+import { Box, IconButton, Typography, Button, CircularProgress, } from '@mui/material';
 
 import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../models';
@@ -29,7 +29,7 @@ interface Props {
 
 export const OrderDetail: FC<Props> = ({ detail }) => {
 
-  const { state: counter, increment, decrement } = useCounter(detail.quantity);
+  const { state: counter, increment, decrement } = useCounter(detail.quantity, 1, 500, 1);
 
   const dispatch = useDispatch();
 
@@ -102,40 +102,73 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
+
         <Typography
           variant="h5"
           color="initial"
 
         >
 
-          {detail.product.name} - $ {detail.product.price}
+          {detail.quantity} - {detail.product.name} ... $ {detail.product.price}
         </Typography>
 
+        <Box display='flex' alignItems='center' gap={2}>
 
-        {/* 
-            */}
-        {
-          detail.qtyDelivered !== detail.quantity
-            ? (
-              <Box>
-                <Label color='success'>Pendiente</Label>
-                {
-                  detail.qtyDelivered === 0 && <IconButton
-                    aria-label="Eliminar detalle"
-                    onClick={deleteDetail}
-                    disabled={false}
-                    color='error'
-                  >
-                    <DeleteOutline />
-                  </IconButton>
+          {
+            detail.qtyDelivered === 0 &&
+            <IconButton
+              size='small'
 
-                }
-              </Box>
-            )
 
-            : <Label color='warning'>Entregado</Label>
+              color='error'
+              onClick={deleteDetail}
+            >
+              <DeleteOutline />
+            </IconButton>
+          }
 
-        }
+
+
+          <IconButton
+            size='small'
+            sx={{ color: 'primary.main' }}
+          >
+            <EditOutlined onClick={editDetail} />
+          </IconButton>
+
+
+
+
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress
+              variant="determinate"
+              size={25}
+              value={detail.qtyDelivered * 100 / detail.quantity}
+              sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+            />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography
+                variant="caption"
+                component="div"
+                sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+
+              >{detail.qtyDelivered}</Typography>
+            </Box>
+          </Box>
+
+        </Box>
+
 
 
       </Box>
@@ -149,43 +182,35 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
             color={detail.description ? "darkslateblue" : ""}
             style={{ whiteSpace: 'pre-wrap' }}
           >
-            {detail.description && detail.description}
-            {
-
-              <Button
-                onClick={editDetail}
-                variant="text"
-              >
-                {
-                  !detail.description
-                    ? 'Editar'
-                    : <EditOutlined />
-
-                }
-              </Button>
-
-            }
+            {detail.description}
 
           </Typography>
 
 
         </Box>
 
-        <Box alignContent="right" >
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-            <IconButton
-              onClick={decrement}
-            >
-              <RemoveCircleOutline />
-            </IconButton>
+      </Box>
 
-            <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
-            <IconButton
-              onClick={increment}
-            >
-              <AddCircleOutline />
-            </IconButton>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+
+          <IconButton
+            onClick={decrement}
+          >
+            <RemoveCircleOutline />
+          </IconButton>
+
+          <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+          <IconButton
+            onClick={increment}
+          >
+            <AddCircleOutline />
+          </IconButton>
+          {
+            counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
             <IconButton
               disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
               color='primary'
@@ -193,13 +218,16 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
             >
               <SaveOutlined />
             </IconButton>
-          </Box>
+
+          }
 
 
         </Box>
-      </Box>
 
-      <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
+        <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
+
+
+      </Box>
 
 
 

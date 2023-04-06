@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, Button, Typography, Box } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Typography, Box, CardActions } from '@mui/material';
 import { useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { DateOrders } from '../../models/date-orders.interface';
@@ -24,18 +24,26 @@ export const OrdersSummary = () => {
     <>
       <Card>
 
+        <CardHeader
+          avatar={<Assignment color='info' sx={{ fontSize: 40 }} />}
+          title={
+            <Typography variant="h4" >Pedidos</Typography>
+          }
+        />
+
         <CardContent>
 
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-
-            <Assignment color='info' sx={{fontSize: 40}} />
-            <Typography variant="h4" component="div" my={2}>Pedidos</Typography>
-          </Box>
-
-          <Typography variant="h3" component="div" my={2}>
+          <Typography variant="h3" component="div" textAlign='center'>
             {datesOrders.reduce((acc, dateOrders) => acc + dateOrders.count, 0)}
           </Typography>
 
+
+        </CardContent>
+
+        <CardActions
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+
+        >
           <Button
             disableRipple
             to="orders"
@@ -47,7 +55,7 @@ export const OrdersSummary = () => {
             Ver más
           </Button>
 
-        </CardContent>
+        </CardActions>
 
 
 

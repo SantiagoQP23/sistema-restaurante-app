@@ -1,6 +1,6 @@
 
 
-import { Card, CardHeader, CardContent, Button, Typography, Box } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Typography, Box, CardActions } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { getIncomes } from '../../services/dashboard.service';
@@ -34,16 +34,25 @@ export const IncomesSummary = () => {
   return (
     <>
       <Card>
-        <CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-            <Paid color='success' sx={{fontSize: 40}}  />
-            <Typography variant="h4" component="div" my={2}>Ingresos</Typography>
-          </Box>
-          <Typography variant="h3" component="div" my={2}>
+        <CardHeader
+          avatar={<Paid color='success' sx={{ fontSize: 40 }} />}
+          title={
+            <Typography variant="h4" >Ingresos</Typography>
+          }
+        />
+
+        <CardContent>
+         
+          <Typography variant="h3" component="div" textAlign='center'>
             $ {datesIncome.reduce((acc, dateIncome) => acc + dateIncome.total, 0)}
           </Typography>
 
+
+        </CardContent>
+        <CardActions 
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
           <Button
             disableRipple
             to="incomes"
@@ -54,7 +63,8 @@ export const IncomesSummary = () => {
             Ver más
           </Button>
 
-        </CardContent>
+        </CardActions>
+
 
 
 

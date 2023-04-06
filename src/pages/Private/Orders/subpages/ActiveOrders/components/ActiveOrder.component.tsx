@@ -154,9 +154,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
 
 >
         <CardHeader
-            sx={{
-              backgroundColor: 'success', 
-            }}
+            
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
@@ -230,12 +228,14 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
 
         <Divider />
 
-        <CardActions>
+        <CardActions sx={{
+          justifyContent: 'space-between'
+        }}>
           {
             order.status === OrderStatus.PENDING
               ? <Button
+              fullWidth
                 variant='contained'
-                fullWidth
                 onClick={() => {
                   changeStatusOrder(OrderStatus.IN_PROGRESS)
                   setStatusFilter(OrderStatus.IN_PROGRESS)
@@ -246,6 +246,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
               &&
               < >
                 <Button
+                fullWidth
                   startIcon={<ArrowBack />}
                   variant='outlined'
                   onClick={() => {
@@ -258,6 +259,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                   Pendiente
                 </Button>
                 <Button
+                fullWidth
                   startIcon={<EditOutlined />}
                   variant='contained'
                   onClick={() => {

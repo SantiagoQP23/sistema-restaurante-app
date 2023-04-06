@@ -1,5 +1,5 @@
 import { Assessment, AssignmentInd } from '@mui/icons-material';
-import { Card, CardHeader, CardContent, Button, Box, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Box, Typography, CardActions, CardActionArea } from '@mui/material';
 
 import { NavLink as RouterLink } from 'react-router-dom';
 
@@ -7,22 +7,36 @@ export const SimulatorAffluenceSummary = () => {
   return (
     <Card>
 
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <CardActionArea>
 
-          <Assessment color='primary' sx={{ fontSize: 40 }} />
-          <Typography variant="h4" component="div" my={2}>Simulador de afluencia</Typography>
-        </Box>
-        <Button
-          disableRipple
-          to="simulation"
-          component={RouterLink}
-          variant="text"
 
+        <CardHeader
+          avatar={<Assessment color='primary' sx={{ fontSize: 40 }} />}
+
+          title={
+            <Typography variant="h4" >Simulador de afluencia</Typography>
+          }
+        />
+
+        <CardActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'center'
+          }}
         >
-          Ver más
-        </Button>
-      </CardContent>
+
+          <Button
+            disableRipple
+            to="simulation"
+            component={RouterLink}
+            variant="text"
+
+
+          >
+            Ver más
+          </Button>
+        </CardActions>
+      </CardActionArea>
     </Card>
   )
 }

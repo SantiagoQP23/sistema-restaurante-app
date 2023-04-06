@@ -1,5 +1,5 @@
 import { Groups } from '@mui/icons-material';
-import { Card, CardHeader, CardContent, Button, Box, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Box, Typography, CardActions } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 
@@ -9,12 +9,18 @@ export const StaffPlanningSummary = () => {
     <>
       <Card>
 
-        <CardContent>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <CardHeader
+          avatar={<Groups color='info' sx={{ fontSize: 40 }} />}
 
-            <Groups color='info' sx={{ fontSize: 40 }} />
-            <Typography variant="h4" component="div" my={2}>Planificación del personal</Typography>
-          </Box>
+          title={
+            <Typography variant="h4" >Planificación del personal</Typography>
+          }
+        />
+
+        <CardActions
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+
 
           <Button
             disableRipple
@@ -26,7 +32,10 @@ export const StaffPlanningSummary = () => {
             Ver más
           </Button>
 
-        </CardContent>
+        </CardActions>
+
+
+
 
 
 

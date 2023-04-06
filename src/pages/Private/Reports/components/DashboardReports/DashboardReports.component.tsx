@@ -13,7 +13,7 @@ import { PredictionAffluenceSummary } from './PredictionAffluenceSummary.compone
 export const DashboardReports = () => {
   return (
     <>
-      <Typography variant="h3" >Dashboard</Typography>
+      <Typography variant="h4" >Dashboard</Typography>
 
       <Grid container spacing={1} my={1}>
 
@@ -21,11 +21,12 @@ export const DashboardReports = () => {
           <Day />
 
         </Grid>
+        */}
 
         <Grid container item xs={12} md={9} spacing={1}>
-          <Grid item xs={12} md={4} >
+          {/* <Grid item xs={12} md={4} >
             <SimulatorAffluenceSummary />
-           
+
           </Grid>
           <Grid item xs={12} md={4}>
             <PredictionAffluenceSummary />
@@ -34,9 +35,8 @@ export const DashboardReports = () => {
 
           <Grid item xs={12} md={4}>
             <StaffPlanningSummary />
-          </Grid>
+          </Grid> */}
 
-          */}
 
           <Grid item xs={12} md={4}>
             <OrdersSummary />
@@ -46,11 +46,11 @@ export const DashboardReports = () => {
             <IncomesSummary />
           </Grid>
 
-          
-        {/* </Grid> */}
-      </Grid>
+
+          </Grid>
+        </Grid>
 
 
-    </>
-  )
+      </>
+      )
 }
