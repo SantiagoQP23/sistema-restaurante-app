@@ -1,9 +1,9 @@
 import { FC } from "react"
 
 import { Document, Page, View, Text, StyleSheet, Image } from '@react-pdf/renderer';
-import { IDay, TypeAffluence } from "../../models/day.interface";
+import { IDay, TypeAffluence } from "../../../models/day.interface";
 
-import logo from '../../../../../assets/logo.png'
+import logo from '../../../../../../assets/logo.png'
 
 
 interface Props {

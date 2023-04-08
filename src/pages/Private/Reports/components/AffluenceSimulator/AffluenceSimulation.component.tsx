@@ -13,7 +13,7 @@ import {
   Tooltip,
   BarElement,
 } from "chart.js"
-import { Card, Grid, MenuItem, Select, CardHeader, CardContent, Button, Box, Stack, CircularProgress } from '@mui/material';
+import { Card, Grid, MenuItem, Select, CardHeader, CardContent, Button, Box, Stack, CircularProgress, CardActions } from '@mui/material';
 import { Typography, SelectChangeEvent } from '@mui/material/';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { useDispatch } from 'react-redux';
@@ -31,7 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { PdfAffluenceSimulation } from "./PdfAffluenceSimulation.component";
+import { PdfAffluenceSimulation } from "./pdf/PdfAffluenceSimulation.component";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler, Tooltip, Legend, BarElement)
 
@@ -213,60 +213,55 @@ export const AffluenceSimulation = () => {
     <>
 
       <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Box>
-          <Stack direction="row" spacing={1} >
+        <Box display='flex' alignItems='center'>
+          <Button onClick={() => { navigate('/reports') }}>
+            <ArrowBack />
+          </Button>
+
+          <Typography variant="h4">Simulación de afluencia {year}</Typography>
 
 
-            <Button onClick={() => { navigate('/reports') }}>
-              <ArrowBack />
-            </Button>
-
-            <Typography variant="h3">Simulación de afluencia {year}</Typography>
-
-          </Stack>
         </Box>
 
-        <Stack direction='row' spacing={2}>
 
 
-          <LoadingButton loading={loading} variant="contained" onClick={() => navigate('/reports/simulator')}>
-            Parámetros de simulación
-          </LoadingButton>
-          {
-            // days.length > 0 &&
 
-            // <PDFDownloadLink
-            //   document={<PdfAffluenceSimulation days={days} />}
-            //   fileName="simulacion-afluencia-completa.pdf"
-            // >
-            //   <Button variant='outlined' >
+        <LoadingButton loading={loading} variant="contained" onClick={() => navigate('/reports/simulator')}>
+          Parámetros de simulación
+        </LoadingButton>
+        {
+          // days.length > 0 &&
 
-            //     Exportar a PDF
-            //   </Button>
+          // <PDFDownloadLink
+          //   document={<PdfAffluenceSimulation days={days} />}
+          //   fileName="simulacion-afluencia-completa.pdf"
+          // >
+          //   <Button variant='outlined' >
 
-            // </PDFDownloadLink>
-          }
+          //     Exportar a PDF
+          //   </Button>
 
-        </Stack>
+          // </PDFDownloadLink>
+        }
+
+
 
 
 
       </Grid>
 
-      <Grid container spacing={2}>
 
 
-        <Grid item xs={12} md={4}>
-          <Day />
 
-        </Grid>
+      <Card>
 
-        <Grid container item xs={12} md={8} spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
+        <CardHeader 
+        title='Afluencia por mes'
+        />
 
-
+        <CardActions>
 
           <Grid container spacing={2}>
-
             <Grid item xs={4}>
               <Select
                 labelId="select-seccion"
@@ -303,8 +298,23 @@ export const AffluenceSimulation = () => {
               </Select>
 
             </Grid>
+          </Grid>
+        </CardActions>
+      </Card>
+
+      <Grid container spacing={2} mt={2}>
 
 
+        {/* <Grid item xs={12} md={4}>
+  <Day />
+
+</Grid> */}
+
+
+        <Grid container item xs={12} md={12} spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
+
+
+          <Grid container spacing={2}>
             <Grid item xs={12}>
 
               <Card>
@@ -349,7 +359,7 @@ export const AffluenceSimulation = () => {
           </Grid>
         </Grid>
 
-        <Grid container item xs={12} spacing={1}
+        {/* <Grid container item xs={12} spacing={1}
           sx={{
             display: 'flex',
             alignContent: 'start',
@@ -379,7 +389,7 @@ export const AffluenceSimulation = () => {
 
             }
             )}
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
 
           {/*  <Card>

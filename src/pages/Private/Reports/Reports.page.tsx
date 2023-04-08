@@ -12,7 +12,7 @@ const Reports = () => {
         <PageTitle
           heading='Reportes'
           subHeading='Información de su restaurante'
-          docs="/menu"
+          
         />
       </PageTitleWrapper>
 

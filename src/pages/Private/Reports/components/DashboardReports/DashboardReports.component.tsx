@@ -17,14 +17,14 @@ export const DashboardReports = () => {
 
       <Grid container spacing={1} my={1}>
 
-        {/* <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3}>
           <Day />
 
         </Grid>
-        */}
+       
 
         <Grid container item xs={12} md={9} spacing={1}>
-          {/* <Grid item xs={12} md={4} >
+          <Grid item xs={12} md={4} >
             <SimulatorAffluenceSummary />
 
           </Grid>
@@ -35,7 +35,7 @@ export const DashboardReports = () => {
 
           <Grid item xs={12} md={4}>
             <StaffPlanningSummary />
-          </Grid> */}
+          </Grid>
 
 
           <Grid item xs={12} md={4}>
