@@ -66,7 +66,8 @@ export const Categories: FC<Props> = ({ categories }) => {
 
                     '&:hover': {
                       backgroundColor: 'primary.main',
-                      color: 'white'
+                      color: 'white',
+                      cursor: 'pointer'
                     }
 
                   }}

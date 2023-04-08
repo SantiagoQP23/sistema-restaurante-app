@@ -52,6 +52,19 @@ export const ordersSlice = createSlice({
     },
 
     loadOrders: (state, action: PayloadAction<IOrder[]>) => {
+
+      // sort by date
+      action.payload.sort((a, b) => {
+        if (a.createdAt < b.createdAt) {
+          return -1;
+        }
+        if (a.createdAt > b.createdAt) {
+          return 1;
+        }
+        return 0;
+      });
+
+
       state.orders = action.payload
     },
     setDateOrders: (state, action: PayloadAction<string>) => {

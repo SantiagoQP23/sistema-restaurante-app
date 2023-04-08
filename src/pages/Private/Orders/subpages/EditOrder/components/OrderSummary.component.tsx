@@ -1,4 +1,4 @@
-import { DeleteOutline, ShoppingCart } from "@mui/icons-material";
+import { DeleteOutline, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, Button } from "@mui/material";
 import { format } from "date-fns";
 import { FC, useState, useEffect } from "react";
@@ -72,6 +72,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                 color='error'
                 onClick={eliminarPedido}
                 disabled={orderDelivered}
+                size='small'
               >
                 <DeleteOutline />
               </Button>
@@ -80,6 +81,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                 variant="contained"
                 color="primary"
                 onClick={() => navigate('products')}
+                size='small'
               >
                 <ShoppingCart />
 
@@ -141,12 +143,15 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           <Box display='flex' justifyContent='center' alignItems='center'>
 
             <Button
-              variant='contained'
+              variant='outlined'
               onClick={() => { navigate('receipt') }}
 
               sx={{ mt: 2 }}
+              startIcon={<PointOfSaleOutlined />}
+              color="primary"
+
             >
-              Comprobante
+              Pago
             </Button>
           </Box>
 

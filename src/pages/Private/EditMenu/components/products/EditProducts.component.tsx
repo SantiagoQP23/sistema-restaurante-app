@@ -117,7 +117,7 @@ export const EditProducts: FC<Props> = () => {
 
      
 
-       
+{/*        
         <Box>
           <InputLabel id='select-categoria'>Categoria</InputLabel>
           <Select
@@ -137,7 +137,7 @@ export const EditProducts: FC<Props> = () => {
           </Select>
 
 
-        </Box>
+        </Box> */}
 
 
 

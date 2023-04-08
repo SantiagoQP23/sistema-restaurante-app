@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Material UI
 import { Typography, Grid, Box, Button, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, CardActions, Tooltip } from '@mui/material/';
@@ -17,6 +17,7 @@ import { useSnackbar } from 'notistack';
 import { updateCategory as updateCategoryS } from '../../services/sections.service';
 import { updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
+import { CardHeader } from '@mui/material';
 
 interface Props {
   categoria: ICategory;
@@ -33,7 +34,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
 
 
-  const {loading, callEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint } = useFetchAndLoad();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,13 +47,13 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
   const editarCategoria = () => {
     dispatch(setActiveCategory(categoria))
 
-    
 
 
-    if(categoria.products.length > 0){
+
+    if (categoria.products.length > 0) {
       dispatch(setActiveProducts(categoria.products))
     }
-    else{
+    else {
       dispatch(setActiveProducts([]))
 
     }
@@ -64,20 +65,20 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
   const changeStatusCategory = async (categoria: ICategory) => {
 
-    await callEndpoint(updateCategoryS(categoria.id, {isActive: !categoria.isActive}))
-    .then((resp) => {
-      const { data } = resp;
+    await callEndpoint(updateCategoryS(categoria.id, { isActive: !categoria.isActive }))
+      .then((resp) => {
+        const { data } = resp;
 
-      dispatch(updateCategory({ ...categoria, isActive: !categoria.isActive }));
-      //dispatch(setActiveCategory({ ...categoria, ...data.category }))
-      enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
+        dispatch(updateCategory({ ...categoria, isActive: !categoria.isActive }));
+        //dispatch(setActiveCategory({ ...categoria, ...data.category }))
+        enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
 
-    })
-    .catch((err) => {
-      console.log(err)
-      enqueueSnackbar('Ya existe', { variant: 'error' })
+      })
+      .catch((err) => {
+        console.log(err)
+        enqueueSnackbar('Ya existe', { variant: 'error' })
 
-    });
+      });
 
 
   }
@@ -86,15 +87,18 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
     <>
 
       <Card>
-        <CardContent>
+        <CardHeader
+          title={categoria.name}
+          subheader={`Productos: ${categoria.products.length}`}
+          action={
+            <Label
+              color={categoria.isActive ? 'success' : 'error'}
+            >
+              {categoria.isActive ? 'Activo' : 'Eliminado'}
+            </Label>
+          }
+        />
 
-          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-            <Typography variant="h4">{categoria.name}</Typography>
-            <Label color={categoria.isActive ? 'success' : 'error' }>{categoria.isActive ? 'Activo' : 'Eliminado' }</Label>
-          </Box>
-
-          <Typography variant="body2" color="orange">Productos: {categoria.products.length}</Typography>
-        </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
           <Box>

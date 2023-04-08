@@ -131,7 +131,7 @@ export function EditCategories() {
 
 
 
-      <Grid container spacing={1} sx={{ my: 2 }}>
+      {/* <Grid container spacing={1} sx={{ my: 2 }}>
 
         <Grid item xs={12} sm={3}>
 
@@ -154,7 +154,7 @@ export function EditCategories() {
 
         </Grid>
 
-      </Grid>
+      </Grid> */}
 
       {
         activeSection!.categories.length === 0 && (
@@ -162,7 +162,7 @@ export function EditCategories() {
         )
       }
 
-      <Box >
+      <Box mt={1}>
         <Grid container rowSpacing={1} spacing={1}>
           {
             activeSection!.categories.length > 0 && activeSection!.categories.map(categoria => (
