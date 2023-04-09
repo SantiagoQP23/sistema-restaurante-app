@@ -2,17 +2,20 @@ import { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs, Box, useTheme } from '@mui/material';
 import { tabsClasses } from '@mui/material/Tabs';
 
 import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
 import { IOrder, OrderStatus, OrderStatusSpanish } from '../../../../../../models/orders.model';
 
 import { ActiveOrder } from "./ActiveOrder.component";
+import { CardActiveOrder } from './CardActiveOrder.component';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 
 export const ListActiveOrders = () => {
 
+  const theme = useTheme();
 
   const { orders } = useSelector(selectOrders);
 
@@ -38,7 +41,7 @@ export const ListActiveOrders = () => {
     <>
 
 
-      <Card sx={{ my: 2, }}>
+      {/* <Card sx={{ my: 2, }}>
 
         <CardContent sx={{ overFlowX: 'auto' }}>
           <Typography variant="h5">Estados de pedidos</Typography>
@@ -72,9 +75,69 @@ export const ListActiveOrders = () => {
 
 
         </CardContent>
-      </Card>
+      </Card> */}
 
-      <Grid container spacing={1}>
+
+      <Scrollbars
+        style={{ width: '100%', height: '600px' }}
+        autoHide
+        renderThumbHorizontal={() => {
+          return (
+            <Box
+              sx={{
+                width: 5,
+                background: `${theme.colors.alpha.black[10]}`,
+                borderRadius: `${theme.general.borderRadiusLg}`,
+                transition: `${theme.transitions.create(['background'])}`,
+
+                '&:hover': {
+                  background: `${theme.colors.alpha.black[30]}`
+                }
+              }}
+            />
+          );
+        }}
+
+
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            overflowX: 'auto',
+          }}
+
+        >
+
+<Box>
+
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.PENDING)}
+            title='PEDIDOS PENDIENTES'
+            color='success'
+            />
+            </Box>
+<Box>
+
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
+            title='PEDIDOS EN PREPARACIÓN'
+            color='primary'
+            />
+            </Box>
+<Box>
+
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
+            title='PEDIDOS ENTREGADOS'
+            color='warning'
+            />
+            </Box>
+
+
+        </Box>
+
+      </Scrollbars>
+      {/* <Grid container spacing={1}>
         {
           activeOrders.length === 0
             ? <Grid item xs={12}>
@@ -89,7 +152,8 @@ export const ListActiveOrders = () => {
             ))
         }
 
-      </Grid>
+      </Grid> */}
+
 
 
 

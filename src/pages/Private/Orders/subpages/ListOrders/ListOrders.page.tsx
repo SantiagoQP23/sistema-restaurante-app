@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader, Accordion, AccordionSummary, AccordionDetails, ToggleButtonGroup, ToggleButton, Divider, Tabs, Tab, tabsClasses, Select, FormControl, InputLabel, MenuItem } from '@mui/material';
+import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader, Accordion, AccordionSummary, AccordionDetails, ToggleButtonGroup, ToggleButton, Divider, Tabs, Tab, tabsClasses, Select, FormControl, InputLabel, MenuItem, Box, CardActionArea, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
 
 import { toast } from 'react-toastify';
 
@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { loadOrders, resetActiveOrder, selectAuth, selectOrders } from '../../../../../redux';
 
 import { SocketContext } from '../../../../../context';
-import { PageTitle, PageTitleWrapper } from '../../../../../components/ui';
+import { Label, PageTitle, PageTitleWrapper } from '../../../../../components/ui';
 import { Order } from '../../components';
 import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
@@ -29,6 +29,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { getOrdersToday } from '../../services/orders.service';
+import { CardOrdersByStatus } from './components';
+import { Scrollbar } from '../../../components';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 
 interface resp {
@@ -78,7 +81,8 @@ export const ListOrders = () => {
 
   const [statusOrderFilter, setStatusOrderFilter] = useState<string>('all');
 
-  const [filterWaiter, setFilterWaiter] = useState('all');
+  const { user } = useSelector(selectAuth);
+  const [filterWaiter, setFilterWaiter] = useState(user?.id || 'all');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -87,9 +91,11 @@ export const ListOrders = () => {
 
   const { orders } = useSelector(selectOrders);
 
-  const { user } = useSelector(selectAuth);
 
   const [filteredOrders, setFilteredOrders] = useState<IOrder[]>([])
+
+  const theme = useTheme();
+
 
 
   const addOrder = () => {
@@ -186,11 +192,23 @@ export const ListOrders = () => {
       <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
 
         <Grid item>
-          <Card>
-            <CardContent>
-              <Typography variant='h5'>Pedidos: {orders.length}</Typography>
-            </CardContent>
-          </Card>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Mesero</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={filterWaiter}
+              label="Mesa del pedido"
+              onChange={(e) => changeWaiter(e.target.value)}
+            >
+              <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
+              {
+                user &&
+                <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
+              }
+
+            </Select>
+          </FormControl>
         </Grid>
 
         <Grid item>
@@ -206,43 +224,8 @@ export const ListOrders = () => {
 
 
 
-      <Card sx={{ my: 2, }}>
+            {/* <Grid item xs={6} sm={4} lg={3}>
 
-        <CardHeader
-          title='Filtrar pedidos'
-          subheader={`${filteredOrders.length} pedido(s) `}
-
-        />
-
-        <CardContent sx={{ overFlowX: 'auto' }}>
-
-
-          <Grid container spacing={1}>
-            {/* Filtro por mesero */}
-            <Grid item xs={6} sm={4} lg={3}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Mesero</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={filterWaiter}
-                  label="Mesa del pedido"
-                  onChange={(e) => changeWaiter(e.target.value)}
-                >
-                  <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
-                  {
-                    user &&
-                    <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
-                  }
-
-                </Select>
-              </FormControl>
-
-            </Grid>
-
-            <Grid item xs={6} sm={4} lg={3}>
-
-              {/* Filtro por estado */}
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                 <Select
@@ -266,17 +249,105 @@ export const ListOrders = () => {
 
 
             </Grid>
+ */}
+
+      <Typography variant='h5' sx={{ my: 2, }} align='right'>
+        {`${filteredOrders.length} pedidos`}
+      </Typography>
 
 
 
-          </Grid>
+      <Scrollbars
+        style={{ width: '100%', height: '600px' }}
+        autoHide
+        renderThumbHorizontal={() => {
+          return (
+            <Box
+              sx={{
+                width: 5,
+                background: `${theme.colors.alpha.black[10]}`,
+                borderRadius: `${theme.general.borderRadiusLg}`,
+                transition: `${theme.transitions.create(['background'])}`,
+
+                '&:hover': {
+                  background: `${theme.colors.alpha.black[30]}`
+                }
+              }}
+            />
+          );
+        }}
+
+
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            overflowX: 'auto',
+          }}
+
+        >
+
+          <Box
+
+          >
+
+            <CardOrdersByStatus
+
+              orders={filteredOrders.filter(order => order.status === OrderStatus.PENDING)}
+              title='PEDIDOS PENDIENTES'
+              color='success'
+
+            />
+          </Box>
+
+          <Box>
+
+            <CardOrdersByStatus
+              orders={filteredOrders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
+              title='PREPARANDO'
+              color='primary'
+
+            />
+          </Box>
+          <Box>
+
+            <CardOrdersByStatus
+              orders={filteredOrders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
+              title='PEDIDOS POR PAGAR'
+              color='warning'
+
+            />
+          </Box>
+          <Box>
+
+            <CardOrdersByStatus
+              orders={filteredOrders.filter(order => order.status === OrderStatus.DELIVERED && order.isPaid)}
+              title='PEDIDOS PAGADOS'
+              color='info'
+
+            />
+          </Box>
+          <Box>
+
+            <CardOrdersByStatus
+              orders={filteredOrders.filter(order => order.status === OrderStatus.CANCELLED)}
+              title='PEDIDOS CANCELADOS'
+              color='error'
+
+            />
+          </Box>
+
+        </Box>
+      </Scrollbars>
 
 
 
 
-        </CardContent>
-      </Card>
 
+
+
+
+      {/* 
       <Grid container spacing={1}>
 
         {
@@ -298,7 +369,7 @@ export const ListOrders = () => {
         }
 
       </Grid>
-
+ */}
 
 
 

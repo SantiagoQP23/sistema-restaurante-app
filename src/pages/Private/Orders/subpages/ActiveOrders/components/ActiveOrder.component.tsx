@@ -30,7 +30,7 @@ import { statusModalEditOrderDetail } from '../../../services/orders.service';
 
 interface Props {
   order: IOrder;
-  setStatusFilter: (status: OrderStatus) => void;
+  setStatusFilter?: (status: OrderStatus) => void;
 }
 
 
@@ -243,7 +243,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                 variant='contained'
                 onClick={() => {
                   changeStatusOrder(OrderStatus.IN_PROGRESS)
-                  setStatusFilter(OrderStatus.IN_PROGRESS)
+                  setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
 
                 }}
               >Iniciar</Button>
@@ -256,7 +256,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                   variant='outlined'
                   onClick={() => {
                     changeStatusOrder(OrderStatus.PENDING)
-                    setStatusFilter(OrderStatus.PENDING)
+                    setStatusFilter && setStatusFilter(OrderStatus.PENDING)
 
                   }}
                   color='success'
