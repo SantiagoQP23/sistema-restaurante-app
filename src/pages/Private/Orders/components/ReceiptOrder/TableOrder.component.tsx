@@ -1,6 +1,6 @@
-import { Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput } from "@mui/material"
+import { Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput, InputAdornment } from '@mui/material';
 import { FC, useContext } from "react"
-import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
+import { DriveFileRenameOutlineOutlined, TableRestaurant } from '@mui/icons-material';
 import { ITable } from "../../../../../models";
 import { OrderContext } from '../../context/Order.context';
 import { SocketContext } from '../../../../../context/SocketContext';
@@ -154,16 +154,24 @@ export const TableOrder: FC<Props> = ({ table: tableOrder  = {id: '', name: ''}}
       {
         tables.length === 0
           ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
-          : <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+          : 
+          <FormControl fullWidth>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={table?.id}
-              label="Mesa del pedido"
+              
 
               onChange={(e) => changeTable(e.target.value)}
 
+              inputProps={{
+                startAdrnment: (
+                  <InputAdornment position='start'>
+                    <TableRestaurant />
+                  </InputAdornment>
+                )
+              }}
+              size='small'
             >
               <MenuItem value="">
                 Ninguno

@@ -4,13 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectTables } from '../../../../../../redux/slices/tables/tables.slice';
 import { selectOrders, setActiveOrder } from '../../../../../../redux/slices/orders/orders.slice';
 import { useSnackbar } from 'notistack';
-import { Accordion, AccordionDetails, AccordionSummary, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, FormControl, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@mui/material';
 import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
 import { UpdateOrderDto } from '../../../dto/update-order.dto';
 import { SocketContext } from '../../../../../../context/SocketContext';
 import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
 import { TypeOrder } from '../../../../../../models/orders.model';
+import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
 
 interface Props {
 
@@ -34,6 +35,8 @@ export const OrderTable: FC<Props> = () => {
 
   const dispatch = useDispatch();
 
+  const { loading, updateOrder } = useUpdateOrder();
+
 
 
 
@@ -47,7 +50,7 @@ export const OrderTable: FC<Props> = () => {
     const newTable = tables.find(t => t.id === tableId);
     setTable(newTable);
 
-    const updateTableDto: UpdateOrderDto = {
+    const updateOrderDto: UpdateOrderDto = {
       id: activeOrder!.id,
       tableId: newTable!.id,
     }
@@ -57,10 +60,7 @@ export const OrderTable: FC<Props> = () => {
       newTableId: newTable!.id
     }
 
-    emitUpdateTable(updateTableDto);
-
-
-
+    updateOrder(updateOrderDto)
     //console.log('Actualizando mesas')
 
     emitChangeTable(changeTableDto);
@@ -82,10 +82,6 @@ export const OrderTable: FC<Props> = () => {
       }
 
     });
-
-
-
-
 
   }
 
@@ -122,29 +118,35 @@ export const OrderTable: FC<Props> = () => {
     <>
       {
         tables.length === 0
-          ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
-          : <FormControl sx={{width: 200}}>
-            <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={table?.id}
-              label="Mesa del pedido"
+          ? (<Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>)
+          : <>
+            {
+              loading ? <CircularProgress size={20}/>
+                :
+                (<FormControl sx={{ width: 200 }}>
+                  <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={table?.id}
+                    label="Mesa del pedido"
 
-              onChange={(e) => changeTable(e.target.value)}
-              disabled={TypeOrder[`${activeOrder!.type}` as keyof typeof TypeOrder] !== TypeOrder.IN_PLACE}
+                    onChange={(e) => changeTable(e.target.value)}
+                    disabled={TypeOrder[`${activeOrder!.type}` as keyof typeof TypeOrder] !== TypeOrder.IN_PLACE}
+                    size='small'
 
-            >
-              {
-                tables.map(table => (
+                  >
+                    {
+                      tables.map(table => (
 
-                  <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
+                        <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
 
-                ))
-              }
+                      ))
+                    }
 
-            </Select>
-          </FormControl>
+                  </Select>
+                </FormControl>)}
+          </>
       }
 
     </>

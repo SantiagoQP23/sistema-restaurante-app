@@ -200,6 +200,7 @@ export const ListOrders = () => {
               value={filterWaiter}
               label="Mesa del pedido"
               onChange={(e) => changeWaiter(e.target.value)}
+              size='small'
             >
               <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
               {

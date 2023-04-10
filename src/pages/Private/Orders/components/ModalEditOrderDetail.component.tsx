@@ -6,8 +6,11 @@ import { IOrderDetail } from "../../../../models";
 import { statusModalEditOrderDetail } from "../services/orders.service";
 import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid } from '@mui/material';
 import { useCounter, useOrders } from '../hooks';
-import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3 } from '@mui/icons-material';
+import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline } from '@mui/icons-material';
 import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
+import { LoadingButton } from '@mui/lab';
+import { DeleteOrderDetailDto } from '../dto/delete-order-detail.dto';
+import { useDeleteOrderDetail } from '../hooks/useDeleteOrderDetail';
 
 
 
@@ -25,6 +28,8 @@ export const ModalEditOrderDetail = () => {
   const [description, setDescription] = useState(detail?.description || '');
   const [discount, setDiscount] = useState(detail?.discount || 0);
 
+  const { loading: loadingDelete, deleteOrderDetail } = useDeleteOrderDetail();
+
 
   const {
     state: counterQtyDelivered,
@@ -40,7 +45,7 @@ export const ModalEditOrderDetail = () => {
     setCounter: setCounterQty
   } = useCounter(0, 1, 100, detail?.qtyDelivered);
 
-  const { updateOrderDetail } = useOrders();
+  const { updateOrderDetail, loading } = useOrders();
 
 
   const subscription$ = statusModalEditOrderDetail.getSubject();
@@ -80,6 +85,20 @@ export const ModalEditOrderDetail = () => {
     setOpen(false)
   }
 
+  const deleteDetail = () => {
+
+    const data: DeleteOrderDetailDto = {
+      detailId: detail!.id,
+      orderId: activeOrder!.id
+    }
+
+    deleteOrderDetail(data)
+    closeModal()
+
+
+
+  }
+
 
 
   useEffect(() => {
@@ -109,15 +128,16 @@ export const ModalEditOrderDetail = () => {
           alignItems: 'center'
         }}
       ><b>{detail?.product.name}</b>
-        <Button
+        <LoadingButton
           startIcon={<CheckOutlined />}
           variant='contained'
           onClick={deliverDetail}
           disabled={counterQtyDelivered === detail?.quantity}
           size='small'
+          loading={loading}
         >{
             counterQtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
-          }</Button>
+          }</LoadingButton>
       </DialogTitle>
       <Divider />
       <DialogContent>
@@ -233,12 +253,38 @@ export const ModalEditOrderDetail = () => {
 
 
       </DialogContent>
-      <DialogActions >
-        <Button variant='outlined' onClick={closeModal}>Cerrar</Button>
-        <Button
-          variant='contained'
-          onClick={updateDetail}
-        >Actualizar</Button>
+      <DialogActions
+        sx={{
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box>
+          {
+            detail?.qtyDelivered === 0 &&
+            (
+              <LoadingButton
+                color='error'
+
+                onClick={deleteDetail}
+                loading={loadingDelete}
+              >
+                <DeleteOutline />
+              </LoadingButton>
+            )
+          }
+
+        </Box>
+        <Box
+          display='flex' gap={1}
+        >
+
+          <Button variant='outlined' onClick={closeModal}>Cerrar</Button>
+          <LoadingButton
+            variant='contained'
+            onClick={updateDetail}
+            loading={loading}
+          >Actualizar</LoadingButton>
+        </Box>
       </DialogActions>
 
 
