@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 
 
-import { Card, CardHeader, CardContent, Box, Button, Typography, TextField, Divider, Grid } from "@mui/material";
+import { Card, CardHeader, CardContent, Box, Button, Typography, TextField, Divider, Grid, Chip, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
 import { TypeOrder } from "../../../../../../models";
 import { DataClient } from "../../../components";
 import { TableOrder } from "../../../components/ReceiptOrder/TableOrder.component";
@@ -13,7 +13,9 @@ import { SocketResponseOrder } from "../../../interfaces/responses-sockets.inter
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { NewOrderDetail } from "./NewOrderDetail.component";
-import { Add } from "@mui/icons-material";
+import { Add, AddShoppingCartOutlined, DeliveryDining, LocalDining } from "@mui/icons-material";
+import { useCreateOrder } from "../../../hooks/useCreateOrder";
+import { LoadingButton } from "@mui/lab";
 
 
 const People: FC = () => {
@@ -25,9 +27,9 @@ const People: FC = () => {
 
       <TextField
         type='number'
-        label='Personas'
         value={people}
         onChange={(e) => { setPeople(Number(e.target.value)) }}
+        size="small"
       />
 
     </>
@@ -51,17 +53,21 @@ export const OrderDetails = () => {
 
     <>
 
-      <Box display='flex' justifyContent='space-between' alignItems='center' my={1}>
+      <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
         <Typography variant="h4" >Productos</Typography>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => navigate('products')}
+
+        <IconButton
           sx={{ display: { xs: 'flex', md: 'none' } }}
+          size="small"
+          onClick={() => navigate('products')}
+          color="primary"
+
+
         >
-          <Add />
-        </Button>
+
+          <AddShoppingCartOutlined />
+        </IconButton>
 
       </Box>
 
@@ -94,6 +100,8 @@ export const NewOrderSummary = () => {
 
   const { socket } = useContext(SocketContext);
 
+  const {createOrder, loading} = useCreateOrder();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
@@ -102,19 +110,9 @@ export const NewOrderSummary = () => {
 
     const order: CreateOrderDto = getOrder();
 
-    socket?.emit(EventsEmitSocket.createOrder, order, (resp: SocketResponseOrder) => {
+    createOrder(order)
 
-      console.log('orden creada', resp)
-      if (resp.ok) {
-
-        navigate('/orders');
-        reset();
-      } else {
-        enqueueSnackbar(resp.msg, { variant: 'error' });
-      }
-
-
-    });
+   
 
 
 
@@ -123,52 +121,66 @@ export const NewOrderSummary = () => {
   return (
     <Card>
 
-      <CardHeader title='Datos del pedido' />
+      <CardHeader title='Información del pedido' />
       <CardContent>
 
-        <Box display='flex' gap={2} justifyContent='center'>
+        <Box
+          display='flex' gap={2} alignItems='center'
+          justifyContent='center'
+        >
+          <Box>
 
-          {
-            Object.keys(TypeOrder).map((key) => (
-              <Button
-                variant={typeOrder === key ? "contained" : "outlined"}
-                key={key}
-                sx={{
+            <Typography variant='h5'>Tipo de orden</Typography>
 
-                  '&:hover': {
-                    backgroundColor: 'primary.main',
-                    color: 'white'
-                  }
-
-                }}
-
-                onClick={() => setTypeOrder(key as TypeOrder)}
-
-
+            <ToggleButtonGroup
+              value={typeOrder}
+              onChange={(e, value) => setTypeOrder(value as TypeOrder)}
+            >
+              <ToggleButton
+                value={"TAKE_AWAY"}
               >
-                {TypeOrder[`${key}` as keyof typeof TypeOrder]}
-              </Button>
-            ))
-          }
+                <DeliveryDining />
+              </ToggleButton>
+              <ToggleButton
+                value={"IN_PLACE"}
+              >
+                <LocalDining />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
 
         </Box>
 
-        <Box display='flex' gap={1} alignItems='center' my={2}>
+        <Box
+          display='flex' 
+          justifyContent='space-around'
+        >
 
-          {
-            typeOrder === "IN_PLACE" as TypeOrder &&
+
+          <Box
+          >
+
+
+            <Typography variant='h5' mt={1}>Personas</Typography>
+            <People />
+          </Box>
+
+          <Box
+          >
+
+            <Typography variant='h5' mt={1}>Mesa</Typography>
             <TableOrder />
-          }
 
-          <People />
+
+          </Box>
 
         </Box>
 
 
-        <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+        {/* <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
           <DataClient />
-        </Box>
+        </Box> */}
 
         <Box >
           <OrderDetails />
@@ -185,7 +197,15 @@ export const NewOrderSummary = () => {
 
 
         <Box mt={2}>
-          <Button variant='contained' disabled={details.length <= 0} onClick={submitAddOrder} fullWidth >Crear pedido</Button>
+          <LoadingButton 
+          variant='contained' 
+          disabled={details.length <= 0} 
+          onClick={submitAddOrder} 
+          fullWidth 
+          loading={loading}
+          >
+            Crear pedido
+          </LoadingButton>
 
         </Box>
 

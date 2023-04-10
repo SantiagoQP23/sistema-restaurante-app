@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Card, CardHeader, Grid, CardContent, Box, Divider, Typography,
-  Button, CardActions, IconButton, Tooltip, useTheme
+  Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions
 } from '@mui/material';
 
-import { ArrowBack, EditOutlined, EditTwoTone } from '@mui/icons-material';
+import { ArrowBack, EditOutlined, EditTwoTone, ExpandMoreOutlined } from '@mui/icons-material';
 
-import { formatDistance } from 'date-fns';
+import { formatDistance, subHours } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 import { useSnackbar } from 'notistack';
@@ -20,7 +20,7 @@ import { DetailInProgress } from './';
 import { Label } from '../../../../../../components/ui';
 import { SocketContext } from '../../../../../../context';
 import { UpdateOrderDto } from '../../../dto/update-order.dto';
-import { OrderStatus, IOrderDetail } from '../../../../../../models/orders.model';
+import { OrderStatus, IOrderDetail, TypeOrder } from '../../../../../../models/orders.model';
 import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
 import { setActiveOrder } from '../../../../../../redux';
@@ -30,7 +30,7 @@ import { statusModalEditOrderDetail } from '../../../services/orders.service';
 
 interface Props {
   order: IOrder;
-  setStatusFilter: (status: OrderStatus) => void;
+  setStatusFilter?: (status: OrderStatus) => void;
 }
 
 
@@ -46,10 +46,10 @@ const PendingDetail: FC<{ detail: IOrderDetail }> = ({ detail }) => {
 
           <Typography
             variant="inherit"
-            
+
             color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}
             style={{ whiteSpace: 'pre-wrap' }}
-            >
+          >
             {detail.description}
           </Typography>
 
@@ -150,11 +150,154 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
     <>
 
 
+      <Accordion>
+
+        <AccordionSummary
+          expandIcon={<ExpandMoreOutlined />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+
+          <Box>
+            <Typography
+              variant="body1"
+              fontWeight='bold'
+              
+            >
+              
+              Mesa {order.table?.name}
+              </Typography>
+            <Typography variant="body1">
+              {
+              
+              // restar 5 horas con datefns
+              
+              formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
+                addSuffix: true,
+                includeSeconds: true,
+                locale: es
+
+
+              })}
+
+            </Typography>
+
+            <Typography variant="body1">
+              <b>De: </b>
+              {order.user.person.firstName + ' ' + order.user.person.lastName}
+            </Typography>
+          </Box>
+
+
+
+
+
+        </AccordionSummary>
+
+        <Divider />
+
+        <AccordionDetails>
+
+          {
+            order.status === OrderStatus.IN_PROGRESS
+              ?
+              <>
+                {
+                  details.filter(detail => detail.quantity !== detail.qtyDelivered)
+                    .map(detail => (
+                      <Grid key={detail.id} item xs={12} mt={1} >
+                        <DetailInProgress detail={detail} orderId={order.id} />
+                      </Grid>
+                    ))
+
+                }
+                {
+                  details.filter(detail => detail.quantity === detail.qtyDelivered)
+                    .map(detail => (
+                      <Grid key={detail.id} item xs={12} >
+                        <DetailDispatched detail={detail} orderId={order.id} />
+                      </Grid>
+                    ))
+
+                }
+
+              </>
+
+              :
+              details.map(detail => (
+                <Grid key={detail.id} item xs={12} >
+                  <PendingDetail detail={detail} />
+                </Grid>
+              )
+              )
+          }
+
+
+        </AccordionDetails>
+
+        <AccordionActions >
+          {
+            order.status === OrderStatus.PENDING
+              ? <Button
+                fullWidth
+                variant='contained'
+                onClick={() => {
+                  changeStatusOrder(OrderStatus.IN_PROGRESS)
+                  setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+
+                }}
+              >Iniciar</Button>
+              : order.status === OrderStatus.IN_PROGRESS
+              &&
+              < >
+                <Button
+                  fullWidth
+                  startIcon={<ArrowBack />}
+                  variant='outlined'
+                  onClick={() => {
+                    changeStatusOrder(OrderStatus.PENDING)
+                    setStatusFilter && setStatusFilter(OrderStatus.PENDING)
+
+                  }}
+                  color='success'
+                >
+                  Pendiente
+                </Button>
+                <Button
+                  fullWidth
+                  startIcon={<EditOutlined />}
+                  variant='contained'
+                  onClick={() => {
+                    navigate(`/orders/edit/${order.id}`)
+                  }}
+                >
+                  Editar
+                </Button>
+                {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
+
+              </ >
+
+
+
+
+          }
+
+
+        </AccordionActions>
+
+
+
+      </Accordion>
+
+
+
+
+      {/* 
       <Card
 
->
+      >
         <CardHeader
-            
+
           title={
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
@@ -170,18 +313,10 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                 })}
 
               </Typography>
-              {/* <Label color='success'>
-                {formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-
-
-                })}
-              </Label> */}
+           
 
             </Box>}
-          subheader={order.user.person.firstName + ' ' + order.user.person.lastName}
+          subheader={'De: ' + order.user.person.firstName + ' ' + order.user.person.lastName}
         />
         <Divider />
         <CardContent>
@@ -234,7 +369,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
           {
             order.status === OrderStatus.PENDING
               ? <Button
-              fullWidth
+                fullWidth
                 variant='contained'
                 onClick={() => {
                   changeStatusOrder(OrderStatus.IN_PROGRESS)
@@ -246,7 +381,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
               &&
               < >
                 <Button
-                fullWidth
+                  fullWidth
                   startIcon={<ArrowBack />}
                   variant='outlined'
                   onClick={() => {
@@ -259,7 +394,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                   Pendiente
                 </Button>
                 <Button
-                fullWidth
+                  fullWidth
                   startIcon={<EditOutlined />}
                   variant='contained'
                   onClick={() => {
@@ -268,7 +403,6 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
                 >
                   Editar pedido
                 </Button>
-                {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
 
               </ >
 
@@ -280,7 +414,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter }) => {
 
 
 
-      </Card>
+      </Card> */}
 
 
     </>

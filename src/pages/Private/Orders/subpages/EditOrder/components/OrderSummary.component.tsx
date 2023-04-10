@@ -1,4 +1,4 @@
-import { DeleteOutline, ShoppingCart } from "@mui/icons-material";
+import { DeleteOutline, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, Button } from "@mui/material";
 import { format } from "date-fns";
 import { FC, useState, useEffect } from "react";
@@ -50,6 +50,10 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
             <Box>
               <Typography variant='h4' fontWeight='bold'>Pedido N° {order.num}</Typography>
+
+            </Box>
+
+            <Box display='flex' gap={1}>
               {
                 !order.isPaid && order.status === OrderStatus.DELIVERED
                   ? <Label color='warning'>Por pagar</Label>
@@ -64,26 +68,8 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                     }
                   </Label>
               }
-            </Box>
 
-            <Box display='flex' gap={1}>
-              <Button
-                variant='contained'
-                color='error'
-                onClick={eliminarPedido}
-                disabled={orderDelivered}
-              >
-                <DeleteOutline />
-              </Button>
 
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate('products')}
-              >
-                <ShoppingCart />
-
-              </Button>
 
             </Box>
 
@@ -95,9 +81,11 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
 
           <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+            <Box>
 
-            <Typography variant='h5'>Hora: {format(new Date(order?.createdAt), 'HH:mm')}</Typography>
-
+              <Typography variant='h5'>Hora: </Typography>
+              <Typography variant='body1'>{format(new Date(order.createdAt), 'HH:mm')}</Typography>
+            </Box>
             {
               order.type === "IN_PLACE" as TypeOrder &&
               <OrderTable />
@@ -107,8 +95,10 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
           <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
             <Box>
-              <Typography variant='body1'>Mesero: </Typography>
-              <b>{order.user.person.firstName} {order.user.person.lastName} </b>
+              <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
+              <Typography>
+                {order.user.person.firstName} {order.user.person.lastName}
+              </Typography>
 
             </Box>
             <Box sx={{ width: '100px' }}>
@@ -138,15 +128,27 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             <Typography variant='h4' fontWeight='bold'>Total </Typography>
             <Typography variant='h4' fontWeight='bold'>${order.amount}</Typography>
           </Box>
-          <Box display='flex' justifyContent='center' alignItems='center'>
+
+          <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+            <Button
+              variant='outlined'
+              color='error'
+              onClick={eliminarPedido}
+              disabled={orderDelivered}
+              size='small'
+            >
+              <DeleteOutline />
+            </Button>
 
             <Button
               variant='contained'
               onClick={() => { navigate('receipt') }}
 
-              sx={{ mt: 2 }}
+              startIcon={<PointOfSaleOutlined />}
+              color="primary"
+
             >
-              Comprobante
+              Pago
             </Button>
           </Box>
 

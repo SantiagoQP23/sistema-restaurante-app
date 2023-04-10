@@ -72,37 +72,37 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
           alt="Product"
         /> */}
 
+        <CardHeader
+          title={producto.name}
+          subheader={`$ ${producto.price}`}
+          action={
+            
+              producto.isActive
+                ? <Label color='info'>
+
+                  {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
+
+                </Label>
+                : <Label color='error'>
+                  Eliminado
+                </Label>
+            
+          }
+
+        />
+
+
+
+
       
 
-
-        <CardContent >
-
-          <Box display='flex' justifyContent='space-between'>
-
-            <Typography variant='h4' >{producto.name}</Typography>
-            <Typography variant="body1" >
-
-              {
-                producto.isActive
-                  ? <Label color='info'>
-
-                    {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
-
-                  </Label>
-                  : <Label color='error'>
-                    Eliminado
-                  </Label>
-              }
-            </Typography>
-          </Box>
-
-          <Typography variant="body1" >$ {producto.price}</Typography>
-          <Typography  >{producto.description ? producto.description : 'No se ha añadido descripción'}</Typography>
+        
+          <Typography ml={2} >{producto.description ? producto.description : 'No se ha añadido descripción'}</Typography>
 
 
 
           {/* <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography> */}
-        </CardContent>
+       
 
         <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
 

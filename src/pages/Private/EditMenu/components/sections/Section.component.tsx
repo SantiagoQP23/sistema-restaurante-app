@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, Tooltip } from '@mui/material';
+import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, Tooltip, CardHeader, CardActionArea } from '@mui/material';
 
 import { EditOutlined, DeleteOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { ISection } from '../../../../../models';
@@ -29,7 +29,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const {loading, callEndpoint} = useFetchAndLoad();
+  const { loading, callEndpoint } = useFetchAndLoad();
 
   const editarCategorias = () => {
     dispatch(setActiveSection(seccion));
@@ -41,13 +41,13 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
     dispatch(setActiveCategories(seccion!.categories))
 
-    if(seccion!.categories.length > 0){
+    if (seccion!.categories.length > 0) {
       dispatch(setActiveCategory(seccion!.categories[0]))
-  
+
       dispatch(setActiveProducts(seccion!.categories[0].products))
-      
-    }else {
-      
+
+    } else {
+
       dispatch(setActiveProducts([]))
     }
 
@@ -61,19 +61,19 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
   const changeStatusSection = async (seccion: ISection) => {
 
-    await callEndpoint(updateSectionS(seccion.id, {isActive: !seccion.isActive}))
-    .then((resp) => {
-      const { data } = resp;
-      console.log(data.section)
+    await callEndpoint(updateSectionS(seccion.id, { isActive: !seccion.isActive }))
+      .then((resp) => {
+        const { data } = resp;
+        console.log(data.section)
 
-      dispatch(updateSection({...seccion, isActive: !seccion.isActive}))
+        dispatch(updateSection({ ...seccion, isActive: !seccion.isActive }))
 
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
 
-      enqueueSnackbar('Ya existe', { variant: 'error' })
+        enqueueSnackbar('Ya existe', { variant: 'error' })
 
-    });
+      });
 
   }
 
@@ -81,21 +81,24 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
   return (
     <>
 
-      <Card >
-        <CardContent>
-        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-            <Typography variant="h4">{seccion.name}</Typography>
-            <Label color={seccion.isActive ? 'success' : 'error' }>{seccion.isActive ? 'Activo' : 'Eliminado' }</Label>
-          </Box>
-          <Typography variant="h6" >Categorías: {seccion.categories.length}</Typography>
+      <Card
 
-          {
-            // seccion.categories.map((categoria, index) => (
-            //   <Typography key={index} variant="h6" >{categoria.name}</Typography>
-            // ))
-          }
+      >
+        <CardActionArea
+         onClick={() => editarCategorias()}
+        >
 
-        </CardContent>
+          <CardHeader
+            title={seccion.name}
+            subheader={`Categorías: ${seccion.categories.length}`}
+            action={
+
+              <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
+            }
+          />
+        </CardActionArea>
+
+
 
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box >
@@ -121,26 +124,26 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
             <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} />
 
             {
-            //   seccion.isActive
-            //   ? 
-            // <Tooltip title='Eliminar' >
+              //   seccion.isActive
+              //   ? 
+              // <Tooltip title='Eliminar' >
 
-            //   <IconButton 
-            //   color='success'
-            //     onClick={() => { activateSection(seccion) }}
-            //     >
-            //   <ToggleOn />
-            //   </IconButton>
-            // </Tooltip>
-            // : 
-            // <Tooltip title='Activar' >
-            //   <IconButton 
-            //   color='error'
-            //     onClick={() => { activateSection(seccion) }}
-            //   >
-            //   <ToggleOff />
-            //   </IconButton>
-            // </Tooltip>
+              //   <IconButton 
+              //   color='success'
+              //     onClick={() => { activateSection(seccion) }}
+              //     >
+              //   <ToggleOn />
+              //   </IconButton>
+              // </Tooltip>
+              // : 
+              // <Tooltip title='Activar' >
+              //   <IconButton 
+              //   color='error'
+              //     onClick={() => { activateSection(seccion) }}
+              //   >
+              //   <ToggleOff />
+              //   </IconButton>
+              // </Tooltip>
 
             }
 
@@ -148,6 +151,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
           </Box>
 
         </CardActions>
+
       </Card>
 
     </>

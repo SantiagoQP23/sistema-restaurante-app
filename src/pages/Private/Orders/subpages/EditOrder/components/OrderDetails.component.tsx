@@ -1,10 +1,11 @@
 import { FC, useContext } from 'react';
-import {  Box, Typography,  Grid, Divider } from '@mui/material';
+import { Box, Typography, Grid, Divider, Button } from '@mui/material';
 import { OrderDetail } from "../../../components/EditOrder/OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
 import { OrderContext } from '../../../context/Order.context';
 import { IOrderDetail } from '../../../../../../models';
 import { ModalUpdateDetail } from '../../../components/EditOrder/ModalUpdateDescriptionDetail.component';
+import { AddShoppingCartOutlined } from '@mui/icons-material';
 
 
 
@@ -30,7 +31,16 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
 
         <Typography variant="h4" fontWeight='bold'>Productos</Typography>
 
-        <Typography variant="subtitle1">Cantidad: {orderDetails.length}</Typography>
+        <Button
+          variant="text"
+          color="primary"
+          onClick={() => navigate('products')}
+          size='small'
+        >
+          <AddShoppingCartOutlined />
+
+        </Button>
+
       </Box>
       <Divider sx={{ my: 1 }} />
 
@@ -41,15 +51,16 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
           <Grid container spacing={1}>
             {
               orderDetails.map((detail) => {
-                
-                if(detail.isActive)
-                return (
-                <Grid key={detail.id} item xs={12}>
 
-                  <OrderDetail detail={detail} />
-                  <Divider sx={{ my: 1 }} />
-                </Grid>
-              )})
+                if (detail.isActive)
+                  return (
+                    <Grid key={detail.id} item xs={12}>
+
+                      <OrderDetail detail={detail} />
+                     
+                    </Grid>
+                  )
+              })
             }
             <ModalUpdateDetail />
           </Grid>

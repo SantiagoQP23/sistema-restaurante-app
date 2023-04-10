@@ -1,5 +1,6 @@
+import { useContext, useState } from 'react';
+
 import { useSnackbar } from 'notistack';
-import { useContext } from 'react';
 import { SocketContext } from '../../../../context';
 import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
 import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
@@ -19,10 +20,16 @@ export const useOrders = () => {
 
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+
 
   const updateOrderDetail = (updateOderDetailDto: UpdateOrderDetailDto) => {
+
+    setLoading(true);
+
     socket?.emit(EventsEmitSocket.updateOrderDetail, updateOderDetailDto, ({ ok, msg, order }: SocketResponseOrder) => {
 
+      setLoading(false);
       if (!ok) {
         enqueueSnackbar(msg, { variant: 'error' });
       }else {
@@ -32,26 +39,14 @@ export const useOrders = () => {
     })
   }
 
-  const createOrderDetail = (data: CreateOrderDetailDto) => {
+ 
   
-
-    socket?.emit(EventsEmitSocket.addOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
-
-      if (ok) {
-        dispatch(setActiveOrder(order!))
-
-      } else {
-        enqueueSnackbar(msg, { variant: 'error' });
-      }
-
-    });
-  }
 
 
 
   return {
     updateOrderDetail,
-    createOrderDetail
+    loading  
 
 
 

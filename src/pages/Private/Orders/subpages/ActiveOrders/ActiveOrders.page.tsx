@@ -49,7 +49,7 @@ export const ActiveOrders = () => {
 
 
 
-      <Typography variant="h4" color="initial">Pedidos pendientes</Typography>
+      <Typography variant="h4" color="initial" mb={1}>Pedidos activos</Typography>
       <Outlet />
 
 
