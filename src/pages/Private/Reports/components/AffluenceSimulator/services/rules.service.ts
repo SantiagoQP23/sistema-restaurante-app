@@ -60,6 +60,17 @@ export const updateRulesDay = (rulesDay: UpdateRuleDayDto[]) => {
   }
 
 }
+export const updateRuleDay = (ruleDay: UpdateRuleDayDto) => {
+
+  const controller = loadAbort();
+
+  return {
+    call: restauranteApi.patch<RuleDay>(`rule-day/${ruleDay.id}`, ruleDay,
+      { signal: controller.signal }),
+    controller
+  }
+
+}
 
 export const getRulesWeather = () => {
 

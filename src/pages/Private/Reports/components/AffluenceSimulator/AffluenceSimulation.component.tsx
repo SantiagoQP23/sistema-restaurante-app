@@ -193,7 +193,6 @@ export const AffluenceSimulation = () => {
 
     //   })
 
-
   }
 
 
@@ -202,12 +201,6 @@ export const AffluenceSimulation = () => {
   }, [days, year])
 
   useAsync(getAffluenceCall, loadAffluenceState, () => { }, []);
-
-
-
-
-
-
 
   return (
     <>
@@ -222,9 +215,6 @@ export const AffluenceSimulation = () => {
 
 
         </Box>
-
-
-
 
         <LoadingButton loading={loading} variant="contained" onClick={() => navigate('/reports/simulator')}>
           Parámetros de simulación
@@ -256,13 +246,13 @@ export const AffluenceSimulation = () => {
       <Card>
 
         <CardHeader 
-        title='Afluencia por mes'
+        title='Filtros'
         />
 
         <CardActions>
 
           <Grid container spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Select
                 labelId="select-seccion"
                 label="Tipo de identificación"
@@ -270,7 +260,8 @@ export const AffluenceSimulation = () => {
                 margin='dense'
                 value={year}
                 onChange={(e) => onChangeYear(e)}
-              >
+                size="small"
+                >
 
                 {years.map(year => (
                   <MenuItem key={year.value} value={year.value}>
@@ -280,7 +271,7 @@ export const AffluenceSimulation = () => {
               </Select>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Select
                 labelId="select-seccion"
                 label="Tipo de identificación"
@@ -288,6 +279,7 @@ export const AffluenceSimulation = () => {
                 margin='dense'
                 value={month}
                 onChange={(e) => onChangeMonth(e)}
+                size="small"
               >
 
                 {months.map(month => (

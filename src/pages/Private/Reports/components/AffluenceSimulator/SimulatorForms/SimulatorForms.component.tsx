@@ -58,33 +58,39 @@ export const SimulatorForms = () => {
   return (
     <>
 
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Box>
-          <Stack direction="row" spacing={1} >
+      <Box display='flex' justifyContent='space-between' mb={2} alignItems='center'>
 
 
-            <Button onClick={() => { navigate(-1) }}>
-              <ArrowBack />
-            </Button>
+        <Box
+          display='flex'
+          alignItems='center'
+          gap={1}
+        >
 
-            <Typography variant="h3">Simulador de afluencia</Typography>
+          <Button onClick={() => { navigate(-1) }}>
+            <ArrowBack />
+          </Button>
 
-          </Stack>
+          <Typography variant="h4">Simulador de afluencia</Typography>
+
         </Box>
 
-        <Stack direction='row' spacing={2}>
-
-
-          <LoadingButton loading={loading} variant="contained" onClick={submitUpdateSimulation}>
-            Actualizar simulación
-          </LoadingButton>
-
-
-        </Stack>
 
 
 
-      </Grid>
+        <LoadingButton
+          loading={loading}
+          variant="contained"
+          onClick={submitUpdateSimulation}
+        >
+          Actualizar simulación
+        </LoadingButton>
+
+
+
+
+
+      </Box>
 
 
       <Grid container spacing={1}>
