@@ -3,9 +3,9 @@ import { FC, useContext } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, IconButton, Typography, Button, CircularProgress, } from '@mui/material';
+import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress } from '@mui/material';
 
-import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined, CloseOutlined } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../models';
 import { useCounter } from '../../hooks';
 
@@ -21,11 +21,28 @@ import { setActiveOrder } from '../../../../../redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 import { statusModalDescriptionDetail, statusModalEditOrderDetail } from '../../services/orders.service';
 import { DeleteOrderDetailDto } from '../../dto/delete-order-detail.dto';
+import { styled } from '@mui/material/styles';
 
 
 interface Props {
   detail: IOrderDetail;
 }
+
+
+const LinearProgressWrapper = styled(LinearProgress)(
+  ({ theme }) => `
+        flex-grow: 1;
+        height: 10px;
+        
+        &.MuiLinearProgress-root {
+          background-color: ${theme.colors.alpha.black[10]};
+        }
+        
+        .MuiLinearProgress-bar {
+          border-radius: ${theme.general.borderRadiusXl};
+        }`
+);
+
 
 export const OrderDetail: FC<Props> = ({ detail }) => {
 
@@ -98,134 +115,164 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
   return (
     <>
 
+      <Box
+        sx={{
+          border: '1px solid #e0e0e0',
+          borderRadius: 1,
+          p: 1,
+          position: 'relative',
+          boxShadow: '0px 0px 3px rgba(0, 0, 0, 0.3)'
+
+          
 
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        }}
+      >
 
+        <CloseOutlined  
+           sx={{
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
+           cursor: 'pointer',
+            border: '1px solid #e0e0e0',
+            borderRadius: '5px',
 
-        <Typography
-          variant="h5"
-          color="initial"
+            '&:hover': {
+              color: 'error.main',
+              borderColor: 'error.main'
+            }
 
+          }}
+        />
+
+        <Box
+          sx={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          }}
         >
 
-          {detail.quantity} - {detail.product.name} ... $ {detail.product.price}
-        </Typography>
-
-        <Box display='flex' alignItems='center' gap={2}>
-
-          {
-            detail.qtyDelivered === 0 &&
-            <IconButton
-              size='small'
-
-
-              color='error'
-              onClick={deleteDetail}
-            >
-              <DeleteOutline />
-            </IconButton>
-          }
-
-
-
-          <IconButton
-            size='small'
-            sx={{ color: 'primary.main' }}
-          >
-            <EditOutlined onClick={editDetail} />
-          </IconButton>
-
-
-
-
-          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-            <CircularProgress
-              variant="determinate"
-              size={25}
-              value={detail.qtyDelivered * 100 / detail.quantity}
-              sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
-            />
-            <Box
-              sx={{
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-                position: 'absolute',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography
-                variant="caption"
-                component="div"
-                sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
-
-              >{detail.qtyDelivered}</Typography>
-            </Box>
-          </Box>
-
-        </Box>
-
-
-
-      </Box>
-
-
-      <Box sx={{ display: "flex" }}>
-        <Box sx={{ flexGrow: 1 }} >
 
           <Typography
-            variant="body2"
-            color={detail.description ? "darkslateblue" : ""}
-            style={{ whiteSpace: 'pre-wrap' }}
-          >
-            {detail.description}
+            variant="h5"
+            color="initial"
 
+          >
+
+            {detail.product.name} ... $ {detail.product.price}
+          <IconButton
+              size='small'
+              sx={{ color: 'primary.main' }}
+            >
+              <EditOutlined onClick={editDetail} />
+            </IconButton>
           </Typography>
+          
+
+          <Box display='flex' alignItems='center' gap={2}>
+
+
+
+
+
+
+
+
+
+            {/* <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+              <CircularProgress
+                variant="determinate"
+                size={25}
+                value={detail.qtyDelivered * 100 / detail.quantity}
+                sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+              />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: 'absolute',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  component="div"
+                  sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+
+                >{detail.qtyDelivered}</Typography>
+              </Box>
+            </Box> */}
+
+          </Box>
+
 
 
         </Box>
 
 
-      </Box>
+        <Box sx={{ display: "flex" }}>
+          <Box sx={{ flexGrow: 1 }} >
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-
-          <IconButton
-            onClick={decrement}
-          >
-            <RemoveCircleOutline />
-          </IconButton>
-
-          <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
-          <IconButton
-            onClick={increment}
-          >
-            <AddCircleOutline />
-          </IconButton>
-          {
-            counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
-            <IconButton
-              disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
-              color='primary'
-              onClick={() => updateQuantityDetail()}
+            <Typography
+              variant="body2"
+              color={detail.description ? "darkslateblue" : ""}
+              style={{ whiteSpace: 'pre-wrap' }}
             >
-              <SaveOutlined />
+              {detail.description}
+
+            </Typography>
+
+
+          </Box>
+
+
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+
+            <IconButton
+              onClick={decrement}
+            >
+              <RemoveCircleOutline />
             </IconButton>
 
-          }
+            <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+            <IconButton
+              onClick={increment}
+            >
+              <AddCircleOutline />
+            </IconButton>
+            {
+              counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
+              <IconButton
+                disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
+                color='primary'
+                onClick={() => updateQuantityDetail()}
+              >
+                <SaveOutlined />
+              </IconButton>
+
+            }
+
+
+          </Box>
+
+          <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
 
 
         </Box>
-
-        <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
-
+        <LinearProgressWrapper
+          value={(detail.qtyDelivered * 100) / detail.quantity}
+          color="primary"
+          variant="determinate"
+        />
 
       </Box>
 

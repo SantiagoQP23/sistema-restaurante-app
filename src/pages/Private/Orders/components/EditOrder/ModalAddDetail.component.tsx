@@ -16,6 +16,9 @@ import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 
 import { CreateOrderDetailDto } from "../../dto/create-order-detail.dto";
 import { useOrders } from '../../hooks/useOrders';
+import { LoadingButton } from '@mui/lab';
+import { useCreateOrder } from '../../hooks/useCreateOrder';
+import { useCreateOrderDetail } from '../../hooks/useCreateOrderDetail';
 
 
 
@@ -43,7 +46,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const {createOrderDetail} = useOrders();
+  const {createOrderDetail, loading} = useCreateOrderDetail();
 
 
   const crearDetalle = () => {
@@ -60,19 +63,15 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
       }
 
       createOrderDetail(data);
+
     } else {
 
       addDetail({ ...detail!, description })
     }
 
-
-
-
-
     enqueueSnackbar(`${detail?.product.name} agregado`, { variant: 'success' })
 
-
-
+    
     // updateDetail({...detail!, description})
 
     setDescription('');
@@ -143,11 +142,12 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
             }}
 
           >Cancelar</Button>
-          <Button
+          <LoadingButton
             onClick={crearDetalle}
             variant="contained"
+            loading={loading}
             
-          >Pedir producto</Button>
+          >Pedir producto</LoadingButton>
         </DialogActions>
       </Dialog>
     </>

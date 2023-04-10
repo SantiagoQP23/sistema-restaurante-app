@@ -1,5 +1,5 @@
 import { Done } from "@mui/icons-material";
-import { Box, TextField, IconButton } from "@mui/material";
+import { Box, TextField, IconButton, CircularProgress } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { FC, useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { selectOrders, setActiveOrder } from "../../../../../../redux";
 import { UpdateOrderDto } from "../../../dto/update-order.dto";
 import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
 import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
+import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 
 interface Props {
   people: number;
@@ -23,11 +24,11 @@ export const PeopleOrder: FC<Props> = ({  }) => {
 
   const { activeOrder } = useSelector(selectOrders);
 
-
-
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const { updateOrder, loading } = useUpdateOrder();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(event.target.value)
@@ -43,14 +44,7 @@ export const PeopleOrder: FC<Props> = ({  }) => {
       people,
     }
 
-    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
-      console.log(res);
-      if (res.ok) {
-        dispatch(setActiveOrder(res.order!));
-      } else {
-        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
-      }
-    });
+    updateOrder(data);
 
 
 
@@ -86,8 +80,12 @@ export const PeopleOrder: FC<Props> = ({  }) => {
             onClick={() => updatePeopleOrder()}
 
 
+
           >
-            <Done />
+            {
+              loading ? <CircularProgress size={20} /> : <Done />
+
+          }
 
           </IconButton>
 
