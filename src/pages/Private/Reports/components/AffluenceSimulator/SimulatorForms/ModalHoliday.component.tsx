@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography, Select, InputLabel, MenuItem } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography, Select, InputLabel, MenuItem, Box } from '@mui/material';
 import { useContext, useState } from 'react';
-import { Holiday, ValidHolidays, ValidHolidaysNames } from '../models/holiday.model';
+import { Holiday, } from '../models/holiday.model';
 import { useEffect } from 'react';
 import { statusModalHoliday, updateHoliday, createHoliday as createHolidayS } from '../services/holidays.service';
 
@@ -10,7 +10,12 @@ import { useSnackbar } from 'notistack';
 import { SimulationContext } from '../../../context/SimulationContext';
 import { FormHoliday } from './FormHoliday.component';
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
-import { formatDate } from '../../../../helpers/format-date.helper';
+import { formatDate, formatDateToPicker } from '../../../../helpers/format-date.helper';
+import { useCreateTypeHoliday, useTypesHolidays, useUpdateTypeHoliday } from '../../../hooks/useTypesHolidays';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { LoadingButton } from '@mui/lab';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../../../../../main';
 
 
 export const ModalHoliday = () => {
@@ -19,73 +24,71 @@ export const ModalHoliday = () => {
 
   const [holiday, setHoliday] = useState<Holiday>();
 
-  const [createHoliday, setCreateHoliday] = useState<CreateHolidayDto>();
+  const [date, setDate] = useState<Date | null>(null);
+  const [typeHolidayId, setTypeHolidayId] = useState<string>();
 
-  const { updateHoliday: updateHolidayC, addHoliday } = useContext(SimulationContext)
 
-  const { loading, callEndpoint } = useFetchAndLoad();
+  
+  const closeModal = () => {
+    setOpen(false);
+    setHoliday(undefined);
+  }
+  
+  const addHolidayMutation = useCreateTypeHoliday(closeModal);
+
+  const updateHolidayMutation = useUpdateTypeHoliday(closeModal);
+
 
   const { enqueueSnackbar } = useSnackbar();
 
   const suscription$ = statusModalHoliday.getSubject();
 
-  const closeModal = () => {
-    setOpen(false);
-  }
+  const holidaysQuery = useTypesHolidays();
 
-  const submitUpdateHoliday = async (holidayToUpdate: UpdateHolidayDto) => {
 
-    await callEndpoint(updateHoliday(holiday!.id, holidayToUpdate))
-      .then((response) => {
-        console.log(response);
-        enqueueSnackbar('Feriado actualizado', { variant: 'success' });
-        updateHolidayC(response.data);
 
-      })
-      .catch((error) => {
-        console.log(error);
-        enqueueSnackbar('Error al actualizar feriado', { variant: 'error' });
-      }
-      )
-  }
-
-  const submitCreateHoliday = async (holidayToCreate: CreateHolidayDto) => {
-    await callEndpoint(createHolidayS(holidayToCreate))
-      .then((response) => {
-        console.log(response);
-        enqueueSnackbar('Feriado creado', { variant: 'success' });
-        addHoliday(response.data);
-
-      }
-      )
-      .catch((error) => {
-        console.log(error);
-        enqueueSnackbar('Error al crear feriado', { variant: 'error' });
-      }
-      )
-
+  const validErrors = () => {
+    return (!typeHolidayId && typeHolidayId?.length === 0)
 
   }
 
-  const onSubmit = async (data: CreateHolidayDto) => {
-    console.log(data);
+  const onSubmit = async () => {
 
-    //Establecer fecha
-    //Pasamos la fecha a formato yyyy-MM-dd
+    console.log({ date, typeHolidayId });
 
-    if (holiday) {
+    if (validErrors()) return;
 
-      await submitUpdateHoliday(data);
+    if (!holiday) {
+      const data: CreateHolidayDto = {
+        date: formatDate(date!),
+        typeHolidayId: typeHolidayId!,
+
+      }
+
+
+      addHolidayMutation.mutate(data);
 
     } else {
-      console.log('crear holiday')
-      await submitCreateHoliday(data);
+      const data: UpdateHolidayDto = {
+        id: holiday.id,
+        date: formatDate(date!),
+        typeHolidayId: typeHolidayId!,
+      }
+
+      updateHolidayMutation.mutate(data);
+
+
+
     }
 
 
-    closeModal();
+
+
 
   }
+  const handleChangeDate = (newValue: Date | null) => {
+    setDate(newValue);
+  };
 
 
 
@@ -96,32 +99,26 @@ export const ModalHoliday = () => {
 
       const { holiday } = data;
       setOpen(data.open);
-      setHoliday(holiday);
 
       if (holiday) {
-        const { id, name, date, ...holidayData } = holiday;
 
-        const holidayToCreate: CreateHolidayDto = {
-          ...holidayData,
-          date,
-          name
-        }
+        setHoliday(holiday);
+        setDate(formatDateToPicker(new Date(holiday.date)));
+        setTypeHolidayId(holiday.typeHoliday.id);
 
-        setCreateHoliday(holidayToCreate);
+
+
       } else {
-        setCreateHoliday({
 
-          name: ValidHolidays.AÑO_NUEVO,
-          date: formatDate(new Date()),
-          value: 0,
-        });
+        setTypeHolidayId('');
+        setDate(formatDateToPicker(new Date()));
+
       }
+
+
 
     });
 
-    // return () => {
-    //   suscription.unsubscribe();
-    // }
 
 
   }, [])
@@ -129,18 +126,66 @@ export const ModalHoliday = () => {
 
   return (
     <>
-      <Dialog open={open} onClose={() => { }} fullWidth maxWidth='xs'>
+      <Dialog open={open} onClose={closeModal} fullWidth maxWidth='xs'>
 
-        {
-          createHoliday &&
-          <FormHoliday
-            onSubmit={onSubmit}
-            loading={loading}
-            closeModal={closeModal}
-            isNew={!holiday?.id}
-            holiday={createHoliday}
-          />
-        }
+        <DialogTitle>
+          <Typography variant='h4'>{holiday ? 'Editar' : 'Crear'} feriado</Typography>
+        </DialogTitle>
+
+        <DialogContent>
+
+
+          <InputLabel id='select-seccion'>Nombre del feriado</InputLabel>
+          <Select
+            labelId="select-seccion"
+
+            label="Seccion"
+            fullWidth
+            margin='dense'
+            value={typeHolidayId}
+            onChange={(e) => setTypeHolidayId(e.target.value)}
+
+          >
+            {
+              holidaysQuery.data?.map((typeHoliday) => (
+                <MenuItem key={typeHoliday.id} value={typeHoliday.id}>{typeHoliday.name}</MenuItem>
+              ))
+            }
+
+
+
+
+          </Select>
+
+          <Box mt={2}
+            width='100%'
+          >
+
+
+            <DesktopDatePicker
+              label="Fecha"
+              inputFormat="yyyy-MM-dd"
+              value={date}
+              onChange={handleChangeDate}
+              renderInput={(params) => <TextField {...params} />}
+
+
+            />
+          </Box>
+
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={closeModal}>Cancelar</Button>
+          <LoadingButton
+            onClick={onSubmit}
+            variant='contained'
+            loading={addHolidayMutation.isLoading}
+
+          >
+            Guardar
+          </LoadingButton>
+        </DialogActions>
 
 
 

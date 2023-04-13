@@ -2,9 +2,10 @@ import { DialogTitle, Typography, DialogContent, Grid, InputLabel, Select, MenuI
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
-import { ValidHolidays, Holiday } from '../models/holiday.model';
+import {  Holiday } from '../models/holiday.model';
 import { formatDate, formatDateToPicker } from '../../../../helpers/format-date.helper';
 import { CreateHolidayDto } from '../dto/create-holiday.dto';
+import { useTypesHolidays } from "../../../hooks/useTypesHolidays";
 
 
 interface Props {
@@ -37,6 +38,9 @@ export const FormHoliday:FC<Props> = ({holiday, onSubmit, loading, isNew, closeM
 
   }
 
+  const {isLoading, error, data} = useTypesHolidays();
+
+
 
 
   return (
@@ -58,7 +62,7 @@ export const FormHoliday:FC<Props> = ({holiday, onSubmit, loading, isNew, closeM
             holiday && <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Controller
-                  name='name'
+                  name='typeHolidayId'
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) =>
                     <>
@@ -72,12 +76,12 @@ export const FormHoliday:FC<Props> = ({holiday, onSubmit, loading, isNew, closeM
                         value={value}
                         onChange={onChange}
                         onBlur={onBlur}
-                        error={!!errors.name}
+                        error={!!errors.typeHolidayId}
 
                       >
                         {
-                          Object.values(ValidHolidays).map((holiday) => (
-                            <MenuItem key={holiday} value={holiday}>{holiday}</MenuItem>
+                          data?.map((holiday) => (
+                            <MenuItem key={holiday.id} value={holiday.id}>{holiday.name}</MenuItem>
                           ))
                         }
 
@@ -103,7 +107,7 @@ export const FormHoliday:FC<Props> = ({holiday, onSubmit, loading, isNew, closeM
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   required
                   {
                   ...register('value', {
@@ -123,7 +127,7 @@ export const FormHoliday:FC<Props> = ({holiday, onSubmit, loading, isNew, closeM
                   inputProps={{
                     step: 0.01,
                   }}
-                />
+                /> */}
 
               </Grid>
             </Grid>

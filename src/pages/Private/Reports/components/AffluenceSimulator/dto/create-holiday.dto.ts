@@ -1,8 +1,7 @@
-import { ValidHolidays } from '../models/holiday.model';
 
 
 export interface CreateHolidayDto {
-  name: ValidHolidays;
+  typeHolidayId: string;
   date: string;
-  value: number;
 }
+

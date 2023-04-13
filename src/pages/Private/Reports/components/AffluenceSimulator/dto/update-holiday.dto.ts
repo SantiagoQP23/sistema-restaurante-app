@@ -1,9 +1,9 @@
-import { ValidHolidays } from '../models/holiday.model';
 
 
 export interface UpdateHolidayDto {
-  name?: ValidHolidays;
+ 
+  id: string;
+  typeHolidayId?: string;
   date?: string;
-  value?: number;
   isActive?: boolean;
 }

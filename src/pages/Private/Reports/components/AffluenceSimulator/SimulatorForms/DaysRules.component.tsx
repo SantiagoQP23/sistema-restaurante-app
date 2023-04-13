@@ -197,37 +197,37 @@ export const DaysRules = () => {
                 <form>
                   <Grid container spacing={1} >
 
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Lunes'
                         dayToUpdate={days.find(day => day.day === 'Monday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Martes'
                         dayToUpdate={days.find(day => day.day === 'Tuesday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Miércoles'
                         dayToUpdate={days.find(day => day.day === 'Wednesday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Jueves'
                         dayToUpdate={days.find(day => day.day === 'Thursday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Viernes'
                         dayToUpdate={days.find(day => day.day === 'Friday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Sábado'
                         dayToUpdate={days.find(day => day.day === 'Saturday')!} />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={3}>
                       <Day
                         label='Domingo'
                         dayToUpdate={days.find(day => day.day === 'Sunday')!} />

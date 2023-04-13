@@ -90,7 +90,7 @@ export const WeekRules = () => {
 
               {
                 weeks.map((week, index) => (
-                  <Grid item xs={12} key={index}>
+                  <Grid item xs={2} key={index}>
 
                     <TextField
 

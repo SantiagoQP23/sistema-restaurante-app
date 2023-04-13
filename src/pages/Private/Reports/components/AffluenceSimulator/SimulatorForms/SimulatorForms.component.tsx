@@ -16,6 +16,8 @@ import { getHolidays } from "../services/holidays.service";
 import { useContext } from 'react';
 import { Holiday } from "../models/holiday.model";
 import { useAsync } from '../../../../../../hooks/useAsync';
+import { Holidays } from "./Holidays.component";
+import { ModalDeleteHoliday } from "./ModalDeleteHoliday";
 
 
 
@@ -46,11 +48,11 @@ export const SimulatorForms = () => {
 
   }
 
-  const getHolidaysCall = async () => await callEndpoint(getHolidays());
+  // const getHolidaysCall = async () => await callEndpoint(getHolidays());
 
-  const loadHolidaysState = (data: Holiday[]) => { loadHolidays(data) };
+  // const loadHolidaysState = (data: Holiday[]) => { loadHolidays(data) };
 
-  useAsync(getHolidaysCall, loadHolidaysState, () => { }, []);
+  // useAsync(getHolidaysCall, loadHolidaysState, () => { }, []);
 
 
 
@@ -99,7 +101,7 @@ export const SimulatorForms = () => {
           <RestaurantInformation />
         </Grid>
 
-        <Grid container item xs={12} md={6} spacing={1} display='flex' alignContent='flex-start'>
+        <Grid container item xs={12} md={9} spacing={1} display='flex' alignContent='flex-start'>
 
           <Grid item xs={12}  >
             <DaysRules />
@@ -112,10 +114,19 @@ export const SimulatorForms = () => {
 
           </Grid>
         </Grid>
-        <Grid item xs={12} md={3} >
-          <HolidaysRules />
+
+        <Grid item container xs={12} spacing={2} >
+          <Grid item xs={12} md={6}>
+            <HolidaysRules />
+
+          </Grid>
+          <Grid item xs={12} md={6}  >
+
+            <Holidays />
+          </Grid>
 
         </Grid>
+
 
 
 
@@ -130,6 +141,7 @@ export const SimulatorForms = () => {
       </Grid>
 
       <ModalHoliday />
+      <ModalDeleteHoliday />
 
 
     </>

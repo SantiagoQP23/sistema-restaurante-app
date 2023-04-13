@@ -88,7 +88,7 @@ export const WeatherRules = () => {
 
               {
                 weatherRules.map((weatherRule, index) => (
-                  <Grid item xs={6} key={index}>
+                  <Grid item xs={2} key={index}>
                     <TextField
 
                       label={WeatherSpanish[`${weatherRule.rule}` as keyof typeof WeatherSpanish]}

@@ -96,7 +96,6 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
               <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
             }
           />
-        </CardActionArea>
 
 
 
@@ -113,7 +112,8 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
           <Box >
             <Tooltip title='Editar' >
               <IconButton color='primary'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   editarSeccion();
                 }}
               >
@@ -123,34 +123,13 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
             <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} />
 
-            {
-              //   seccion.isActive
-              //   ? 
-              // <Tooltip title='Eliminar' >
-
-              //   <IconButton 
-              //   color='success'
-              //     onClick={() => { activateSection(seccion) }}
-              //     >
-              //   <ToggleOn />
-              //   </IconButton>
-              // </Tooltip>
-              // : 
-              // <Tooltip title='Activar' >
-              //   <IconButton 
-              //   color='error'
-              //     onClick={() => { activateSection(seccion) }}
-              //   >
-              //   <ToggleOff />
-              //   </IconButton>
-              // </Tooltip>
-
-            }
-
+          
 
           </Box>
 
         </CardActions>
+        </CardActionArea>
+
 
       </Card>
 
