@@ -32,10 +32,11 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
         <Typography variant="h4" fontWeight='bold'>Productos</Typography>
 
         <Button
-          variant="text"
+          variant="outlined"
           color="primary"
           onClick={() => navigate('products')}
           size='small'
+
         >
           <AddShoppingCartOutlined />
 
@@ -57,6 +58,7 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
                     <Grid key={detail.id} item xs={12}>
 
                       <OrderDetail detail={detail} />
+                      
                      
                     </Grid>
                   )

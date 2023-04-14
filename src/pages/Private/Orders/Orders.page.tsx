@@ -50,7 +50,7 @@ export const Orders = () => {
     socket?.on(EventsOnSocket.newOrder, ({ order }: { order: IOrder }) => {
 
       console.log(order);
-      enqueueSnackbar(`Se ha añadido un nuevo pedido`, { variant: 'success' });
+      enqueueSnackbar(`Se ha añadido un nuevo pedido`, { variant: 'info' });
 
       dispatch(addOrder(order))
 
