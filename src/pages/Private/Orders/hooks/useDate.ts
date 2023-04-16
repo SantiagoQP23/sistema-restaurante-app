@@ -12,22 +12,22 @@ import { useAppDispatch } from './useRedux';
  */
 
 
-export const useDate = () => {
+// export const useDate = () => {
 
-  const { date } = useSelector(selectOrders);
+//   const { date } = useSelector(selectOrders);
   
-  const dispatch = useAppDispatch();
+//   const dispatch = useAppDispatch();
 
-  const setdate = (date: string = '') => {
-    const dateActual = parseDate();
+//   const setdate = (date: string = '') => {
+//     const dateActual = parseDate();
 
- /*    
-    console.log('estableciendo la date: ', date)
-     date === ''
-      ?  dispatch(pedidoStartSetDate(dateActual))
-      :  dispatch( pedidoStartSetDate( parseDate(date) )); */
-  }
+    
+//     console.log('estableciendo la date: ', date)
+//      date === ''
+//       ?  dispatch(pedidoStartSetDate(dateActual))
+//       :  dispatch( pedidoStartSetDate( parseDate(date) ));
+//   }
 
 
-  return { date, setdate }
-}
+//   return { date, setdate }
+// }
