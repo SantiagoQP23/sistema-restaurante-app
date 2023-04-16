@@ -82,9 +82,9 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
       <Box display="flex" alignItems="center" justifyContent="space-between">
 
         <Typography variant='h4' color='gray'
-          // sx={{
-          //   textDecoration: 'line-through'
-          // }}
+        // sx={{
+        //   textDecoration: 'line-through'
+        // }}
         >
           {`${detail.quantity}`} - {`${detail.product.name}`}
 
@@ -100,7 +100,7 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
             color='success'
             size="small"
             onClick={() => editDetail()}
-            
+
           >
             <CheckCircleOutline fontSize="small" />
           </IconButton>
@@ -202,8 +202,14 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
 
             >
+              {
+                order.type === TypeOrder.IN_PLACE
 
-              Mesa {order.table?.name}
+                  ?
+                  `Mesa ${order.table?.name}`
+                  : 'Para llevar'
+
+              }
             </Typography>
           }
 
@@ -233,7 +239,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
         />
 
-      
+
 
         <Box
           mx={2}
@@ -252,7 +258,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                     ))
 
                 }
-                <Divider sx={{my: 1}}/>
+                <Divider sx={{ my: 1 }} />
                 {
                   details.filter(detail => detail.quantity === detail.qtyDelivered)
                     .map(detail => (

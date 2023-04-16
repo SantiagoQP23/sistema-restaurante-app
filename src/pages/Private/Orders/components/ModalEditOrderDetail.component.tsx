@@ -106,10 +106,12 @@ export const ModalEditOrderDetail = () => {
     subscription$.subscribe((data) => {
 
       setDetail(data.detalle);
-      setOpen(data.value)
-      setOrderId(data.orderId)
-      setCounterQtyDelivered(data.detalle.qtyDelivered)
-      setCounterQty(data.detalle.quantity)
+      setOpen(data.value);
+      setOrderId(data.orderId);
+      setCounterQtyDelivered(data.detalle.qtyDelivered);
+      setCounterQty(data.detalle.quantity);
+      setDescription(data.detalle.description);
+      setDiscount(data.detalle.discount);
 
     })
 
@@ -136,7 +138,7 @@ export const ModalEditOrderDetail = () => {
           size='small'
           loading={loading}
         >{
-            counterQtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
+            detail?.qtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
           }</LoadingButton>
       </DialogTitle>
       <Divider />

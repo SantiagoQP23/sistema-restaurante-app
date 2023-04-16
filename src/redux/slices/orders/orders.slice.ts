@@ -8,7 +8,7 @@ import { RootState } from "../../store";
 export interface PedidosState {
   orders: IOrder[]
   activeOrder: IOrder | null;
-  date: string;
+  lastUpdatedOrders: string ;
   detailActive: IOrderDetail | null;
   
 }
@@ -16,7 +16,7 @@ export interface PedidosState {
 const initialState: PedidosState = {
   orders: [],
   activeOrder: null,
-  date: '',
+  lastUpdatedOrders: new Date().toISOString(),
   detailActive: null
 };
 
@@ -67,8 +67,8 @@ export const ordersSlice = createSlice({
 
       state.orders = action.payload
     },
-    setDateOrders: (state, action: PayloadAction<string>) => {
-      state.date = action.payload;
+    setLastUpdatedOrders: (state, action: PayloadAction<string>) => {
+      state.lastUpdatedOrders = action.payload;
     },
     resetOrders: () => ({ ...initialState }),
     resetActiveOrder: (state) => {
@@ -219,7 +219,7 @@ export const {
   updateOrder,
   deleteOrder,
   loadOrders,
-  setDateOrders,
+  setLastUpdatedOrders,
   resetOrders,
   resetActiveOrder,
   /* 

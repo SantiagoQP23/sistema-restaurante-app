@@ -59,7 +59,7 @@ export const CardOrdersByStatus: FC<Props> = ({
           {orders.map(order => (
 
 
-            <>
+          
               <ListItemButton
                 key={order.id}
                 onClick={() => { navigate(`edit/${order.id}`) }}
@@ -87,11 +87,11 @@ export const CardOrdersByStatus: FC<Props> = ({
 
 
               </ListItemButton>
-              <Divider />
+           
 
 
 
-            </>
+          
 
           ))}
         </List>

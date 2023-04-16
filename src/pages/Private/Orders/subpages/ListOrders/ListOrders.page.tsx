@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 // Componentes
 
-import { loadOrders, resetActiveOrder, selectAuth, selectOrders } from '../../../../../redux';
+import { loadOrders, resetActiveOrder, selectAuth, selectOrders, setLastUpdatedOrders } from '../../../../../redux';
 
 import { SocketContext } from '../../../../../context';
 import { Label, PageTitle, PageTitleWrapper } from '../../../../../components/ui';
@@ -44,6 +44,8 @@ export const Clock: FC = () => {
 
   const [date, setDate] = useState(new Date());
 
+  const {lastUpdatedOrders} = useSelector(selectOrders);
+
 
   function tick() {
     setDate(new Date());
@@ -63,10 +65,16 @@ export const Clock: FC = () => {
     <>
 
       {
-        format(new Date(), 'EEEE dd MMMM yyyy HH:mm ',
+        format(new Date(), 'EEEE dd MMMM.  ',
           {
             locale: es
           })
+
+        
+      }
+      <br/>
+      {
+       " Ult. actualización: " + format(new Date (lastUpdatedOrders), 'HH:mm:ss')
       }
 
     </>
@@ -154,6 +162,8 @@ export const ListOrders = () => {
         const { data } = resp;
 
         dispatch(loadOrders(data));
+
+        dispatch(setLastUpdatedOrders(new Date().toISOString()));
       })
   }
 

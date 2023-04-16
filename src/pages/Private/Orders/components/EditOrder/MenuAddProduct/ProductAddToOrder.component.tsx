@@ -120,22 +120,26 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
 
   return (
     <>
-      <Card>
+      <Card
+        sx={{
+          p: 1,
+        }}
+      >
 
-        <CardContent sx={{ flex: '1 0 auto' }} >
+       
 
-          <Typography variant="h5" >{product.name}</Typography>
+          <Typography variant="h4" >{product.name}</Typography>
 
           <Typography variant="body1" >$ {product.price}</Typography>
 
-          <Box display='flex' justifyContent='right' alignItems='center'>
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
 
 
             {
               product.status === ProductStatus.AVAILABLE
                 ?
 
-                <Box display='flex' justifyContent='center' alignItems='center'>
+                <Box display='flex'  alignItems='center'>
 
                   <IconButton
                     size="small"
@@ -183,7 +187,7 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
           </Box>
 
 
-        </CardContent>
+       
       </Card>
 
     </>

@@ -25,9 +25,10 @@ interface ChangeTableDto {
 
 
 export const OrderTable: FC<Props> = () => {
+
   const { activeOrder } = useSelector(selectOrders);
 
-  const [table, setTable] = useState<ITable>();
+  const [table, setTable] = useState<string | undefined >(activeOrder?.table?.id);
 
   const { tables } = useSelector(selectTables);
 
@@ -47,17 +48,16 @@ export const OrderTable: FC<Props> = () => {
 
   const changeTable = (tableId: string) => {
 
-    const newTable = tables.find(t => t.id === tableId);
-    setTable(newTable);
+  
 
     const updateOrderDto: UpdateOrderDto = {
       id: activeOrder!.id,
-      tableId: newTable!.id,
+      tableId,
     }
 
     const changeTableDto: ChangeTableDto = {
-      previousTableId: table?.id,
-      newTableId: newTable!.id
+      previousTableId: activeOrder?.table?.id,
+      newTableId: tableId
     }
 
     updateOrder(updateOrderDto)
@@ -67,23 +67,7 @@ export const OrderTable: FC<Props> = () => {
 
   }
 
-  const emitUpdateTable = (updateOrderDto: UpdateOrderDto) => {
-    socket?.emit(EventsEmitSocket.updateOrder, updateOrderDto, (res: SocketResponseOrder) => {
 
-      console.log('response', res);
-
-      if (res.ok) {
-
-        dispatch(setActiveOrder(res.order!));
-      }
-
-      else {
-        enqueueSnackbar(res.msg, { variant: 'error' });
-      }
-
-    });
-
-  }
 
   const emitChangeTable = (tablesId: ChangeTableDto) => {
     socket?.emit(EventsEmitSocket.changeTable, tablesId, ({ ok, msg, order }: SocketResponseOrder) => {
@@ -107,7 +91,7 @@ export const OrderTable: FC<Props> = () => {
 
   useEffect(() => {
 
-    setTable(activeOrder?.table);
+    setTable(activeOrder?.table?.id);
 
   }, [activeOrder]);
 
@@ -128,11 +112,11 @@ export const OrderTable: FC<Props> = () => {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={table?.id}
+                    value={table}
                     label="Mesa del pedido"
 
                     onChange={(e) => changeTable(e.target.value)}
-                    disabled={TypeOrder[`${activeOrder!.type}` as keyof typeof TypeOrder] !== TypeOrder.IN_PLACE}
+                    disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
                     size='small'
 
                   >

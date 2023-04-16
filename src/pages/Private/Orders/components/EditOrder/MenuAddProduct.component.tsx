@@ -56,9 +56,10 @@ export const Categories: FC<Props> = ({ categories }) => {
                   key={category.id}
                   sx={{
                     
-                    border: '5%',
+                    border: '1px solid',
                     borderRadius: 2,
                     borderColor: 'primary.main',
+
                     color: activeCategory.id === category.id ? 'white' : 'primary.main',
                     backgroundColor: activeCategory.id === category.id ? 'primary.main' : 'white',
                     

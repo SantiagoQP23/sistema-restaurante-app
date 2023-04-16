@@ -35,6 +35,8 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
   const editDescription = () => {
 
+    console.log(detalle);
+
     sharingInformationService.setSubject(true, detalle);
 
   }

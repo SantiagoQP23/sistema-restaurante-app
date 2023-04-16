@@ -49,10 +49,13 @@ export const Sections: FC<Props> = ({ sections }) => {
             variant="fullWidth"
             scrollButtons
             allowScrollButtonsMobile
-            indicatorColor='primary'
+            indicatorColor='secondary'
             
 
+
             sx={{
+              height: 'auto',
+
               [`& .${tabsClasses.scrollButtons}`]: {
                 '&.Mui-disabled': { opacity: 0.3 },
               },

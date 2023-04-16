@@ -83,6 +83,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
       setDetail(data.detalle)
       setOpen(!!data.value);
+      setDescription(data.detalle?.description || '');
 
     })
   }, [])

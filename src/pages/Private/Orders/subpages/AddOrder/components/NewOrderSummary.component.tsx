@@ -100,7 +100,7 @@ export const NewOrderSummary = () => {
 
   const { socket } = useContext(SocketContext);
 
-  const {createOrder, loading} = useCreateOrder();
+  const { createOrder, loading } = useCreateOrder();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -112,7 +112,7 @@ export const NewOrderSummary = () => {
 
     createOrder(order)
 
-   
+
 
 
 
@@ -134,15 +134,16 @@ export const NewOrderSummary = () => {
 
             <ToggleButtonGroup
               value={typeOrder}
-              onChange={(e, value) => setTypeOrder(value as TypeOrder)}
+              onChange={(e, value) => setTypeOrder(value)}
+              exclusive
             >
               <ToggleButton
-                value={"TAKE_AWAY"}
+                value={TypeOrder.TAKE_AWAY}
               >
                 <DeliveryDining />
               </ToggleButton>
               <ToggleButton
-                value={"IN_PLACE"}
+                value={TypeOrder.IN_PLACE}
               >
                 <LocalDining />
               </ToggleButton>
@@ -152,7 +153,7 @@ export const NewOrderSummary = () => {
         </Box>
 
         <Box
-          display='flex' 
+          display='flex'
           justifyContent='space-around'
         >
 
@@ -165,15 +166,18 @@ export const NewOrderSummary = () => {
             <People />
           </Box>
 
-          <Box
-          >
+          {
+            typeOrder === TypeOrder.IN_PLACE && (
+              <Box
+              >
 
-            <Typography variant='h5' mt={1}>Mesa</Typography>
-            <TableOrder />
+                <Typography variant='h5' mt={1}>Mesa</Typography>
+                <TableOrder />
 
 
-          </Box>
-
+              </Box>
+            )
+          }
         </Box>
 
 
@@ -197,12 +201,12 @@ export const NewOrderSummary = () => {
 
 
         <Box mt={2}>
-          <LoadingButton 
-          variant='contained' 
-          disabled={details.length <= 0} 
-          onClick={submitAddOrder} 
-          fullWidth 
-          loading={loading}
+          <LoadingButton
+            variant='contained'
+            disabled={details.length <= 0}
+            onClick={submitAddOrder}
+            fullWidth
+            loading={loading}
           >
             Crear pedido
           </LoadingButton>

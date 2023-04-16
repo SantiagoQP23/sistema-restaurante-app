@@ -21,7 +21,7 @@ import { useSnackbar } from "notistack";
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context";
-import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder } from "../../../redux";
+import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders } from "../../../redux";
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
@@ -53,6 +53,7 @@ export const Orders = () => {
       enqueueSnackbar(`Se ha añadido un nuevo pedido`, { variant: 'info' });
 
       dispatch(addOrder(order))
+      dispatch(setLastUpdatedOrders(new Date().toISOString()))
 
       //dispatch(pedidoAddNew(pedido))
 
@@ -81,6 +82,8 @@ export const Orders = () => {
       if (activeOrder?.id === order?.id) {
         dispatch(setActiveOrder(order!))
       }
+
+      dispatch(setLastUpdatedOrders(new Date().toISOString()))
       // enqueueSnackbar(`${msg}`, { variant: 'success' });
 
 
@@ -102,6 +105,8 @@ export const Orders = () => {
 
       dispatch(deleteOrder(order!.id));
 
+      dispatch(setLastUpdatedOrders(new Date().toISOString()))
+
     });
 
 
@@ -121,7 +126,12 @@ export const Orders = () => {
 
   const getOrdersCall = async () => await callEndpoint(getOrdersToday());
 
-  const loadOrdersState = (data: IOrder[]) => { dispatch(loadOrders(data)); }
+  const loadOrdersState = (data: IOrder[]) => { 
+    dispatch(loadOrders(data));  
+
+    dispatch(setLastUpdatedOrders(new Date().toISOString()))
+
+  }
 
   useAsync(getOrdersCall, loadOrdersState, () => { }, []);
 

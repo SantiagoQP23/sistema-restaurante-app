@@ -12,8 +12,8 @@ export enum OrderStatus {
 
 
 export enum TypeOrder {
-  TAKE_AWAY = 'PARA LLEVAR',
-  IN_PLACE = 'PARA SERVIR',
+  TAKE_AWAY = 'TAKE_AWAY',
+  IN_PLACE = 'IN_PLACE',
   //DELIVERY = 'ENTREGA DOMICILIO',
 }
 

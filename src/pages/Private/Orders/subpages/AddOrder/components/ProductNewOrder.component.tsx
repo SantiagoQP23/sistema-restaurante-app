@@ -31,60 +31,70 @@ export const ProductNewOrder: FC<Props> = ({ product }) => {
 
 
   return (
-    <Card>
+    <Card
+      sx={{
+        p: 2,
+      }}
+    >
 
-      <CardContent  >
+    
 
-        <Typography variant="h5" >{product.name}</Typography>
+        <Typography variant="h5" color='initial'>{product.name}</Typography>
 
         <Typography variant="body1" >$ {product.price}</Typography>
 
-        <Box display='flex' justifyContent='right' alignItems='center'>
+        <Box display='flex' justifyContent='space-between' alignItems='center'>
 
           {
             product.status === ProductStatus.AVAILABLE
               ?
 
-              <Box display='flex' justifyContent='center' alignItems='center'>
+              <>
 
-                <IconButton
-                  size="small"
-                  onClick={decrement}
-                >
-                  <RemoveCircleOutline />
-                </IconButton>
+                <Box display='flex' alignItems='center'>
 
-                <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
-                <IconButton
-                  size="small"
-                  onClick={increment}
-                >
-                  <AddCircleOutline />
-                </IconButton>
+                  <IconButton
+                    size="small"
+                    onClick={decrement}
+                  >
+                    <RemoveCircleOutline />
+                  </IconButton>
+
+                  <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+                  <IconButton
+                    size="small"
+                    onClick={increment}
+                  >
+                    <AddCircleOutline />
+                  </IconButton>
+
+                </Box>
+
+                <Box>
 
                 {
                   !details.find(det => det.product.id === product.id)
                     ?
                     <Button
-                      disabled={counter <= 0}
-                      color='primary'
-                      onClick={() => {
-                        openModal();
+                    disabled={counter <= 0}
+                    color='primary'
+                    onClick={() => {
+                      openModal();
                         /* newDetail({product, quantity: counter}) */
                       }}
-
+                      
                       size='small'
-                    >
+                      >
                       <ShoppingCart />
 
                     </Button>
-                    : <Button
-                      disabled
+                    : <Button disabled >Añadido</Button>
 
-                    >Añadido</Button>
+                  }
+                  </Box>
+              </>
 
-                }
-              </Box>
+
               : <Typography variant='h6' color='info' align="center">Producto no disponible</Typography>
           }
 
@@ -93,7 +103,7 @@ export const ProductNewOrder: FC<Props> = ({ product }) => {
         </Box>
 
 
-      </CardContent>
+     
     </Card>
   )
 }

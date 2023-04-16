@@ -44,33 +44,6 @@ export const SelectTypeOrder = () => {
 
   }
 
-  // <Box display='flex' sx={{gap: 2}} justifyContent='center'>
-
-
-  //   {
-  //     Object.keys(TypeOrder).map((key) => (
-  //       <Button
-  //         variant={activeOrder!.type === key ? "contained" : "outlined"}
-  //         key={key}
-  //         sx={{
-
-  //           '&:hover': {
-  //             backgroundColor: 'primary.main',
-  //             color: 'white'
-  //           }
-
-  //         }}
-
-  //         onClick={() => handleChange(key as TypeOrder)}
-
-
-  //       >
-  //         {TypeOrder[`${key}` as keyof typeof TypeOrder]}
-  //       </Button>
-  //     ))
-  //   }
-
-  // </Box>
 
   return (<>
     <Typography variant='h5'>Tipo de orden</Typography>
@@ -83,6 +56,10 @@ export const SelectTypeOrder = () => {
 
         <ToggleButtonGroup
           value={activeOrder!.type}
+
+          onChange={(_, value) => handleChange(value as TypeOrder)}
+
+          exclusive
         >
           <ToggleButton
             value={"TAKE_AWAY"}

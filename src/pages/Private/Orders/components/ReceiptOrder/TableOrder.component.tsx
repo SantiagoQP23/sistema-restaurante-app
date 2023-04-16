@@ -164,13 +164,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder  = {id: '', name: ''}}
 
               onChange={(e) => changeTable(e.target.value)}
 
-              inputProps={{
-                startAdrnment: (
-                  <InputAdornment position='start'>
-                    <TableRestaurant />
-                  </InputAdornment>
-                )
-              }}
+             
               size='small'
             >
               <MenuItem value="">

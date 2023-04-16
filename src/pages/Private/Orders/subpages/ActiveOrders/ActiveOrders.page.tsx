@@ -4,7 +4,7 @@ import { DespachoDetalle } from './components';
 import { Cached } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { PageTitleWrapper, PageTitle } from '../../../../../components/ui';
-import { loadOrders } from '../../../../../redux';
+import { loadOrders, setLastUpdatedOrders } from '../../../../../redux';
 import { getOrdersToday } from '../../services/orders.service';
 import { Clock } from '../ListOrders/ListOrders.page';
 import { useFetchAndLoad } from '../../../../../hooks';
@@ -26,6 +26,8 @@ export const ActiveOrders = () => {
         const { data } = resp;
 
         dispatch(loadOrders(data));
+
+        dispatch(setLastUpdatedOrders(new Date().toISOString()));
       })
   }
 
