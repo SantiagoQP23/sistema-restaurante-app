@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context";
 import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders } from "../../../redux";
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
-import { ModalEditOrderDetail } from "./components";
+import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
 import { LoadingButton } from '@mui/lab';
 
@@ -149,6 +149,7 @@ export const Orders = () => {
 
             <Outlet />
 
+      <ModalClientOrder />
 
           </LocalizationProvider>
         </OrderProvider>

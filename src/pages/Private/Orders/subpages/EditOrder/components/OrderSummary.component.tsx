@@ -1,10 +1,9 @@
-import { DeleteOutline, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
-import { Card, CardContent, Box, Typography, Button } from "@mui/material";
+import { AddOutlined, DeleteOutline, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
+import { Card, CardContent, Box, Typography, Button, IconButton } from '@mui/material';
 import { format } from "date-fns";
 import { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { OrderStatus, OrderStatusSpanish } from "../../../../../../models";
-import { DataClient } from "../../../components";
+import { IClient, OrderStatus, OrderStatusSpanish } from "../../../../../../models";
 import { statusModalDeleteOrder } from "../../../services/orders.service";
 import { OrderDetails } from "./OrderDetails.component";
 import { OrderTable } from "./OrderTable.component";
@@ -12,6 +11,9 @@ import { PeopleOrder } from "./PeopleOrder.component";
 import { SelectTypeOrder } from "./SelectTypeOrder.component";
 import { IOrder, TypeOrder } from '../../../../../../models/orders.model';
 import { Label } from "../../../../../../components/ui";
+import { statusModalClientOrder } from "../../../services/sharing-information.service";
+import { ComboBoxClient } from "../../../components";
+import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 
 
 interface PropsOrder {
@@ -27,6 +29,8 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
   const [orderDelivered, setOrderDelivered] = useState<boolean>(false);
 
+  const {updateOrder, loading} = useUpdateOrder()
+
 
 
   useEffect(() => {
@@ -34,6 +38,23 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
       setOrderDelivered(!!(order.details?.find(detail => detail.qtyDelivered > 0)))
     }
   }, [order])
+
+
+  const handleChangeClient = (client: IClient | null) => {
+
+    updateOrder({
+      id: order.id,
+      clientId: client?.id || 'none'
+    })
+
+    
+
+  }
+
+  
+  const editClient = () => {
+    statusModalClientOrder.setSubject({ value: true });
+  }
 
 
   const eliminarPedido = () => {
@@ -109,9 +130,20 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           </Box>
 
           <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+            <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient}/>
+            <IconButton
+              size="small"
+              onClick={editClient}
+
+            >
+              <AddOutlined />
+            </IconButton>
+          </Box>
+
+          {/* <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
             <DataClient client={order?.client} />
-          </Box>
+          </Box> */}
           {/*  <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
             <Typography variant='h5' fontWeight='bold'>Personas</Typography>
 

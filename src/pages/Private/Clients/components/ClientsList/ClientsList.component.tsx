@@ -1,8 +1,8 @@
-import {  IconButton, InputBase, Paper, Grid, Button, CircularProgress } from '@mui/material';
+import { IconButton, InputBase, Paper, Grid, Button, CircularProgress, Typography } from '@mui/material';
 import { useState } from "react";
 
 import SearchIcon from '@mui/icons-material/Search';
-import {ClientsTable} from "./ClientsTable.component";
+import { ClientsTable } from "./ClientsTable.component";
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,8 @@ import { IClient } from '../../../../../models';
 import { useSnackbar } from 'notistack';
 import { selectClients } from '../../../../../redux/slices/clients/clients.slice';
 import { DeleteClient } from '../DeleteClient/DeleteClient.component';
+import { useClient, useClients } from '../../hooks/useClients';
+import { InputSearch } from '../../../../../components/ui';
 
 
 
@@ -22,9 +24,10 @@ export const ClientsList = () => {
 
   const [identification, setIdentification] = useState<string>('');
 
-  const { clients } = useSelector(selectClients);
+  // const { clients } = useSelector(selectClients);
 
-  const [client, setClient] = useState<IClient>();
+  const { clientsQuery } = useClients();
+  const useClientQuery = useClient(identification, false);
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -37,6 +40,9 @@ export const ClientsList = () => {
 
 
 
+
+
+
   const createClient = () => {
     dispatch(resetActiveClient())
     navigate('add');
@@ -44,32 +50,34 @@ export const ClientsList = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIdentification(event.target.value);
-    setClient(undefined);
+    // setClient(undefined);
   };
 
 
   const searchClient = async () => {
 
     if (identification.length === 0) {
-      enqueueSnackbar('Ingrese un número de identificación', { variant: 'error' })
+      enqueueSnackbar('Ingrese un número de identificación', { variant: 'info' })
       return;
     }
 
     if (identification.length === 10 || identification.length === 13) {
 
-      await callEndpoint(getClient(identification))
-        .then((resp) => {
-          const { data } = resp;
 
-          setClient(data);
-          console.log(data);
-        })
-        .catch((err) => {
-          enqueueSnackbar('No se encontró al cliente', { variant: 'error' })
+      useClientQuery.refetch();
+      // await callEndpoint(getClient(identification))
+      //   .then((resp) => {
+      //     const { data } = resp;
 
-        })
+      //     setClient(data);
+      //     console.log(data);
+      //   })
+      //   .catch((err) => {
+      //     enqueueSnackbar('No se encontró al cliente', { variant: 'error' })
+
+      //   })
     } else {
-      enqueueSnackbar('El número de identificación es incorrecto', { variant: 'error' })
+      enqueueSnackbar('El número de identificación es incorrecto', { variant: 'info' })
       return;
     }
 
@@ -83,33 +91,20 @@ export const ClientsList = () => {
       <Grid container justifyContent="space-between" alignItems="center">
         <Grid item>
 
-          <Paper
-            component="form"
-            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-          >
+          <InputSearch
 
-            <InputBase
-              type='number'
-              onChange={handleChange}
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Número de identificación"
-              inputProps={{ 'aria-label': 'Buscar cliente' }}
-            />
-            <IconButton
-              type="button"
-              sx={{ p: '10px' }}
-              aria-label="search"
-              onClick={searchClient}
-            >
-              {
-                loading
-                  ? <CircularProgress size={20} />
-                  : <SearchIcon />
-              }
-            </IconButton>
+            handleChange={handleChange}
+            search={searchClient}
+            loading={useClientQuery.isLoading}
+            placeholder='Buscar cliente'
+
+          />
+          {
+            useClientQuery.isFetched && !useClientQuery.data
+            && <Typography sx={{ mt: 2 }} variant='body2' color='error'>No se encontró al cliente</Typography>
+          }
 
 
-          </Paper>
         </Grid>
 
         <Grid item>
@@ -127,7 +122,7 @@ export const ClientsList = () => {
 
       </Grid>
 
-      <ClientsTable clients={clients} clientFound={client}/>
+      <ClientsTable clients={clientsQuery.data || []} clientFound={useClientQuery.data} />
 
       <DeleteClient />
 

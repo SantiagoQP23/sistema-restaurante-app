@@ -42,7 +42,7 @@ export const AddOrder = () => {
               onClick={() => { reset() }}
 
             >
-              <Clear />
+              Limpiar
             </Button>
             
           </Grid>

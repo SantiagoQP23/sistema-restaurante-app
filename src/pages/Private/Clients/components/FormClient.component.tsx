@@ -24,14 +24,7 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
 
   const identification = useWatch({ control, name: 'identification' });
 
-  const validateNoNumbers = (value: any) => {
-    if (!isNaN(value)) {
-      return {
-        type: 'validation',
-        message: 'No se permiten números en este campo'
-      };
-    }
-  };
+
 
   const lenghtIdentification = identification.type === TypeIdentification.CEDULA ? 10 : 13;
 
@@ -72,7 +65,7 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               type='number'
               {
               ...register('identification.num', {
-                required: 'Este campo es requerido',
+               
 
                 minLength: { value: lenghtIdentification, message: `Minimo ${lenghtIdentification} caracteres` },
                 maxLength: { value: lenghtIdentification, message: `Máximo ${lenghtIdentification} caracteres` },
@@ -163,7 +156,7 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               fullWidth
               {
               ...register('email', {
-                required: 'Este campo es requerido',
+              
                 pattern: {
                   value: /\S+@\S+\.\S+/,
                   message: "Email no válido"

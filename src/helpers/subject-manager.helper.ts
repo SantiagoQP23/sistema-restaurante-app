@@ -18,3 +18,19 @@ export class SubjectManager {
 }
 
 
+export class SubjectModal {
+  subject$ = new Subject<{value: boolean}>();
+
+  getSubject(){
+
+    return this.subject$.asObservable();
+  }
+
+  setSubject({value}:{value: boolean}){
+    this.subject$.next({value});
+  }
+}
+
+
+
+

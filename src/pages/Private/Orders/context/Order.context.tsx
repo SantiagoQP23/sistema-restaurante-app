@@ -9,7 +9,7 @@ import { CreateOrderDto, CreateOrderDetailDto } from '../dto/create-order.dto';
 
 interface IOrderContext {
   amount: number;
-  client: IClient | undefined;
+  client: IClient | null;
   details: ICreateOrderDetail[];
   table: ITable | undefined;
 
@@ -20,7 +20,7 @@ interface IOrderContext {
   deleteDetail: (nameProduct: string) => void;
   reset: () => void;
   setPeople: (people: number) => void;
-  setClient: (client: IClient | undefined) => void;
+  setClient: (client: IClient | null) => void;
   setTable: (table: ITable) => void;
   updateDetail: (detail: ICreateOrderDetail) => void;
   getOrder: () => CreateOrderDto;
@@ -42,7 +42,7 @@ export const OrderProvider: FC<Props> = ({ children }) => {
   const [amount, setAmount] = useState<number>(0)
   const [details, setDetails] = useState<ICreateOrderDetail[]>([]);
   const [table, setTable] = useState<ITable>();
-  const [client, setClient] = useState<IClient>();
+  const [client, setClient] = useState<IClient | null>(null);
   const [people, setPeople] = useState<number>(1);
   const [typeOrder, setTypeOrder] = useState<TypeOrder>(TypeOrder.IN_PLACE);
 
@@ -130,7 +130,7 @@ export const OrderProvider: FC<Props> = ({ children }) => {
 
   const reset = () => {
     setAmount(0)
-    setClient(undefined);
+    setClient(null);
     setTable(undefined);
     setDetails([]);
 

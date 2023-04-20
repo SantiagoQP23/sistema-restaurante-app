@@ -17,7 +17,7 @@ import { Label } from '../../../../../../components/ui';
 const LinearProgressWrapper = styled(LinearProgress)(
   ({ theme }) => `
         flex-grow: 1;
-        height: 10px;
+        height: 6px;
         
         &.MuiLinearProgress-root {
           background-color: ${theme.colors.alpha.black[10]};
@@ -55,6 +55,11 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
 
           width: '100%',
+          // borderRadius: '10px',
+          // border: '1px solid #e0e0e0',
+          // p: 0.5,
+          px:  0.5,
+          
 
         }}
       >
@@ -65,6 +70,7 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
               {`${detail.quantity} -  ${detail.product.name}`}
 
             </Typography>
+           
             <Typography
               variant="h6"
               style={{ whiteSpace: 'pre-wrap' }}
@@ -78,11 +84,11 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
                       Entregado {detail.qtyDelivered} de {' '}
                       <Text color="info">{detail.quantity}</Text> {' '}
                     </Typography> */}
-              <Label color='success' >{detail.qtyDelivered}</Label>
+              {/* <Label color='success' >{detail.qtyDelivered}</Label> */}
 
             </Box>
             {
-
+              
               user?.role.name === 'admin' && (
                 <Tooltip title="Editar detalle" arrow>
                   <IconButton
@@ -102,11 +108,12 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
               )}
           </Box>
         </Box>
-        <LinearProgressWrapper
-          value={(detail.qtyDelivered * 100) / detail.quantity}
-          color="primary"
-          variant="determinate"
-        />
+                    <LinearProgressWrapper
+                  value={(detail.qtyDelivered * 100) / detail.quantity}
+                  color="primary"
+                  variant="determinate"
+                />
+        
 
       </Box>
 

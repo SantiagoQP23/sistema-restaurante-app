@@ -1,6 +1,6 @@
-import { Grid,  Typography, Button, Container, Card, CardContent,  } from '@mui/material';
+import { Grid, Typography, Button, Container, Card, CardContent, } from '@mui/material';
 
-import {  useNavigate,  } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -51,36 +51,49 @@ export const EditClient = () => {
   async function onSubmit(form: ICreateClient) {
 
     const { identification, ...dataClient } = form;
-    
-    if( form.address === "" ){
+
+    if (form.address === "") {
       delete dataClient.address;
 
     }
 
-    if( form.numPhone === "" ){
+    if (form.numPhone === "") {
       delete dataClient.numPhone;
 
     }
 
-    const clientUpdated: UpdateClientDto = {
-      ...dataClient,
-      typeIdentification: identification.type,
-      numberIdentification: identification.num
-    } 
 
-    console.log(clientUpdated);
+    let clientUpdated: UpdateClientDto
 
-    await callEndpoint(updateClientS(activeClient!.id, clientUpdated))
-      .then((resp) => {
-        const { data } = resp;
-        dispatch(updateClient(data.client))
-        enqueueSnackbar('El cliente ha sido actualizada', { variant: 'success' })
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('error', { variant: 'error' })
+    if (identification.type === TypeIdentification.CEDULA && identification.num.length === 10
+      || identification.type === TypeIdentification.RUC && identification.num.length === 13
+    ) {
 
-      })
+      clientUpdated = {
+        ...dataClient,
+        id: activeClient!.id,
+        typeIdentification: identification.type,
+        numberIdentification: identification.num
+      }
+    } else {
+      clientUpdated = {
+        ...dataClient,
+        id: activeClient!.id,
+      };
+    }
+
+
+    // await callEndpoint(updateClientS(activeClient!.id, clientUpdated))
+    //   .then((resp) => {
+    //     const { data } = resp;
+    //     dispatch(updateClient(data.client))
+    //     enqueueSnackbar('El cliente ha sido actualizada', { variant: 'success' })
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //     enqueueSnackbar('error', { variant: 'error' })
+
+    //   })
   }
 
 
@@ -96,8 +109,8 @@ export const EditClient = () => {
               <ArrowBack />
             </Button>
             <Typography variant='h6'>{
-                `${activeClient!.person.firstName} ${activeClient!.person.lastName}`
-                
+              `${activeClient!.person.firstName} ${activeClient!.person.lastName}`
+
             }
             </Typography>
 

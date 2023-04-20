@@ -60,17 +60,17 @@ export const AddClient = () => {
       numberIdentification: identification.num
     }   
 
-    await callEndpoint(createClient(newClient))
-      .then((resp) => {
-        const { data } = resp;
-        dispatch(addClient(data.client))
-        enqueueSnackbar('El cliente ha sido creado', { variant: 'success' })
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('error', { variant: 'error' })
+    // await callEndpoint(createClient(newClient))
+    //   .then((resp) => {
+    //     const { data } = resp;
+    //     dispatch(addClient(data.client))
+    //     enqueueSnackbar('El cliente ha sido creado', { variant: 'success' })
+    //   })
+    //   .catch((err) => {
+    //     console.log(err)
+    //     enqueueSnackbar('error', { variant: 'error' })
 
-      })
+    //   })
 
 
 

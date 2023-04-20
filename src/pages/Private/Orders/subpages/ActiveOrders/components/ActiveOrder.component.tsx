@@ -43,7 +43,7 @@ const PendingDetail: FC<{ detail: IOrderDetail }> = ({ detail }) => {
         detail.quantity !== detail.qtyDelivered &&
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box>
-            <Typography variant='h4' color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
+            <Typography variant='h5' color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
               {`${detail.quantity - detail.qtyDelivered}`} - {`${detail.product.name}`}
             </Typography>
 
@@ -81,7 +81,7 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
     <>
       <Box display="flex" alignItems="center" justifyContent="space-between">
 
-        <Typography variant='h4' color='gray'
+        <Typography variant='h5' color='gray'
         // sx={{
         //   textDecoration: 'line-through'
         // }}
@@ -210,18 +210,21 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                   : 'Para llevar'
 
               }
+              {
+                order.client &&
+                ` - ${order.client.person.firstName} ${order.client.person.lastName}`
+              }
             </Typography>
           }
 
           subheader={
             <>
-              {formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
-                addSuffix: true,
-                includeSeconds: true,
-                locale: es
-
-
-              })}
+              {
+                formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es
+                })}
             </>
           }
 
@@ -242,7 +245,10 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
 
         <Box
-          mx={2}
+        mx={1}
+        display='flex'
+        flexDirection='column'
+        gap={1}
         >
 
           {
@@ -252,9 +258,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 {
                   details.filter(detail => detail.quantity !== detail.qtyDelivered)
                     .map(detail => (
-                      <Grid key={detail.id} item xs={12} mt={1} >
-                        <DetailInProgress detail={detail} orderId={order.id} />
-                      </Grid>
+                      
+                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+                     
                     ))
 
                 }
@@ -341,134 +347,6 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
         </CardActions>
       </Card>
-
-
-
-
-      {/* 
-      <Card
-
-      >
-        <CardHeader
-
-          title={
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-              <Typography variant="body1" fontWeight='bold'>Mesa {order.table?.name}</Typography>
-
-              <Typography variant="body1" fontWeight='bold'>
-                {formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-
-
-                })}
-
-              </Typography>
-           
-
-            </Box>}
-          subheader={'De: ' + order.user.person.firstName + ' ' + order.user.person.lastName}
-        />
-        <Divider />
-        <CardContent>
-
-          <Grid container spacing={1}>
-            {
-              order.status === OrderStatus.IN_PROGRESS
-                ?
-                <>
-                  {
-                    details.filter(detail => detail.quantity !== detail.qtyDelivered)
-                      .map(detail => (
-                        <Grid key={detail.id} item xs={12} mt={1} >
-                          <DetailInProgress detail={detail} orderId={order.id} />
-                        </Grid>
-                      ))
-
-                  }
-                  {
-                    details.filter(detail => detail.quantity === detail.qtyDelivered)
-                      .map(detail => (
-                        <Grid key={detail.id} item xs={12} >
-                          <DetailDispatched detail={detail} orderId={order.id} />
-                        </Grid>
-                      ))
-
-                  }
-
-                </>
-
-                :
-                details.map(detail => (
-                  <Grid key={detail.id} item xs={12} >
-                    <PendingDetail detail={detail} />
-                  </Grid>
-                )
-                )
-            }
-
-          </Grid>
-
-
-        </CardContent>
-
-        <Divider />
-
-        <CardActions sx={{
-          justifyContent: 'space-between'
-        }}>
-          {
-            order.status === OrderStatus.PENDING
-              ? <Button
-                fullWidth
-                variant='contained'
-                onClick={() => {
-                  changeStatusOrder(OrderStatus.IN_PROGRESS)
-                  setStatusFilter(OrderStatus.IN_PROGRESS)
-
-                }}
-              >Iniciar</Button>
-              : order.status === OrderStatus.IN_PROGRESS
-              &&
-              < >
-                <Button
-                  fullWidth
-                  startIcon={<ArrowBack />}
-                  variant='outlined'
-                  onClick={() => {
-                    changeStatusOrder(OrderStatus.PENDING)
-                    setStatusFilter(OrderStatus.PENDING)
-
-                  }}
-                  color='success'
-                >
-                  Pendiente
-                </Button>
-                <Button
-                  fullWidth
-                  startIcon={<EditOutlined />}
-                  variant='contained'
-                  onClick={() => {
-                    navigate(`/orders/edit/${order.id}`)
-                  }}
-                >
-                  Editar pedido
-                </Button>
-
-              </ >
-
-
-
-
-          }
-        </CardActions>
-
-
-
-      </Card> */}
-
 
     </>
 

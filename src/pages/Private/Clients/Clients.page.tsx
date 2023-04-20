@@ -10,16 +10,16 @@ import { useAsync } from "../../../hooks";
 
 const Clients = () => {
 
-
-  const {loading, callEndpoint} = useFetchAndLoad();
+// const {loading, callEndpoint} = useFetchAndLoad();
   
-  const dispatch = useDispatch()
+//   const dispatch = useDispatch()
+  
 
-  const getClientsCall = async () => await callEndpoint(getClients())
+  // const getClientsCall = async () => await callEndpoint(getClients())
 
-  const loadClientsState = (data: IClient[]) => { dispatch(loadClients(data)); }
+  // const loadClientsState = (data: IClient[]) => { dispatch(loadClients(data)); }
 
-  useAsync(getClientsCall, loadClientsState, () => { }, []);
+  // useAsync(getClientsCall, loadClientsState, () => { }, []);
 
   return (
     <>

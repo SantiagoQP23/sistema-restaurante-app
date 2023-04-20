@@ -54,16 +54,16 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 
   const submitChangeStatus = async (client: IClient) => {
 
-    await callEndpoint(updateClientS( client.id, {isActive: !client.isActive}))
-    .then((res) => {
-      console.log(res);
-      dispatch(updateClient({...client, isActive: !client.isActive}));
+    // await callEndpoint(updateClientS( client.id, {isActive: !client.isActive}))
+    // .then((res) => {
+    //   console.log(res);
+    //   dispatch(updateClient({...client, isActive: !client.isActive}));
 
-    })  
-    .catch((err) => {
-      console.log(err);
-      enqueueSnackbar('Error al actualizar el estado del usuario', {variant: 'error'})
-    })
+    // })  
+    // .catch((err) => {
+    //   console.log(err);
+    //   enqueueSnackbar('Error al actualizar el estado del usuario', {variant: 'error'})
+    // })
 
 
 
@@ -98,7 +98,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           gutterBottom
           noWrap
         >
-          {client.person.identification.type}
+          {client.person.identification?.type}
         </Typography>
       </TableCell>
       <TableCell>
@@ -109,7 +109,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           gutterBottom
           noWrap
         >
-          {client.person?.identification.num}
+          {client.person?.identification?.num}
 
         </Typography>
       </TableCell>
