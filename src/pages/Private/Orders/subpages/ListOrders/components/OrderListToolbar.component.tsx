@@ -24,7 +24,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
   }),
   '&.Mui-focused': {
     width: 320,
-    boxShadow: theme.customShadows.z8,
+  
   },
   '& fieldset': {
     borderWidth: `1px !important`,
