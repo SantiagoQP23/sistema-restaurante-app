@@ -118,6 +118,7 @@ export const OrderTable: FC<Props> = () => {
                     onChange={(e) => changeTable(e.target.value)}
                     disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
                     size='small'
+                    fullWidth
 
                   >
                     {

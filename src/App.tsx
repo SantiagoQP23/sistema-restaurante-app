@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react';
 
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
 
@@ -27,15 +27,16 @@ function App() {
       <Suspense fallback={<SuspenseLoader />}>
         <CssBaseline />
 
-        <BrowserRouter>
-        {
-          // status === 'checking'
-          // ? <SuspenseLoader />
-          // : <AppRouter />
-          
-        }
-        <AppRouter />
-            
+        <BrowserRouter >
+
+          {
+            // status === 'checking'
+            // ? <SuspenseLoader />
+            // : <AppRouter />
+
+          }
+          <AppRouter />
+
         </BrowserRouter>
 
       </Suspense>

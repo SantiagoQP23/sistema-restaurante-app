@@ -46,11 +46,11 @@ export const SelectTypeOrder = () => {
 
 
   return (<>
-    <Typography variant='h5'>Tipo de orden</Typography>
     <Box
       display='flex' gap={2} alignItems='center'
-      justifyContent='center'
+      justifyContent='space-between'
     >
+    <Typography variant='h6'>Tipo de orden</Typography>
       <Box>
 
 
@@ -60,16 +60,19 @@ export const SelectTypeOrder = () => {
           onChange={(_, value) => handleChange(value as TypeOrder)}
 
           exclusive
+          size='small'
         >
           <ToggleButton
             value={"TAKE_AWAY"}
           >
             <DeliveryDining />
+            Para llevar
           </ToggleButton>
           <ToggleButton
             value={"IN_PLACE"}
           >
             <LocalDining />
+            Para servir
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>

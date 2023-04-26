@@ -1,8 +1,9 @@
+import { FC, useContext} from 'react';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Badge } from '@mui/material';
 import { ShoppingCartOutlined } from '@mui/icons-material';
-import {useContext} from 'react';
 import { OrderContext } from '../../Orders/context/Order.context';
 import { useNavigate } from 'react-router-dom';
 // component
@@ -32,22 +33,26 @@ const StyledRoot = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export function CartWidget() {
+
+interface Props{
+  onClick?: () => void;
+  badge: number;
+}
+
+export const CartWidget: FC<Props> = ({
+  onClick,
+  badge
+}) => {
 
 
-  const {getTotalProducts} = useContext(OrderContext);
 
-  const navigate = useNavigate();
-
-  const totalProducts = getTotalProducts();
-  
 
   return (
     <StyledRoot
     
-      onClick={() => navigate('/orders/add')}
+      onClick={() => { onClick && onClick()  }}
     >
-      <Badge showZero badgeContent={totalProducts} color="error" max={99}>
+      <Badge showZero badgeContent={badge} color="error" max={99}>
         <ShoppingCartOutlined />
       </Badge>
     </StyledRoot>

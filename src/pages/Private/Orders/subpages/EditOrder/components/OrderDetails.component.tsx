@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { Box, Typography, Grid, Divider, Button } from '@mui/material';
+import { Box, Typography, Grid, Divider, Button, Card, CardHeader } from '@mui/material';
 import { OrderDetail } from "../../../components/EditOrder/OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
 import { OrderContext } from '../../../context/Order.context';
@@ -27,47 +27,61 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
 
     <>
 
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
+      <Card>
 
-        <Typography variant="h4" fontWeight='bold'>Productos</Typography>
+        <CardHeader 
+        
+        title='Productos'
+        action={
+          <Button
+            
+            color="primary"
+            onClick={() => navigate('products')}
+            size='small'
 
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => navigate('products')}
-          size='small'
+          >
+            <AddShoppingCartOutlined />
 
+          </Button>
+
+        }
+        />
+
+        <Box
+          sx={{
+            px: 1,
+            pb: 2
+
+          }}
         >
-          <AddShoppingCartOutlined />
 
-        </Button>
+       
 
-      </Box>
-      <Divider sx={{ my: 1 }} />
+        {
+          orderDetails.length === 0
+            ? <Typography variant="body1" color="textSecondary" align='center'>No hay productos en este pedido</Typography>
+            :
+            <Grid container spacing={1}>
+              {
+                orderDetails.map((detail) => {
 
-      {
-        orderDetails.length === 0
-          ? <Typography variant="body1" color="textSecondary" align='center'>No hay productos en este pedido</Typography>
-          :
-          <Grid container spacing={1}>
-            {
-              orderDetails.map((detail) => {
+                  if (detail.isActive)
+                    return (
+                      <Grid key={detail.id} item xs={12}>
 
-                if (detail.isActive)
-                  return (
-                    <Grid key={detail.id} item xs={12}>
+                        <OrderDetail detail={detail} />
 
-                      <OrderDetail detail={detail} />
-                      
-                     
-                    </Grid>
-                  )
-              })
-            }
-            <ModalUpdateDetail />
-          </Grid>
-      }
 
+                      </Grid>
+                    )
+                })
+              }
+              <ModalUpdateDetail />
+            </Grid>
+        }
+        </Box>
+
+      </Card>
 
     </>
   )

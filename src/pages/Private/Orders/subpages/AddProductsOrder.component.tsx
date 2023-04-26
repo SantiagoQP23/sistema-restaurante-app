@@ -1,16 +1,18 @@
-import { FC, useState,  } from 'react'
-import { useNavigate,  } from 'react-router-dom';
+import { FC, useState, } from 'react'
+import { useNavigate, } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Grid, Typography, Button, Box,  } from '@mui/material';
+import { Grid, Typography, Button, Box, Container } from '@mui/material';
 
 
-import { ShoppingCartOutlined, ArrowBack,  } from '@mui/icons-material';
+import { ShoppingCartOutlined, ArrowBack, } from '@mui/icons-material';
 import { useModal } from '../../../../hooks';
 import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
 import { selectMenu } from '../../../../redux';
 
-import { MenuAddProduct } from '../components/EditOrder/MenuAddProduct.component';
+import { CartWidget } from '../../Menu/components/CartWidget.component';
+import { MenuAddProduct } from '../../Menu';
+import { TitlePage } from '../../components/TitlePage.component';
 
 
 
@@ -23,56 +25,32 @@ export const AddProductsOrder: FC = () => {
 
 
   const { activeOrder } = useSelector(selectOrders);
-  
 
-  if(!activeOrder)
+
+  if (!activeOrder)
     return (<></>)
 
   return (
     <>
 
-      {/* <Box>
+      <Container maxWidth='xl'>
 
-        <Typography variant='h5'>Carrito</Typography>
-
-      </Box> */}
-
-
-      <Grid container display='flex' justifyContent='space-between' alignItems='center' mb={2} mt={1}>
-        <Grid item display='flex' justifyContent='left' alignItems='center'>
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h4'>Añadir Productos </Typography>
-
-        </Grid>
-
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => navigate(-1)}
-        >
-          <ShoppingCartOutlined /> $ {activeOrder.amount}
-        </Button>
-
-      </Grid>
+        <TitlePage 
+          title='Agregar productos'
+        />
+      
 
 
-
-      <Grid container spacing={1}>
-
-        <Grid item xs={12} >
-
-          <MenuAddProduct />
-
-
-        </Grid>
-
+        <MenuAddProduct />
        
 
-      </Grid>
-   
 
+      </Container>
+
+      <CartWidget 
+        onClick={() => {navigate('/orders/edit/' + activeOrder.id )}}
+        badge={activeOrder.details.length}
+      />
     </>
   )
 }

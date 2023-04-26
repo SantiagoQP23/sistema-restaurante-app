@@ -71,7 +71,9 @@ export const PeopleOrder: FC<Props> = ({  }) => {
           label='Personas'
           value={people}
           onChange={handleChange}
-          variant='standard'
+          variant='outlined'
+          size='small'
+          fullWidth
         />
 
         {

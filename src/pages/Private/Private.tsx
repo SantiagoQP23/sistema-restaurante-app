@@ -1,5 +1,5 @@
 import { lazy, useContext, useEffect } from "react"
-import { Navigate, Route, useRoutes } from "react-router-dom"
+import { MemoryRouter, Navigate, Route, useRoutes } from "react-router-dom"
 
 import { useFetchAndLoad, useAsync } from "../../hooks"
 
@@ -79,6 +79,8 @@ export const Private = () => {
 
 
   return (
+   
+
     <SnackbarProvider
       maxSnack={3}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -97,6 +99,7 @@ export const Private = () => {
         </ SidebarProvider>
       </OrderProvider>
     </SnackbarProvider>
+    
   )
 }
 

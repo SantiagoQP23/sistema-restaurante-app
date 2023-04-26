@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 
 // Componentes
 
-import { loadOrders, resetActiveOrder, selectAuth, selectOrders, setLastUpdatedOrders } from '../../../../../redux';
+import { loadOrders, resetActiveOrder, selectAuth, selectOrders, setActiveOrder, setLastUpdatedOrders } from '../../../../../redux';
 
 import { SocketContext } from '../../../../../context';
 import { Label, PageTitle, PageTitleWrapper } from '../../../../../components/ui';
@@ -25,7 +25,7 @@ import { Order } from '../../components';
 import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
-import { Cached, Check, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
+import { Cached, Check, EditOutlined, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
 
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -93,7 +93,7 @@ export const ListOrders = () => {
   // const [view, setView] = useState('list');
 
   const { user } = useSelector(selectAuth);
-  const { orders } = useSelector(selectOrders);
+  const { orders, activeOrder } = useSelector(selectOrders);
 
   const [open, setOpen] = useState(null);
 
@@ -116,7 +116,8 @@ export const ListOrders = () => {
   const { callEndpoint, loading } = useFetchAndLoad();
 
 
-  const handleOpenMenu = (event: any) => {
+  const handleOpenMenu = (event: any, order: IOrder) => {
+    dispatch(setActiveOrder(order))
     setOpen(event.currentTarget);
   };
 
@@ -295,7 +296,7 @@ export const ListOrders = () => {
                           {order.total}
                         </TableCell>
                         <TableCell align='center'>
-                          <IconButton onClick={handleOpenMenu}>
+                          <IconButton onClick={(e) => handleOpenMenu(e, order)}>
                             <MoreVert />
                           </IconButton>
                         </TableCell>
@@ -349,8 +350,13 @@ export const ListOrders = () => {
           },
         }}
       >
-        <MenuItem>
-
+        <MenuItem
+          onClick={() => {
+            navigate(`edit/${activeOrder?.id}`);
+            handleCloseMenu();
+          }}
+        >
+          <EditOutlined />
           Edit
         </MenuItem>
 

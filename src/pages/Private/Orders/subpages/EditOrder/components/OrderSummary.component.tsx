@@ -1,10 +1,11 @@
-import { AddOutlined, DeleteOutline, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
-import { Card, CardContent, Box, Typography, Button, IconButton } from '@mui/material';
-import { format } from "date-fns";
 import { FC, useState, useEffect } from "react";
+
+import { AddOutlined, DeleteOutline, EditOutlined, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
+import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider } from '@mui/material';
+import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { IClient, OrderStatus, OrderStatusSpanish } from "../../../../../../models";
-import { statusModalDeleteOrder } from "../../../services/orders.service";
+import { statusModalDeleteOrder, statusModalDiscountOrder } from "../../../services/orders.service";
 import { OrderDetails } from "./OrderDetails.component";
 import { OrderTable } from "./OrderTable.component";
 import { PeopleOrder } from "./PeopleOrder.component";
@@ -29,7 +30,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
   const [orderDelivered, setOrderDelivered] = useState<boolean>(false);
 
-  const {updateOrder, loading} = useUpdateOrder()
+  const { updateOrder, loading } = useUpdateOrder()
 
 
 
@@ -47,15 +48,20 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
       clientId: client?.id || 'none'
     })
 
-    
+
 
   }
 
-  
+
   const editClient = () => {
     statusModalClientOrder.setSubject({ value: true });
   }
 
+
+  
+  const openModalDiscount = () => {
+    statusModalDiscountOrder.setSubject(true, order!);
+  }
 
   const eliminarPedido = () => {
 
@@ -65,6 +71,49 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
   return (
     <>
+
+      <Stack
+        spacing={1}
+      >
+
+      <Card>
+        <CardHeader
+          title='Información del pedido'
+        />
+        <CardContent>
+
+          <Stack spacing={2}>
+
+            <SelectTypeOrder />
+
+            <Stack spacing={1} direction='row'>
+
+              {
+                order.type === "IN_PLACE" as TypeOrder &&
+                <OrderTable />
+
+              }
+              <PeopleOrder people={order.people} />
+            </Stack>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
+              <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient} />
+
+            </Box>
+
+          </Stack>
+          <Box display='flex' justifyContent='right' >
+            <Button
+              onClick={editClient}
+            >
+              Añadir cliente
+            </Button>
+          </Box>
+
+
+        </CardContent>
+      </Card>
+
+
       <Card>
         <CardContent>
 
@@ -96,62 +145,55 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
           </Box>
 
-          <SelectTypeOrder />
 
+          <Divider sx={{mb: 1}}/>
 
+          <Stack spacing={1}>
 
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
 
-          <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-            <Box>
-
-              <Typography variant='h5'>Hora: </Typography>
-              <Typography variant='body1'>{format(new Date(order.createdAt), 'HH:mm')}</Typography>
-            </Box>
-            {
-              order.type === "IN_PLACE" as TypeOrder &&
-              <OrderTable />
-
-            }
-          </Box>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-            <Box>
-              <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
-              <Typography>
-                {order.user.person.firstName} {order.user.person.lastName}
-              </Typography>
-
-            </Box>
-            <Box sx={{ width: '100px' }}>
-              <PeopleOrder people={order.people} />
-
-            </Box>
+            <Typography variant='h5'>Hora: </Typography>
+            <Typography variant='body1'>{format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}</Typography>
 
           </Box>
 
-          <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-            <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient}/>
-            <IconButton
-              size="small"
-              onClick={editClient}
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
+            <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
+            <Typography>
+              {order.user.person.firstName} {order.user.person.lastName}
+            </Typography>
 
-            >
-              <AddOutlined />
-            </IconButton>
+
+
+          </Box>
+          </Stack>
+
+          <Divider sx={{my: 1}}/>
+
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
+
+            <Typography variant='subtitle1' >Subtotal </Typography>
+            <Typography variant='h5' fontWeight='bold'>$ {order.amount}</Typography>
           </Box>
 
-          {/* <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
-            <DataClient client={order?.client} />
-          </Box> */}
-          {/*  <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-            <Typography variant='h5' fontWeight='bold'>Personas</Typography>
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
 
-            <People />
-          </Box> */}
+            <Box display='flex' alignItems='center'>
 
+              <Typography variant='subtitle1' >Descuento </Typography>
+              <Button
+              onClick={openModalDiscount}
+              disabled={order.isPaid}
+              color="secondary"
 
-          <OrderDetails details={order.details} />
+              >
+                editar
+              </Button>
+            
+            </Box>
+            <Typography variant='h5' fontWeight='bold'>$ {order.discount}</Typography>
+          </Box>
 
 
 
@@ -163,13 +205,13 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
           <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
             <Button
-              variant='outlined'
+            startIcon={<DeleteOutline />}
               color='error'
               onClick={eliminarPedido}
               disabled={orderDelivered}
               size='small'
             >
-              <DeleteOutline />
+              Eliminar
             </Button>
 
             <Button
@@ -186,6 +228,8 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
         </CardContent>
       </Card>
+      </Stack>
+
     </>
   )
 

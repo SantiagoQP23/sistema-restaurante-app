@@ -26,8 +26,9 @@ import { OrderContext } from '../../context/Order.context';
 import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.component';
 
 import { OrderSummary } from './components/';
-import { Container } from '@mui/material';
+import { Container, Stack, Box } from '@mui/material';
 import { TitlePage } from '../../../components/TitlePage.component';
+import { OrderDetails } from './components/OrderDetails.component';
 
 
 
@@ -98,9 +99,9 @@ export const EditOrder = () => {
         />
 
 
-        <Button onClick={() => { navigate('/orders') }}>
+        {/* <Button onClick={() => { navigate('/orders') }}>
           <ArrowBack />
-        </Button>
+        </Button> */}
 
 
 
@@ -111,23 +112,51 @@ export const EditOrder = () => {
               <CircularProgress />
             </>
             :
-              <OrderSummary order={activeOrder} />
-            // <Grid container spacing={1}>
 
-            //   <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
-            //     display: { xs: 'none', md: 'flex' },
-            //   }}>
-            //   </Grid>
+            <>
 
-            //   <Grid item xs={12} sm={5} >
+              <Stack
+                spacing={1}
+                direction={{ xs: 'column', md: 'row' }}
+              >
 
-            //     <MenuAddProduct />
+                <Box
+                  sx={{
+                    flexBasis: '60%',
+                  }}
+                >
+
+                  <OrderDetails
+                    details={activeOrder.details}
+                  />
+                </Box>
+                
+                <Box
+                  sx={{
+                    flexBasis: '40%',
+                  }}
+                >
+
+                <OrderSummary order={activeOrder} />
+                </Box>
+              </Stack>
+            </>
+          // <Grid container spacing={1}>
+
+          //   <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
+          //     display: { xs: 'none', md: 'flex' },
+          //   }}>
+          //   </Grid>
+
+          //   <Grid item xs={12} sm={5} >
+
+          //     <MenuAddProduct />
 
 
 
-            //   </Grid>
+          //   </Grid>
 
-            // </Grid>
+          // </Grid>
         }
 
       </Container>
