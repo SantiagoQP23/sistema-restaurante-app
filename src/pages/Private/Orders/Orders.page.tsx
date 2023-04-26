@@ -12,7 +12,6 @@ import { OrderProvider } from './context/Order.context';
 import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
 import { ModalPayOrder } from './components/ReceiptOrder/ModalPayOrder.component';
 import { ModalDiscountOrder } from './components/ReceiptOrder/ModalDiscountOrder.component';
-import { Clock } from "./subpages";
 import { EventsOnSocket } from './interfaces/events-sockets.interface';
 import { useAsync, useFetchAndLoad } from "../../../hooks";
 import { IOrder } from "../../../models";
