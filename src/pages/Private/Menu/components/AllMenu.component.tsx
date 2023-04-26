@@ -17,7 +17,7 @@ export const AllMenu: FC = () => {
     <>
       <Grid container item  spacing={2}>
 
-        <Grid item xs={12}  >
+        {/* <Grid item xs={12}  >
 
 
           <Sections sections={sections} />
@@ -31,7 +31,7 @@ export const AllMenu: FC = () => {
             <Categories categories={activeSection!.categories} />
 
           }
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} >
 
           {

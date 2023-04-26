@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Container, Grid } from '@mui/material';
+import { Box, Button, Container, Grid, Typography, Stack } from '@mui/material';
 import { InputSearch, PageTitle, PageTitleWrapper } from '../../../components/ui';
 
 import { selectMenu, setActiveCategory, setActiveSection } from '../../../redux';
@@ -14,6 +14,10 @@ import { AllMenu } from './components/AllMenu.component';
 import { ListProducts } from './components/ListProducts.component';
 
 import { findProductsByName, getProducts } from '../../../helpers';
+import { ProductSortByCategory } from './components/ProductSortByCategory.component';
+import { ProductSortBySection } from './components/ProductSortBySection.components';
+import { TitlePage } from '../components/TitlePage.component';
+import { CartWidget } from './components/CartWidget.component';
 
 
 export const Menu = () => {
@@ -54,27 +58,64 @@ export const Menu = () => {
   return (
     < >
 
-      <PageTitleWrapper>
+      {/* <PageTitleWrapper>
         <PageTitle
           heading='Menu'
           subHeading='Navege por los platos que ofrece el restaurante'
         />
-      </PageTitleWrapper>
+      </PageTitleWrapper> */}
 
 
-      <Container maxWidth="lg">
+      <Container maxWidth="xl" >
+        <TitlePage
+          title="Menú"
+        />
+
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: {  sm: 'space-between' },
+           
+            flexDirection: { xs: 'column', sm: 'row'}
+
+          }}
+        >
+
+          <Box
+            sx={{
+              width: '250px',
+            }}
+          >
+
+            <InputSearch
+              handleChange={handleChange}
+              search={searchProduct}
+              placeholder={'Buscar producto'}
+            />
+
+          </Box>
+          <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="right" >
+            <Stack direction={{ xs: 'column', md: 'row'}} spacing={1} flexShrink={0} sx={{ my: 1 }}>
+
+              <ProductSortBySection />
+
+              <ProductSortByCategory />
+
+            </Stack>
+          </Stack>
+        </Box>
+
+
 
         <Grid container spacing={1} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
           <Grid item xs={12} mb={1}>
 
 
-            <InputSearch
-              handleChange={handleChange}
-              search={searchProduct}
-              placeholder={'Nombre del producto'}
-            />
 
           </Grid>
+
+
           <Grid item xs={12} mb={1}>
 
             {
@@ -86,6 +127,10 @@ export const Menu = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <CartWidget />
+
+      
 
 
     </>

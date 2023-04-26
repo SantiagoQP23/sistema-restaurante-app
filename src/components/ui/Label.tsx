@@ -6,6 +6,7 @@ interface LabelProps {
   className?: string;
   color?: 'primary' | 'secondary' | 'error' | 'warning' | 'success' | 'info';
   children?: ReactNode;
+  sx?: any;
 }
 
 const LabelWrapper = styled('span')(
@@ -57,10 +58,11 @@ export const Label: FC<LabelProps> = ({
   className = '',
   color = 'secondary',
   children,
+  sx,
   ...rest
 }) => {
   return (
-    <LabelWrapper className={'MuiLabel-' + color} {...rest}>
+    <LabelWrapper className={'MuiLabel-' + color} {...rest} sx={sx}>
       {children}
     </LabelWrapper>
   );
@@ -69,6 +71,7 @@ export const Label: FC<LabelProps> = ({
 Label.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  sx: PropTypes.object,
   color: PropTypes.oneOf([
     'primary',
     'secondary',

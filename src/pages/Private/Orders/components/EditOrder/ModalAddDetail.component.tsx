@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import {
   TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText,
-  DialogTitle, FormControl, FormHelperText
+  DialogTitle, FormControl, FormHelperText, Typography, Box, IconButton, Stack
 } from '@mui/material/'
 
 import { ICreateOrderDetail } from '../../../../../models/orders.model';
@@ -19,6 +19,9 @@ import { useOrders } from '../../hooks/useOrders';
 import { LoadingButton } from '@mui/lab';
 import { useCreateOrder } from '../../hooks/useCreateOrder';
 import { useCreateOrderDetail } from '../../hooks/useCreateOrderDetail';
+import { useCounter } from '../../hooks';
+import { RemoveCircleOutline, AddCircleOutline } from '@mui/icons-material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
 
@@ -35,43 +38,48 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
   const subscription$ = sharingInformationService.getSubject();
 
+  const [detail, setDetail] = useState<ICreateOrderDetail>();
+
+  const { state: counter, increment, decrement, setCounter } = useCounter(detail?.quantity, 1, 100, 1);
+
   const { activeOrder } = useSelector(selectOrders);
 
   const [open, setOpen] = useState(false);
 
-  const [detail, setDetail] = useState<ICreateOrderDetail>();
 
 
   const { addDetail, updateDetail } = useContext(OrderContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const {createOrderDetail, loading} = useCreateOrderDetail();
+  const { createOrderDetail, loading } = useCreateOrderDetail();
 
 
   const crearDetalle = () => {
 
-    if(activeOrder){
+    if (activeOrder) {
       const data: CreateOrderDetailDto = {
         orderId: activeOrder.id,
         productId: detail!.product.id,
-        quantity: detail!.quantity
+        quantity: counter
       }
 
       if (description) {
         data.description = description;
       }
 
+      console.log({data})
+
       createOrderDetail(data);
 
     } else {
 
-      addDetail({ ...detail!, description })
+      addDetail({ ...detail!, quantity: counter, description })
     }
 
     enqueueSnackbar(`${detail?.product.name} agregado`, { variant: 'success' })
 
-    
+
     // updateDetail({...detail!, description})
 
     setDescription('');
@@ -84,6 +92,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
       setDetail(data.detalle)
       setOpen(!!data.value);
       setDescription(data.detalle?.description || '');
+      setCounter(data.detalle?.quantity || 1);
 
     })
   }, [])
@@ -100,30 +109,56 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
           setDescription('');
         }}
       >
-        <DialogTitle>Detalle del pedido</DialogTitle>
+        <DialogTitle>Añadir Producto</DialogTitle>
 
         <DialogContent>
-          <DialogContentText>
-            {detail?.quantity} - {detail?.product.name}
-          </DialogContentText>
+          <Typography variant="h4" mb={1}>{detail?.product.name}</Typography>
+
+          <Typography variant="body2">{detail?.product.description}</Typography>
+
+          <Stack direction='row' alignItems='center' justifyContent='space-between' my={2}>
+            <Typography variant="body2" >Cantidad</Typography>
+            <Box display='flex' alignItems='center'>
+
+              <IconButton
+                size="small"
+                onClick={decrement}
+              >
+                <RemoveCircleOutline />
+              </IconButton>
+
+              <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+              <IconButton
+                size="small"
+                onClick={increment}
+              >
+                <AddCircleOutline />
+              </IconButton>
+
+            </Box>
+
+          </Stack>
+
+
+
 
           <FormControl fullWidth>
-            <FormHelperText>Ingrese aquí los pedidos especiales del cliente</FormHelperText>
             <TextField
               id="descripcion-pedido"
-              label="Detalle del pedido"
+              label="Notas"
               margin="dense"
               multiline
               rows={4}
               defaultValue={description}
-
+              
               onBlur={(e) => {
                 console.log(e.target.value);
                 setDescription(e.target.value);
 
               }
-              }
-
+            }
+            variant='filled'
+            
             />
 
 
@@ -147,8 +182,9 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
             onClick={crearDetalle}
             variant="contained"
             loading={loading}
-            
-          >Pedir producto</LoadingButton>
+            startIcon={<ShoppingCartIcon />}
+
+          >Añadir</LoadingButton>
         </DialogActions>
       </Dialog>
     </>

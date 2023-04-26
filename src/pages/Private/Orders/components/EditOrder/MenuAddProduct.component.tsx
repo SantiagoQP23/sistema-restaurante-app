@@ -212,7 +212,7 @@ export const MenuAddProduct = () => {
               : <AllMenu />
           }
 
-          <ModalAddDetail />
+        
 
         </Grid>
       </Grid>

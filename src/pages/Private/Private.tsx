@@ -24,6 +24,7 @@ import { SocketContext } from '../../context/SocketContext';
 import { EventsOnSocket } from './Orders/interfaces/events-sockets.interface';
 import { SocketResponseTable } from './Orders/interfaces/responses-sockets.interface';
 import { selectAuth } from '../../redux/slices/auth/auth.slice';
+import { OrderProvider } from "./Orders/context/Order.context"
 
 
 export const Private = () => {
@@ -84,14 +85,17 @@ export const Private = () => {
       autoHideDuration={3000}
 
     >
+      <OrderProvider>
 
-      <SidebarProvider>
+        <SidebarProvider>
 
-        <>
-          {content}
-        </>
+          <>
+            {content}
+          </>
 
-      </ SidebarProvider>
+
+        </ SidebarProvider>
+      </OrderProvider>
     </SnackbarProvider>
   )
 }

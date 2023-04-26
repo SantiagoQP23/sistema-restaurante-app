@@ -26,7 +26,7 @@ export const PrivateRouter: RouteObject[] = [
     path: "/",
     element: <SidebarLayout />,
     children: [
-      MenuRouter,
+      // MenuRouter,
       OrderRouter,
       MenuEditRouter,
       ClientsRouter,
@@ -35,10 +35,14 @@ export const PrivateRouter: RouteObject[] = [
       ReportsRouter,
       {
         path: '/auth/login',
-        element: <Navigate to='/menu' />
+        element: <Navigate to={PrivateRoutes.MENU} />
       },
       {
         path: "",
+        element: <Navigate to={PrivateRoutes.MENU} />
+      },
+      {
+        path: "menu",
         element: <Navigate to={PrivateRoutes.MENU} />
       },
       {

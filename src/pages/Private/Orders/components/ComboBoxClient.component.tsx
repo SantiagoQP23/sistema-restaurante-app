@@ -40,7 +40,7 @@ export const ComboBoxClient: FC<Props> = ({client, handleChangeClient}) => {
 
 
         filterOptions={(x) => x}
-        options={clientsQuery.data || []}
+        options={clientsQuery.data?.clients || []}
         getOptionLabel={(option) => option.person.firstName + ' ' + option.person.lastName}
         value={client}
 

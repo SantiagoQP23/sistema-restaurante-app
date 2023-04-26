@@ -26,7 +26,7 @@ export const ClientsList = () => {
 
   // const { clients } = useSelector(selectClients);
 
-  const { clientsQuery } = useClients();
+ 
   const useClientQuery = useClient(identification, false);
 
   const { loading, callEndpoint } = useFetchAndLoad();
@@ -122,7 +122,7 @@ export const ClientsList = () => {
 
       </Grid>
 
-      <ClientsTable clients={clientsQuery.data || []} clientFound={useClientQuery.data} />
+      <ClientsTable  clientFound={useClientQuery.data} />
 
       <DeleteClient />
 

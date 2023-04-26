@@ -19,11 +19,12 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useNavigate } from 'react-router-dom';
 import { statusModalDeleteClient, updateClient as updateClientS } from '../../services/clients.service';
 import { useSnackbar } from 'notistack';
+import { useClients } from '../../hooks/useClients';
 
 
 interface Props {
   clientFound?: IClient;
-  clients: IClient[];
+  
 }
 
 
@@ -177,18 +178,21 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 }
 
 
-export const ClientsTable: FC<Props> = ({ clientFound, clients }) => {
+export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+
+  const {  clientsQuery, page, setPage, limit, setLimit} = useClients();
 
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
+    clientsQuery.refetch();
   };
-
+  
   const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setLimit(parseInt(event.target.value));
+    clientsQuery.refetch();
   };
+
 
 
 
@@ -221,7 +225,7 @@ export const ClientsTable: FC<Props> = ({ clientFound, clients }) => {
               {
                 clientFound
                   ? <TableRowClient client={clientFound} />
-                  : clients.length > 0 && clients.map(client => (
+                  : clientsQuery.data && clientsQuery.data?.clients.map(client => (
 
                     <TableRowClient client={client} key={client.id} />))
 
@@ -234,7 +238,7 @@ export const ClientsTable: FC<Props> = ({ clientFound, clients }) => {
         <Box p={2}>
           <TablePagination
             component="div"
-            count={clients.length}
+            count={clientsQuery.data?.length || 0}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleLimitChange}
             page={page}

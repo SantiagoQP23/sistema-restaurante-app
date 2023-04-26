@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Typography, Container } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { DespachoDetalle } from './components';
 import { Cached } from '@mui/icons-material';
@@ -6,9 +6,10 @@ import { LoadingButton } from '@mui/lab';
 import { PageTitleWrapper, PageTitle } from '../../../../../components/ui';
 import { loadOrders, setLastUpdatedOrders } from '../../../../../redux';
 import { getOrdersToday } from '../../services/orders.service';
-import { Clock } from '../ListOrders/ListOrders.page';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { useDispatch } from 'react-redux';
+import { Clock } from '../ListOrders/components/Clock.component';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 export const ActiveOrders = () => {
@@ -34,25 +35,30 @@ export const ActiveOrders = () => {
   return (
     <>
 
-      <PageTitleWrapper>
-        <PageTitle
-          heading='Pedidos'
-          docs={
+
+      <Container maxWidth="lg" sx={{ mb: 4 }} >
+        <TitlePage
+          title='Pedidos activos'
+          action={
             <LoadingButton
-              variant="contained"
+              variant="text"
               loading={loading}
               onClick={refreshOrders}
             >
               <Cached />
             </LoadingButton>
-          } />
+          }
+        />
         <Clock />
-      </PageTitleWrapper>
+        
+        <Outlet />
+
+      </Container>
 
 
 
-      <Typography variant="h4" color="initial" mb={1}>Pedidos activos</Typography>
-      <Outlet />
+
+
 
 
       <DespachoDetalle />

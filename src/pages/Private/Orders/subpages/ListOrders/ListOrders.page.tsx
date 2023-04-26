@@ -1,10 +1,17 @@
-import { FC, useContext, useState, useEffect } from 'react';
+import { FC, useContext, useState, useEffect, ChangeEvent } from 'react';
 
 import { format } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Grid, Button, Typography, useTheme, Card, CardContent, CardHeader, Accordion, AccordionSummary, AccordionDetails, ToggleButtonGroup, ToggleButton, Divider, Tabs, Tab, tabsClasses, Select, FormControl, InputLabel, MenuItem, Box, CardActionArea, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
+import {
+  Grid, Button, Typography, useTheme, Card,
+  CardContent, CardHeader, Accordion, AccordionSummary,
+  AccordionDetails, ToggleButtonGroup, ToggleButton, Divider,
+  Tabs, Tab, tabsClasses, Select, FormControl, InputLabel,
+  MenuItem, Box, CardActionArea, List, ListItem, ListItemText, ListItemButton,
+  Container, TableContainer, TableBody, TableHead, TableRow, TableCell, Table, styled, Popover
+} from '@mui/material';
 
 import { toast } from 'react-toastify';
 
@@ -18,7 +25,7 @@ import { Order } from '../../components';
 import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
-import { Cached, ExpandMore } from '@mui/icons-material';
+import { Cached, Check, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
 
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -26,133 +33,120 @@ import { ModalDeleteOrder } from '../../components/EditOrder/ModalDeleteOrder.co
 import { es } from 'date-fns/locale';
 import { OrderStatusSpanish, TypeOrder } from '../../../../../models/orders.model';
 import AddIcon from '@mui/icons-material/Add';
-import { LoadingButton } from '@mui/lab';
+import { LoadingButton, TabList } from '@mui/lab';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { getOrdersToday } from '../../services/orders.service';
 import { CardOrdersByStatus } from './components';
 import { Scrollbar } from '../../../components';
 import Scrollbars from 'react-custom-scrollbars-2';
+import { TitlePage } from '../../../components/TitlePage.component';
+import { OrderListToolbar } from './components/OrderListToolbar.component';
+import { Checkbox } from '@mui/material/';
+import { TablePagination, IconButton } from '@mui/material';
+import { TabsOrderStatus } from './components/TabsOrderStatus.component';
 
 
-interface resp {
-  ok: boolean
-}
+// function applySortFilter(array: IOrder[], comparator, query) {
+//   const stabilizedThis = array.map((el, index) => [el, index]);
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
+//   if (query) {
+//     return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+//   }
+//   return stabilizedThis.map((el) => el[0]);
+// }
+
+const filterOrders = (orders: IOrder[], waiter: string, status: string): IOrder[] => {
+
+  let ordersF: IOrder[] = orders;
 
 
-
-export const Clock: FC = () => {
-
-  const [date, setDate] = useState(new Date());
-
-  const {lastUpdatedOrders} = useSelector(selectOrders);
-
-
-  function tick() {
-    setDate(new Date());
+  if (waiter !== 'all') {
+    ordersF = orders.filter(order => order.user.id === waiter)
   }
 
 
-  useEffect(() => {
-    const timerId = setInterval(tick, 1000);
+  if (status !== 'all') {
 
-    return () => {
-      clearInterval(timerId);
+    if (status === 'unpaid') {
+      ordersF = ordersF.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)
+    } else {
+      const orderStatus = status as OrderStatus;
+      ordersF = ordersF.filter(order => order.status === orderStatus)
     }
-  }, [])
 
 
-  return (
-    <>
+  }
 
-      {
-        format(new Date(), 'EEEE dd MMMM.  ',
-          {
-            locale: es
-          })
+  return ordersF;
 
-        
-      }
-      <br/>
-      {
-       " Ult. actualización: " + format(new Date (lastUpdatedOrders), 'HH:mm:ss')
-      }
 
-    </>
-  )
+
 }
 
 
 
 export const ListOrders = () => {
+  // const [view, setView] = useState('list');
 
-  const [view, setView] = useState('list');
+  const { user } = useSelector(selectAuth);
+  const { orders } = useSelector(selectOrders);
+
+  const [open, setOpen] = useState(null);
+
+  const [page, setPage] = useState(0);
 
   const [statusOrderFilter, setStatusOrderFilter] = useState<string>('all');
 
-  const { user } = useSelector(selectAuth);
+  const [selected, setSelected] = useState<string[]>([]);
+
   const [filterWaiter, setFilterWaiter] = useState(user?.id || 'all');
+
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { callEndpoint, loading } = useFetchAndLoad();
-
-  const { orders } = useSelector(selectOrders);
-
-
-  const [filteredOrders, setFilteredOrders] = useState<IOrder[]>([])
-
   const theme = useTheme();
 
+  const { callEndpoint, loading } = useFetchAndLoad();
 
+
+  const handleOpenMenu = (event: any) => {
+    setOpen(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
 
   const addOrder = () => {
     dispatch(resetActiveOrder());
     navigate('add');
   }
 
-  const filterOrders = (waiter: string, status: string) => {
+  const handleChangePage = (event: any, newPage: number) => {
+    setPage(newPage);
+  };
 
-    let ordersF: IOrder[] = orders;
-
-
-    if (waiter !== 'all') {
-      ordersF = orders.filter(order => order.user.id === waiter)
-    }
-
-
-    if (status !== 'all') {
-
-      if (status === 'unpaid') {
-        ordersF = ordersF.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)
-      } else {
-        const orderStatus = status as OrderStatus;
-        ordersF = ordersF.filter(order => order.status === orderStatus)
-      }
-
-
-    }
-
-    setFilteredOrders(ordersF)
-
-  }
+  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
 
   const changeWaiter = (waiter: string) => {
-
+    setPage(0);
     setFilterWaiter(waiter);
-
-    filterOrders(waiter, statusOrderFilter);
-
   }
 
-  const changeStatus = (status: string) => {
-
-    setStatusOrderFilter(status);
-
-    filterOrders(filterWaiter, status);
-
+  const changeStatus = (event: React.SyntheticEvent, newValue: string) => {
+    setPage(0);
+    setStatusOrderFilter(newValue);
   }
-
 
   const refreshOrders = () => {
 
@@ -167,220 +161,207 @@ export const ListOrders = () => {
       })
   }
 
-
-
-
-  useEffect(() => {
-
-    filterOrders(filterWaiter, statusOrderFilter);
-
-
-  }, [orders])
-
-
+  const filteredOrders = filterOrders(orders, filterWaiter, statusOrderFilter);
 
   return (
 
     <>
 
-      <PageTitleWrapper>
-        <PageTitle
-          heading='Pedidos'
-          docs={
-            <LoadingButton
+      <Container maxWidth='xl'>
+        <TitlePage title='Pedidos'
+          action={
+            <Button
+              startIcon={<AddIcon />}
               variant="contained"
-              loading={loading}
-              onClick={refreshOrders}
-            >
-              <Cached />
-            </LoadingButton>
-          } />
-        <Clock />
-      </PageTitleWrapper>
+              color="primary"
+              onClick={() => addOrder()}
+            >Añadir Pedido</Button>
 
+          }
+        />
 
-      <Grid container item spacing={1} display='flex' justifyContent='space-between' alignItems='center' my={1}>
-
-        <Grid item>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Mesero</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={filterWaiter}
-              label="Mesa del pedido"
-              onChange={(e) => changeWaiter(e.target.value)}
-              size='small'
-            >
-              <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
-              {
-                user &&
-                <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
-              }
-
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item>
-          <Button
-            startIcon={<AddIcon />}
-            variant="contained"
-            color="primary"
-            onClick={() => addOrder()}
-          >Añadir Pedido</Button>
-        </Grid>
-      </Grid>
-
-
-
-
-            {/* <Grid item xs={6} sm={4} lg={3}>
-
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={statusOrderFilter}
-                  label="Mesa del pedido"
-
-                  onChange={(e) => changeStatus(e.target.value)}
-                >
-                  <MenuItem key={'all'} value={'all'}>Todos</MenuItem>
-                  <MenuItem key={OrderStatus.PENDING} value={OrderStatus.PENDING}>Pendiente</MenuItem>
-                  <MenuItem key={OrderStatus.IN_PROGRESS} value={OrderStatus.IN_PROGRESS}>Preparando</MenuItem>
-                  <MenuItem key={OrderStatus.DELIVERED} value={OrderStatus.DELIVERED}>Entregado</MenuItem>
-                  <MenuItem key={'unpaid'} value={'unpaid'}>Por pagar</MenuItem>
-                  <MenuItem key={OrderStatus.CANCELLED} value={OrderStatus.CANCELLED}>Cancelado</MenuItem>
-
-
-                </Select>
-              </FormControl>
-
-
-            </Grid>
- */}
-
-      <Typography variant='h5' sx={{ my: 2, }} align='right'>
-        {`${filteredOrders.length} pedidos`}
-      </Typography>
-
-
-
-      <Scrollbars
-        style={{ width: '100%', height: '600px' }}
-        autoHide
-        renderThumbHorizontal={() => {
-          return (
-            <Box
-              sx={{
-                width: 5,
-                background: `${theme.colors.alpha.black[10]}`,
-                borderRadius: `${theme.general.borderRadiusLg}`,
-                transition: `${theme.transitions.create(['background'])}`,
-
-                '&:hover': {
-                  background: `${theme.colors.alpha.black[30]}`
-                }
-              }}
-            />
-          );
-        }}
-
-
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            overflowX: 'auto',
-          }}
-
-        >
-
+        <Card>
           <Box
+            sx={{
+              overflowX: 'auto',
+              bgcolor: '#eee',
+              py: 1
+            }}
+          >
+            <TabsOrderStatus
+              changeStatus={changeStatus}
+              statusOrderFilter={statusOrderFilter}
+              orders={orders}
+
+            />
+          </Box>
+
+          <OrderListToolbar
+            changeWaiter={changeWaiter}
+            filterWaiter={filterWaiter}
+            statusOrderFilter={statusOrderFilter}
+          />
+
+          <Scrollbars
+            style={{ width: '100%', height: 'calc(100vh - 300px)' }}
+            autoHide
+            renderThumbHorizontal={() => {
+              return (
+                <Box
+                  sx={{
+                    width: 5,
+                    background: `${theme.colors.alpha.black[10]}`,
+                    borderRadius: `${theme.general.borderRadiusLg}`,
+                    transition: `${theme.transitions.create(['background'])}`,
+
+                    '&:hover': {
+                      background: `${theme.colors.alpha.black[30]}`
+                    }
+                  }}
+                />
+              );
+            }}
+
 
           >
 
-            <CardOrdersByStatus
+            <TableContainer sx={{ minWidth: 800 }}>
 
-              orders={filteredOrders.filter(order => order.status === OrderStatus.PENDING)}
-              title='PEDIDOS PENDIENTES'
-              color='success'
+              <Table>
 
-            />
-          </Box>
-
-          <Box>
-
-            <CardOrdersByStatus
-              orders={filteredOrders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
-              title='PREPARANDO'
-              color='primary'
-
-            />
-          </Box>
-          <Box>
-
-            <CardOrdersByStatus
-              orders={filteredOrders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
-              title='PEDIDOS POR PAGAR'
-              color='warning'
-
-            />
-          </Box>
-          <Box>
-
-            <CardOrdersByStatus
-              orders={filteredOrders.filter(order => order.status === OrderStatus.DELIVERED && order.isPaid)}
-              title='PEDIDOS PAGADOS'
-              color='info'
-
-            />
-          </Box>
-          <Box>
-
-            <CardOrdersByStatus
-              orders={filteredOrders.filter(order => order.status === OrderStatus.CANCELLED)}
-              title='PEDIDOS CANCELADOS'
-              color='error'
-
-            />
-          </Box>
-
-        </Box>
-      </Scrollbars>
+                <TableHead
+                >
 
 
+                  <TableRow>
+                    <TableCell>
+                      <Checkbox />
+                    </TableCell>
+                    <TableCell>
+                      Usuario
+                    </TableCell>
+                    <TableCell>
+                      Cliente
+                    </TableCell>
+                    <TableCell>
+                      Hora
+                    </TableCell>
+                    <TableCell>
+                      Estado
+                    </TableCell>
+                    <TableCell>
+                      Cantidad
+                    </TableCell>
+                    <TableCell>
+                      Acciones
+                    </TableCell>
+
+                  </TableRow>
+
+                </TableHead>
+
+                <TableBody>
+
+                  {
+                    filteredOrders.map((order) => (
+                      <TableRow
+                        hover
+                        key={order.id}
+                        sx={{
+                          cursor: 'pointer',
+                          '&:hover': {
+                            backgroundColor: theme.colors.alpha.black[5]
+
+                          }
+                        }}
+                      // onClick={() => navigate(`orders/${order.id}`)}
+                      >
+                        <TableCell>
+                          <Checkbox />
+                        </TableCell>
+                        <TableCell>
+                          {order.user.person.firstName} {order.user.person.lastName}
+                        </TableCell>
+                        <TableCell>
+                          {order.client?.person.firstName} {order.client?.person.lastName}
+                        </TableCell>
+                        <TableCell>
+                          {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
+                        </TableCell>
+                        <TableCell>
+                          {order.status}
+                        </TableCell>
+                        <TableCell>
+                          {order.total}
+                        </TableCell>
+                        <TableCell align='center'>
+                          <IconButton onClick={handleOpenMenu}>
+                            <MoreVert />
+                          </IconButton>
+                        </TableCell>
+
+                      </TableRow>
+                    ))
+
+
+                  }
+
+                </TableBody>
+
+              </Table>
+
+            </TableContainer>
+
+          </Scrollbars>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={filteredOrders.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
 
 
 
+        </Card>
+
+
+      </Container>
+
+      <Popover
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
+          },
+        }}
+      >
+        <MenuItem>
+
+          Edit
+        </MenuItem>
+
+        <MenuItem sx={{ color: 'error.main' }}>
+
+          Delete
+        </MenuItem>
+      </Popover>
 
 
 
-      {/* 
-      <Grid container spacing={1}>
-
-        {
-          filteredOrders.length > 0
-            ? filteredOrders.map(order => (
-              <Grid key={order.id} item xs={12} md={6} lg={4}  >
-
-                <Order order={order} />
-
-              </Grid>
-            ))
-            :
-            <Grid item xs={12} sx={{ my: 3 }}>
-
-              <Typography align='center' variant='h4' >No se encontraron pedidos </Typography>
-
-            </Grid>
-
-        }
-
-      </Grid>
- */}
 
 
 

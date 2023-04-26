@@ -1,20 +1,18 @@
 import { Container } from "@mui/material"
 import { Outlet } from "react-router-dom"
 import { PageTitle, PageTitleWrapper } from "../../../components/ui"
+import { TitlePage } from "../components/TitlePage.component"
 
 
 const Table = () => {
 
   return (
     <>
-      <PageTitleWrapper>
-        <PageTitle
-          heading='Mesas'
-          subHeading='Administre las mesas del restaurante'
-        />
-      </PageTitleWrapper>
 
       <Container maxWidth='lg'>
+        <TitlePage
+          title='Mesas'
+        />
         <Outlet />
 
       </Container>

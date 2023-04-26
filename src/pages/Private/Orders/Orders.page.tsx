@@ -26,6 +26,7 @@ import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
 import { LoadingButton } from '@mui/lab';
+import { ModalAddDetail } from "./components/EditOrder";
 
 
 
@@ -126,8 +127,8 @@ export const Orders = () => {
 
   const getOrdersCall = async () => await callEndpoint(getOrdersToday());
 
-  const loadOrdersState = (data: IOrder[]) => { 
-    dispatch(loadOrders(data));  
+  const loadOrdersState = (data: IOrder[]) => {
+    dispatch(loadOrders(data));
 
     dispatch(setLastUpdatedOrders(new Date().toISOString()))
 
@@ -139,22 +140,19 @@ export const Orders = () => {
 
   return (
     <>
-      
 
 
-      <Container maxWidth="lg">
-        <OrderProvider>
+
+       
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
 
             <Outlet />
 
-      <ModalClientOrder />
+            <ModalClientOrder />
 
           </LocalizationProvider>
-        </OrderProvider>
-
-      </Container>
+      
 
 
       <ModalDeleteOrder />
@@ -162,6 +160,7 @@ export const Orders = () => {
       <ModalPayOrder />
       <ModalEditOrderDetail />
 
+      <ModalAddDetail />
 
     </>
   )

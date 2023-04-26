@@ -197,18 +197,7 @@ function SidebarMenu() {
                   Dashboard
                 </Button>
               </ListItem> */}
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/menu"
 
-                  startIcon={<RestaurantOutlinedIcon />}
-                >
-                  Menu
-                </Button>
-              </ListItem>
             </List>
           </SubMenuWrapper>
         </List>
@@ -223,6 +212,20 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div">
+
+              <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/menu"
+
+                  startIcon={<RestaurantOutlinedIcon />}
+                >
+                  Menu
+                </Button>
+              </ListItem>
+              
               <ListItem component="div">
                 <Button
                   disableRipple
@@ -337,7 +340,7 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div"> */}
-              {/* <ListItem component="div">
+        {/* <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
@@ -348,7 +351,7 @@ function SidebarMenu() {
                   Perfil de usuario
                 </Button>
               </ListItem> */}
-              {/*  <ListItem component="div">
+        {/*  <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
@@ -359,7 +362,7 @@ function SidebarMenu() {
                   Configuración de cuenta
                 </Button>
               </ListItem> */}
-            {/* </List>
+        {/* </List>
           </SubMenuWrapper>
         </List> */}
         {/* <List

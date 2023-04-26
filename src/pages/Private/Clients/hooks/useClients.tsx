@@ -10,18 +10,26 @@ import { useState } from "react";
 
 export const useClients = () => {
 
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
+
+  const [limit, setLimit] = useState<number>(10);
 
   const [term, setTerm] = useState<string>('');
 
-  const clientsQuery =  useQuery<IClient[]>(['clients'], 
-  (data) => getClients(term)
+  const clientsQuery =  useQuery<{clients: IClient[], length: number}>(['clients', {page, limit, term}], 
+  (data) => getClients(page, limit, term)
   )
 
   return {
     clientsQuery,
 
     page,
+
+    setPage,
+
+    limit,
+
+    setLimit,
 
 
     setTerm,

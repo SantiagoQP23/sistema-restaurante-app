@@ -20,15 +20,25 @@ export const getClient = async (term: string): Promise<IClient> => {
 }
 
 
-export const getClients = async (term?: string): Promise<IClient[]> => {
+export const getClients = async (page = 0, limit = 10, term?: string): Promise<{clients: IClient[], length: number}> => {
 
-  const { data } = await restauranteApi.get<IClient[]>(`clients/`,{
-    params: {
-      term
-    }
+  const params = new URLSearchParams();
+
+  if (term) {
+    params.append('term', term);
+  }
+
+  params.append('offset', page.toString());
+  params.append('limit', limit.toString());
+
+  const { data } = await restauranteApi.get<{clients: IClient[], length: number}>(`clients/`,{
+    params
   })
 
-  return data;
+  return {
+    clients: data.clients,
+    length: data.length
+  };
 
 }
 

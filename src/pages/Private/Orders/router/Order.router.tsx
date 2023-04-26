@@ -4,6 +4,7 @@ import { ListActiveOrders } from '../subpages/ActiveOrders/components';
 import { MenuNewOrder } from '../subpages/AddOrder/components';
 import { PrivateRoutes } from '../../../../models/routes.model';
 import { lazy } from 'react';
+import { Menu } from '../../Menu';
 
 
 const Orders = lazy(() => import('../Orders.page'))
@@ -19,6 +20,12 @@ export const OrderRouter: RouteObject =
       path: '',
       element: <ListOrders />
     },
+
+    {
+      path: 'menu',
+      element: <Menu />
+    },
+    
     {
       path: 'edit/:orderId',
       element: <EditOrder />

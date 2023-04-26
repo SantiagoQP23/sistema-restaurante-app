@@ -52,13 +52,24 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   return (
     <>
 
+    <Box
+      sx={{
+        // border: '1px solid #ddd',
+
+        // borderRadius: '8px',
+        p:1 
+      }}
+    >
+
+
+
 
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography
-            variant="body1"
+            variant="h5"
             color="initial"
           >
 
@@ -131,12 +142,10 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
         </Box>
       </Box>
+      </Box>
 
 
-      {/* 
-
-
-            */}
+      
 
 
     </>

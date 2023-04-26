@@ -26,6 +26,7 @@ interface IOrderContext {
   getOrder: () => CreateOrderDto;
   setDetails: (details: ICreateOrderDetail[]) => void;
   setTypeOrder: (typeOrder: TypeOrder) => void;
+  getTotalProducts: () => number;
 }
 
 interface Props {
@@ -128,6 +129,12 @@ export const OrderProvider: FC<Props> = ({ children }) => {
   }
 
 
+  const getTotalProducts = (): number => {
+
+    return details.reduce((acc, detail) => acc + detail.quantity, 0)
+  }
+
+
   const reset = () => {
     setAmount(0)
     setClient(null);
@@ -155,7 +162,8 @@ export const OrderProvider: FC<Props> = ({ children }) => {
           setPeople,
           setDetails,
           typeOrder,
-          setTypeOrder
+          setTypeOrder,
+          getTotalProducts
 
         }
       }

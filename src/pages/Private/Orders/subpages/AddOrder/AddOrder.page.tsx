@@ -1,16 +1,18 @@
 
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Grid, Typography} from '@mui/material';
+import { Button, Grid, Typography, Container, Stack, Box } from '@mui/material';
 
 import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.component';
 
 
 import { useContext } from 'react';
-import { Add, ArrowBack, Clear, ClearAll, EditOutlined } from '@mui/icons-material';
+import { Add, ArrowBack, ArrowBackIos, ChevronLeft, Clear, ClearAll, EditOutlined } from '@mui/icons-material';
 import { OrderContext } from '../../context/Order.context';
 
-import { NewOrderSummary } from './components/NewOrderSummary.component';
+import { NewOrderSummary, OrderDetails } from './components/NewOrderSummary.component';
+import { TitlePage } from '../../../components/TitlePage.component';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 
@@ -19,58 +21,60 @@ export const AddOrder = () => {
   const navigate = useNavigate();
 
 
-  const {  reset } = useContext(OrderContext);
+  const { reset } = useContext(OrderContext);
 
-  
+
 
 
 
   return (
     <>
-      <Grid container spacing={1} pt={2}>
-        <Grid container item xs={12} md={7} spacing={1} justifyContent='space-between' alignContent='start'>
+      <Container maxWidth='xl'  sx={{pb: 5}}>
+        <TitlePage
+          title='Nuevo pedido'
+        />
+        <Stack
+          spacing={1}
+          direction={{ sx: 'column', md: 'row' }}
 
-          <Grid item display='flex' xs={12} alignItems='center' justifyContent='space-between'>
+        >
 
-            <Button onClick={() => { navigate('/orders') }}>
-              <ArrowBack />
-            </Button>
-            <Typography variant='h4'>Nuevo pedido</Typography>
+          <Box 
+            sx={{
+              flexBasis: '120%',
+            }}
+          >
 
-            <Button
-              
-              onClick={() => { reset() }}
+            <OrderDetails />
 
-            >
-              Limpiar
-            </Button>
-            
-          </Grid>
+            <Stack direction='row' spacing={1} justifyContent='space-between' my={2}>
 
-          <Grid item xs={12} sx={{
-            display: { xs: 'none', md: 'flex' },
-          }}>
-            <MenuAddProduct />
+              <Button
+                startIcon={<ChevronLeft />}
+                fullWidth={false}
+                onClick={() => { navigate('/orders/menu') }}
+              >
+                Continuar
+              </Button>
+              <Button
 
-          </Grid>
+                onClick={() => { reset() }}
+                color='error'
+              >
+                Limpiar
+              </Button>
 
+            </Stack>
 
-        </Grid>
-
-        <Grid container item xs={12} md={5} spacing={1} >
-
-          <Grid item xs={12}>
-
-            <NewOrderSummary />
-          </Grid>
-
-        </Grid>
-
-
-      </Grid>
+          </Box>
 
 
 
+          <NewOrderSummary />
+        </Stack>
+
+
+      </Container>
 
 
 

@@ -49,46 +49,58 @@ export const OrderDetails = () => {
 
   const navigate = useNavigate();
 
-  const { details } = useContext(OrderContext)
+  const { details, getTotalProducts } = useContext(OrderContext)
 
+
+  const totalProducts = getTotalProducts();
 
   return (
 
     <>
 
-      <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+      <Card>
 
-        <Typography variant="h4" >Productos</Typography>
+        <CardHeader
+          title='Productos'
+          subheader={`Total: ${totalProducts}`}
+          action={
+            <>
+              <IconButton
+                // sx={{ display: { xs: 'flex', md: 'none' } }}
+                size="small"
+                onClick={() => navigate('/orders/menu')}
+                color="primary"
 
-        <IconButton
-          sx={{ display: { xs: 'flex', md: 'none' } }}
-          size="small"
-          onClick={() => navigate('products')}
-          color="primary"
 
+              >
 
-        >
+                <AddShoppingCartOutlined />
+              </IconButton>
+            </>
+          }
+        />
 
-          <AddShoppingCartOutlined />
-        </IconButton>
+        <Divider />
 
-      </Box>
+        <Box>
 
-      <Divider sx={{ my: 1 }} />
+          <Grid container spacing={1} sx={{  pb: 2 }}>
+            {
+              details.map((detail) => (
 
-      <Grid container spacing={1}>
-        {
-          details.map((detail) => (
+                <Grid key={detail.product.name} item xs={12}>
+                  <NewOrderDetail detalle={detail} />
+                  <Divider />
 
-            <Grid key={detail.product.name} item xs={12}>
-              <NewOrderDetail detalle={detail} />
-              <Divider sx={{ my: 1 }} />
-            </Grid>
+                </Grid>
 
-          ))
+              ))
 
-        }
-      </Grid>
+            }
+          </Grid>
+        </Box>
+
+      </Card>
 
     </>
   )
@@ -99,7 +111,7 @@ export const OrderDetails = () => {
 
 export const NewOrderSummary = () => {
 
-  const { amount, reset, getOrder, details, setTypeOrder, typeOrder, client, setClient} = useContext(OrderContext);
+  const { amount, reset, getOrder, details, setTypeOrder, typeOrder, client, setClient } = useContext(OrderContext);
 
   const { socket } = useContext(SocketContext);
 
@@ -126,162 +138,135 @@ export const NewOrderSummary = () => {
   }
 
   return (
-    <Card>
+    <Box>
+      <Card
+        sx={{ mb: 2 }}
+      >
 
-      <CardHeader title='Información del pedido' />
-      <CardContent>
-
-
-        <Grid container spacing={1}
-          alignItems='center'
-          sx={{
-            borderRadius: 1,
-            bgcolor: '#f5f5f5',
-            p: 1,
-
-          }}
-        >
-          <Grid item xs={4}>
-
-            <Typography variant='h5'>Tipo de orden</Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <ToggleButtonGroup
-              value={typeOrder}
-              onChange={(e, value) => setTypeOrder(value)}
-              exclusive
-            >
-              <ToggleButton
-                value={TypeOrder.TAKE_AWAY}
-              >
-                <DeliveryDining />
-              </ToggleButton>
-              <ToggleButton
-                value={TypeOrder.IN_PLACE}
-              >
-                <LocalDining />
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
+        <CardHeader title='Información del pedido' />
+        <CardContent>
 
 
-          <Grid item xs={4}>
+          <Grid container spacing={1}
+            alignItems='center'
 
-            <Typography variant='h5' mt={1}>Personas</Typography>
-          </Grid>
-
-
-          <Grid item xs={8}>
-            <TextFieldPeople />
-          </Grid>
-
-
-          {
-            typeOrder === TypeOrder.IN_PLACE && (
-              <>
-                <Grid item xs={4}>
-                  <Typography variant='h5' mt={1}>Mesa</Typography>
-
-                </Grid>
-
-                <Grid item xs={8}>
-                  <TableOrder />
-                </Grid>
-
-
-
-              </>
-            )
-          }
-
-          <Grid item xs={4}>
-
-            <Typography variant='h5'>Cliente </Typography>
-
-          </Grid>
-
-
-          <Grid item xs={8} display='flex'>
-
-            <ComboBoxClient client={client} handleChangeClient={setClient} />
-            <IconButton
-              size="small"
-              onClick={editClient}
-
-            >
-              <AddOutlined />
-            </IconButton>
-
-
-          </Grid>
-
-          <Grid item xs={4}>
-          </Grid>
-
-
-          <Grid item xs={8}>
-          </Grid>
-
-        </Grid>
-        <Box
-          display='flex'
-          justifyContent='space-around'
-        >
-
-
-          <Box
           >
+            <Grid item xs={4}>
+
+              <Typography variant='h6'>Tipo de orden</Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <ToggleButtonGroup
+                value={typeOrder}
+                onChange={(e, value) => setTypeOrder(value)}
+                exclusive
+              >
+                <ToggleButton
+                  value={TypeOrder.TAKE_AWAY}
+                >
+                  <DeliveryDining />
+                </ToggleButton>
+                <ToggleButton
+                  value={TypeOrder.IN_PLACE}
+                >
+                  <LocalDining />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+
+
+            <Grid item xs={4}>
+
+              <Typography variant='h6' mt={1}>Personas</Typography>
+            </Grid>
+
+
+            <Grid item xs={8}>
+              <TextFieldPeople />
+            </Grid>
+
+
+            {
+              typeOrder === TypeOrder.IN_PLACE && (
+                <>
+                  <Grid item xs={4}>
+                    <Typography variant='h6' mt={1}>Mesa</Typography>
+
+                  </Grid>
+
+                  <Grid item xs={8}>
+                    <TableOrder />
+                  </Grid>
 
 
 
+                </>
+              )
+            }
+
+            <Grid item xs={4}>
+
+              <Typography variant='h6'>Cliente </Typography>
+
+            </Grid>
+
+
+            <Grid item xs={8} display='flex'>
+
+              <ComboBoxClient client={client} handleChangeClient={setClient} />
+              <IconButton
+                size="small"
+                onClick={editClient}
+
+              >
+                <AddOutlined />
+              </IconButton>
+
+
+            </Grid>
+
+            <Grid item xs={4}>
+            </Grid>
+
+
+            <Grid item xs={8}>
+            </Grid>
+
+          </Grid>
+
+
+
+
+
+          <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+
+            <Typography variant='h4' fontWeight='bold'>Total </Typography>
+            <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
+          </Box>
+
+
+
+          <Box mt={2}>
 
           </Box>
 
 
-        </Box>
+        </CardContent>
 
 
-        {/* <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
+      </Card>
 
+      <LoadingButton
+        variant='contained'
+        disabled={details.length <= 0}
+        onClick={submitAddOrder}
+        fullWidth
+        loading={loading}
+      >
+        Crear pedido
+      </LoadingButton>
 
-
-
-         
-
-        </Box> */}
-
-        <Box >
-          <OrderDetails />
-
-        </Box>
-
-
-        <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-
-          <Typography variant='h4' fontWeight='bold'>Total </Typography>
-          <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
-        </Box>
-
-
-
-        <Box mt={2}>
-          <LoadingButton
-            variant='contained'
-            disabled={details.length <= 0}
-            onClick={submitAddOrder}
-            fullWidth
-            loading={loading}
-          >
-            Crear pedido
-          </LoadingButton>
-
-        </Box>
-
-
-      </CardContent>
-
-
-    </Card>
+    </ Box>
 
   )
 }

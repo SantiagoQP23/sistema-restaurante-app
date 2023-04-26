@@ -26,6 +26,8 @@ import { OrderContext } from '../../context/Order.context';
 import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.component';
 
 import { OrderSummary } from './components/';
+import { Container } from '@mui/material';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 
@@ -89,45 +91,46 @@ export const EditOrder = () => {
   return (
     <>
 
-      <Grid container spacing={2} display='flex' justifyContent='space-between' alignItems='center' sx={{ pb: 2, mt: 1 }}>
-        <Grid item display='flex' md={6} alignItems='center'>
-          <Button onClick={() => { navigate('/orders') }}>
-            <ArrowBack />
-          </Button>
+      <Container maxWidth='xl'>
 
-          <Typography variant="h4" >Editar pedido</Typography>
+        <TitlePage
+          title='Editar pedido'
+        />
 
-        </Grid>
 
-      </Grid>
+        <Button onClick={() => { navigate('/orders') }}>
+          <ArrowBack />
+        </Button>
 
-    
-      {
-        loading
-          ?
-          <>
-            <CircularProgress />
-          </>
-          :
-          <Grid container spacing={1}>
 
-            <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
-              display: { xs: 'none', md: 'flex' },
-            }}>
-              <MenuAddProduct />
-            </Grid>
 
-            <Grid item xs={12} sm={5} >
-
+        {
+          loading
+            ?
+            <>
+              <CircularProgress />
+            </>
+            :
               <OrderSummary order={activeOrder} />
+            // <Grid container spacing={1}>
+
+            //   <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
+            //     display: { xs: 'none', md: 'flex' },
+            //   }}>
+            //   </Grid>
+
+            //   <Grid item xs={12} sm={5} >
+
+            //     <MenuAddProduct />
 
 
 
-            </Grid>
+            //   </Grid>
 
-          </Grid>
-      }
+            // </Grid>
+        }
 
+      </Container>
 
 
 

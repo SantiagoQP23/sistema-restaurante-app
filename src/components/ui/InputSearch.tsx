@@ -17,7 +17,13 @@ export const InputSearch: FC<Props> = ({ handleChange, search, placeholder, load
     <>
       <Paper
         component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%' }}
+        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%',
+        backgroundColor: 'transparent',
+        border: '1px solid #aaa',
+
+
+       }}
+        
       >
 
         <InputBase
