@@ -12,6 +12,7 @@ import { Divider } from '@mui/material/';
 import { es } from "date-fns/locale";
 import { PdfReceiptOrder } from '../../components/ReceiptOrder/pdf/PdfReceiptOrder.component';
 import { TitlePage } from "../../../components/TitlePage.component";
+import { LabelStatusOrder } from "../ListOrders/components/LabelStatusOrder.component";
 
 
 const TAX_RATE = 0.07;
@@ -99,7 +100,7 @@ export const ReceiptOrder = () => {
             >
 
               <IconButton
-                
+
               >
                 <SendOutlined />
               </IconButton>
@@ -143,20 +144,12 @@ export const ReceiptOrder = () => {
             action={
 
               <>
-                {
-                  !activeOrder.isPaid && activeOrder.status === OrderStatus.DELIVERED
-                    ? <Label color='warning'>Por pagar</Label>
-                    :
-                    <Label color='info'>
+                <LabelStatusOrder status={
+                  activeOrder.status === OrderStatus.DELIVERED && !activeOrder.isPaid
+                    ? "unpaid"
+                    : activeOrder.status
 
-                      {
-                        activeOrder.isPaid
-                          ? 'PAGADO'
-                          : OrderStatusSpanish[`${activeOrder.status as OrderStatus}`]
-
-                      }
-                    </Label>
-                }
+                } />
                 <Box>
                   <Typography variant='h5' fontWeight='bold'>Pedido N° {activeOrder.num}</Typography>
 
@@ -242,7 +235,7 @@ export const ReceiptOrder = () => {
               activeOrder.details.map((detail, index) => {
                 return (
                   <>
-                    <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+                    <Box key={detail.id} display='flex' justifyContent='space-between' alignItems='center' mt={2}>
                       <Box>
                         <Typography variant='h5'> {detail.quantity} - {detail.product.name}</Typography>
                         <Typography variant='subtitle1'>${detail.product.price}</Typography>

@@ -7,7 +7,7 @@ import { MenuAddProduct } from '../../components/EditOrder/MenuAddProduct.compon
 
 
 import { useContext } from 'react';
-import { Add, ArrowBack, ArrowBackIos, ChevronLeft, Clear, ClearAll, EditOutlined } from '@mui/icons-material';
+import { Add, ArrowBack, ArrowBackIos, ChevronLeft, Clear, ClearAll, EditOutlined, ShoppingCart } from '@mui/icons-material';
 import { OrderContext } from '../../context/Order.context';
 
 import { NewOrderSummary, OrderDetails } from './components/NewOrderSummary.component';
@@ -50,11 +50,11 @@ export const AddOrder = () => {
             <Stack direction='row' spacing={1} justifyContent='space-between' my={2}>
 
               <Button
-                startIcon={<ChevronLeft />}
+                startIcon={<ShoppingCart />}
                 fullWidth={false}
                 onClick={() => { navigate('/orders/menu') }}
               >
-                Continuar
+                Añadir productos
               </Button>
               <Button
 
