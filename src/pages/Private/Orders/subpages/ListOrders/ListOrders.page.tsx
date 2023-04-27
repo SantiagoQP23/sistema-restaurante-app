@@ -25,7 +25,7 @@ import { Order } from '../../components';
 import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
-import { Cached, Check, EditOutlined, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
+import { Cached, Check, DeleteOutlined, EditOutlined, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
 
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -44,6 +44,7 @@ import { OrderListToolbar } from './components/OrderListToolbar.component';
 import { Checkbox } from '@mui/material/';
 import { TablePagination, IconButton } from '@mui/material';
 import { TabsOrderStatus } from './components/TabsOrderStatus.component';
+import { LabelStatusOrder } from './components/LabelStatusOrder.component';
 
 
 // function applySortFilter(array: IOrder[], comparator, query) {
@@ -185,7 +186,7 @@ export const ListOrders = () => {
           <Box
             sx={{
               overflowX: 'auto',
-              bgcolor: '#eee',
+            
               py: 1
             }}
           >
@@ -239,7 +240,7 @@ export const ListOrders = () => {
                       <Checkbox />
                     </TableCell>
                     <TableCell>
-                      Usuario
+                      Mesero
                     </TableCell>
                     <TableCell>
                       Cliente
@@ -290,14 +291,22 @@ export const ListOrders = () => {
                           {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
                         </TableCell>
                         <TableCell>
-                          {order.status}
+                          <LabelStatusOrder status={ 
+                            order.status === OrderStatus.DELIVERED && !order.isPaid 
+                            ? "unpaid" 
+                            : order.status
+
+                             }/>
                         </TableCell>
                         <TableCell>
                           {order.total}
                         </TableCell>
                         <TableCell align='center'>
-                          <IconButton onClick={(e) => handleOpenMenu(e, order)}>
+                          {/* <IconButton onClick={(e) => handleOpenMenu(e, order)}>
                             <MoreVert />
+                          </IconButton> */}
+                          <IconButton onClick={() => navigate(`edit/${order.id}`)}>
+                            <EditOutlined />
                           </IconButton>
                         </TableCell>
 
@@ -357,12 +366,12 @@ export const ListOrders = () => {
           }}
         >
           <EditOutlined />
-          Edit
+          Editar
         </MenuItem>
 
         <MenuItem sx={{ color: 'error.main' }}>
-
-          Delete
+          <DeleteOutlined />
+          Eliminar
         </MenuItem>
       </Popover>
 

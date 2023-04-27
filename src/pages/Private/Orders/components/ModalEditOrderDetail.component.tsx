@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { selectOrders } from '../../../../redux/slices/orders/orders.slice';
 import { IOrderDetail } from "../../../../models";
 import { statusModalEditOrderDetail } from "../services/orders.service";
-import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid, Stack } from '@mui/material';
 import { useCounter, useOrders } from '../hooks';
 import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline } from '@mui/icons-material';
 import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
@@ -130,19 +130,12 @@ export const ModalEditOrderDetail = () => {
           alignItems: 'center'
         }}
       ><b>{detail?.product.name}</b>
-        <LoadingButton
-          startIcon={<CheckOutlined />}
-          variant='contained'
-          onClick={deliverDetail}
-          disabled={counterQtyDelivered === detail?.quantity}
-          size='small'
-          loading={loading}
-        >{
-            detail?.qtyDelivered === detail?.quantity ? 'Entregado' : 'Entregar'
-          }</LoadingButton>
+
       </DialogTitle>
       <Divider />
       <DialogContent>
+
+
 
 
         <Grid container spacing={2}>
@@ -217,6 +210,7 @@ export const ModalEditOrderDetail = () => {
               </IconButton>
             </Box>
 
+
           </ Grid>
 
           <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
@@ -243,6 +237,7 @@ export const ModalEditOrderDetail = () => {
 
 
 
+
             </Box>
 
 
@@ -250,8 +245,20 @@ export const ModalEditOrderDetail = () => {
           </ Grid>
         </ Grid>
 
+        <Stack direction='row' justifyContent='right'>
 
+          <LoadingButton
+            startIcon={<CheckOutlined />}
+            variant='outlined'
+            onClick={deliverDetail}
+            disabled={counterQtyDelivered === detail?.quantity}
+            size='small'
+            loading={loading}
+          >{
+              detail?.qtyDelivered === detail?.quantity ? 'Entregado' : 'Marcar como entregado'
+            }</LoadingButton>
 
+        </Stack>
 
 
       </DialogContent>

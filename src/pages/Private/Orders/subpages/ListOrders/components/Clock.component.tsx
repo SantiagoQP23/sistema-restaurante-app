@@ -3,6 +3,7 @@ import { es } from "date-fns/locale";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
+import { Typography, Stack } from '@mui/material';
 
 
 export const Clock = () => {
@@ -27,20 +28,20 @@ export const Clock = () => {
 
   return (
     <>
+      <Stack direction={{sx: 'column'}} spacing={2} py={1}>
 
-      {
-        format(new Date(), 'EEEE dd MMMM.  ',
+        <Typography variant="h5" >
+          Fecha: {format(date, 'eeee dd/MM/yyyy', { locale: es })}
+        </Typography>
+
+        <Typography variant="body1" >
+
           {
-            locale: es
-          })
+            " Ult. actualización: " + format(new Date(lastUpdatedOrders), 'HH:mm:ss')
+          }
+        </Typography>
 
-
-      }
-      <br />
-      {
-        " Ult. actualización: " + format(new Date(lastUpdatedOrders), 'HH:mm:ss')
-      }
-
+      </Stack>
     </>
   )
 }

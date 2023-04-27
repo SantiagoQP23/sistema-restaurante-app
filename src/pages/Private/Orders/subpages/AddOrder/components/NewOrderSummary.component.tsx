@@ -84,17 +84,21 @@ export const OrderDetails = () => {
 
         <Box>
 
-          <Grid container spacing={1} sx={{  pb: 2 }}>
+          <Grid container spacing={1} sx={{ pb: 2 }}>
             {
-              details.map((detail) => (
+              details.length > 0
+                ? details.map((detail) => (
 
-                <Grid key={detail.product.name} item xs={12}>
-                  <NewOrderDetail detalle={detail} />
-                  <Divider />
+                  <Grid key={detail.product.name} item xs={12}>
+                    <NewOrderDetail detalle={detail} />
+                    <Divider />
 
+                  </Grid>
+
+                ))
+                : <Grid item xs={12}>
+                  <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
                 </Grid>
-
-              ))
 
             }
           </Grid>
@@ -160,16 +164,19 @@ export const NewOrderSummary = () => {
                 value={typeOrder}
                 onChange={(e, value) => setTypeOrder(value)}
                 exclusive
+                size="small"
               >
                 <ToggleButton
                   value={TypeOrder.TAKE_AWAY}
                 >
                   <DeliveryDining />
+                  Para llevar
                 </ToggleButton>
                 <ToggleButton
                   value={TypeOrder.IN_PLACE}
                 >
                   <LocalDining />
+                  Para servir
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

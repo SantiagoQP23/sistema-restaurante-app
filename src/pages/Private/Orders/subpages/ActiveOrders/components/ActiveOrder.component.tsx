@@ -27,6 +27,7 @@ import { setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
+import { Stack } from '@mui/material';
 
 interface Props {
   order: IOrder;
@@ -185,168 +186,240 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   return (
     <>
 
-      <Card
-
+      <Box
         sx={{
-          m: 1,
-          border: (theme) => `2px solid ${theme.palette[color].main}`,
+          mb: 1
         }}
-
       >
 
-        <CardHeader
-          title={
-            <Typography
-              variant="body1"
-              fontWeight='bold'
 
+        <Card
 
-            >
-              {
-                order.type === TypeOrder.IN_PLACE
-
-                  ?
-                  `Mesa ${order.table?.name}`
-                  : 'Para llevar'
-
-              }
-              {
-                order.client &&
-                ` - ${order.client.person.firstName} ${order.client.person.lastName}`
-              }
-            </Typography>
-          }
-
-          subheader={
-            <>
-              {
-                formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-                })}
-            </>
-          }
-
-          avatar={
-            <>
-              <Avatar
-                {...stringAvatar(order.user.person.firstName + ' ' + order.user.person.lastName)}
-              />
-
-            </>
-          }
           sx={{
-            mb: 1
+
+            border: (theme) => `1px solid ${theme.palette[color].main}`,
           }}
+          variant='elevation'
 
-        />
-
-
-
-        <Box
-        mx={1}
-        display='flex'
-        flexDirection='column'
-        gap={1}
         >
+          
+          {/* 
+          <CardHeader
+            title={
+              <Typography
+                variant="body1"
+                fontWeight='bold'
 
-          {
-            order.status === OrderStatus.IN_PROGRESS || order.status === OrderStatus.DELIVERED
-              ?
+
+              >
+                {
+                  order.type === TypeOrder.IN_PLACE
+
+                    ?
+                    `Mesa ${order.table?.name}`
+                    : 'Para llevar'
+
+                }
+                {
+                  order.client &&
+                  ` - ${order.client.person.firstName} ${order.client.person.lastName}`
+                }
+              </Typography>
+            }
+
+
+            avatar={
               <>
-                {
-                  details.filter(detail => detail.quantity !== detail.qtyDelivered)
-                    .map(detail => (
-                      
-                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
-                     
-                    ))
-
-                }
-                <Divider sx={{ my: 1 }} />
-                {
-                  details.filter(detail => detail.quantity === detail.qtyDelivered)
-                    .map(detail => (
-                      <Grid key={detail.id} item xs={12} >
-                        <DetailDispatched detail={detail} orderId={order.id} />
-                      </Grid>
-                    ))
-
-                }
+                <Avatar
+                  {...stringAvatar(order.user.person.firstName + ' ' + order.user.person.lastName)}
+                />
 
               </>
+            }
+            sx={{
+              mb: 1
+            }}
 
-              :
-              details.map(detail => (
-                <Grid key={detail.id} item xs={12} >
-                  <PendingDetail detail={detail} />
-                </Grid>
-              )
-              )
-          }
-        </Box>
+          /> */}
 
 
+          <Stack
+            sx={{ p: 1 }}
+            spacing={1}
+          >
+            <Stack
+              direction='row'
+              justifyContent='space-between'
+            >
+              <Box
+                flexBasis='50%'
+              >
+                <Typography variant='body1' fontWeight='bold'>N° {order.num}</Typography>
+
+              </Box>
 
 
-        <CardActions>
+              <Box
+                flexBasis='50%'
+              >
+
+
+               
+
+                <Typography
+                  variant="body1"
+                  fontWeight='bold'
+                >
+                  {
+                    order.type === TypeOrder.IN_PLACE
+
+                      ?
+                      `Mesa ${order.table?.name}`
+                      : 'Para llevar'
+
+                  }
+
+                </Typography>
+              </Box>
+
+
+            </Stack>
+
+            <Box>
+              <Typography variant='caption'>Cliente</Typography>
+              <Typography variant='body1' fontWeight='bold'>
+                {order.client?.person.firstName} {order.client?.person.lastName}
+              </Typography>
+            </Box>
+            <Box>
+
+              <Typography variant='caption'>Mesero</Typography>
+              <Typography variant='body1' fontWeight='bold'>
+                {order.user.person.firstName} {order.user.person.lastName}
+              </Typography>
+            </Box>
+            <Typography variant='body2'  >
+          {'Creado ' + 
+            formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
+              addSuffix: true,
+              includeSeconds: true,
+              locale: es
+            })}
+        </Typography>  
+
+          </Stack>
+
+          
+
+          <Divider sx={{ mb: 1 }} />
+
+          <Box
+            mx={1}
+            display='flex'
+            flexDirection='column'
+            gap={1}
+          >
+
+            {
+              order.status === OrderStatus.IN_PROGRESS || order.status === OrderStatus.DELIVERED
+                ?
+                <>
+                  {
+                    details.filter(detail => detail.quantity !== detail.qtyDelivered)
+                      .map(detail => (
+
+                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+
+                      ))
+
+                  }
+                 
+                  {
+                    details.filter(detail => detail.quantity === detail.qtyDelivered)
+                      .map(detail => (
+                        <Grid key={detail.id} item xs={12} >
+                          <DetailDispatched detail={detail} orderId={order.id} />
+                        </Grid>
+                      ))
+
+                  }
+
+                </>
+
+                :
+                details.map(detail => (
+                  <Grid key={detail.id} item xs={12} >
+                    <PendingDetail detail={detail} />
+                  </Grid>
+                )
+                )
+            }
+          </Box>
 
 
 
 
-          {
-            order.status === OrderStatus.PENDING
-              ? <Button
-                fullWidth
-                variant='text'
-                startIcon={<PlayArrow />}
-                onClick={() => {
-                  changeStatusOrder(OrderStatus.IN_PROGRESS)
-                  setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+          <CardActions>
 
-                }}
-                color={color}
 
-              >Iniciar</Button>
-              : order.status === OrderStatus.IN_PROGRESS
-              &&
-              < >
-                <Button
+
+
+            {
+              order.status === OrderStatus.PENDING
+                ? <Button
                   fullWidth
-                  startIcon={<ArrowBack />}
                   variant='text'
+                  startIcon={<PlayArrow />}
                   onClick={() => {
-                    changeStatusOrder(OrderStatus.PENDING)
-                    setStatusFilter && setStatusFilter(OrderStatus.PENDING)
+                    changeStatusOrder(OrderStatus.IN_PROGRESS)
+                    setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
 
                   }}
                   color={color}
 
-                >
-                  Pendiente
-                </Button>
+                >Iniciar</Button>
+                : order.status === OrderStatus.IN_PROGRESS
+                &&
+                < >
+                  <Button
+                    fullWidth
+                    startIcon={<ArrowBack />}
+                    variant='text'
+                    onClick={() => {
+                      changeStatusOrder(OrderStatus.PENDING)
+                      setStatusFilter && setStatusFilter(OrderStatus.PENDING)
 
-                {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
+                    }}
+                    color={color}
 
-              </ >
+                  >
+                    Pendiente
+                  </Button>
+
+                  {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
+
+                </ >
 
 
 
 
-          }
-          <Button
-            onClick={() => {
-              navigate(`/orders/edit/${order.id}`)
-            }}
-            size='small'
-            color={color}
-          >
-            <EditOutlined />
-          </Button>
+            }
+            <Button
+              onClick={() => {
+                navigate(`/orders/edit/${order.id}`)
+              }}
+              size='small'
+              color={color}
+            >
+              <EditOutlined />
+            </Button>
 
-        </CardActions>
-      </Card>
+          </CardActions>
+          
+      
+        </Card>
+      </Box>
+
 
     </>
 

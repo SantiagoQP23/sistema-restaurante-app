@@ -22,7 +22,7 @@ export const OrderRouter: RouteObject =
     },
 
     {
-      path: 'menu',
+      path: 'add/menu',
       element: <Menu />
     },
     

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   ListSubheader,
@@ -7,7 +7,11 @@ import {
   List,
   styled,
   Button,
-  ListItem
+  ListItem,
+  Collapse,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { SidebarContext } from '../../../../contexts/SidebarContext';
@@ -31,6 +35,8 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../../redux';
 import { ValidRoles } from '../../../../router';
+import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -177,6 +183,15 @@ const SubMenuWrapper = styled(Box)(
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
 
+  const [openOrders, setOpenOrders] = useState(false);
+
+
+  const handleOpenOrders = () => {
+    setOpenOrders(!openOrders);
+  };
+
+
+
   const { user } = useSelector(selectAuth);
 
   return (
@@ -185,8 +200,8 @@ function SidebarMenu() {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {/* 
-              <ListItem component="div">
+
+              {/* <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
@@ -206,48 +221,94 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Pedidos
+              GENERAL
             </ListSubheader>
           }
         >
           <SubMenuWrapper>
             <List component="div">
 
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/menu"
 
-                  startIcon={<RestaurantOutlinedIcon />}
-                >
-                  Menu
-                </Button>
-              </ListItem>
-              
-              <ListItem component="div">
+              <ListItemButton 
+              onClick={handleOpenOrders}
+              selected={openOrders}
+              sx={{
+                '&:hover': {
+                  backgroundColor: '#aaaa',
+                },
+              }}
+
+              >
+                <ListItemIcon>
+                <TableChartTwoToneIcon />
+                </ListItemIcon>
+                <ListItemText >
+                  <Typography variant='h5'>
+
+                  Pedidos
+                  </Typography>
+                </ListItemText>
+                {openOrders ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+
+              {/* <ListItem component="div"  >
                 <Button
                   disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/orders"
+
+
+
+                  onClick={handleOpenOrders}
                   startIcon={<TableChartTwoToneIcon />}
+                  endIcon={openOrders ? <ExpandLess /> : <ExpandMore />}
                 >
                   Pedidos
                 </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/orders/actives"
-                  startIcon={<DeliveryDiningOutlinedIcon />}
-                >
-                  Pedidos Activos
-                </Button>
-              </ListItem>
+              </ListItem> */}
+
+              <Collapse in={openOrders} sx={{ pl: 2 }}>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/orders"
+
+                    startIcon={<ListAlt />}
+                    end
+                  >
+                    Lista
+                  </Button>
+                </ListItem>
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/orders/add"
+
+                    startIcon={<RestaurantOutlinedIcon />}
+                    
+                  >
+                    Nuevo pedido
+
+                  </Button>
+                </ListItem>
+
+
+
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/orders/actives"
+                    startIcon={<DeliveryDiningOutlinedIcon />}
+                    end
+                  >
+                    Pedidos Activos
+                  </Button>
+                </ListItem>
+              </Collapse>
 
 
               <ListItem component="div">

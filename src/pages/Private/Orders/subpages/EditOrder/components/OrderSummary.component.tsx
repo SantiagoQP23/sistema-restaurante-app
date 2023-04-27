@@ -15,6 +15,7 @@ import { Label } from "../../../../../../components/ui";
 import { statusModalClientOrder } from "../../../services/sharing-information.service";
 import { ComboBoxClient } from "../../../components";
 import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { LabelStatusOrder } from "../../ListOrders/components/LabelStatusOrder.component";
 
 
 interface PropsOrder {
@@ -58,7 +59,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
   }
 
 
-  
+
   const openModalDiscount = () => {
     statusModalDiscountOrder.setSubject(true, order!);
   }
@@ -76,158 +77,150 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
         spacing={1}
       >
 
-      <Card>
-        <CardHeader
-          title='Información del pedido'
-        />
-        <CardContent>
+        <Card>
+          <CardHeader
+            title='Información del pedido'
+          />
+          <CardContent>
 
-          <Stack spacing={2}>
+            <Stack spacing={2}>
 
-            <SelectTypeOrder />
+              <SelectTypeOrder />
 
-            <Stack spacing={1} direction='row'>
+              <Stack spacing={1} direction='row'>
 
-              {
-                order.type === "IN_PLACE" as TypeOrder &&
-                <OrderTable />
+                {
+                  order.type === "IN_PLACE" as TypeOrder &&
+                  <OrderTable />
 
-              }
-              <PeopleOrder people={order.people} />
+                }
+                <PeopleOrder people={order.people} />
+              </Stack>
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient} />
+
+              </Box>
+
             </Stack>
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-              <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient} />
-
-            </Box>
-
-          </Stack>
-          <Box display='flex' justifyContent='right' >
-            <Button
-              onClick={editClient}
-            >
-              Añadir cliente
-            </Button>
-          </Box>
-
-
-        </CardContent>
-      </Card>
-
-
-      <Card>
-        <CardContent>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
-            <Box>
-              <Typography variant='h4' fontWeight='bold'>Pedido N° {order.num}</Typography>
-
-            </Box>
-
-            <Box display='flex' gap={1}>
-              {
-                !order.isPaid && order.status === OrderStatus.DELIVERED
-                  ? <Label color='warning'>Por pagar</Label>
-                  :
-                  <Label color='info'>
-
-                    {
-                      order.isPaid
-                        ? 'PAGADO'
-                        : OrderStatusSpanish[`${order.status as OrderStatus}`]
-
-                    }
-                  </Label>
-              }
-
-
-
-            </Box>
-
-          </Box>
-
-
-          <Divider sx={{mb: 1}}/>
-
-          <Stack spacing={1}>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' >
-
-            <Typography variant='h5'>Hora: </Typography>
-            <Typography variant='body1'>{format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}</Typography>
-
-          </Box>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' >
-            <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
-            <Typography>
-              {order.user.person.firstName} {order.user.person.lastName}
-            </Typography>
-
-
-
-          </Box>
-          </Stack>
-
-          <Divider sx={{my: 1}}/>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' >
-
-            <Typography variant='subtitle1' >Subtotal </Typography>
-            <Typography variant='h5' fontWeight='bold'>$ {order.amount}</Typography>
-          </Box>
-
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' >
-
-            <Box display='flex' alignItems='center'>
-
-              <Typography variant='subtitle1' >Descuento </Typography>
+            <Box display='flex' justifyContent='right' >
               <Button
-              onClick={openModalDiscount}
-              disabled={order.isPaid}
-              color="secondary"
+                onClick={editClient}
+              >
+                Añadir cliente
+              </Button>
+            </Box>
+
+
+          </CardContent>
+        </Card>
+
+
+        <Card>
+          <CardContent>
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
+              <Box>
+                <Typography variant='h4' fontWeight='bold'>Pedido N° {order.num}</Typography>
+
+              </Box>
+
+              <Box display='flex' gap={1}>
+                <LabelStatusOrder status={
+                  order.status === OrderStatus.DELIVERED && !order.isPaid
+                    ? "unpaid"
+                    : order.status
+
+                } />
+
+
+
+              </Box>
+
+            </Box>
+
+
+            <Divider sx={{ mb: 1 }} />
+
+            <Stack spacing={1}>
+
+              <Box display='flex' justifyContent='space-between' alignItems='center' >
+
+                <Typography variant='h5'>Hora: </Typography>
+                <Typography variant='body1'>{format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}</Typography>
+
+              </Box>
+
+              <Box display='flex' justifyContent='space-between' alignItems='center' >
+                <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
+                <Typography>
+                  {order.user.person.firstName} {order.user.person.lastName}
+                </Typography>
+
+
+
+              </Box>
+            </Stack>
+
+            <Divider sx={{ my: 1 }} />
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' >
+
+              <Typography variant='subtitle1' >Subtotal </Typography>
+              <Typography variant='h5' fontWeight='bold'>$ {order.amount}</Typography>
+            </Box>
+
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' >
+
+              <Box display='flex' alignItems='center'>
+
+                <Typography variant='subtitle1' >Descuento </Typography>
+                <Button
+                  onClick={openModalDiscount}
+                  disabled={order.isPaid}
+                  color="secondary"
+
+                >
+                  editar
+                </Button>
+
+              </Box>
+              <Typography variant='h5' fontWeight='bold'>$ {order.discount}</Typography>
+            </Box>
+
+
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+
+              <Typography variant='h4' fontWeight='bold'>Total </Typography>
+              <Typography variant='h4' fontWeight='bold'>${order.amount}</Typography>
+            </Box>
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
+              <Button
+                startIcon={<DeleteOutline />}
+                color='error'
+                onClick={eliminarPedido}
+                disabled={orderDelivered}
+                size='small'
+              >
+                Eliminar
+              </Button>
+
+              <Button
+                variant='contained'
+                onClick={() => { navigate('receipt') }}
+
+                startIcon={<PointOfSaleOutlined />}
+                color="primary"
 
               >
-                editar
+                Pago
               </Button>
-            
             </Box>
-            <Typography variant='h5' fontWeight='bold'>$ {order.discount}</Typography>
-          </Box>
 
-
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-
-            <Typography variant='h4' fontWeight='bold'>Total </Typography>
-            <Typography variant='h4' fontWeight='bold'>${order.amount}</Typography>
-          </Box>
-
-          <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-            <Button
-            startIcon={<DeleteOutline />}
-              color='error'
-              onClick={eliminarPedido}
-              disabled={orderDelivered}
-              size='small'
-            >
-              Eliminar
-            </Button>
-
-            <Button
-              variant='contained'
-              onClick={() => { navigate('receipt') }}
-
-              startIcon={<PointOfSaleOutlined />}
-              color="primary"
-
-            >
-              Pago
-            </Button>
-          </Box>
-
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
       </Stack>
 
     </>

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Divider, lighten, useTheme } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box } from '@mui/material';
 import { IOrder, OrderStatus } from "../../../../../../models"
 import { FC } from "react"
 import { ActiveOrder } from "./ActiveOrder.component"
@@ -30,10 +30,10 @@ export const CardActiveOrder: FC<Props> = ({
           overflowY: 'auto',
           width: '325px',
           mr: 1,
-          
+
         }}
       >
-        
+
         <CardHeader
           title={
             <>
@@ -50,7 +50,14 @@ export const CardActiveOrder: FC<Props> = ({
         />
         <Divider />
 
-        {/* <CardContent> */}
+        <Box
+          sx={{
+            p: 1
+          }}
+        >
+
+
+          {/* <CardContent> */}
 
 
           {
@@ -58,11 +65,12 @@ export const CardActiveOrder: FC<Props> = ({
             &&
             orders.map(order => (
               <>
-                <ActiveOrder order={order} color={color}/>
-              
+                <ActiveOrder  key={order.id} order={order} color={color} />
+
               </>
             ))
           }
+        </Box>
         {/* </CardContent> */}
 
 

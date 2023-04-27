@@ -98,12 +98,9 @@ export const EditOrder = () => {
           title='Editar pedido'
         />
 
-
-        {/* <Button onClick={() => { navigate('/orders') }}>
-          <ArrowBack />
-        </Button> */}
-
-
+        {
+          loading
+        }
 
         {
           loading

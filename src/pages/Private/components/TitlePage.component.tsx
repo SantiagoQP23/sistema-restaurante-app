@@ -58,9 +58,7 @@ export const TitlePage: FC<Props> = ({ title, action }) => {
             const last = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
-            console.log({to})
-
-            console.log({sn: breadcrumbNameMap[to]})
+          
 
             if (breadcrumbNameMap[to]) {
 

@@ -8,7 +8,7 @@ export const PublicRoutes = {
 }
 
 export const PrivateRoutes = {
-  MENU: 'orders/menu',
+  MENU: 'orders/add/menu',
   MENU_EDIT: 'menu/edit/',
   ORDERS: 'orders',
   ACTIVE_ORDERS: 'active-orders',
