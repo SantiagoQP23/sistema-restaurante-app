@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ICategory } from '../../../../models/menu.model';
-import { Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Grid, Typography, Stack, Chip } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMenu, setActiveCategory } from '../../../../redux/slices/menu/menu.slice';
 import { useAppDispatch } from '../../../../hooks/useRedux';
@@ -32,9 +32,38 @@ export const Categories: FC<Props> = ({ categories }) => {
 
   return (
     <>
+      <Stack
+        direction="row"
+        sx={{
+          width: 'auto',
+          overflowX: 'auto',
+        }}
+        spacing={1}
+      >
+        {
+          categories.map((category, index) => {
+              
+              if (category.isActive)
+                return (
+                  <Chip 
+                  label={category.name}
+                  key={category.id}
+                  variant={activeCategory.id === category.id ? "filled" : "outlined"}
+                  onClick={() => changeCategory(category)}
+                  color={activeCategory.id === category.id ? 'info' : 'default'}
+
+                  clickable
+                  />
+                )
+          })
+        }
+
+      </Stack>
+
+
       {/* <Box sx={{ display: 'flex', flexDirection: {xs: 'column', md: 'row'} }}> */}
 
-      <Card>
+      {/* <Card>
 
 
         <Box sx={{ display: 'flex', overflowX: 'auto', p: 1 }}>
@@ -69,7 +98,7 @@ export const Categories: FC<Props> = ({ categories }) => {
           }
 
         </Box>
-      </Card>
+      </Card> */}
 
 
 

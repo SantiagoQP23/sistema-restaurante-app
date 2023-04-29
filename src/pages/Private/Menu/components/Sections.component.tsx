@@ -6,6 +6,7 @@ import { ISection } from '../../../../models';
 import { useAppSelector } from '../../../../hooks/';
 import { useDispatch, } from 'react-redux';
 import { selectMenu, setActiveCategory, setActiveSection } from '../../../../redux';
+import { Chip, Stack } from '@mui/material';
 
 
 interface Props {
@@ -40,50 +41,37 @@ export const Sections: FC<Props> = ({ sections }) => {
 
   return (
     <>
-      <Box sx={{ bgcolor: 'background.paper' }} >
+
+      <Stack
+        direction="row"
+        sx={{
+          width: 'auto',
+          overflowX: 'auto',
+        }}
+        spacing={1}
+      >
         {
-          activeSection &&
-          <Tabs
-            onChange={(e, value) => changeSection(value)}
-            value={activeSection.id}
-            variant="fullWidth"
-            scrollButtons
-            allowScrollButtonsMobile
-            indicatorColor='secondary'
-            
 
-
-            sx={{
-              height: 'auto',
-
-              [`& .${tabsClasses.scrollButtons}`]: {
-                '&.Mui-disabled': { opacity: 0.3 },
-              },
-
-            }}
-          >
-            {
-              sections.map(section => {
-
-                if (section.categories.length > 0 && section.isActive)
-                  return (
-                    <Tab
-                      key={section.id}
-                      value={section.id}
-                      label={section.name}
-                      wrapped
-                    />
-
-                  )
-              }
-              )
+          sections.map(section => {
+            if (section.categories.length > 0 && section.isActive)
+            return (
+              <>
+              <Chip 
+              label={section.name}
+               key={section.id} 
+                onClick={() => changeSection(section.id)}
+                clickable
+                color={activeSection?.id === section.id ? 'info' : 'default'}
+              />
+              </>
+            )
             }
-
-          </Tabs>
+            )
         }
 
+      </Stack>
 
-      </Box>
+     
 
 
     </>

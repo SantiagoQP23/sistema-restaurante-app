@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetActiveSection, selectMenu, setActiveSection } from '../../../../../redux';
 import { useModal } from '../../../../../hooks';
 import { DeleteSection } from './DeleteSection.component';
+import { SectionsTable } from './SectionsTable.component';
 
 
 
@@ -63,7 +64,16 @@ export const EditSections = () => {
 
       </Box>
 
-      <Box minHeight={"70vh"}>
+      {/* <Sections/> */}
+
+      {/* <SectionsTable
+       /> */}
+
+
+
+
+
+     
 
         <Grid container rowSpacing={1} spacing={1}>
 
@@ -86,7 +96,7 @@ export const EditSections = () => {
           }
 
         </Grid>
-      </Box>
+     
 
       {
         activeSection &&
