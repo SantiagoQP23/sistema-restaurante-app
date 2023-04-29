@@ -1,43 +1,29 @@
-import { FC, useContext, useState, useEffect, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 
 import { format } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  Grid, Button, Typography, useTheme, Card,
-  CardContent, CardHeader, Accordion, AccordionSummary,
-  AccordionDetails, ToggleButtonGroup, ToggleButton, Divider,
-  Tabs, Tab, tabsClasses, Select, FormControl, InputLabel,
-  MenuItem, Box, CardActionArea, List, ListItem, ListItemText, ListItemButton,
-  Container, TableContainer, TableBody, TableHead, TableRow, TableCell, Table, styled, Popover
+  Button, useTheme,
+  MenuItem, Box, Container, TableContainer, TableBody,
+  TableHead, TableRow, TableCell, Table, Popover,
+  Card
 } from '@mui/material';
 
-import { toast } from 'react-toastify';
 
 // Componentes
 
 import { loadOrders, resetActiveOrder, selectAuth, selectOrders, setActiveOrder, setLastUpdatedOrders } from '../../../../../redux';
 
-import { SocketContext } from '../../../../../context';
-import { Label, PageTitle, PageTitleWrapper } from '../../../../../components/ui';
-import { Order } from '../../components';
-import { FilterOrders } from '../../../Reports/components/FilterOrders';
 import { IOrder, OrderStatus } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
-import { Cached, Check, DeleteOutlined, EditOutlined, ExpandMore, MoreVert, Style, TableRows } from '@mui/icons-material';
+import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import { ModalDeleteOrder } from '../../components/EditOrder/ModalDeleteOrder.component';
-import { es } from 'date-fns/locale';
-import { OrderStatusSpanish, TypeOrder } from '../../../../../models/orders.model';
+
 import AddIcon from '@mui/icons-material/Add';
-import { LoadingButton, TabList } from '@mui/lab';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { getOrdersToday } from '../../services/orders.service';
-import { CardOrdersByStatus } from './components';
-import { Scrollbar } from '../../../components';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { OrderListToolbar } from './components/OrderListToolbar.component';
@@ -186,7 +172,7 @@ export const ListOrders = () => {
           <Box
             sx={{
               overflowX: 'auto',
-            
+
               py: 1
             }}
           >
@@ -291,12 +277,12 @@ export const ListOrders = () => {
                           {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
                         </TableCell>
                         <TableCell>
-                          <LabelStatusOrder status={ 
-                            order.status === OrderStatus.DELIVERED && !order.isPaid 
-                            ? "unpaid" 
-                            : order.status
+                          <LabelStatusOrder status={
+                            order.status === OrderStatus.DELIVERED && !order.isPaid
+                              ? "unpaid"
+                              : order.status
 
-                             }/>
+                          } />
                         </TableCell>
                         <TableCell>
                           {order.total}

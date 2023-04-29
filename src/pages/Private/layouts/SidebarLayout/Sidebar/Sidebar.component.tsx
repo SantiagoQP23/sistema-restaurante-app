@@ -74,7 +74,9 @@ function Sidebar() {
             theme.palette.mode === 'dark' ? theme.sidebar.boxShadow : 'none'
         }}
       >
-        <Scrollbar>
+        <Scrollbar
+          height={'100%'}
+        >
           <Box mt={3}>
             {/* <Box
               mx={2}
@@ -88,9 +90,6 @@ function Sidebar() {
             <Title />
 
           </Box>
-
-
-
           <Divider
             sx={{
               mt: theme.spacing(3),
@@ -133,7 +132,9 @@ function Sidebar() {
                 : darken(theme.colors.alpha.black[100], 0.5)
           }}
         >
-          <Scrollbar>
+          <Scrollbar
+            height={'100%'}
+          >
             <Box mt={3}>
 
               <Title />

@@ -92,24 +92,36 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
             title={seccion.name}
             subheader={`Categorías: ${seccion.categories.length}`}
             action={
+              <Switch checked={seccion.isActive} 
+              onClick={(e) => {
+                e.stopPropagation();
+                changeStatusSection(seccion)
 
-              <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
+              }} 
+              color={seccion.isActive ? 'success' : 'warning'} 
+              />
+
+              // <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
             }
           />
 
 
 
-        <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
           <Box >
             <Button
               size='small'
-              variant="outlined"
-              onClick={() => editarCategorias()}
+              onClick={
+                (e) => {
+                  e.stopPropagation();
+                  editarSeccion()
+                }
+              }
             >
-              Categorías
+              Editar
             </Button>
           </Box>
-          <Box >
+          {/* <Box >
             <Tooltip title='Editar' >
               <IconButton color='primary'
                 onClick={(e) => {
@@ -121,11 +133,11 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
               </IconButton>
             </Tooltip>
 
-            <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} />
 
           
 
-          </Box>
+          </Box> */}
+            {/* <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} /> */}
 
         </CardActions>
         </CardActionArea>

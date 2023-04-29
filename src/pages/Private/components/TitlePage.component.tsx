@@ -17,11 +17,17 @@ import { CircleRounded } from "@mui/icons-material";
 const breadcrumbNameMap: { [key: string]: string } = {
   '/orders': 'Pedidos',
   '/orders/edit': 'Editar',
+  '/orders/add': 'Nuevo pedido',
   [`/orders/edit/:id`]: 'id',
   '/orders/edit/ljasd/receipt': 'Comprobante',
   '/orders/actives': 'Activos',
   '/orders/menu': 'Nuevo pedido',
   '/drafts': 'Drafts',
+  '/menu': 'Menú',
+  '/menu/edit': 'Editar',
+  '/menu/edit/seccion': 'Seccion',
+  '/menu/edit/category': 'Categoría',
+  '/menu/edit/product': 'Producto',
 };
 
 

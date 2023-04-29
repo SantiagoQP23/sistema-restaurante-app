@@ -20,11 +20,14 @@ import { TitlePage } from '../components/TitlePage.component';
 import { CartWidget } from './components/CartWidget.component';
 import { useNavigate } from 'react-router-dom';
 import { OrderContext } from '../Orders/context/Order.context';
+import { ComboBoxProducts } from '../EditMenu/components/products/ComboBoxProducts.component';
+import { Sections } from './components';
+import { Categories } from './components/Categories.compontent';
 
 
 export const MenuAddProduct = () => {
 
-  const { sections } = useSelector(selectMenu);
+  const { sections, activeSection } = useSelector(selectMenu);
 
   const listProducts = getProducts(sections);
 
@@ -68,33 +71,29 @@ export const MenuAddProduct = () => {
           }}
         >
 
-          <InputSearch
-            handleChange={handleChange}
-            search={searchProduct}
-            placeholder={'Buscar producto'}
-          />
+        
+
+          <ComboBoxProducts />
 
         </Box>
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="right" >
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1} flexShrink={0} sx={{ my: 1 }}>
 
-            <ProductSortBySection />
 
-            <ProductSortByCategory />
-
-          </Stack>
-        </Stack>
+     
       </Box>
 
+      <Stack
+        spacing={1}
+        my={1}
+      >
+
+        <Sections sections={sections} />
+
+        <Categories categories={activeSection?.categories || []} />
+      </Stack>
 
 
       <Grid container spacing={1} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-        <Grid item xs={12} mb={1}>
-
-
-
-        </Grid>
-
+      
 
         <Grid item xs={12} mb={1}>
 
