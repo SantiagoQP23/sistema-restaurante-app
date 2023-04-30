@@ -49,6 +49,7 @@ export const Sections: FC<Props> = ({ sections }) => {
           overflowX: 'auto',
         }}
         spacing={1}
+        py={1}
       >
         {
 

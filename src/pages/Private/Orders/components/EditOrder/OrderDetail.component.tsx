@@ -119,14 +119,12 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
       <Box
         sx={{
-         
-          p: 1,
-          position: 'relative',
+         p: 1,
           borderRadius: '5px',
-          border: `1px solid ${
+          // border: `1px solid ${
 
-            detail.qtyDelivered === detail.quantity ? theme.colors.success.main : theme.colors.warning.main
-            }`,
+          //   detail.qtyDelivered === detail.quantity ? theme.colors.success.main : theme.colors.warning.main
+          //   }`,
           // color: `${
 
           //   detail.qtyDelivered === detail.quantity ? theme.colors.success.main : theme.colors.warning.main
@@ -141,32 +139,15 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
         }}
         onClick={editDetail}
       >
-
-        {/* <CloseOutlined  
-           sx={{
-            position: 'absolute',
-            top: '0px',
-            right: '0px',
-           cursor: 'pointer',
-            border: '1px solid #e0e0e0',
-            borderRadius: '5px',
-
-            '&:hover': {
-              color: 'error.main',
-              borderColor: 'error.main'
-            }
-
-          }}
-        /> */}
+ 
 
         <Box
           sx={{
-            display: 'flex', justifyContent: '', gap: 1,  alignItems: 'center',
+            display: 'flex', justifyContent: 'space-between', gap: 1,  alignItems: 'center',
           }}
         >
 
-
-{
+{/* {
               detail.qtyDelivered === detail.quantity ?
             <IconButton
               size='small'
@@ -183,7 +164,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
               <Pending />
             </IconButton>
 
-            }
+            } */}
 
           <Typography
             variant="h5"
@@ -196,26 +177,12 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
        
           </Typography>
 
-          
-          
-
-          <Box display='flex' alignItems='center' gap={2}>
-
-
-
-
-
-
-
-
-
-
-            {/* <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
               <CircularProgress
                 variant="determinate"
                 size={25}
                 value={detail.qtyDelivered * 100 / detail.quantity}
-                sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+                sx={{ color: detail.qtyDelivered === detail.quantity ? 'success.main' : 'warning.main' }}
               />
               <Box
                 sx={{
@@ -232,13 +199,11 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
                 <Typography
                   variant="caption"
                   component="div"
-                  sx={{ color: detail.qtyDelivered === detail.quantity ? 'primary.main' : 'success.main' }}
+                  sx={{ color: detail.qtyDelivered === detail.quantity ? 'success.main' : 'warning.main' }}
 
                 >{detail.qtyDelivered}</Typography>
               </Box>
-            </Box> */}
-
-          </Box>
+            </Box>
 
 
 

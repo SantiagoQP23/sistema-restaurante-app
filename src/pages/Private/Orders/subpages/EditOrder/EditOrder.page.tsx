@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -55,7 +55,16 @@ export const EditOrder = () => {
   const loadOrderState = async () => {
     console.log('loadOrderState')
     const resp = await getOrderCall();
-    dispatch(setActiveOrder(resp.data))
+
+    const order = resp.data;
+    dispatch(setActiveOrder(order));
+
+    if(order.isPaid)  {
+      navigate(`/orders/edit/${orderId}/receipt`)
+
+    }
+
+
 
   }
 
@@ -86,6 +95,8 @@ export const EditOrder = () => {
 
   if (!activeOrder)
     return <></>;
+
+
 
 
 

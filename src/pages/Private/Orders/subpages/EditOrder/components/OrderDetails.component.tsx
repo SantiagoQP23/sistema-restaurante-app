@@ -69,6 +69,7 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
                     return (
                       <Grid key={detail.id} item xs={12}>
 
+                        <Divider />
                         <OrderDetail detail={detail} />
 
 

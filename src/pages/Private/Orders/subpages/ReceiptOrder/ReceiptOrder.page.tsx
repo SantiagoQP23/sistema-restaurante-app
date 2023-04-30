@@ -75,11 +75,15 @@ export const ReceiptOrder = () => {
 
           <Box>
 
-            <IconButton
-              onClick={endEdit}
-            >
-              <EditOutlined />
-            </IconButton>
+            {
+              !activeOrder.isPaid &&
+              <IconButton
+                onClick={endEdit}
+              >
+                <EditOutlined />
+              </IconButton>
+
+            }
 
 
             <PDFDownloadLink
@@ -139,7 +143,7 @@ export const ReceiptOrder = () => {
 
           <CardHeader
             title={
-              <Typography variant='h4' > Resturante Doña Yoli </Typography>
+              <Typography variant='h4' > Restaurante Doña Yoli </Typography>
             }
             action={
 

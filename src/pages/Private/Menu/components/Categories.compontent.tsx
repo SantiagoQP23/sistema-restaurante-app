@@ -39,6 +39,7 @@ export const Categories: FC<Props> = ({ categories }) => {
           overflowX: 'auto',
         }}
         spacing={1}
+        pb={1}
       >
         {
           categories.map((category, index) => {
