@@ -112,7 +112,7 @@ export const TabsOrderStatus:FC<Props> = (
       <Tab
         label='Pagados'
         value={OrderStatus.DELIVERED}
-        icon={<Label color='info'>{orders.filter(order => order.status === OrderStatus.DELIVERED).length}</Label>}
+        icon={<Label color='info'>{orders.filter(order => order.isPaid).length}</Label>}
         iconPosition='start'
       // onClick={() => setView('list')}
       />

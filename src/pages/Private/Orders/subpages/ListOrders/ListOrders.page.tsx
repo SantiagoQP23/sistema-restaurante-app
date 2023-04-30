@@ -213,9 +213,11 @@ export const ListOrders = () => {
 
           >
 
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer sx={{ minWidth: 800 }} >
 
-              <Table>
+              <Table
+                size='small'
+              >
 
                 <TableHead
                 >
@@ -232,13 +234,16 @@ export const ListOrders = () => {
                       Cliente
                     </TableCell>
                     <TableCell>
+                      Mesa
+                    </TableCell>
+                    <TableCell>
                       Hora
                     </TableCell>
                     <TableCell>
                       Estado
                     </TableCell>
                     <TableCell>
-                      Cantidad
+                      Total
                     </TableCell>
                     <TableCell>
                       Acciones
@@ -272,6 +277,10 @@ export const ListOrders = () => {
                         </TableCell>
                         <TableCell>
                           {order.client?.person.firstName} {order.client?.person.lastName}
+                        </TableCell>
+
+                        <TableCell>
+                          Mesa {order.table?.name}
                         </TableCell>
                         <TableCell>
                           {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}

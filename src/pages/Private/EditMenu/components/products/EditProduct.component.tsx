@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 
   DialogTitle, Button, TextField, Select, MenuItem,
-  InputAdornment, Typography, Grid, InputLabel, styled, Box, Card, Avatar, Input, IconButton
+  InputAdornment, Typography, Grid, InputLabel, styled, Box, Card, Avatar, Input, IconButton, Stack, CardHeader
 
 } from '@mui/material/';
 
@@ -17,7 +17,7 @@ import { ArrowBack, AttachMoney } from '@mui/icons-material';
 import { Controller, useForm } from 'react-hook-form';
 
 
-import { resetActiveProduct,  selectMenu,  setActiveProduct } from '../../../../../redux';
+import { resetActiveProduct, selectMenu, setActiveProduct } from '../../../../../redux';
 import { ICreateProduct, IProduct, ProductStatus } from '../../../../../models/menu.model';
 import { LoadingButton } from '@mui/lab';
 import { BtnCancel } from '../../../components';
@@ -272,43 +272,58 @@ export const EditProduct: FC<Props> = ({ }) => {
   return (
     <>
 
-      <Container maxWidth='md' >
+    
 
-        <Grid container display='flex' justifyContent='space-between'>
-          <Grid item display='flex' justifyContent='left' alignItems='center'>
-            <Button onClick={() => navigate(-1)}>
-              <ArrowBack />
-            </Button>
-            <Typography variant='h6'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
+        <Stack direction='row' spacing={1} alignItems='center'>
 
-          </Grid>
-
-        </Grid>
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </Button>
+          <Typography variant='h4'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
+        </Stack>
 
 
-        <Card>
-          <CardContent>
+        <Stack
+          direction={{ sx: 'column', lg: 'row' }}
+          spacing={1}
+        >
+          <Card
+            sx={{
+              mb: 1
+            }}
+          >
 
-            <Grid container spacing={1} mb={1}>
-              <Grid item xs={12} sm={3}>
+            <CardHeader 
+              title='Imagen del producto'
+            />
+            <CardContent>
 
 
-                {
-                  activeProduct &&
-                  <FormProductImage product={activeProduct} />
-                }
+            {
+              activeProduct &&
+              <FormProductImage product={activeProduct} />
+            }
+            </CardContent>
 
-              </Grid>
 
-              <Grid item xs={12} sm={9}>
+          </Card>
+
+
+
+
+          <Card>
+            
+          <CardHeader 
+              title='Información del producto'
+            />
+            <CardContent>
+
+              <Grid item xs={12}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Grid container spacing={1} mb={1}>
 
-
-
-                    <Grid container item xs={12} sm={9} spacing={1}>
-
+                
 
                       <Grid item xs={12} sm={8}>
                         <TextField
@@ -360,7 +375,7 @@ export const EditProduct: FC<Props> = ({ }) => {
 
                         />
                       </Grid>
-                      <Grid item xs={12} sm={8}>
+                      <Grid item xs={12}>
 
                         <TextField
                           label="Descripcion del producto"
@@ -404,7 +419,7 @@ export const EditProduct: FC<Props> = ({ }) => {
                             </>
                           } />
                       </Grid>
-                      <Grid item xs={12} sm={4}>
+                      <Grid item xs={12} sm={6}>
                         <Controller
                           name='categoryId'
                           control={control}
@@ -455,33 +470,23 @@ export const EditProduct: FC<Props> = ({ }) => {
                       </Grid>
                     </Grid>
 
-                  </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
                 </form>
 
 
               </Grid>
 
-            </Grid>
 
 
 
 
-          </CardContent>
 
-        </Card>
-      </Container>
+
+            </CardContent>
+
+          </Card>
+        </Stack>
+
+  
 
     </>
   )
