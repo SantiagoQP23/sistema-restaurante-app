@@ -8,6 +8,7 @@ import { OrdersSummary } from './OrdersSummary.component';
 import { IncomesSummary } from './IncomesSummary.component';
 import { SimulatorAffluenceSummary } from './SimulatorAffluenceSummary.component';
 import { PredictionAffluenceSummary } from './PredictionAffluenceSummary.component';
+import { BestSellingProductsSummary } from './BestSellingProductsSummary.component';
 
 
 export const DashboardReports = () => {
@@ -44,6 +45,12 @@ export const DashboardReports = () => {
 
           <Grid item xs={12} md={4}>
             <IncomesSummary />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+          <BestSellingProductsSummary />
+
+
           </Grid>
 
 
