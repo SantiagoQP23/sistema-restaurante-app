@@ -10,6 +10,7 @@ import { IncomesReports } from '../components/IncomesReports/IncomesReports.comp
 import { OrdersReports } from '../components/OrdersReports/OrdersReports.component';
 import { ReceiptOrderReport } from '../components/OrdersReports/ReceiptOrderReport.component';
 import { StaffPlaning } from '../components/StaffPlanning/StaffPlaning.component';
+import { ProductsReports } from '../components/ProductsReports/ProductsReports.view';
 
 
 const Reports = lazy(() => import('../Reports.page'));
@@ -55,6 +56,10 @@ export const ReportsRouter: RouteObject = {
     {
       path: 'incomes',
       element: <IncomesReports />
+    },
+    {
+      path: 'products',
+      element: <ProductsReports />
     }
   ]
 }
