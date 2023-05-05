@@ -1,42 +1,54 @@
-import { Typography, Select, MenuItem, TextField, Stack, Box, InputLabel, FormControl } from '@mui/material';
-import { useState } from 'react';
+import {
+  Typography, Select, MenuItem, TextField, Stack,
+  Box, InputLabel, FormControl, Card, CardContent, List, ListItem,
+  ListItemText, CardHeader, Button, ListItemAvatar, Avatar,
+  ListItemSecondaryAction, IconButton, Divider, Grid, CardActions, TablePagination, CircularProgress, Checkbox
+} from '@mui/material';
+import { useState, useEffect } from 'react';
 import { SelectChangeEvent } from '@mui/material/';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { useQuery } from '@tanstack/react-query';
+import { FilterDto, ResultBestSellingProducts, getBestSellingProducts } from '../../services/dashboard.service';
+import { EditOutlined } from '@mui/icons-material';
+import { Period } from '../../../../../models/period.model';
+import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
+import { useSelector } from 'react-redux';
+import { selectMenu } from '../../../../../redux';
+import { getProducts } from '../../../../../helpers/menu.helper';
+import { FormControlLabel } from '@mui/material';
 
 
 
 export const ProductsReports = () => {
 
 
-  const [period, setPeriod] = useState('day');
+  const {
+    period, page, endDate, startDate, nextPage, prevPage, rowsPerPage,
+    handleChangeStartDate,
+    handleChangePeriod,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    endDateChecked,
+    handleChangeEndDateChecked,
 
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+    handleChangeEndDate } = usePaginationAsync();
 
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
-  const handleChangeStartDate = (newValue: Date | null) => {
+  const { data, refetch, isLoading, isFetching } = useQuery<ResultBestSellingProducts>(['best-selling-products', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
+    return getBestSellingProducts({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
+  })
 
-    if (newValue === null) {
-      return;
-    }
+  
 
-    setStartDate(newValue);
+  const handleSubmit = () => {
+
+    refetch();
   }
 
-  const handleChangeEndDate = (newValue: Date | null) => {
+  useEffect(() => {
+    refetch();
+  }, [page, rowsPerPage, period, endDateChecked])
 
-    if (newValue === null) {
-      return;
-    }
-
-    setEndDate(newValue);
-  }
-
-
-
-  const handleChange = (e: SelectChangeEvent) => {
-    setPeriod(e.target.value)
-  }
 
   return (
     <>
@@ -44,20 +56,21 @@ export const ProductsReports = () => {
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         spacing={1}
-        alignItems='flex-end'
+
+        my={2}
 
       >
         <FormControl>
           <InputLabel id="select-period-label">Periodo</InputLabel>
           <Select
             labelId="select-period-label"
-            
+
             value={period}
-            onChange={handleChange}
+            onChange={handleChangePeriod}
             fullWidth
             label="Periodo"
           >
-            <MenuItem value='day'>Hoy</MenuItem>
+            <MenuItem value='today'>Hoy</MenuItem>
             <MenuItem value='week'>Esta semana</MenuItem>
             <MenuItem value='month'>Este mes</MenuItem>
             <MenuItem value='year'>Este Año</MenuItem>
@@ -70,18 +83,35 @@ export const ProductsReports = () => {
         {
 
           period === 'custom' && <>
-            <DesktopDatePicker
-              label="Fecha de inicio"
-              inputFormat="yyyy-MM-dd"
-              value={startDate}
-              onChange={handleChangeStartDate}
-              renderInput={(params) => <TextField {...params} />}
-              maxDate={new Date()}
+            <Stack direction='column'>
 
-            />
+              <DesktopDatePicker
+                label="Fecha de inicio"
+                inputFormat="yyyy-MM-dd"
+                value={startDate}
+                onChange={handleChangeStartDate}
+                renderInput={(params) => <TextField {...params} />}
+                disableFuture
+                maxDate={endDate ? endDate : undefined}
 
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={endDateChecked}
+                    onChange={handleChangeEndDateChecked}
+                  />
+
+                }
+                label='Fecha de fin'
+              />
+
+            </Stack>
             {
-              startDate && startDate !== endDate &&
+
+
+
+              startDate && endDateChecked &&
 
               <DesktopDatePicker
                 label="Fecha de fin"
@@ -90,16 +120,65 @@ export const ProductsReports = () => {
                 onChange={handleChangeEndDate}
                 renderInput={(params) => <TextField {...params} />}
                 minDate={startDate}
-                maxDate={new Date()}
+                disableFuture
 
               />
             }
           </>
 
-        }
+          }
 
       </Stack>
 
+      <Card>
+
+        <CardHeader
+          title='Productos más vendidos'
+          action={
+            isFetching && <CircularProgress sx={{ fontSize: '2px' }} />
+          }
+        />
+
+
+        <List>
+          {
+            data && data.products?.map((product, index) => (
+              <ListItem>
+                <ListItemAvatar
+
+                >
+                  <Typography variant='h4'>{index + 1 + (rowsPerPage * page)}</Typography>
+
+                </ListItemAvatar>
+                <ListItemText primary={product.name} secondary={`Total vendido: ${product.totalSold}`} />
+                <ListItemSecondaryAction>
+                  <IconButton
+                  >
+                    <EditOutlined />
+                  </IconButton>
+                </ListItemSecondaryAction>
+
+              </ListItem>
+            ))
+          }
+
+        </List>
+
+
+        <CardActions >
+          <TablePagination
+            page={page}
+            count={100}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[10, 25, 50, 100]}
+
+          />
+        </CardActions>
+
+
+      </Card>
 
     </>
   )

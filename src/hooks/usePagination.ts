@@ -1,9 +1,7 @@
 import { useState } from "react";
 
 
-interface Props <T>{
-  list: T[];
-}
+
 export const usePagination = <T>(list: T[]) => {
 
   const [page, setPage] = useState(0);
