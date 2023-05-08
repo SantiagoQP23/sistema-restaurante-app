@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { selectUsers, updateUser } from '../../../../../redux/slices/users/users.slice';
 import { useSelector, useDispatch } from 'react-redux';
-import { ArrowBack } from '@mui/icons-material';
-import { Container, Grid, Button, Typography, Card, CardContent } from '@mui/material';
+import { Container, Grid, Button, Typography, Card, CardContent, Stack, Switch, Box, CardHeader } from '@mui/material';
 import { CreateUser } from '../../models/create-user.model';
 import { FormUser } from '../FormUser.component';
-import { updateUser as updateUserS, resetPasswordUser } from '../../services/users.service';
 import { useSnackbar } from 'notistack';
 import { ResetPasswordUserDto } from '../../dto/update-user.dto';
+import { LoadingButton } from '@mui/lab';
+import { useResetPasswordUser, useUpdateUser } from '../../hooks/useUsers';
+import { IUser } from '../../../../../models';
+import { Label } from '../../../../../components/ui';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 export const EditUser = () => {
@@ -24,7 +26,9 @@ export const EditUser = () => {
 
   const dispatch = useDispatch();
 
-  const { loading, callEndpoint } = useFetchAndLoad();
+  const resetPasswordMutation = useResetPasswordUser();
+
+  const updateUserMutation = useUpdateUser();
 
   const { id, person, role, ...restUser } = activeUser!;
 
@@ -53,9 +57,41 @@ export const EditUser = () => {
 
     }
 
-    await callEndpoint(updateUserS(activeUser!.id, userUpdated))
-      .then((resp) => {
-        const { data } = resp;
+    updateUserMutation.mutateAsync({ id: activeUser!.id, ...userUpdated })
+      .then((data) => {
+        dispatch(updateUser(data));
+
+        enqueueSnackbar('Usuario actualizado', { variant: 'success' });
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
+      })
+
+
+
+
+
+    // await callEndpoint(updateUserS(activeUser!.id, userUpdated))
+    //   .then((resp) => {
+    //     const { data } = resp;
+    //     dispatch(updateUser(data));
+
+    //     enqueueSnackbar('Usuario actualizado', { variant: 'success' });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
+    //   }
+    //   )
+
+  }
+
+  
+  const submitChangeStatus = () => {
+
+    updateUserMutation.mutateAsync({ id: activeUser!.id, isActive: !activeUser!.isActive })
+      .then((data) => {
         dispatch(updateUser(data));
 
         enqueueSnackbar('Usuario actualizado', { variant: 'success' });
@@ -71,64 +107,151 @@ export const EditUser = () => {
 
   async function onReset() {
 
-    const data : ResetPasswordUserDto = {
+    const data: ResetPasswordUserDto = {
       userId: activeUser!.id,
     }
 
-    console.log({data})
-    await callEndpoint(resetPasswordUser( data))
+    console.log({ data })
 
-      .then((resp) => {
-        const { data } = resp;
-        console.log(data)
-        enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
-      }
-      )
+    resetPasswordMutation.mutateAsync(data).then((resp) => {
+      enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
+    }).catch((err) => {
+      console.log(err);
+      enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
+    });
+
+
+    // await callEndpoint(resetPasswordUser(data))
+
+    //   .then((resp) => {
+    //     const { data } = resp;
+    //     console.log(data)
+    //     enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
+    //   }
+    //   )
 
   }
+
+  if (!activeUser)
+    return <Navigate to='/users' replace />
 
 
   return (
 
     <>
-      <Container maxWidth={'md'}>
 
-        <Grid container display='flex' justifyContent='space-between'>
-          <Grid item display='flex' justifyContent='left' alignItems='center'>
-            <Button onClick={() => navigate(-1)}>
-              <ArrowBack />
-            </Button>
-            <Typography variant='h6'>{
+      <TitlePage
+        title='Editar usuario'
+      />
 
-              `${activeUser!.person.firstName} ${activeUser!.person.lastName}`
-            }
-            </Typography>
+      <Grid container spacing={3}>
 
-          </Grid>
+        <Grid item xs={12} md={4}>
 
-        </Grid>
-        <Card>
-          <CardContent>
+          <Card
 
-            <FormUser
-              onSubmit={onSubmit}
-              user={user}
-              loading={loading}
-              isNew={false}
-              onReset={onReset}
+          >
+
+            <CardHeader 
+              action={
+                <>
+                  <Label 
+                    color={activeUser!.isActive ? 'success' : 'error'}
+                  >
+                    {
+                      activeUser!.isActive ? 'Activo' : 'Inactivo'
+                    }
+                  </Label>
+                </>
+                }
             />
 
-            {/* <FormClient onSubmit={onSubmit} client={client} loading={loading} msg={'Editar'} /> */}
+            <CardContent>
+
+              <Typography variant='h4' align='center' mt={5}>
+                {
+                  user.firstName + ' ' + user.lastName
+                }
 
 
-          </CardContent>
-        </Card>
+              </Typography>
 
-      </Container>
+              <Typography variant='subtitle2' align='center' mb={5}>
+                {
+                  user.role.name
+                }
+              </Typography>
+
+              <Stack
+                spacing={2}
+              >
+
+              <Box
+                display='flex'
+                justifyContent='space-between'
+              >
+
+                <Box>
+
+                  <Typography variant='h5' >Baneado</Typography>
+                  <Typography variant='subtitle2' >Deshabilitar cuenta</Typography>
+
+                </Box>
+
+                <Switch
+                  checked={!activeUser!.isActive}
+                  color='success'
+                  onChange={() => submitChangeStatus()}
+                />
+              </Box>
+
+              <LoadingButton
+                variant='text'
+                onClick={onReset}
+                loading={resetPasswordMutation.isLoading}
+
+                
+                >
+                Restablecer contraseña
+              </LoadingButton>
+                </Stack>
+
+            </CardContent>
+
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={8}>
+          <Card>
+            <CardContent>
+
+              <FormUser
+                onSubmit={onSubmit}
+                user={user}
+                loading={updateUserMutation.isLoading}
+                isNew={false}
+               
+              />
+
+              {/* <FormClient onSubmit={onSubmit} client={client} loading={loading} msg={'Editar'} /> */}
+
+
+            </CardContent>
+          </Card>
+
+        </Grid>
+      </Grid>
+
+
+
+
+
+
+
     </>
   )
 }

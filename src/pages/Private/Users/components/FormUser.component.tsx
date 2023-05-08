@@ -3,7 +3,7 @@ import { CreateUser } from '../models/create-user.model';
 import { useWatch, useForm, Controller } from 'react-hook-form';
 import { TypeIdentification } from '../../../../models/common.model';
 import { LoadingButton } from '@mui/lab';
-import { Grid, Select, MenuItem, TextField, Typography, Button } from '@mui/material';
+import { Grid, Select, MenuItem, TextField, Typography, Button, FormControl, InputLabel } from '@mui/material';
 import { ValidRoles } from '../../router';
 
 interface Props {
@@ -28,93 +28,7 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2} mt={1}>
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name='identification.type'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) =>
-                <>
-                  <Select
-                    labelId="select-seccion"
-                    label="Tipo de identificación"
-                    fullWidth
-                    margin='dense'
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                  >
-                    <MenuItem value={TypeIdentification.CEDULA}>Cédula</MenuItem>
-                    <MenuItem value={TypeIdentification.RUC}>RUC</MenuItem>
-                  </Select>
-                </>
-              } />
-          </Grid>
-
-
-          <Grid item xs={12} sm={6}>
-
-            <TextField
-
-              label="Número de identificación"
-              fullWidth
-              type='number'
-              {
-              ...register('identification.num', {
-                required: 'Este campo es requerido',
-
-                minLength: { value: lenghtIdentification, message: `Minimo ${lenghtIdentification} caracteres` },
-                maxLength: { value: lenghtIdentification, message: `Máximo ${lenghtIdentification} caracteres` },
-
-
-              })
-              }
-              helperText={<Typography color="red">{errors.identification?.num?.message} </ Typography>}
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name='role.name'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) =>
-                <>
-                  <Select
-                    labelId="select-seccion"
-                    label="Tipo de identificación"
-                    fullWidth
-                    margin='dense'
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    error={!!errors.role?.name?.message}
-                  >
-                    <MenuItem value={ValidRoles.admin}>Administrador</MenuItem>
-                    <MenuItem value={ValidRoles.mesero}>Mesero</MenuItem>
-                    <MenuItem value={ValidRoles.despachador}>Despachador</MenuItem>
-
-                  </Select>
-                </>
-              } />
-          </Grid>
-
-          <Grid item xs={12} sm={6} >
-
-            <TextField
-
-              label="Nombre de usuario"
-              fullWidth
-              {
-              ...register('username', {
-                required: 'Este campo es requerido',
-                minLength: { value: 2, message: 'Minimo 2 caracteres' },
-
-
-              })
-              }
-              helperText={<Typography color="red">{errors.username?.message} </ Typography>}
-            />
-          </Grid>
+        <Grid container spacing={2} >
 
 
 
@@ -178,6 +92,108 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
             />
           </Grid>
 
+          <Grid item xs={12} sm={6}>
+
+            <FormControl 
+            fullWidth
+            >
+
+              <Controller
+                name='identification.type'
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) =>
+                  <>
+                    <InputLabel id="select-seccion">Tipo de identificación</InputLabel>
+                    <Select
+                      labelId="select-seccion"
+                      label="Tipo de identificación"
+                      fullWidth
+                      margin='dense'
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                    >
+                      <MenuItem value={TypeIdentification.CEDULA}>Cédula</MenuItem>
+                      <MenuItem value={TypeIdentification.RUC}>RUC</MenuItem>
+                    </Select>
+                  </>
+                } />
+            </FormControl>
+          </Grid>
+
+
+          <Grid item xs={12} sm={6}>
+
+            <TextField
+
+              label="Número de identificación"
+              fullWidth
+              type='number'
+              {
+              ...register('identification.num', {
+                required: 'Este campo es requerido',
+
+                minLength: { value: lenghtIdentification, message: `Minimo ${lenghtIdentification} caracteres` },
+                maxLength: { value: lenghtIdentification, message: `Máximo ${lenghtIdentification} caracteres` },
+
+
+              })
+              }
+              helperText={<Typography color="red">{errors.identification?.num?.message} </ Typography>}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+
+            <FormControl fullWidth>
+            <Controller
+              name='role.name'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) =>
+                <>
+
+                  <InputLabel id="select-identification">Rol</InputLabel>
+                  <Select
+                    labelId="select-identification"
+                    label="Rol"
+                    fullWidth
+                    margin='dense'
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    error={!!errors.role?.name?.message}
+                  >
+                    <MenuItem value={ValidRoles.admin}>Administrador</MenuItem>
+                    <MenuItem value={ValidRoles.mesero}>Mesero</MenuItem>
+                    <MenuItem value={ValidRoles.despachador}>Despachador</MenuItem>
+
+                  </Select>
+                </>
+              } />
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6} >
+
+            <TextField
+
+              label="Nombre de usuario"
+              fullWidth
+              {
+              ...register('username', {
+                required: 'Este campo es requerido',
+                minLength: { value: 2, message: 'Minimo 2 caracteres' },
+
+
+              })
+              }
+              helperText={<Typography color="red">{errors.username?.message} </ Typography>}
+            />
+          </Grid>
+
+
+
+
 
           <Grid item xs={12} sm={6}>
 
@@ -222,35 +238,25 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
 
 
 
-          <Grid item xs={12} >
+          <Grid item xs={12}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
             <LoadingButton
-              variant='outlined'
+              variant='contained'
               type='submit'
               loading={loading}
+
+
             >
               {isNew ? 'Crear' : 'Actualizar'}
             </LoadingButton>
 
-            {
-              loading &&
-              <Button
-                color='error'
-                variant='outlined'
-              >Cancelar</Button>
-            }
 
-            {
-              !isNew &&
-              <LoadingButton
-                variant='contained'
-                onClick={onReset}
-                loading={loading}
-                
 
-              >
-                Restablecer contraseña
-              </LoadingButton>
-            }
+
           </Grid>
 
 

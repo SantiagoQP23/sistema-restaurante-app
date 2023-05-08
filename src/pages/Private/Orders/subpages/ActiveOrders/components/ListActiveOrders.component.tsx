@@ -114,6 +114,7 @@ export const ListActiveOrders = () => {
             orders={orders.filter(order => order.status === OrderStatus.PENDING)}
             title='PEDIDOS PENDIENTES'
             color='success'
+            status={OrderStatus.PENDING}
             />
             </Box>
 <Box>

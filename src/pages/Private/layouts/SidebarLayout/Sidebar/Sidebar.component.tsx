@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import { SidebarContext } from '../../../contexts/SidebarContext';
 
+import logo from '../../../../../assets/logo3.png'
+
 import {
   Box,
   Drawer,
@@ -38,9 +40,23 @@ const SidebarWrapper = styled(Box)(
 const Title = () => {
   return (
     <>
-      <Typography variant='h5' color='white' align='center'>Restaurante</Typography>
-      <Typography variant='h3' color='white' align='center'>Doña Yoli</Typography>
-      <Typography variant='subtitle2' color='gray' align='center'>v0.1.0</Typography>
+      {/* Logo del restaurante */}
+      <Box
+        display='flex'
+        alignItems='center'
+        gap={2}
+      >
+
+        <img src={logo} alt='logo' width='70px' style={{ borderRadius: 8 }} />
+
+
+        <Box>
+
+          <Typography variant='subtitle1' color='white' >Restaurante</Typography>
+          <Typography variant='h4' color='white' >Doña Yoli</Typography>
+        </Box>
+      </Box>
+
     </>
   )
 }
@@ -77,7 +93,9 @@ function Sidebar() {
         <Scrollbar
           height={'100%'}
         >
-          <Box mt={3}>
+          <Box mx={2} my={1}>
+
+
             {/* <Box
               mx={2}
               sx={{
@@ -90,13 +108,26 @@ function Sidebar() {
             <Title />
 
           </Box>
-          <Divider
+          {/* <Divider
             sx={{
               mt: theme.spacing(3),
               mx: theme.spacing(2),
               background: theme.colors.alpha.trueWhite[10]
             }}
-          />
+          /> */}
+
+
+          {/* <Button
+            color='inherit'
+            fullWidth
+            sx={{
+              m: 1,
+             
+            }}
+          >
+            <Typography variant='h6' textAlign='left' >Santiago</Typography>
+          </Button> */}
+
           <SidebarMenu />
         </Scrollbar>
         <Divider
@@ -135,7 +166,7 @@ function Sidebar() {
           <Scrollbar
             height={'100%'}
           >
-            <Box mt={3}>
+            <Box mx={2} my={1}>
 
               <Title />
 
@@ -145,13 +176,18 @@ function Sidebar() {
 
 
 
-            <Divider
+            {/* <Divider
               sx={{
                 mt: theme.spacing(3),
                 mx: theme.spacing(2),
                 background: theme.colors.alpha.trueWhite[10]
               }}
-            />
+            /> */}
+
+            <Button>
+              Santigo Quirumbay
+            </Button>
+
             <SidebarMenu />
 
           </Scrollbar>

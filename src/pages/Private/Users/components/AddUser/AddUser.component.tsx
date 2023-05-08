@@ -10,8 +10,9 @@ import { Container, Card, CardContent, Grid, Typography, Button } from "@mui/mat
 import { FormUser } from "../FormUser.component";
 import { createUser } from '../../services/users.service';
 import { addUser } from "../../../../../redux";
+import { TitlePage } from "../../../components/TitlePage.component";
+import { useCreateUser } from "../../hooks/useUsers";
 
-console.log(ValidRoles);
 
 const initialUser: CreateUser = {
   username: '',
@@ -33,7 +34,9 @@ export const AddUser = () => {
 
   const user = initialUser;
 
-  const { loading, callEndpoint } = useFetchAndLoad();
+  // const { loading, callEndpoint } = useFetchAndLoad();
+
+  const {isLoading, mutateAsync } = useCreateUser();
 
   const dispatch = useDispatch();
 
@@ -58,18 +61,18 @@ export const AddUser = () => {
 
     }
 
-    await callEndpoint(createUser(newUser))
-      .then((res) => {
+    // await callEndpoint(createUser(newUser))
+    //   .then((res) => {
 
-        const { data } = res;
-        dispatch(addUser(data.user))
-        enqueueSnackbar('Usuario creado con exito', { variant: 'success' });
-        navigate(-1);
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar('Error al crear usuario', { variant: 'error' });
-      })
+    //     const { data } = res;
+    //     dispatch(addUser(data.user))
+    //     enqueueSnackbar('Usuario creado con exito', { variant: 'success' });
+    //     navigate(-1);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     enqueueSnackbar('Error al crear usuario', { variant: 'error' });
+    //   })
 
 
 
@@ -78,23 +81,9 @@ export const AddUser = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <Grid container display='flex' justifyContent='space-between'>
-          <Grid item xs={12}>
-            <Button
-
-              onClick={() => navigate(-1)}
-              startIcon={<ArrowBack />}
-            >
-              Volver
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Agregar usuario
-            </Typography>
-          </Grid>
-        </Grid>
+      <TitlePage 
+        title="Agregar usuario"
+      />
 
 
         <Card>
@@ -104,13 +93,13 @@ export const AddUser = () => {
 
               user={user}
               onSubmit={onSubmit}
-              loading={loading}
+               loading={isLoading}
               isNew={true}
             />
 
           </CardContent>
         </Card>
-      </Container>
+     
 
     </>
 

@@ -18,7 +18,7 @@ export const AppRouter = () => {
 
   const dispatch = useAppDispatch();
 
-  const { status } = useAppSelector(selectAuth);
+  const { status, user } = useAppSelector(selectAuth);
 
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const AppRouter = () => {
               <Route path='/*' element={<Navigate to={PublicRoutes.LOGIN} />} />
             </>
           
-          : <Route path='/*' element={<Private />} />
+          : user && <Route path='/*' element={<Private />} />
 
           
       }

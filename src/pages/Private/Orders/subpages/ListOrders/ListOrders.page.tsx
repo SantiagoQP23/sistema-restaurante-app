@@ -190,30 +190,9 @@ export const ListOrders = () => {
             statusOrderFilter={statusOrderFilter}
           />
 
-          <Scrollbars
-            style={{ width: '100%', height: 'calc(100vh - 300px)' }}
-            autoHide
-            renderThumbHorizontal={() => {
-              return (
-                <Box
-                  sx={{
-                    width: 5,
-                    background: `${theme.colors.alpha.black[10]}`,
-                    borderRadius: `${theme.general.borderRadiusLg}`,
-                    transition: `${theme.transitions.create(['background'])}`,
+         
 
-                    '&:hover': {
-                      background: `${theme.colors.alpha.black[30]}`
-                    }
-                  }}
-                />
-              );
-            }}
-
-
-          >
-
-            <TableContainer sx={{ minWidth: 800 }} >
+            <TableContainer>
 
               <Table
                 size='small'
@@ -317,7 +296,7 @@ export const ListOrders = () => {
 
             </TableContainer>
 
-          </Scrollbars>
+      
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}

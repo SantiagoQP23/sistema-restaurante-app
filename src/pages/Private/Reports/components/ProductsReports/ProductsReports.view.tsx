@@ -147,16 +147,16 @@ export const ProductsReports = () => {
                 <ListItemAvatar
 
                 >
-                  <Typography variant='h4'>{index + 1 + (rowsPerPage * page)}</Typography>
+                  <Typography variant='h4'>{product.totalSold}</Typography>
 
                 </ListItemAvatar>
-                <ListItemText primary={product.name} secondary={`Total vendido: ${product.totalSold}`} />
-                <ListItemSecondaryAction>
+                <ListItemText primary={product.name} secondary={`Puesto: ${index + (page * rowsPerPage ) + 1}`} />
+                {/* <ListItemSecondaryAction>
                   <IconButton
                   >
                     <EditOutlined />
                   </IconButton>
-                </ListItemSecondaryAction>
+                </ListItemSecondaryAction> */}
 
               </ListItem>
             ))

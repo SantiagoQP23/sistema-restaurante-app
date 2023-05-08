@@ -1,10 +1,10 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useState, useEffect } from "react";
 
-import { Box, Card, Checkbox, IconButton, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from "@mui/material";
+import { Box, Card, Checkbox, IconButton, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, Button, FormControlLabel, TableSortLabel, Paper, InputBase, CircularProgress } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { selectUsers, setActiveUser, updateUser } from '../../../../../redux/slices/users/users.slice';
+import { resetActiveUser, selectUsers, setActiveUser, updateUser } from '../../../../../redux/slices/users/users.slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { IUser, Roles } from '../../../../../models/auth.model';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,11 @@ import { Label } from "../../../../../components/ui";
 import { IClient } from '../../../../../models/client.model';
 import { useSnackbar } from 'notistack';
 import { ValidRoles } from "../../../router";
+import { TitlePage } from "../../../components/TitlePage.component";
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
+import { useUsers } from "../../hooks/useUsers";
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -23,6 +28,9 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
   const navigate = useNavigate();
 
   const { loading, callEndpoint } = useFetchAndLoad();
+
+
+
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -41,37 +49,19 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
 
   }
 
-  const submitChangeStatus = async (user: IUser) => {
-
-    await callEndpoint(updateUserS(user.id, { isActive: !user.isActive }))
-      .then((res) => {
-        console.log(res);
-        dispatch(updateUser({ ...user, isActive: !user.isActive }));
-
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar('Error al actualizar el estado del usuario', { variant: 'error' })
-      })
-
-
-
-
-
-  }
 
 
 
   return (
     <TableRow>
-      <TableCell padding='checkbox'>
+      {/* <TableCell padding='checkbox'>
         <Switch
           checked={user.isActive}
           color={user.isActive ? 'success' : 'warning'}
           onChange={() => submitChangeStatus(user)}
         />
 
-      </TableCell>
+      </TableCell> */}
       <TableCell>
         <Typography
           variant="body1"
@@ -127,13 +117,29 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
           noWrap
         >
           <Label color={
-            user?.role.name === ValidRoles.admin
+            user?.role.name === 'admin'
               ? 'info'
-              : user?.role.name === ValidRoles.mesero
-                ? 'success'
-                : 'warning'
+              : user?.role.name === 'mesero'
+                ? 'primary'
+                : 'secondary'
           }>
             {Roles[`${user?.role.name! as ValidRoles}`]}
+          </Label>
+        </Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography
+          variant="body1"
+
+          color="text.primary"
+          gutterBottom
+          noWrap
+        >
+          <Label color={
+            user.isActive ? 'success' : 'error'
+          }>
+            {user.isActive ? 'Activo' : 'Inactivo'}
           </Label>
         </Typography>
       </TableCell>
@@ -179,92 +185,192 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
 
 
 interface Props {
-  user?: IUser;
-  users: IUser[];
+
 }
 
-export const UsersTable: FC<Props> = ({ users, user }) => {
+export const UsersTable: FC<Props> = ({ }) => {
 
-  const { loading, callEndpoint } = useFetchAndLoad();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
 
+  const {
+    usersQuery,
+    page,
+    term,
+    rowsPerPage,
+
+    handleChangeTerm,
+    handleChangePage,
+    handleChangeRowsPerPage
+  } = useUsers();
+
+  const { users } = useSelector(selectUsers);
+
+
+
+
+
   const theme = useTheme();
 
 
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
 
-  const handlePageChange = (event: any, newPage: number): void => {
-    setPage(newPage);
+  const [dense, setDense] = useState<boolean>(false);
+
+
+  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDense(event.target.checked);
   };
 
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
+
 
   const editUser = (user: IUser) => {
     dispatch(setActiveUser(user));
     navigate('edit')
   }
 
+  const createUser = () => {
+    dispatch(resetActiveUser())
+    navigate('add');
+
+  }
+
+  const updateList = () => {
+    usersQuery.refetch();
+
+  }
+
+  useEffect(() => {
+
+    updateList();
+  }, [page, rowsPerPage, term])
+
+
   return (
-    <Box sx={{ height: 400, width: '100%', my: 1 }} >
 
-      {
-        loading &&
-        <LinearProgress />
-      }
-      <Card>
+    <>
 
-        <TableContainer>
-          <Table>
-            <TableHead>
 
-              <TableRow>
-                <TableCell padding="checkbox">
+
+      <Paper
+        component="form"
+        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center'}}
+      >
+
+        <InputBase
+          type='text'
+          onChange={handleChangeTerm}
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Buscar usuario"
+          inputProps={{ 'aria-label': 'Buscar usuario' }}
+          value={term}
+        />
+        <IconButton
+          type="button"
+          sx={{ p: '10px' }}
+          aria-label="search"
+          onClick={updateList}
+        >
+          {
+            usersQuery.isLoading
+              ? <CircularProgress size={20} />
+              : <SearchIcon />
+          }
+        </IconButton>
+
+
+      </Paper>
+
+
+
+      <Box sx={{ height: 400, width: '100%', my: 1 }} >
+
+        {
+          usersQuery.isLoading &&
+          <LinearProgress />
+        }
+        <Card>
+
+          <TableContainer>
+            <Table
+              size={dense ? 'small' : 'medium'}
+            >
+              <TableHead
+
+              >
+
+                <TableRow>
+                  {/* <TableCell padding="checkbox">
                   Estado
-                </TableCell>
-                <TableCell>Apellidos y nombres</TableCell>
-                <TableCell>Número de identificación</TableCell>
-                <TableCell>Nombre de usuario</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Rol</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
+                </TableCell> */}
+                  <TableCell
 
-            </TableHead>
-            <TableBody>
-              {
-                user
-                  ? <TableRowUser user={user} />
-                  : users.length > 0 && users.map(user => (
+
+
+                  >
+                    <TableSortLabel
+
+                    >
+                      Nombres y apellidos
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell>Número de identificación</TableCell>
+                  <TableCell>Nombre de usuario</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Rol</TableCell>
+                  <TableCell>Estado</TableCell>
+                  <TableCell>Acciones</TableCell>
+                </TableRow>
+
+              </TableHead>
+              <TableBody>
+                {/* {
+                  user
+                    ? <TableRowUser user={user} />
+                    : users.length > 0 && users.map(user => (
+                      <TableRowUser key={user.id} user={user} />
+                    ))
+
+
+                } */}
+                {
+                  usersQuery.data && usersQuery.data.count > 0 && usersQuery.data.users.map(user => (
                     <TableRowUser key={user.id} user={user} />
                   ))
+                }
+              </TableBody>
+
+            </Table>
+          </TableContainer>
+          <Box p={2}
+            display="flex"
+            justifyContent="space-between"
+          >
+
+            <FormControlLabel
+              control={<Switch checked={dense} onChange={handleChangeDense} />}
+              label="Dense padding"
+            />
+            <TablePagination
+              component="div"
+              count={usersQuery.data?.count || 0}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              rowsPerPageOptions={[5, 10, 25, 30]}
+            />
+          </Box>
+
+        </Card>
 
 
-              }
-            </TableBody>
-
-          </Table>
-        </TableContainer>
-        <Box p={2}>
-          <TablePagination
-            component="div"
-            count={users.length}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handleLimitChange}
-            page={page}
-            rowsPerPage={limit}
-            rowsPerPageOptions={[5, 10, 25, 30]}
-          />
-        </Box>
-      </Card>
 
 
 
+      </Box>
+    </>
 
-    </Box>)
+  )
 }

@@ -15,6 +15,8 @@ import { selectUsers } from '../../../../redux/slices/users/users.slice';
 import { getUser } from '../services/users.service';
 import { IUser } from '../../../../models/auth.model';
 import { DeleteUser } from '../components/DeleteUser/DeleteUser.component';
+import { TitlePage } from "../../components/TitlePage.component";
+import { useUsers } from "../hooks/useUsers";
 
 export const UsersList = () => {
 
@@ -23,6 +25,8 @@ export const UsersList = () => {
   const { users } = useSelector(selectUsers);
 
   const [user, setUser] = useState<IUser>();
+
+
 
 
   const { loading, callEndpoint } = useFetchAndLoad();
@@ -46,30 +50,45 @@ export const UsersList = () => {
 
 
   const searchUser = async () => {
-    if (identification.length === 0) {
-      enqueueSnackbar('Ingrese un número de identificación', { variant: 'error' })
-      return;
-    }
+    // if (identification.length === 0) {
+    //   enqueueSnackbar('Ingrese un número de identificación', { variant: 'error' })
+    //   return;
+    // }
 
-    if (identification.length === 10 || identification.length === 13) {
+    // if (identification.length === 10 || identification.length === 13) {
 
-      await callEndpoint(getUser(identification))
-        .then((response) => {
-          const { data } = response;
-          setUser(data);
-        })
-        .catch((error) => {
-          enqueueSnackbar('No se encontró al usuario', { variant: 'error' })
-        })
-    }else {
-        enqueueSnackbar('El número de identificación es incorrecto', { variant: 'error' })
-        return;
-      }
+    //   await callEndpoint(getUser(identification))
+    //     .then((response) => {
+    //       const { data } = response;
+    //       setUser(data);
+    //     })
+    //     .catch((error) => {
+    //       enqueueSnackbar('No se encontró al usuario', { variant: 'error' })
+    //     })
+    // }else {
+    //     enqueueSnackbar('El número de identificación es incorrecto', { variant: 'error' })
+    //     return;
+    //   }
 
   }
 
   return (
     <>
+
+      <TitlePage
+        title='Usuarios'
+
+        action={
+          <Button
+            sx={{ mt: { xs: 2, md: 0 } }}
+            variant="contained"
+            startIcon={<AddTwoToneIcon fontSize="small" />}
+            onClick={createUser}
+          >
+            Añadir usuario
+          </Button>
+        }
+      />
 
       <Grid container justifyContent="space-between" alignItems="center">
 
@@ -78,36 +97,10 @@ export const UsersList = () => {
 
         <Grid item>
 
-          <Paper
-            component="form"
-            sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-          >
-
-            <InputBase
-              type='number'
-              onChange={handleChange}
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Número de identificación"
-              inputProps={{ 'aria-label': 'Buscar cliente' }}
-            />
-            <IconButton
-              type="button"
-              sx={{ p: '10px' }}
-              aria-label="search"
-              onClick={searchUser}
-            >
-              {
-                loading
-                  ? <CircularProgress size={20} />
-                  : <SearchIcon />
-              }
-            </IconButton>
-
-
-          </Paper>
+    
         </Grid>
 
-        <Grid item>
+        {/* <Grid item>
 
           <Button
             sx={{ mt: { xs: 2, md: 0 } }}
@@ -118,11 +111,11 @@ export const UsersList = () => {
             Añadir usuario
           </Button>
 
-        </Grid>
+        </Grid> */}
 
       </Grid>
 
-      <UsersTable users={users} user={user}/>
+      <UsersTable  />
 
       <DeleteUser />
 
