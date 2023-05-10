@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs, Box, useTheme } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs, Box, useTheme, Stepper, Step, StepButton } from '@mui/material';
 import { tabsClasses } from '@mui/material/Tabs';
 
 import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
@@ -78,6 +78,39 @@ export const ListActiveOrders = () => {
       </Card> */}
 
 
+      {/* <Box
+        sx={{
+          width: '100%',
+        }}
+      >
+
+        <Stepper
+          nonLinear
+          
+          sx={{bgcolor: (theme) => `${theme.palette.success}`}}
+        >
+          <Step
+            sx={{bgcolor: (theme) => `${theme.palette.success}`}}
+          >
+            <StepButton sx={{bgcolor: (theme) => `${theme.palette.success}`}} >Pendientes</StepButton>
+          </Step>
+          <Step>
+
+            <StepButton>En preparación</StepButton>
+
+          </Step>
+          <Step>
+            <StepButton>Entregados</StepButton>
+          </Step>
+
+
+        </Stepper>
+
+      </Box> */}
+
+      <Typography variant='h4' mb={1} >
+        Pedidos por estado
+        </Typography>
       <Scrollbars
         style={{ width: '100%', height: '600px' }}
         autoHide
@@ -108,31 +141,31 @@ export const ListActiveOrders = () => {
 
         >
 
-<Box>
+          <Box>
 
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.PENDING)}
-            title='PEDIDOS PENDIENTES'
-            color='success'
-            status={OrderStatus.PENDING}
+            <CardActiveOrder
+              orders={orders.filter(order => order.status === OrderStatus.PENDING)}
+              title='PENDIENTES'
+              color='success'
+              status={OrderStatus.PENDING}
             />
-            </Box>
-<Box>
+          </Box>
+          <Box>
 
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
-            title='PEDIDOS EN PREPARACIÓN'
-            color='primary'
+            <CardActiveOrder
+              orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
+              title='EN PREPARACIÓN'
+              color='primary'
             />
-            </Box>
-<Box>
+          </Box>
+          <Box>
 
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
-            title='PEDIDOS ENTREGADOS'
-            color='warning'
+            <CardActiveOrder
+              orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
+              title='ENTREGADOS'
+              color='warning'
             />
-            </Box>
+          </Box>
 
 
         </Box>

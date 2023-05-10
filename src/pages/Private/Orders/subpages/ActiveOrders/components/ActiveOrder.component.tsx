@@ -1,13 +1,13 @@
-import { FC, useContext, } from 'react';
+import { FC, useContext, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 import {
-  Card, CardHeader, Grid, CardContent, Box, Divider, Typography,
+  Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Collapse,
   Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar
 } from '@mui/material';
 
-import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandMoreOutlined, PlayArrow } from '@mui/icons-material';
+import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore } from '@mui/icons-material';
 
 import { formatDistance, subHours } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -27,7 +27,7 @@ import { setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
-import { Stack } from '@mui/material';
+import { Stack, ListItemButton, ListItemText } from '@mui/material';
 
 interface Props {
   order: IOrder;
@@ -115,42 +115,6 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
 }
 
 
-function stringToColor(string: string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
-}
-
-
-
-
-
-
 
 export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
@@ -163,6 +127,12 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const [expanded, setExpanded] = useState<boolean>(order.status === OrderStatus.DELIVERED ? true : false);
+
+  const handleExpanded = () => {
+    setExpanded(!expanded);
+  };
 
 
   const changeStatusOrder = (status: OrderStatus) => {
@@ -195,52 +165,16 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
         <Card
 
-          sx={{
+          // sx={{
 
-            border: (theme) => `1px solid ${theme.palette[color].main}`,
-          }}
+          //   borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
+          //   borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
+          //   border: (theme) => `1px solid ${theme.palette[color].main}`,
+          // }}
           variant='elevation'
 
         >
-          
-          {/* 
-          <CardHeader
-            title={
-              <Typography
-                variant="body1"
-                fontWeight='bold'
 
-
-              >
-                {
-                  order.type === TypeOrder.IN_PLACE
-
-                    ?
-                    `Mesa ${order.table?.name}`
-                    : 'Para llevar'
-
-                }
-                {
-                  order.client &&
-                  ` - ${order.client.person.firstName} ${order.client.person.lastName}`
-                }
-              </Typography>
-            }
-
-
-            avatar={
-              <>
-                <Avatar
-                  {...stringAvatar(order.user.person.firstName + ' ' + order.user.person.lastName)}
-                />
-
-              </>
-            }
-            sx={{
-              mb: 1
-            }}
-
-          /> */}
 
 
           <Stack
@@ -264,7 +198,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               >
 
 
-               
+
 
                 <Typography
                   variant="body1"
@@ -299,25 +233,23 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               </Typography>
             </Box>
             <Typography variant='body2'  >
-          {'Creado ' + 
-            formatDistance(subHours(new Date(order.createdAt), 5), new Date(), {
-              addSuffix: true,
-              includeSeconds: true,
-              locale: es
-            })}
-        </Typography>  
+              {'Creado ' +
+                formatDistance(new Date(order.createdAt), new Date(), {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es
+                })}
+            </Typography>
 
           </Stack>
 
-          
+
 
           <Divider sx={{ mb: 1 }} />
 
-          <Box
-            mx={1}
-            display='flex'
-            flexDirection='column'
-            gap={1}
+          <Stack
+            spacing={1}
+            sx={{ px: 1 }}
           >
 
             {
@@ -333,17 +265,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                       ))
 
                   }
-                 
-                  {
-                    details.filter(detail => detail.quantity === detail.qtyDelivered)
-                      .map(detail => (
-                        <Grid key={detail.id} item xs={12} >
-                          <DetailDispatched detail={detail} orderId={order.id} />
-                        </Grid>
-                      ))
-
-                  }
-
+                
                 </>
 
                 :
@@ -354,8 +276,55 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 )
                 )
             }
-          </Box>
 
+            {
+              details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
+              <>
+                <Stack
+                  direction='row'
+                  justifyContent='space-between'
+                  alignItems='center'
+                  onClick={handleExpanded}
+
+                >
+
+
+
+                  <ListItemText>
+
+                    <Typography variant='body1' >Productos entregados</Typography>
+                  </ListItemText>
+
+
+                  {expanded ? <ExpandLess /> : <ExpandMore />}
+
+
+
+                </Stack>
+
+                <Collapse
+                  in={expanded}
+                >
+
+                  {
+                    details.filter(detail => detail.quantity === detail.qtyDelivered)
+                      .map(detail => (
+                        <Grid key={detail.id} item xs={12} >
+                          <DetailDispatched detail={detail} orderId={order.id} />
+                        </Grid>
+                      ))
+
+                  }
+
+                </Collapse>
+
+              </>
+
+
+
+            }
+
+          </Stack>
 
 
 
@@ -415,8 +384,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             </Button>
 
           </CardActions>
-          
-      
+
+
         </Card>
       </Box>
 

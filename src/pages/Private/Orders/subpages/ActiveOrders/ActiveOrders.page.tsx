@@ -1,4 +1,4 @@
-import { Typography, Container } from '@mui/material';
+import { Typography, Container, Divider } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import { DespachoDetalle } from './components';
 import { Cached } from '@mui/icons-material';
@@ -10,6 +10,7 @@ import { useFetchAndLoad } from '../../../../../hooks';
 import { useDispatch } from 'react-redux';
 import { Clock } from '../ListOrders/components/Clock.component';
 import { TitlePage } from '../../../components/TitlePage.component';
+import { BarActiveOrders } from './components/BarActiveOrders.component';
 
 
 export const ActiveOrders = () => {
@@ -49,7 +50,16 @@ export const ActiveOrders = () => {
             </LoadingButton>
           }
         />
+
+        
+
+
         <Clock />
+
+        <Divider />
+        <BarActiveOrders />
+        <Divider sx={{mb: 1}} />
+
         
         <Outlet />
 

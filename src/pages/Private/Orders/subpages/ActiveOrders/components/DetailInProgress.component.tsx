@@ -49,74 +49,56 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
     <>
 
+      <Tooltip title={`Editar ${detail.product.name}`} arrow>
+        <Box component='div'
+          sx={{
 
-      <Box component='div'
-        sx={{
+            p: 0.5,
+            px: 0.5,
+            borderRadius: `5px`,
+
+            '&:hover': {
+              bgcolor: `${theme.colors.alpha.black[10]}`,
+              cursor: 'pointer'
+
+            }
 
 
-          width: '100%',
-          // borderRadius: '10px',
-          // border: '1px solid #e0e0e0',
-          // p: 0.5,
-          px:  0.5,
-          
 
-        }}
-      >
 
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box >
-            <Typography variant='h4'>
-              {`${detail.quantity} -  ${detail.product.name}`}
+          }}
 
-            </Typography>
-           
-            <Typography
-              variant="h6"
-              style={{ whiteSpace: 'pre-wrap' }}
-            >
-              {detail.description}
-            </Typography>
-          </Box>
-          <Box display='flex'>
-            <Box>
-              {/* <Typography variant="h5" >
-                      Entregado {detail.qtyDelivered} de {' '}
-                      <Text color="info">{detail.quantity}</Text> {' '}
-                    </Typography> */}
-              {/* <Label color='success' >{detail.qtyDelivered}</Label> */}
+          onClick={editDetail}
 
+        >
+
+          <Box display="flex" alignItems="center" justifyContent="space-between" mb={0.5}>
+            <Box >
+              <Typography variant='h4'>
+                {`${detail.quantity} -  ${detail.product.name}`}
+
+              </Typography>
+
+              <Typography
+                variant="h6"
+                style={{ whiteSpace: 'pre-wrap' }}
+              >
+                {detail.description}
+              </Typography>
             </Box>
-            {
-              
-              user?.role.name === 'admin' && (
-                <Tooltip title="Editar detalle" arrow>
-                  <IconButton
-                    sx={{
-                      '&:hover': {
-                        background: theme.colors.primary.lighter
-                      },
-                      color: theme.palette.primary.main
-                    }}
-                    color="inherit"
-                    size="small"
-                    onClick={() => editDetail()}
-                  >
-                    <EditTwoToneIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              )}
+          
+       
           </Box>
+          <LinearProgressWrapper
+            value={(detail.qtyDelivered * 100) / detail.quantity}
+            color="primary"
+            variant="determinate"
+          />
+
+
         </Box>
-                    <LinearProgressWrapper
-                  value={(detail.qtyDelivered * 100) / detail.quantity}
-                  color="primary"
-                  variant="determinate"
-                />
-        
 
-      </Box>
-
+      </Tooltip>
 
 
 

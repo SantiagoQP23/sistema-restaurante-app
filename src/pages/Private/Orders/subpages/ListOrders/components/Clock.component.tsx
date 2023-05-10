@@ -28,18 +28,24 @@ export const Clock = () => {
 
   return (
     <>
-      <Stack direction={{sx: 'column'}} spacing={2} py={1}>
+      <Stack direction='row' spacing={2} pb={1}>
 
-        <Typography variant="h5" >
-          Fecha: {format(date, 'eeee dd/MM/yyyy', { locale: es })}
-        </Typography>
+        <Stack>
+          <Typography variant="caption" >Fecha </Typography>
+          <Typography variant="body1" >
+            {format(date, 'eeee dd MMMM yyyy', { locale: es })}
+          </Typography>
+        </Stack>
 
-        <Typography variant="body1" >
+        <Stack>
+          <Typography variant="caption" >Ult. actualización </Typography>
+          <Typography variant="body1" >
 
-          {
-            " Ult. actualización: " + format(new Date(lastUpdatedOrders), 'HH:mm:ss')
-          }
-        </Typography>
+            {
+              format(new Date(lastUpdatedOrders), 'HH:mm:ss')
+            }
+          </Typography>
+        </ Stack>
 
       </Stack>
     </>

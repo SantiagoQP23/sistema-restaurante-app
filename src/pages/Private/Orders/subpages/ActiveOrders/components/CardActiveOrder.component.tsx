@@ -44,7 +44,8 @@ export const CardActiveOrder: FC<Props> = ({
           height: '600px',
           overflowY: 'auto',
           width: '325px',
-          mr: 1,
+          mr: 2,
+          bgcolor: 'transparent',
 
         }}
       >
@@ -57,18 +58,19 @@ export const CardActiveOrder: FC<Props> = ({
               >
                 {title}
               </Label>
-              {orders.length}
+              
             </>
           }
 
+          subheader={
+            `${orders.length} pedidos`
+          }
 
         />
         <Divider />
 
         <Box
-          sx={{
-            p: 1
-          }}
+         
         >
 
 
@@ -90,7 +92,7 @@ export const CardActiveOrder: FC<Props> = ({
           {/* </CardContent> */}
 
 
-          {
+          {/* {
             status === OrderStatus.PENDING && (
               <Button
                 startIcon={<AddIcon />}
@@ -100,7 +102,7 @@ export const CardActiveOrder: FC<Props> = ({
               >Añadir Pedido</Button>
 
             )
-          }
+          } */}
         </Box>
 
 

@@ -8,7 +8,8 @@ import {
   Button, useTheme,
   MenuItem, Box, Container, TableContainer, TableBody,
   TableHead, TableRow, TableCell, Table, Popover,
-  Card
+  Card,
+  Typography
 } from '@mui/material';
 
 
@@ -190,113 +191,130 @@ export const ListOrders = () => {
             statusOrderFilter={statusOrderFilter}
           />
 
-         
 
-            <TableContainer>
 
-              <Table
-                size='small'
+          <TableContainer>
+
+            <Table
+              size='small'
+            >
+
+              <TableHead
               >
 
-                <TableHead
-                >
+
+                <TableRow>
+                  <TableCell>
+                    <Checkbox />
+                  </TableCell>
+                  <TableCell>
+                    Mesero
+                  </TableCell>
+                  <TableCell>
+                    Cliente
+                  </TableCell>
+                  <TableCell>
+                    Mesa
+                  </TableCell>
+                  <TableCell>
+                    Hora
+                  </TableCell>
+                  <TableCell>
+                    Estado
+                  </TableCell>
+                  <TableCell>
+                    Total
+                  </TableCell>
+                  <TableCell>
+                    Acciones
+                  </TableCell>
+
+                </TableRow>
+
+              </TableHead>
+
+              <TableBody>
 
 
-                  <TableRow>
-                    <TableCell>
-                      <Checkbox />
-                    </TableCell>
-                    <TableCell>
-                      Mesero
-                    </TableCell>
-                    <TableCell>
-                      Cliente
-                    </TableCell>
-                    <TableCell>
-                      Mesa
-                    </TableCell>
-                    <TableCell>
-                      Hora
-                    </TableCell>
-                    <TableCell>
-                      Estado
-                    </TableCell>
-                    <TableCell>
-                      Total
-                    </TableCell>
-                    <TableCell>
-                      Acciones
-                    </TableCell>
+                {
+                  filteredOrders.length === 0 && (
+                    <TableRow
 
-                  </TableRow>
+                    >
+                      <TableCell colSpan={8}>
+                        <Typography my={5} textAlign='center'>
+                          No hay pedidos
 
-                </TableHead>
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
 
-                <TableBody>
+                  )
+                }
 
-                  {
-                    filteredOrders.map((order) => (
-                      <TableRow
-                        hover
-                        key={order.id}
-                        sx={{
-                          cursor: 'pointer',
-                          '&:hover': {
-                            backgroundColor: theme.colors.alpha.black[5]
+                {
+                  filteredOrders.map((order) => (
+                    <TableRow
+                      hover
+                      key={order.id}
+                      sx={{
+                        cursor: 'pointer',
+                        '&:hover': {
+                          backgroundColor: theme.colors.alpha.black[5]
 
-                          }
-                        }}
-                      // onClick={() => navigate(`orders/${order.id}`)}
-                      >
-                        <TableCell>
-                          <Checkbox />
-                        </TableCell>
-                        <TableCell>
-                          {order.user.person.firstName} {order.user.person.lastName}
-                        </TableCell>
-                        <TableCell>
-                          {order.client?.person.firstName} {order.client?.person.lastName}
-                        </TableCell>
+                        }
+                      }}
+                    // onClick={() => navigate(`orders/${order.id}`)}
+                    >
+                      <TableCell>
+                        <Checkbox />
+                      </TableCell>
+                      <TableCell>
+                        {order.user.person.firstName} {order.user.person.lastName}
+                      </TableCell>
+                      <TableCell>
+                        {order.client?.person.firstName} {order.client?.person.lastName}
+                      </TableCell>
 
-                        <TableCell>
-                          Mesa {order.table?.name}
-                        </TableCell>
-                        <TableCell>
-                          {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
-                        </TableCell>
-                        <TableCell>
-                          <LabelStatusOrder status={
-                            order.status === OrderStatus.DELIVERED && !order.isPaid
-                              ? "unpaid"
-                              : order.status
+                      <TableCell>
+                        Mesa {order.table?.name}
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
+                      </TableCell>
+                      <TableCell>
+                        <LabelStatusOrder status={
+                          order.status === OrderStatus.DELIVERED && !order.isPaid
+                            ? "unpaid"
+                            : order.status
 
-                          } />
-                        </TableCell>
-                        <TableCell>
-                          {order.total}
-                        </TableCell>
-                        <TableCell align='center'>
-                          {/* <IconButton onClick={(e) => handleOpenMenu(e, order)}>
+                        } />
+                      </TableCell>
+                      <TableCell>
+                        {order.total}
+                      </TableCell>
+                      <TableCell align='center'>
+                        {/* <IconButton onClick={(e) => handleOpenMenu(e, order)}>
                             <MoreVert />
                           </IconButton> */}
-                          <IconButton onClick={() => navigate(`edit/${order.id}`)}>
-                            <EditOutlined />
-                          </IconButton>
-                        </TableCell>
+                        <IconButton onClick={() => navigate(`edit/${order.id}`)}>
+                          <EditOutlined />
+                        </IconButton>
+                      </TableCell>
 
-                      </TableRow>
-                    ))
+                    </TableRow>
+                  ))
 
 
-                  }
+                }
 
-                </TableBody>
+              </TableBody>
 
-              </Table>
+            </Table>
 
-            </TableContainer>
+          </TableContainer>
 
-      
+
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
