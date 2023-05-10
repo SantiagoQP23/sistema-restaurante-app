@@ -385,7 +385,7 @@ function SidebarMenu() {
                 </Button>
               </ListItem>
               {
-                user && user.role.name === ValidRoles.admin && (
+                user && user.role.name === 'admin' && (
                   <>
                     <ListItem component="div">
                       <Button

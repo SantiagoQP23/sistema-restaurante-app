@@ -140,6 +140,9 @@ export const OrderProvider: FC<Props> = ({ children }) => {
     setClient(null);
     setTable(undefined);
     setDetails([]);
+    setPeople(1);
+    setTypeOrder(TypeOrder.IN_PLACE);
+    
 
   }
 

@@ -1,12 +1,12 @@
 
 import { lazy } from 'react'
-
 import { RouteObject } from 'react-router'
+
 import { PrivateRoutes } from '../../../../models/routes.model';
 import { AddUser } from '../components/AddUser/AddUser.component';
-import { EditUser } from '../components/EditUser/EditUser.component';
 import { UsersList } from '../pages/UsersList.page';
 
+import { EditUser } from '../components/EditUser/EditUser.component';
 
 const Users = lazy(() => import('../Users.page'))
 

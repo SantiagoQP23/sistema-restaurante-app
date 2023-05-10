@@ -29,16 +29,17 @@ export const BestSellingProductsSummary = () => {
               <ListItemAvatar
 
               >
-                <Typography variant='h4'>{index }</Typography>
+                <Typography variant='h4'>{product.totalSold}</Typography>
 
               </ListItemAvatar>
-              <ListItemText primary={product.name} secondary={`Total vendido: ${product.totalSold}`} />
-              <ListItemSecondaryAction>
+              <ListItemText primary={product.name} />
+
+              {/* <ListItemSecondaryAction>
                 <IconButton
                 >
                   <EditOutlined />
                 </IconButton>
-              </ListItemSecondaryAction>
+              </ListItemSecondaryAction> */}
 
             </ListItem>
           ))

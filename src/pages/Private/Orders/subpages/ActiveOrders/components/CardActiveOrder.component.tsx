@@ -1,8 +1,12 @@
-import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box, Button } from '@mui/material';
 import { IOrder, OrderStatus } from "../../../../../../models"
 import { FC } from "react"
 import { ActiveOrder } from "./ActiveOrder.component"
 import { Label } from "../../../../../../components/ui"
+import { useDispatch } from 'react-redux';
+import { resetActiveOrder } from '../../../../../../redux';
+import { useNavigate } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -17,10 +21,21 @@ interface Props {
 export const CardActiveOrder: FC<Props> = ({
   orders,
   title,
-  color
+  color,
+  status 
 }) => {
 
   const theme = useTheme();
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const addOrder = () => {
+    dispatch(resetActiveOrder());
+    navigate('add');
+  }
+
   return (
     <>
 
@@ -29,7 +44,8 @@ export const CardActiveOrder: FC<Props> = ({
           height: '600px',
           overflowY: 'auto',
           width: '325px',
-          mr: 1,
+          mr: 2,
+          bgcolor: 'transparent',
 
         }}
       >
@@ -42,18 +58,19 @@ export const CardActiveOrder: FC<Props> = ({
               >
                 {title}
               </Label>
-              {orders.length}
+              
             </>
           }
 
+          subheader={
+            `${orders.length} pedidos`
+          }
 
         />
         <Divider />
 
         <Box
-          sx={{
-            p: 1
-          }}
+         
         >
 
 
@@ -65,13 +82,28 @@ export const CardActiveOrder: FC<Props> = ({
             &&
             orders.map(order => (
               <>
-                <ActiveOrder  key={order.id} order={order} color={color} />
+                <ActiveOrder key={order.id} order={order} color={color} />
 
               </>
             ))
           }
+
+
+          {/* </CardContent> */}
+
+
+          {/* {
+            status === OrderStatus.PENDING && (
+              <Button
+                startIcon={<AddIcon />}
+                color="primary"
+                onClick={() => addOrder()}
+                fullWidth
+              >Añadir Pedido</Button>
+
+            )
+          } */}
         </Box>
-        {/* </CardContent> */}
 
 
       </Card>

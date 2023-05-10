@@ -8,7 +8,7 @@ export const usePaginationAsync = (periodo = Period.TODAY) => {
 
   const [page, setPage] = useState(0);
 
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [period, setPeriod] = useState<Period>(periodo);
 

@@ -18,6 +18,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/orders': 'Pedidos',
   '/orders/edit': 'Editar',
   '/orders/add': 'Nuevo pedido',
+  '/orders/add/menu': 'Productos',
   [`/orders/edit/:id`]: 'id',
   '/orders/edit/ljasd/receipt': 'Comprobante',
   '/orders/actives': 'Activos',
@@ -28,6 +29,12 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/menu/edit/seccion': 'Seccion',
   '/menu/edit/category': 'Categoría',
   '/menu/edit/product': 'Producto',
+  '/users': 'Usuarios',
+  '/users/edit': 'Editar',
+  '/users/add': 'Nuevo usuario',
+  '/tables': 'Mesas',
+  '/tables/edit': 'Editar',
+  '/tables/add': 'Nueva mesa',
 };
 
 
@@ -50,6 +57,7 @@ interface Props {
 export const TitlePage: FC<Props> = ({ title, action }) => {
 
   const location = useLocation();
+  
   const pathnames = location.pathname.split('/').filter((x) => x);
 
 
