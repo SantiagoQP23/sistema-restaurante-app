@@ -60,7 +60,7 @@ export const EditOrder = () => {
     dispatch(setActiveOrder(order));
 
     if(order.isPaid)  {
-      navigate(`/orders/edit/${orderId}/receipt`)
+      navigate(`/orders/edit/${orderId}/receipt`, { replace: true })
 
     }
 

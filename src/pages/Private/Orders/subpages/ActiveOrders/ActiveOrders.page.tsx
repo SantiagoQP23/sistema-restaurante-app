@@ -56,7 +56,7 @@ export const ActiveOrders = () => {
 
         <Clock />
 
-        <Divider />
+        <Divider sx={{mb: 1}}/>
         <BarActiveOrders />
         <Divider sx={{mb: 1}} />
 

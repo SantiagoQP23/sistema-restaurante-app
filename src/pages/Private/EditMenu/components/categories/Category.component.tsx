@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Grid, Box, Button, IconButton, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, CardActions, Tooltip } from '@mui/material/';
 
 
-import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import { DeleteOutlined, EditOutlined, MoreHoriz } from '@mui/icons-material';
 import { ICategory } from '../../../../../models';
 import { setActiveCategory, setActiveProducts } from '../../../../../redux';
 import { useDispatch } from 'react-redux';
@@ -17,15 +17,16 @@ import { useSnackbar } from 'notistack';
 import { updateCategory as updateCategoryS } from '../../services/sections.service';
 import { updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
-import { CardHeader } from '@mui/material';
+import { CardHeader, CardActionArea } from '@mui/material';
 
 interface Props {
   categoria: ICategory;
   eliminarCategoria: (categoria: ICategory) => void;
+  handleOpenMenu: (event: any, categoria: ICategory) => void;
 }
 
 
-export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
+export const Category: FC<Props> = ({ categoria, eliminarCategoria, handleOpenMenu }) => {
 
 
   const navigate = useNavigate();
@@ -87,31 +88,45 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
     <>
 
       <Card>
+
+        <CardActionArea onClick={() => establecerCategoria()}>
+
         <CardHeader
           title={categoria.name}
           subheader={`Productos: ${categoria.products.length}`}
           action={
-            <Label
-              color={categoria.isActive ? 'success' : 'error'}
+            <IconButton
+              aria-label="settings"
+              onClick={(event) => {
+                event.stopPropagation();
+                handleOpenMenu(event, categoria)
+              }}
             >
-              {categoria.isActive ? 'Activo' : 'Eliminado'}
-            </Label>
+              <MoreHoriz />
+            </IconButton>
           }
         />
 
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
           <Box>
-            <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
+
+            <Label
+              color={categoria.isActive ? 'success' : 'error'}
+            >
+              {categoria.isActive ? 'Activo' : 'Eliminado'}
+            </Label>
+
+            {/* <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
               Ver Productos
 
-            </Button>
+            </Button> */}
 
           </Box>
 
 
           <Box >
-            <Tooltip title="Editar">
+            {/* <Tooltip title="Editar">
 
               <IconButton color='primary'
                 onClick={() => editarCategoria()}
@@ -121,7 +136,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
 
               </IconButton>
             </Tooltip>
-            <Switch checked={categoria.isActive} onClick={() => changeStatusCategory(categoria)} color={categoria.isActive ? 'success' : 'error'} />
+            <Switch checked={categoria.isActive} onClick={() => changeStatusCategory(categoria)} color={categoria.isActive ? 'success' : 'error'} /> */}
 
             {/* <Tooltip title="Eliminar">
 
@@ -136,6 +151,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria }) => {
             </Tooltip> */}
           </Box>
         </CardActions>
+        </CardActionArea>
       </Card>
 
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs, Box, useTheme, Stepper, Step, StepButton } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Typography, Tab, Tabs, Box, useTheme, Stepper, Step, StepButton, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { tabsClasses } from '@mui/material/Tabs';
 
 import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
@@ -11,6 +11,7 @@ import { IOrder, OrderStatus, OrderStatusSpanish } from '../../../../../../model
 import { ActiveOrder } from "./ActiveOrder.component";
 import { CardActiveOrder } from './CardActiveOrder.component';
 import Scrollbars from 'react-custom-scrollbars-2';
+import { AlignHorizontalLeft, AlignVerticalTop } from '@mui/icons-material';
 
 
 export const ListActiveOrders = () => {
@@ -21,6 +22,17 @@ export const ListActiveOrders = () => {
 
   const [activeOrders, setActiveOrders] = useState<IOrder[]>([]);
   const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
+
+  const [alignment, setAlignment] = useState<string>('vertical');
+
+
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string,
+  ) => {
+    setAlignment(newAlignment);
+  };
+
 
   const filterActiveOrder = (status: OrderStatus) => {
     setActiveOrders(orders.filter(order => order.status === status));
@@ -41,78 +53,45 @@ export const ListActiveOrders = () => {
     <>
 
 
-      {/* <Card sx={{ my: 2, }}>
-
-        <CardContent sx={{ overFlowX: 'auto' }}>
-          <Typography variant="h5">Estados de pedidos</Typography>
-
-          <Tabs
-            onChange={(e, value) => {
-              setStatusOrderFilter(value);
-              filterActiveOrder(value);
-            }}
-            value={statusOrderFilter}
-            variant="fullWidth"
-            textColor='primary'
-            scrollButtons
-            indicatorColor='primary'
-            allowScrollButtonsMobile
-
-            sx={{
-              [`& .${tabsClasses.scrollButtons}`]: {
-                '&.Mui-disabled': { opacity: 0.3 },
-              },
-              width: '100%',
-              my: 1,
-              fontSize: '1rem',
-
-            }}
-          >
-            <Tab color='green' key={OrderStatus.PENDING} label={OrderStatusSpanish[OrderStatus.PENDING]} value={OrderStatus.PENDING} />
-            <Tab key={OrderStatus.IN_PROGRESS} label={'PREPARANDO'} value={OrderStatus.IN_PROGRESS} />
-
-          </Tabs>
-
-
-        </CardContent>
-      </Card> */}
-
-
-      {/* <Box
-        sx={{
-          width: '100%',
-        }}
+      <Stack
+        direction='row'
+        justifyContent='space-between'
+        alignItems='center'
+        mb={1}
       >
-
-        <Stepper
-          nonLinear
-          
-          sx={{bgcolor: (theme) => `${theme.palette.success}`}}
-        >
-          <Step
-            sx={{bgcolor: (theme) => `${theme.palette.success}`}}
-          >
-            <StepButton sx={{bgcolor: (theme) => `${theme.palette.success}`}} >Pendientes</StepButton>
-          </Step>
-          <Step>
-
-            <StepButton>En preparación</StepButton>
-
-          </Step>
-          <Step>
-            <StepButton>Entregados</StepButton>
-          </Step>
-
-
-        </Stepper>
-
-      </Box> */}
-
-      <Typography variant='h4' mb={1} >
-        Pedidos por estado
+        <Typography variant='h4' mb={1} >
+          Pedidos por estado
         </Typography>
-      <Scrollbars
-        style={{ width: '100%', height: '600px' }}
+
+        <ToggleButtonGroup
+          exclusive
+          size='small'
+          value={alignment}
+          onChange={handleAlignment}
+        >
+          <ToggleButton
+            value={'horizontal'}
+          >
+            <AlignHorizontalLeft />
+          </ToggleButton>
+
+          <ToggleButton
+            value={'vertical'}
+          >
+            <AlignVerticalTop />
+
+          </ToggleButton>
+
+
+
+
+
+        </ToggleButtonGroup>
+
+      </Stack>
+
+      {/* <Scrollbars
+        style={{  height: '600px' }}
         autoHide
         renderThumbHorizontal={() => {
           return (
@@ -132,45 +111,57 @@ export const ListActiveOrders = () => {
         }}
 
 
+      > */}
+      <Stack
+        direction={alignment === 'vertical' ? 'row' : 'column'}
+        width={alignment === 'vertical' ? 'auto' : '100%'}
+
+        sx={{
+          display: 'flex',
+          overflowX: 'auto',
+          overflowY: 'auto',
+        }}
+        spacing={1}
+
       >
-        <Box
-          sx={{
-            display: 'flex',
-            overflowX: 'auto',
-          }}
+        <Box>
 
-        >
 
-          <Box>
 
-            <CardActiveOrder
-              orders={orders.filter(order => order.status === OrderStatus.PENDING)}
-              title='PENDIENTES'
-              color='success'
-              status={OrderStatus.PENDING}
-            />
-          </Box>
-          <Box>
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.PENDING)}
+            title='PENDIENTES'
+            color='success'
+            alignment={alignment}
 
-            <CardActiveOrder
-              orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
-              title='EN PREPARACIÓN'
-              color='primary'
-            />
-          </Box>
-          <Box>
-
-            <CardActiveOrder
-              orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
-              title='ENTREGADOS'
-              color='warning'
-            />
-          </Box>
-
+          />
 
         </Box>
 
-      </Scrollbars>
+        <Box>
+
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
+            title='EN PREPARACIÓN'
+            color='primary'
+            alignment={alignment}
+          />
+
+        </Box>
+
+        <Box>
+
+          <CardActiveOrder
+            orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
+            title='ENTREGADOS'
+            color='warning'
+            alignment={alignment}
+          />
+        </Box>
+
+      </Stack>
+
+      {/* </Scrollbars> */}
       {/* <Grid container spacing={1}>
         {
           activeOrders.length === 0

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 
@@ -6,9 +6,8 @@ export const usePagination = <T>(list: T[]) => {
 
   const [page, setPage] = useState(0);
 
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [paginatedList, setPaginatedList] = useState<T[]>(list);
 
 
   const nextPage = () => {
@@ -24,15 +23,16 @@ export const usePagination = <T>(list: T[]) => {
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPaginatedList(list.slice(newPage * rowsPerPage, newPage * rowsPerPage + rowsPerPage));
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPaginatedList(list.slice(page * parseInt(event.target.value, 10), page * parseInt(event.target.value, 10) + parseInt(event.target.value, 10)));
     setRowsPerPage(parseInt(event.target.value, 10));
     resetPage();
   };
+
+  const paginatedList = list.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
 
   return {
     page,
@@ -41,7 +41,7 @@ export const usePagination = <T>(list: T[]) => {
     prevPage,
     resetPage,
     handleChangePage,
-    handleChangeRowsPerPage, 
+    handleChangeRowsPerPage,
     paginatedList
   }
 

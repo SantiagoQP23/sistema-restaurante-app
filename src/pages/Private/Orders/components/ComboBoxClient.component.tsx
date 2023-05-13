@@ -28,6 +28,7 @@ export const ComboBoxClient: FC<Props> = ({client, handleChangeClient}) => {
   }, [term])
 
 
+  console.log({client})
 
  
 

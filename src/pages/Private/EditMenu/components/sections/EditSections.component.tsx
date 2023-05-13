@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 //Material UI
-import { Typography, Box, Button, Grid } from '@mui/material/'
+import { Typography, Box, Button, Grid, Popover, MenuItem } from '@mui/material/'
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
@@ -18,6 +18,7 @@ import { resetActiveSection, selectMenu, setActiveSection } from '../../../../..
 import { useModal } from '../../../../../hooks';
 import { DeleteSection } from './DeleteSection.component';
 import { SectionsTable } from './SectionsTable.component';
+import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
 
 
 
@@ -27,11 +28,25 @@ export const EditSections = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {activeSection, sections} = useSelector(selectMenu);
+  const { activeSection, sections } = useSelector(selectMenu);
   const { isOpen, handleOpen, handleClose } = useModal();
+
+  const [open, setOpen] = useState(null);
 
 
   
+  const handleOpenMenu = (event: any, section: ISection) => {
+    dispatch(setActiveSection(section))
+    setOpen(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+
+
+
   const createSection = () => {
 
     dispatch(resetActiveSection())
@@ -40,7 +55,6 @@ export const EditSections = () => {
   }
 
   const eliminarSeccion = (seccion: ISection) => {
-    dispatch(setActiveSection(seccion))
     handleOpen();
   }
 
@@ -48,10 +62,10 @@ export const EditSections = () => {
     <>
       <Box mb={2} display='flex' justifyContent='space-between' alignItems='center'>
 
-       
+
         <Box>
-        <Typography align='center' variant="h4">Secciones ({sections.length})</Typography>
-        <Typography ></Typography>
+          <Typography align='center' variant="h4">Secciones ({sections.length})</Typography>
+          <Typography ></Typography>
 
         </Box>
 
@@ -73,34 +87,70 @@ export const EditSections = () => {
 
 
 
-     
 
-        <Grid container rowSpacing={1} spacing={1}>
 
-          {
-            sections.length === 0 && (
-              <Typography variant='h6'>Aún no se han ingresado sections</Typography>
-            )
-          }
-          {
-            sections.length > 0 && sections.map(seccion => (
-              <Grid  key={seccion.id} item xs={12} sm={6} lg={4}>
+      <Grid container rowSpacing={1} spacing={1}>
 
-                <Section
-                  seccion={seccion}
-                 
-                  eliminarSeccion={eliminarSeccion}
-                />
-              </Grid>
-            ))
-          }
+        {
+          sections.length === 0 && (
+            <Typography variant='h6'>Aún no se han ingresado sections</Typography>
+          )
+        }
+        {
+          sections.length > 0 && sections.map(seccion => (
+            <Grid key={seccion.id} item xs={12} sm={6} lg={4}>
 
-        </Grid>
-     
+              <Section
+                seccion={seccion}
+                eliminarSeccion={eliminarSeccion}
+                handleOpenMenu={handleOpenMenu}
+              />
+            </Grid>
+          ))
+        }
+
+      </Grid>
+
 
       {
-        activeSection &&
-        <DeleteSection isOpen={isOpen} closeModal={handleClose} />
+        activeSection && <>
+          <DeleteSection isOpen={isOpen} closeModal={handleClose} />
+
+          <Popover
+            open={Boolean(open)}
+            anchorEl={open}
+            onClose={handleCloseMenu}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{
+              sx: {
+                p: 1,
+                width: 140,
+                '& .MuiMenuItem-root': {
+                  px: 1,
+                  typography: 'body2',
+                  borderRadius: 0.75,
+                },
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+
+                navigate(`seccion`);
+                handleCloseMenu();
+              }}
+            >
+              <EditOutlined />
+              Editar
+            </MenuItem>
+
+            {/* <MenuItem sx={{ color: 'error.main' }}>
+              <DeleteOutlined />
+              Eliminar
+            </MenuItem> */}
+          </Popover>
+        </>
       }
 
 

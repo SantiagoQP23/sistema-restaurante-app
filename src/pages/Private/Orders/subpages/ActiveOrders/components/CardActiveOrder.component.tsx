@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box, Button } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box, Button, Stack } from '@mui/material';
 import { IOrder, OrderStatus } from "../../../../../../models"
 import { FC } from "react"
 import { ActiveOrder } from "./ActiveOrder.component"
@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { resetActiveOrder } from '../../../../../../redux';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import { Scrollbar } from '../../../../components';
 
 
 
@@ -14,7 +15,8 @@ interface Props {
   orders: IOrder[],
   title: string,
   color: 'success' | 'error' | 'warning' | 'info' | 'primary' | 'secondary',
-  status?: OrderStatus
+  status?: OrderStatus,
+  alignment?: string
 }
 
 
@@ -22,7 +24,8 @@ export const CardActiveOrder: FC<Props> = ({
   orders,
   title,
   color,
-  status 
+  status,
+  alignment = 'vertical'
 }) => {
 
   const theme = useTheme();
@@ -31,21 +34,17 @@ export const CardActiveOrder: FC<Props> = ({
 
   const navigate = useNavigate();
 
-  const addOrder = () => {
-    dispatch(resetActiveOrder());
-    navigate('add');
-  }
+
 
   return (
     <>
 
       <Card
         sx={{
-          height: '600px',
-          overflowY: 'auto',
-          width: '325px',
-          mr: 2,
-          bgcolor: 'transparent',
+         
+          width: alignment === 'horizontal' ? 'auto' : '325px',
+        
+          // bgcolor: 'transparent',
 
         }}
       >
@@ -58,7 +57,7 @@ export const CardActiveOrder: FC<Props> = ({
               >
                 {title}
               </Label>
-              
+
             </>
           }
 
@@ -67,43 +66,48 @@ export const CardActiveOrder: FC<Props> = ({
           }
 
         />
-        <Divider />
-
-        <Box
-         
-        >
 
 
-          {/* <CardContent> */}
+       
+       
+
+          <Stack
+
+            direction={alignment === 'horizontal' ? 'row' : 'column'}
+
+            // direction='row'
+            sx={{
+
+              height: alignment === 'horizontal' ? 'auto' : '600px',
+              width: alignment === 'horizontal' ? 'auto' : '100%',
+              overflowX: 'auto',
+            
+    
+            }}
+            spacing={1}
+            p={1}
+          >
 
 
-          {
-            orders.length > 0
-            &&
-            orders.map(order => (
-              <>
-                <ActiveOrder key={order.id} order={order} color={color} />
 
-              </>
-            ))
-          }
+            {
+              orders.length > 0
+              &&
+              orders.map(order => (
+                <Box
+                  key={order.id}
+                  sx={{
+                    
+                    minWidth: alignment === 'horizontal' ? '325px' : '100%',
+                  }}
+                >
+                  <ActiveOrder key={order.id} order={order} color={color} />
 
-
-          {/* </CardContent> */}
-
-
-          {/* {
-            status === OrderStatus.PENDING && (
-              <Button
-                startIcon={<AddIcon />}
-                color="primary"
-                onClick={() => addOrder()}
-                fullWidth
-              >Añadir Pedido</Button>
-
-            )
-          } */}
-        </Box>
+                </Box>
+              ))
+            }
+          </Stack>
+     
 
 
       </Card>

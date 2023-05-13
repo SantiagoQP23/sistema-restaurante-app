@@ -17,7 +17,7 @@ import { PrivateRouter } from "./router"
 import { SidebarProvider } from "./contexts/SidebarContext"
 
 import { SnackbarProvider } from 'notistack'
-import { CircularProgress } from "@mui/material"
+import { CircularProgress, IconButton } from "@mui/material"
 import { getTables } from "./Tables/services"
 import { ITable } from '../../models/table.model';
 import { SocketContext } from '../../context/SocketContext';
@@ -25,6 +25,7 @@ import { EventsOnSocket } from './Orders/interfaces/events-sockets.interface';
 import { SocketResponseTable } from './Orders/interfaces/responses-sockets.interface';
 import { selectAuth } from '../../redux/slices/auth/auth.slice';
 import { OrderProvider } from "./Orders/context/Order.context"
+import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 
 
 export const Private = () => {
@@ -85,6 +86,11 @@ export const Private = () => {
       maxSnack={3}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       autoHideDuration={3000}
+    // action={(key) => (
+    //   <IconButton onClick={() => { console.log('dismissed'); }}>
+    //     <CloseTwoToneIcon />
+    //   </IconButton>
+    // )}
 
     >
       <OrderProvider>

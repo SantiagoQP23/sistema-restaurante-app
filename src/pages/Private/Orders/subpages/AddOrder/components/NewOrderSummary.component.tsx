@@ -132,10 +132,9 @@ export const NewOrderSummary = () => {
     createOrder(order)
 
 
-
-
-
   }
+
+  console.log(client);
 
   const editClient = () => {
     statusModalClientOrder.setSubject({ value: true });

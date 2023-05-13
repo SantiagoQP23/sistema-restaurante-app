@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import { es } from "date-fns/locale";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -42,7 +42,10 @@ export const Clock = () => {
           <Typography variant="body1" >
 
             {
-              format(new Date(lastUpdatedOrders), 'HH:mm:ss')
+              'Hace ' + formatDistance(new Date(lastUpdatedOrders), new Date(),{
+                locale: es,
+                
+              })
             }
           </Typography>
         </ Stack>

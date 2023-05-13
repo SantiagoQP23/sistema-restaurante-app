@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Material UI
-import { Typography, Box, Grid, Button, MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider } from '@mui/material/'
+import { Typography, Box, Grid, Button, MenuItem, Select, SelectChangeEvent, CardHeader, Card, CardContent, Divider, Popover } from '@mui/material/';
 
 // Iconos
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -20,6 +20,7 @@ import { useModal } from '../../../../../hooks';
 import { DeleteCategory } from './DeleteCategory.component';
 
 import { resetActiveCategory, selectMenu, setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection } from '../../../../../redux';
+import { EditOutlined } from '@mui/icons-material';
 
 export function EditCategories() {
 
@@ -30,6 +31,18 @@ export function EditCategories() {
   const { sections, activeSection, activeCategory } = useSelector(selectMenu);
 
 
+  const [open, setOpen] = useState(null);
+
+
+
+  const handleOpenMenu = (event: any, category: ICategory) => {
+    dispatch(setActiveCategory(category))
+    setOpen(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
 
 
   const { isOpen, handleOpen, handleClose } = useModal();
@@ -57,6 +70,20 @@ export function EditCategories() {
     changeSection(e.target.value)
   }
 
+
+  const editarCategoria = () => {
+
+    if (activeCategory!.products.length > 0) {
+      dispatch(setActiveProducts(activeCategory!.products))
+    }
+    else {
+      dispatch(setActiveProducts([]))
+
+    }
+
+
+    navigate('../category');
+  }
 
   const changeSection = (sectionId: string) => {
     const section = sections.find(s => s.id === sectionId);
@@ -172,6 +199,7 @@ export function EditCategories() {
 
                   categoria={categoria}
                   eliminarCategoria={eliminarCategoria}
+                  handleOpenMenu={handleOpenMenu}
                 />
               </Grid>
 
@@ -187,7 +215,44 @@ export function EditCategories() {
 
       {
         activeCategory &&
-        <DeleteCategory isOpen={isOpen} closeModal={handleClose} />
+        <>
+          <Popover
+            open={Boolean(open)}
+            anchorEl={open}
+            onClose={handleCloseMenu}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{
+              sx: {
+                p: 1,
+                width: 140,
+                '& .MuiMenuItem-root': {
+                  px: 1,
+                  typography: 'body2',
+                  borderRadius: 0.75,
+                },
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+
+               editarCategoria();
+                handleCloseMenu();
+              }}
+            >
+              <EditOutlined />
+              Editar
+            </MenuItem>
+
+            {/* <MenuItem sx={{ color: 'error.main' }}>
+              <DeleteOutlined />
+              Eliminar
+            </MenuItem> */}
+          </Popover>
+
+          <DeleteCategory isOpen={isOpen} closeModal={handleClose} />
+        </>
       }
 
 

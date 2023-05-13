@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Card, CardContent, Typography, Box, Button, CardActions, IconButton, Tooltip, CardHeader, CardActionArea } from '@mui/material';
 
-import { EditOutlined, DeleteOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
+import { EditOutlined, DeleteOutlined, ToggleOff, ToggleOn, MoreHorizOutlined } from '@mui/icons-material';
 import { ISection } from '../../../../../models';
 
 import { setActiveCategories, setActiveCategory, setActiveProducts, setActiveSection, updateSection } from '../../../../../redux';
@@ -17,11 +17,11 @@ import { updateSection as updateSectionS } from '../../services/sections.service
 interface Props {
   seccion: ISection,
   eliminarSeccion: (seccion: ISection) => void;
-  editarSeccion?: (seccion: ISection) => void;
+  handleOpenMenu: (event: any, seccion: ISection) => void;
 }
 
 
-export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
+export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu }) => {
 
   const navigate = useNavigate();
 
@@ -50,11 +50,6 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
       dispatch(setActiveProducts([]))
     }
-
-
-
-
-
 
     navigate(`seccion`);
   }
@@ -85,43 +80,53 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
 
       >
         <CardActionArea
-         onClick={() => editarCategorias()}
+          onClick={() => editarCategorias()}
         >
 
           <CardHeader
             title={seccion.name}
             subheader={`Categorías: ${seccion.categories.length}`}
             action={
-              <Switch checked={seccion.isActive} 
-              onClick={(e) => {
-                e.stopPropagation();
-                changeStatusSection(seccion)
 
-              }} 
-              color={seccion.isActive ? 'success' : 'warning'} 
-              />
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleOpenMenu(e, seccion)
+                }}
+              >
+                <MoreHorizOutlined />
+              </IconButton>
+              // <Switch checked={seccion.isActive}
+              //   onClick={(e) => {
+              //     e.stopPropagation();
+              //     changeStatusSection(seccion)
 
-              // <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
+              //   }}
+              //   color={seccion.isActive ? 'success' : 'warning'}
+              // />
+
             }
           />
 
 
 
-        <CardActions sx={{ display: 'flex', justifyContent: 'right' }}>
-          <Box >
-            <Button
-              size='small'
-              onClick={
-                (e) => {
-                  e.stopPropagation();
-                  editarSeccion()
+          <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
+            {/* <Box >
+              <Button
+                size='small'
+                onClick={
+                  (e) => {
+                    e.stopPropagation();
+                    editarSeccion()
+                  }
                 }
-              }
-            >
-              Editar
-            </Button>
-          </Box>
-          {/* <Box >
+              >
+                Editar
+              </Button>
+            </Box>
+               */}
+            {/* <Box >
             <Tooltip title='Editar' >
               <IconButton color='primary'
                 onClick={(e) => {
@@ -139,7 +144,7 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion }) => {
           </Box> */}
             {/* <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} /> */}
 
-        </CardActions>
+          </CardActions>
         </CardActionArea>
 
 

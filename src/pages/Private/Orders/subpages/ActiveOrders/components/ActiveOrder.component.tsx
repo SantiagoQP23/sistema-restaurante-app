@@ -156,21 +156,16 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   return (
     <>
 
-      <Box
-        sx={{
-          mb: 1
-        }}
-      >
-
+    
 
         <Card
 
-          // sx={{
+          sx={{
 
-          //   borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
-          //   borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
-          //   border: (theme) => `1px solid ${theme.palette[color].main}`,
-          // }}
+            // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
+            // borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
+            border: (theme) => `1px solid ${theme.palette[color].main}`,
+          }}
           variant='elevation'
 
         >
@@ -253,18 +248,19 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
           >
 
             {
+              details.filter(detail => detail.quantity !== detail.qtyDelivered)
+                .map(detail => (
+
+                  <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+
+                ))
+
+            }
+            
+            {/* {
               order.status === OrderStatus.IN_PROGRESS || order.status === OrderStatus.DELIVERED
                 ?
                 <>
-                  {
-                    details.filter(detail => detail.quantity !== detail.qtyDelivered)
-                      .map(detail => (
-
-                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
-
-                      ))
-
-                  }
                 
                 </>
 
@@ -275,7 +271,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                   </Grid>
                 )
                 )
-            }
+            } */}
 
             {
               details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
@@ -387,7 +383,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
 
         </Card>
-      </Box>
+   
 
 
     </>

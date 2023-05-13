@@ -29,30 +29,6 @@ export const MenuAddProduct = () => {
 
   const { sections, activeSection } = useSelector(selectMenu);
 
-  const listProducts = getProducts(sections);
-
-  const [nameProduct, setNameProduct] = useState('');
-
-  const [products, setProducts] = useState<IProduct[]>([]);
-
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameProduct(event.target.value);
-
-    setProducts(findProductsByName(nameProduct, listProducts));
-
-
-  };
-
-  const searchProduct = () => {
-    setProducts(findProductsByName(nameProduct, listProducts));
-  }
-
-  const searchingProduct = () => {
-    return nameProduct.length > 0;
-  }
-
-
   return (
     <>
       <Box
@@ -97,11 +73,7 @@ export const MenuAddProduct = () => {
 
         <Grid item xs={12} mb={1}>
 
-          {
-            searchingProduct()
-              ? <ListProducts products={products} />
-              : <AllMenu />
-          }
+               <AllMenu />
 
         </Grid>
       </Grid>
@@ -115,38 +87,19 @@ export const Menu = () => {
 
   const { sections } = useSelector(selectMenu);
 
+  const { getTotalProducts, client} = useContext(OrderContext);
+  
+  console.log('menu', client)
 
 
-  const [nameProduct, setNameProduct] = useState('');
-
-  const [products, setProducts] = useState<IProduct[]>([]);
-
-  const listProducts = getProducts(sections);
 
   const dispatch = useDispatch();
 
-  const { getTotalProducts } = useContext(OrderContext);
 
   const navigate = useNavigate();
 
   const totalProducts = getTotalProducts();
 
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameProduct(event.target.value);
-
-    setProducts(findProductsByName(nameProduct, listProducts));
-
-
-  };
-
-  const searchProduct = () => {
-    setProducts(findProductsByName(nameProduct, listProducts));
-  }
-
-  const searchingProduct = () => {
-    return nameProduct.length > 0;
-  }
 
   useEffect(() => {
     dispatch(setActiveSection(sections[0]));

@@ -56,12 +56,14 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
             p: 0.5,
             px: 0.5,
             borderRadius: `5px`,
+            bgcolor: `${theme.colors.alpha.black[5]}`,
 
             '&:hover': {
               bgcolor: `${theme.colors.alpha.black[10]}`,
               cursor: 'pointer'
 
             }
+            
 
 
 
@@ -89,11 +91,14 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
           
        
           </Box>
-          <LinearProgressWrapper
+          {
+
+          detail.quantity > 1 && <LinearProgressWrapper
             value={(detail.qtyDelivered * 100) / detail.quantity}
             color="primary"
             variant="determinate"
           />
+          }
 
 
         </Box>

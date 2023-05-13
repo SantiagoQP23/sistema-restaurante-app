@@ -32,6 +32,7 @@ import { Checkbox } from '@mui/material/';
 import { TablePagination, IconButton } from '@mui/material';
 import { TabsOrderStatus } from './components/TabsOrderStatus.component';
 import { LabelStatusOrder } from './components/LabelStatusOrder.component';
+import { usePagination } from '../../../../../hooks/usePagination';
 
 
 // function applySortFilter(array: IOrder[], comparator, query) {
@@ -61,7 +62,10 @@ const filterOrders = (orders: IOrder[], waiter: string, status: string): IOrder[
 
     if (status === 'unpaid') {
       ordersF = ordersF.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)
-    } else {
+    } else if (status === OrderStatus.DELIVERED ) {
+      ordersF = ordersF.filter(order => order.status === OrderStatus.DELIVERED && order.isPaid)
+    }
+     else {
       const orderStatus = status as OrderStatus;
       ordersF = ordersF.filter(order => order.status === orderStatus)
     }
@@ -83,24 +87,25 @@ export const ListOrders = () => {
   const { user } = useSelector(selectAuth);
   const { orders, activeOrder } = useSelector(selectOrders);
 
+  
   const [open, setOpen] = useState(null);
 
-  const [page, setPage] = useState(0);
 
   const [statusOrderFilter, setStatusOrderFilter] = useState<string>('all');
-
+  
   const [selected, setSelected] = useState<string[]>([]);
 
   const [filterWaiter, setFilterWaiter] = useState(user?.id || 'all');
-
-
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  
+  const filteredOrders = filterOrders(orders, filterWaiter, statusOrderFilter);
+  
+  const {page, handleChangePage, handleChangeRowsPerPage, rowsPerPage, paginatedList, resetPage} = usePagination<IOrder>(filteredOrders);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const theme = useTheme();
-
+  
   const { callEndpoint, loading } = useFetchAndLoad();
 
 
@@ -118,22 +123,14 @@ export const ListOrders = () => {
     navigate('add');
   }
 
-  const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
 
   const changeWaiter = (waiter: string) => {
-    setPage(0);
+    resetPage();
     setFilterWaiter(waiter);
   }
 
   const changeStatus = (event: React.SyntheticEvent, newValue: string) => {
-    setPage(0);
+    resetPage();
     setStatusOrderFilter(newValue);
   }
 
@@ -150,7 +147,6 @@ export const ListOrders = () => {
       })
   }
 
-  const filteredOrders = filterOrders(orders, filterWaiter, statusOrderFilter);
 
   return (
 
@@ -237,7 +233,7 @@ export const ListOrders = () => {
 
 
                 {
-                  filteredOrders.length === 0 && (
+                  paginatedList.length === 0 && (
                     <TableRow
 
                     >
@@ -253,7 +249,7 @@ export const ListOrders = () => {
                 }
 
                 {
-                  filteredOrders.map((order) => (
+                  paginatedList.map((order) => (
                     <TableRow
                       hover
                       key={order.id}
@@ -319,7 +315,7 @@ export const ListOrders = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={filteredOrders.length}
+            count={orders.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
