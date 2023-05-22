@@ -13,6 +13,7 @@ import { estimateStaff } from '../../helpers/estimate-staff.helper';
 import { Bar } from 'react-chartjs-2';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PdfStaffPlaning } from './PdfStaffPlaning.component';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 export const StaffPlaning = () => {
@@ -112,17 +113,14 @@ export const StaffPlaning = () => {
   return (
 
     <>
+
+      <TitlePage 
+        title="Planificación del personal"
+
+        />
+
       <Box display='flex' justifyContent='space-between' alignItems='center' sx={{pb: 2}}>
-        <Box display='flex'>
-          <Button onClick={() => { navigate('/reports') }}>
-            <ArrowBack />
-          </Button>
-
-          <Typography variant="h3" >Planificación del personal</Typography>
-
-
-
-        </Box>
+       
 
         <Box>
           <Stack direction="row" spacing={2}>

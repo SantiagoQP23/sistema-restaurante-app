@@ -38,6 +38,13 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/clients': 'Clientes',
   '/clients/edit': 'Editar',
   '/clients/add': 'Nuevo cliente',
+  
+  '/reports': 'Dashboard',
+  '/reports/products': 'Productos',
+  '/reports/incomes': 'Ingresos',
+  '/reports/prediction': 'Predicción de afluencia',
+  '/reports/simulation': 'Simulación de afluencia',
+  '/reports/staff-planning': 'Planificación de personal',
 
 };
 

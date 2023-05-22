@@ -13,7 +13,8 @@ import {
   Popover,
   Typography,
   ListItemButton,
-  ListItemIcon
+  ListItemIcon,
+  ListItemSecondaryAction
 } from '@mui/material';
 
 import { grey } from '@mui/material/colors';
@@ -35,6 +36,7 @@ import { Circle } from '@mui/icons-material';
 import { useSocket } from '../../../../../../hooks/useSocket';
 import { SocketContext } from '../../../../../../context/SocketContext';
 import { ValidRoles } from '../../../../router';
+import { Label } from '../../../../../../components/ui';
 
 
 const UserBoxButton = styled(Button)(
@@ -81,7 +83,7 @@ export const Userbox = () => {
 
   const user =
   {
-    name: userState?.person.firstName! + " " + userState?.person.lastName!,
+    name: userState?.username!,
     avatar: '/static/images/avatars/2.jpg',
     jobtitle: Roles[`${userState?.role.name! as ValidRoles}`]
   };
@@ -111,7 +113,7 @@ export const Userbox = () => {
 
         <UserBoxText>
 
-          <UserBoxLabel variant="body1"> <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} /> {user.name}</UserBoxLabel>
+          <UserBoxLabel variant="body1">  {user.name} <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} /></UserBoxLabel>
           <UserBoxDescription variant="body2">
             {user.jobtitle}
           </UserBoxDescription>
@@ -151,11 +153,14 @@ export const Userbox = () => {
               to="/users/account"
               component={NavLink}
             >
-              <ListItemIcon>
+              {/* <ListItemIcon>
                 <AccountBoxTwoToneIcon fontSize="small" />
 
-              </ListItemIcon>
+              </ListItemIcon> */}
               <ListItemText primary="Mi perfil" />
+              <ListItemSecondaryAction>
+                <Label color="info">Nuevo</Label>
+              </ListItemSecondaryAction>
             </ListItemButton>
 
 
@@ -163,11 +168,13 @@ export const Userbox = () => {
               onClick={() => !online && conectarSocket()}
             >
 
-              <ListItemIcon>
-                <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
-                </ListItemIcon>
 
               <ListItemText primary={online ? 'Conectado' : 'Conectar'} />
+
+              <ListItemSecondaryAction>
+                <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
+                </ListItemSecondaryAction>
+
 
 
             </ListItemButton>

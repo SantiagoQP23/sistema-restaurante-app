@@ -21,6 +21,7 @@ import { Holiday } from '../AffluenceSimulator/models/holiday.model';
 import { SimulationContext } from '../../context/SimulationContext';
 import { HolidaysRules } from '../AffluenceSimulator/SimulatorForms/HolidaysRules.component';
 import { ModalHoliday } from '../AffluenceSimulator/SimulatorForms/ModalHoliday.component';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 // interface PdfAffluencePredictionType {
 //   print: () => void;
@@ -194,16 +195,8 @@ export const AffluencePrediction = () => {
   return (
     <>
 
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Box sx={{ display: 'flex', }}>
-          <Button onClick={() => { navigate('/reports') }}>
-            <ArrowBack />
-          </Button>
-          <Typography variant="h3">Predicción de afluencia</Typography>
-
-        </Box>
-
-        <Box>
+    <TitlePage title="Predicción de afluencia" 
+      action={
           <Stack direction="row" spacing={2}>
 
             <LoadingButton loading={loading} variant="contained" onClick={submitUpdateWeather}>
@@ -229,9 +222,9 @@ export const AffluencePrediction = () => {
               </PDFDownloadLink>}
 
           </Stack>
-        </Box>
+      }
 
-      </Grid>
+    />
 
 
 

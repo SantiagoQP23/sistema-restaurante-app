@@ -19,10 +19,11 @@ import {
 
 import SidebarMenu from './SidebarMenu/SidebarMenu.component';
 import { LogoSign, Scrollbar } from '../../../components';
-import { ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { ToggleButtonGroup, ToggleButton, Card } from '@mui/material';
 import { DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
 import Userbox from '../Header/components/Userbox.component';
+import { useNavigate } from 'react-router-dom';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -62,13 +63,53 @@ const Title = () => {
 }
 
 
+export const BoxUser = ({onClick}: {onClick: () => void}) => {
+
+  const theme = useTheme();
+
+
+  return (
+    <Box
+    color='inherit'
+    onClick={onClick}
+ 
+    sx={{
+      mx: 1,
+      borderRadius: 1,
+      border: '1px solid',
+      padding: 1,
+      borderColor: theme.colors.alpha.trueWhite[10],
+      color: theme.colors.alpha.trueWhite[70],
+      '&:hover': {
+        borderColor: theme.colors.alpha.trueWhite[50],
+        color: theme.colors.alpha.trueWhite[50],
+        cursor: 'pointer'
+      }
+
+    }}
+
+  >
+    <Typography variant='h6' textAlign='center' >Santiago Quirumbay</Typography>
+    <Typography variant='body1' textAlign='center'>Administrador</Typography>
+  </Box>
+  )
+}
+
+
 
 function Sidebar() {
-  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+  const { sidebarToggle, toggleSidebar, closeSidebar } = useContext(SidebarContext);
+
+  const navigate = useNavigate();
 
 
-  const closeSidebar = () => toggleSidebar();
+  
   const theme = useTheme();
+
+  const navigateAccount = () => {
+    navigate('/users/account');
+    closeSidebar();
+  }
 
 
   return (
@@ -96,6 +137,8 @@ function Sidebar() {
           <Box mx={2} my={1}>
 
 
+
+
             {/* <Box
               mx={2}
               sx={{
@@ -108,6 +151,9 @@ function Sidebar() {
             <Title />
 
           </Box>
+
+          <BoxUser onClick={navigateAccount} />
+
           {/* <Divider
             sx={{
               mt: theme.spacing(3),
@@ -184,9 +230,7 @@ function Sidebar() {
               }}
             /> */}
 
-            <Button>
-              Santigo Quirumbay
-            </Button>
+            <BoxUser onClick={navigateAccount} />
 
             <SidebarMenu />
 

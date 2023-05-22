@@ -86,8 +86,15 @@ export const getIncomes = () => {
 
   return {
     call: restauranteApi.get<DateIncome>(`/orders/incomes/`,
-      { signal: controller.signal }),
-    controller
+      { signal: controller.signal,
+        params: {
+
+          period: Period.TODAY,
+        }
+
+         }),
+    controller,
+    
   }
 
 }
@@ -98,7 +105,11 @@ export const getOrdersEachDate = () => {
 
   return {
     call: restauranteApi.get<DateOrders>(`/orders/qty-each-date/`,
-      { signal: controller.signal }),
+      { signal: controller.signal,
+        params: {
+          period: Period.TODAY,
+        }
+      }),
     controller
   }
 

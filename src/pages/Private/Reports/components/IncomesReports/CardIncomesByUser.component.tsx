@@ -147,8 +147,7 @@ export const CardIncomesByUser = () => {
 
               </ListItemAvatar> */}
               <ListItemText
-                primary={data.user.person.firstName}
-                secondary={`Total ingreso: $${data.total}`}
+                primary={data.user.person.firstName + ' ' + data.user.person.lastName}
 
                 primaryTypographyProps={
                   {
@@ -161,10 +160,7 @@ export const CardIncomesByUser = () => {
                 // }}
               />
               <ListItemSecondaryAction>
-                <IconButton
-                >
-                  <EditOutlined />
-                </IconButton>
+              <Typography variant='h4'>${data.total}</Typography>
               </ListItemSecondaryAction>
 
             </ListItem>
@@ -173,7 +169,7 @@ export const CardIncomesByUser = () => {
 
       </List>
 
-      <Divider />
+     
 
 
       <CardActions

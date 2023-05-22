@@ -26,7 +26,7 @@ export const ButtonTheme = () => {
      
     >
       {
-        curThemeName === 'PureLightTheme' ? <LightMode  /> : <DarkMode />
+        curThemeName === 'PureLightTheme' ? <DarkMode  /> : <LightMode />
       }
 
     </IconButton>

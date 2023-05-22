@@ -73,7 +73,7 @@ function Header() {
         {/* <Typography variant='h3'>Restaurante Doña Yoli</Typography> */}
         <HeaderMenu />
       </Stack>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" justifyContent='space-between'>
         <HeaderButtons />
         <HeaderUserbox />
         <Box

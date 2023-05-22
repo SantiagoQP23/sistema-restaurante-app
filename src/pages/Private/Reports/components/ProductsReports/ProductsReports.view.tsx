@@ -2,7 +2,7 @@ import {
   Typography, Select, MenuItem, TextField, Stack,
   Box, InputLabel, FormControl, Card, CardContent, List, ListItem,
   ListItemText, CardHeader, Button, ListItemAvatar, Avatar,
-  ListItemSecondaryAction, IconButton, Divider, Grid, CardActions, TablePagination, CircularProgress, Checkbox
+  IconButton, Divider, Grid, CardActions, TablePagination, CircularProgress, Checkbox
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { SelectChangeEvent } from '@mui/material/';
@@ -15,7 +15,8 @@ import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
 import { useSelector } from 'react-redux';
 import { selectMenu } from '../../../../../redux';
 import { getProducts } from '../../../../../helpers/menu.helper';
-import { FormControlLabel } from '@mui/material';
+import { FormControlLabel, ListItemButton, ListItemSecondaryAction } from '@mui/material';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 
@@ -38,7 +39,7 @@ export const ProductsReports = () => {
     return getBestSellingProducts({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
   })
 
-  
+
 
   const handleSubmit = () => {
 
@@ -52,6 +53,10 @@ export const ProductsReports = () => {
 
   return (
     <>
+
+      <TitlePage
+        title='Productos'
+      />
 
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
@@ -126,7 +131,7 @@ export const ProductsReports = () => {
             }
           </>
 
-          }
+        }
 
       </Stack>
 
@@ -143,22 +148,22 @@ export const ProductsReports = () => {
         <List>
           {
             data && data.products?.map((product, index) => (
-              <ListItem>
-                <ListItemAvatar
+              <ListItemButton>
+
+                <ListItemAvatar>
+                  <Typography variant='h4'>{index + (page * rowsPerPage) + 1}</Typography>
+                </ListItemAvatar>
+
+                <ListItemText primary={product.name} />
+                <ListItemSecondaryAction
 
                 >
                   <Typography variant='h4'>{product.totalSold}</Typography>
 
-                </ListItemAvatar>
-                <ListItemText primary={product.name} secondary={`Puesto: ${index + (page * rowsPerPage ) + 1}`} />
-                {/* <ListItemSecondaryAction>
-                  <IconButton
-                  >
-                    <EditOutlined />
-                  </IconButton>
-                </ListItemSecondaryAction> */}
+                </ListItemSecondaryAction>
 
-              </ListItem>
+
+              </ListItemButton>
             ))
           }
 

@@ -32,6 +32,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { PdfAffluenceSimulation } from "./pdf/PdfAffluenceSimulation.component";
+import { TitlePage } from "../../../components/TitlePage.component";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler, Tooltip, Legend, BarElement)
 
@@ -205,20 +206,18 @@ export const AffluenceSimulation = () => {
   return (
     <>
 
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Box display='flex' alignItems='center'>
-          <Button onClick={() => { navigate('/reports') }}>
-            <ArrowBack />
-          </Button>
 
-          <Typography variant="h4">Simulación de afluencia {year}</Typography>
-
-
-        </Box>
-
+      <TitlePage 
+      title='Simulación de afluencia' 
+      action={
         <LoadingButton loading={loading} variant="contained" onClick={() => navigate('/reports/simulator')}>
           Parámetros de simulación
         </LoadingButton>
+
+      }
+
+      />
+    
         {
           // days.length > 0 &&
 
@@ -238,7 +237,6 @@ export const AffluenceSimulation = () => {
 
 
 
-      </Grid>
 
 
 

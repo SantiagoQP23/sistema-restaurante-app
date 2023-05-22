@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, Button, Stack, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Stack, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography, ListItemButton } from '@mui/material';
 import { CardActions } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import { NavLink as RouterLink } from 'react-router-dom';
@@ -25,14 +25,14 @@ export const BestSellingProductsSummary = () => {
 
         {
           data && data.products?.map((product, index) => (
-            <ListItem>
-              <ListItemAvatar
+            <ListItemButton>
+              <ListItemText primary={product.name}  />
+              <ListItemSecondaryAction
 
               >
                 <Typography variant='h4'>{product.totalSold}</Typography>
 
-              </ListItemAvatar>
-              <ListItemText primary={product.name} />
+              </ListItemSecondaryAction>
 
               {/* <ListItemSecondaryAction>
                 <IconButton
@@ -41,7 +41,7 @@ export const BestSellingProductsSummary = () => {
                 </IconButton>
               </ListItemSecondaryAction> */}
 
-            </ListItem>
+            </ListItemButton>
           ))
         }
 

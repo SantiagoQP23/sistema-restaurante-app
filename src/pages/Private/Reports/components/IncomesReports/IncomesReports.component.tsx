@@ -21,6 +21,7 @@ import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useQuery } from '@tanstack/react-query';
 import { Period } from '../../../../../models/period.model';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 export const IncomesReports = () => {
@@ -81,43 +82,24 @@ export const IncomesReports = () => {
 
   return (
     <>
-      <Grid container display='flex' justifyContent='space-between' mb={2} alignItems='center'>
-        <Box sx={{ display: 'flex', }}>
-          <Button onClick={() => { navigate('/reports') }}>
-            <ArrowBack />
-          </Button>
-          <Typography variant="h3">Ingresos</Typography>
 
-        </Box>
+      <TitlePage
 
-        <Box>
+        title="Ingresos"
+        action={
+          <PDFDownloadLink
+            document={<PDFIncomesReports dates={data || []} />}
+            fileName="reporte-ingresos.pdf"
+          >
+            <Button variant="contained" >
+              Descargar PDF
+            </Button>
 
-          <Stack direction="row" spacing={2}>
-            <PDFDownloadLink
-              document={<PDFIncomesReports dates={data || []} />}
-              fileName="reporte-ingresos.pdf"
-            >
-              <Button variant="contained" >
-                Descargar PDF
-              </Button>
+          </PDFDownloadLink>
 
-            </PDFDownloadLink>
-          </Stack>
-
-          {/*
-
-           
-            <LoadingButton variant="contained" loading={loading} >
-              Actualizar Predicción
-            </LoadingButton>
-
-            
-
-           */}
-        </Box>
-
-
-      </Grid>
+        }
+      />
+      
 
       <Grid container spacing={1}>
 

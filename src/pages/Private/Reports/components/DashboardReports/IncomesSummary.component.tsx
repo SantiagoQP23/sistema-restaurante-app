@@ -38,7 +38,7 @@ export const IncomesSummary = () => {
         <CardHeader
           avatar={<Paid color='success' sx={{ fontSize: 40 }} />}
           title={
-            <Typography variant="h4" >Ingresos</Typography>
+            <Typography variant="h4" >Ingresos del día</Typography>
           }
         />
 

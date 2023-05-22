@@ -17,7 +17,7 @@ const colorStatusOrderMap: {
 
 const textStatusOrderMap: { [key: string]: string } = {
   'PENDING': 'Pendiente',
-  'IN_PROGRESS': 'En proceso',
+  'IN_PROGRESS': 'En preparación',
   'unpaid': 'Por pagar',
   'DELIVERED': 'Pagado',
   'CANCELLED': 'Cancelado',

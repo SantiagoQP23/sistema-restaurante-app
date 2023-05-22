@@ -9,12 +9,16 @@ import { IncomesSummary } from './IncomesSummary.component';
 import { SimulatorAffluenceSummary } from './SimulatorAffluenceSummary.component';
 import { PredictionAffluenceSummary } from './PredictionAffluenceSummary.component';
 import { BestSellingProductsSummary } from './BestSellingProductsSummary.component';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 export const DashboardReports = () => {
   return (
     <>
-      <Typography variant="h4" >Dashboard</Typography>
+    
+      <TitlePage 
+      title='Dashboard'
+      />
 
       <Grid container spacing={1} my={1}>
 

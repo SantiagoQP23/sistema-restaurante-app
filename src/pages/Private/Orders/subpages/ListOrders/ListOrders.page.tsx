@@ -310,12 +310,10 @@ export const ListOrders = () => {
 
           </TableContainer>
 
-
-
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={paginatedList.length}
+            count={filteredOrders.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
