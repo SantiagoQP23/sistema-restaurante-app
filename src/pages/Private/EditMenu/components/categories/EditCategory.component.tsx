@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
 
-import {  TextField,  Button, Select, MenuItem, Typography, InputLabel, Grid } from '@mui/material/';
+import { TextField, Button, Select, MenuItem, Typography, InputLabel, Grid, CardHeader, CardContent } from '@mui/material/';
 // MOdal
 
 import { Controller, useForm } from 'react-hook-form';
@@ -16,11 +16,12 @@ import { useAppDispatch, useFetchAndLoad } from '../../../../../hooks';
 import {
   createCategory,
   updateCategory as updateCategoryS
-} from '../../services/sections.service';
+} from '../../services/menu.service';
 import { ArrowBack } from '@mui/icons-material';
 import { addCategory, updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { resetActiveCategory, selectMenu, setActiveCategory } from '../../../../../redux';
-import { Container } from '@mui/material';
+import { Container, FormControl, Card } from '@mui/material';
+import { useCreateCategory, useUpdateCategory } from '../../hooks/useCategories';
 
 
 
@@ -46,11 +47,7 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   const { activeCategory, activeSection, sections } = useSelector(selectMenu);
 
-  const { enqueueSnackbar } = useSnackbar();
 
-
-
-  const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad()
 
   let category: ICreateCategory;
 
@@ -69,56 +66,29 @@ export const EditCategory: FC<Props> = ({ }) => {
 
   });
 
+  const updateCategoryMutation = useUpdateCategory();
+
+  const createCategoryMutation = useCreateCategory();
 
   async function onSubmit(form: ICreateCategory) {
 
     if (activeCategory) {
 
-      await callEndpoint(updateCategoryS(activeCategory.id, form))
-        .then((resp) => {
-          const { data } = resp;
-
-          dispatch(updateCategory(data.category));
-          dispatch(setActiveCategory({ ...activeCategory, ...data.category }))
-          enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
-
-        })
-        .catch((err) => {
-          console.log(err)
-          enqueueSnackbar('Ya existe', { variant: 'error' })
-
+      updateCategoryMutation.mutateAsync({ ...form, id: activeCategory.id })
+        .then((data) => {
+          dispatch(updateCategory(data));
+          dispatch(setActiveCategory({ ...activeCategory, ...data }))
         });
 
     } else {
 
-     
-
-      await callEndpoint(createCategory(form))
-        .then((resp) => {
-          const { data } = resp;
-
-          dispatch(addCategory(data.category))
-          dispatch(setActiveCategory({ ...data.category, products: [] }))
-
-          enqueueSnackbar('La categoría ha sido añadida', { variant: 'success' })
-
-        })
-        .catch((err) => {
-          console.log(err);
-          enqueueSnackbar('No se pudo crear la categoria', { variant: 'error' })
-
+      createCategoryMutation.mutateAsync(form)
+        .then((data) => {
+          dispatch(addCategory(data));
+          dispatch(setActiveCategory({ ...data, products: [] }))
         });
     }
 
-  
-
-  }
-
-
-
-  const cancel = () => {
-    cancelEndpoint();
-    dispatch(resetActiveCategory());
   }
 
 
@@ -137,103 +107,110 @@ export const EditCategory: FC<Props> = ({ }) => {
           </Grid>
 
         </Grid>
-        <form onSubmit={handleSubmit(onSubmit)}>
 
 
+        <Card >
 
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Nombre de la Categoria"
-            type="text"
-            fullWidth
-            {
-            ...register('name', {
-              required: 'Este campo es requerido',
-              minLength: { value: 2, message: 'Minimo 2 caracteres' }
-            })
-            }
-            error={!!errors.name}
-            helperText={<Typography variant="body1" color="red">{errors.name?.message}</Typography>}
-
-
+          <CardHeader
+            title='Datos de la Categoria'
           />
 
-          {/*   <TextField
-          id="descripcion-seccion"
-          label="Descripcion de la Categoria"
-          margin="dense"
+          <CardContent sx={{ my: 0, py: 0 }}>
 
-          multiline
-          rows={4}
-          defaultValue=""
-          fullWidth
-
-        /> */}
-
-          <Controller
-            name='sectionId'
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) =>
-              <>
-                <InputLabel id='select-seccion'>Seccion</InputLabel>
-                <Select
-                  labelId="select-seccion"
-
-                  label="Seccion"
-                  fullWidth
-                  margin='dense'
-                  disabled
-                  
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  error={!!errors.sectionId}
-
-                >
-
-                  {sections.map(seccion => (
-
-                    <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
-                  )
-
-
-                  )
-                  }
-
-                </Select>
-              </>
-            }
-
-          />
+            <form onSubmit={handleSubmit(onSubmit)}>
 
 
 
-
-          <LoadingButton
-            variant='outlined'
-            type='submit'
-            loading={loading}
-          >
-            {activeCategory ? 'Editar' : "Crear"}
-          </LoadingButton>
-
-
-          {
-            loading && <Button
-              color='error'
-              variant='outlined'
-              onClick={() => cancelEndpoint()}
-            >
-              Cancelar
-            </Button>
-          }
+              <TextField
+                autoFocus
+                margin="dense"
+                label="Nombre de la Categoria"
+                type="text"
+                fullWidth
+                {
+                ...register('name', {
+                  required: 'Este campo es requerido',
+                  minLength: { value: 2, message: 'Minimo 2 caracteres' }
+                })
+                }
+                error={!!errors.name}
+                helperText={<Typography variant="body1" color="red">{errors.name?.message}</Typography>}
 
 
+              />
+
+              {/*   <TextField
+id="descripcion-seccion"
+label="Descripcion de la Categoria"
+margin="dense"
+
+multiline
+rows={4}
+defaultValue=""
+fullWidth
+
+/> */}
+
+              <Controller
+                name='sectionId'
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) =>
+                  <>
+
+                    <FormControl fullWidth >
+
+                      <InputLabel id='select-seccion'>Seccion</InputLabel>
+                      <Select
+                        labelId="select-seccion"
+
+                        label="Seccion"
+
+                        margin='dense'
+                        disabled
+
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={!!errors.sectionId}
+
+                      >
+
+                        {
+                          sections.map(seccion => (
+                            <MenuItem key={seccion!.id} value={seccion.id!}>{seccion.name} </MenuItem>
+                          )
+                          )
+                        }
+
+                      </Select>
+                    </FormControl>
+                  </>
+                }
+
+              />
 
 
 
-        </form>
+
+              <LoadingButton
+                variant='outlined'
+                type='submit'
+                loading={updateCategoryMutation.isLoading || createCategoryMutation.isLoading}
+              >
+                {activeCategory ? 'Editar' : "Crear"}
+              </LoadingButton>
+
+
+
+
+
+
+            </form>
+
+          </CardContent>
+
+        </Card>
+
 
       </Container>
 

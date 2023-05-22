@@ -19,6 +19,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
 import { useUsers } from "../../hooks/useUsers";
 import SearchIcon from '@mui/icons-material/Search';
+import { selectAuth } from "../../../../../redux";
 
 
 
@@ -27,27 +28,24 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
 
   const navigate = useNavigate();
 
-  const { loading, callEndpoint } = useFetchAndLoad();
-
-
-
-
-  const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useDispatch();
+
+  const {user: currentUser} = useSelector(selectAuth);
 
   const theme = useTheme();
 
   const editUser = (user: IUser) => {
     dispatch(setActiveUser(user));
-    navigate('edit')
+
+    if(currentUser!.id === user.id){
+      navigate('/users/account');
+    } else {
+      navigate('edit');
+
+    }
   }
 
-  const deleteUser = () => {
-    statusModalDeleteUser.setSubject(true, user);
 
-
-  }
 
 
 
@@ -205,16 +203,9 @@ export const UsersTable: FC<Props> = ({ }) => {
     handleChangePage,
     handleChangeRowsPerPage
   } = useUsers();
+  
 
   const { users } = useSelector(selectUsers);
-
-
-
-
-
-  const theme = useTheme();
-
-
 
   const [dense, setDense] = useState<boolean>(false);
 

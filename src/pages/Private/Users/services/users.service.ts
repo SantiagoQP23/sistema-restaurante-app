@@ -5,6 +5,7 @@ import { UpdateUserDto, ResetPasswordUserDto } from '../dto/update-user.dto';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { SubjectDeleteUser } from '../helpers/subjects-users.helper';
 import { PaginationDto } from '../../Clients/dto/pagination.dto';
+import { ChangePasswordDto } from '../dto/change-password.dto';
 
 
 export const statusModalDeleteUser = new SubjectDeleteUser();
@@ -63,7 +64,11 @@ export const createUser = async (data: CreateUserDto): Promise<IUser> => {
 
 }
 
+export const changePassword = async (data: ChangePasswordDto): Promise<void> => {
 
+  await restauranteApi.patch(`auth/change-password`, data);
+
+}
 
 
 // export const getUser = (term: string) => {

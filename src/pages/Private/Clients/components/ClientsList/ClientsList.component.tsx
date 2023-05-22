@@ -16,6 +16,7 @@ import { selectClients } from '../../../../../redux/slices/clients/clients.slice
 import { DeleteClient } from '../DeleteClient/DeleteClient.component';
 import { useClient, useClients } from '../../hooks/useClients';
 import { InputSearch } from '../../../../../components/ui';
+import { TitlePage } from '../../../components/TitlePage.component';
 
 
 
@@ -26,7 +27,7 @@ export const ClientsList = () => {
 
   // const { clients } = useSelector(selectClients);
 
- 
+
   const useClientQuery = useClient(identification, false);
 
   const { loading, callEndpoint } = useFetchAndLoad();
@@ -85,30 +86,13 @@ export const ClientsList = () => {
   }
 
 
+
   return (
     <>
 
-      <Grid container justifyContent="space-between" alignItems="center">
-        <Grid item>
-
-          <InputSearch
-
-            handleChange={handleChange}
-            search={searchClient}
-            loading={useClientQuery.isLoading}
-            placeholder='Buscar cliente'
-
-          />
-          {
-            useClientQuery.isFetched && !useClientQuery.data
-            && <Typography sx={{ mt: 2 }} variant='body2' color='error'>No se encontró al cliente</Typography>
-          }
-
-
-        </Grid>
-
-        <Grid item>
-
+      <TitlePage
+        title='Clientes'
+        action={
           <Button
             sx={{ mt: { xs: 2, md: 0 } }}
             variant="contained"
@@ -117,12 +101,12 @@ export const ClientsList = () => {
           >
             Añadir cliente
           </Button>
+        }
+      />
 
-        </Grid>
+     
 
-      </Grid>
-
-      <ClientsTable  clientFound={useClientQuery.data} />
+      <ClientsTable clientFound={useClientQuery.data} />
 
       <DeleteClient />
 

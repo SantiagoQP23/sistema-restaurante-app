@@ -8,7 +8,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { Scrollbar } from '../../../components';
 import { LabelStatus } from '../../../components/LabelStatus.component';
 import { ISection } from '../../../../../models';
-import { updateSection as updateSectionS } from '../../services/sections.service';
+import { updateSection as updateSectionS } from '../../services/menu.service';
 import { useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';

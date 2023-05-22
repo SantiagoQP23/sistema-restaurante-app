@@ -14,7 +14,7 @@ import { Label } from '../../../../../components/ui';
 import Switch from '@mui/material/Switch';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { useSnackbar } from 'notistack';
-import { updateCategory as updateCategoryS } from '../../services/sections.service';
+import { updateCategory as updateCategoryS } from '../../services/menu.service';
 import { updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 import { CardHeader, CardActionArea } from '@mui/material';

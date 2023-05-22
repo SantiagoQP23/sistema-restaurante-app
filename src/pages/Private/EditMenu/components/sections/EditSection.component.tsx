@@ -8,7 +8,7 @@ import {   updateSection, addSection,  selectMenu } from '../../../../../redux';
 import {
   createSection,
   updateSection as updateSectionS
-} from '../../services/sections.service';
+} from '../../services/menu.service';
 
 import { LoadingButton } from '@mui/lab';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +16,7 @@ import { useFetchAndLoad } from '../../../../../hooks';
 import { useSnackbar } from 'notistack';
 import { ArrowBack } from '@mui/icons-material';
 import { CardContent, CardHeader, Container } from '@mui/material';
-
-
+import { useCreateSection, useUpdateSection } from '../../hooks/useSections';
 
 
 export const FormSection = () => {
@@ -35,7 +34,6 @@ export const EditSection = () => {
 
   const dispatch = useDispatch();
 
-  const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
 
   const { activeSection } = useSelector(selectMenu);
 
@@ -48,70 +46,37 @@ export const EditSection = () => {
 
   } else { section = { name: '' } }
 
-
-
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ICreateSection>({
     defaultValues: section,
-
   })
+
+
+  const updateSectionMutation = useUpdateSection();
+
+  const createSectionMutation = useCreateSection();
+
 
   async function onSubmit(form: ICreateSection) {
 
-
     if (activeSection) {
-      await callEndpoint(updateSectionS(activeSection.id, form))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data.section)
 
-          dispatch(updateSection({...data.section, categories: activeSection.categories}))
-          enqueueSnackbar('La sección ha sido actualizada', { variant: 'success' })
+      updateSectionMutation.mutateAsync({...form, id: activeSection.id})
+        .then((data) => {
+          dispatch(updateSection({...data, categories: activeSection.categories}))
 
         })
-        .catch((err) => {
-
-          enqueueSnackbar('Ya existe', { variant: 'error' })
-
-        });
-
+      ;
     } else {
 
-      
-      await callEndpoint(createSection( form))
-      .then((resp) =>{
-        const {data} = resp;
-        console.log(data.section);
-        dispatch(addSection({...data.section, categories: []}))
-        //dispatch(setActiveSection(data.section))
-        enqueueSnackbar('La sección ha sido añadida',{variant: 'success'})
-        
-      })
-      .catch((err)=> {
-        console.log(err)
-        enqueueSnackbar('Ya existe',{variant: 'error'})
-        
-      });
+      createSectionMutation.mutateAsync(form)
+        .then((data) => {
+          dispatch(addSection({...data, categories: []}))
+        })
+      }
 
-      console.log('Crear section')
-    }
-
-
-    /*     if (!form.idSeccion) {
-          dispatch(seccionStartCreated(form as ISeccion));
-        } else {
-          dispatch(seccionStartUpdate(form as ISeccion));
-        } */
 
   }
 
-
-
-  const cancel = () => {
-    console.log('cancelando')
-    cancelEndpoint();
-    //dispatch(resetActiveSection())
-
-  }
 
   return (
     <>
@@ -169,20 +134,10 @@ export const EditSection = () => {
               <LoadingButton
                 variant='outlined'
                 type='submit'
-                loading={loading}
+                loading={updateSectionMutation.isLoading || createSectionMutation.isLoading}
               >
                 {activeSection ? `Editar` : "Crear"}
               </LoadingButton>
-
-              {
-                loading && <Button
-                  color='error'
-                  variant='outlined'
-                  onClick={() => cancelEndpoint()}
-                >
-                  Cancelar
-                </Button>
-              }
 
 
             </form>

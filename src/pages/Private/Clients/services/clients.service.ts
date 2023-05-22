@@ -32,7 +32,11 @@ export const getClients = async (page = 0, limit = 10, term?: string): Promise<{
   params.append('limit', limit.toString());
 
   const { data } = await restauranteApi.get<{clients: IClient[], length: number}>(`clients/`,{
-    params
+    params: {
+      offset: page * limit,
+      limit,
+      term
+  }
   })
 
   return {

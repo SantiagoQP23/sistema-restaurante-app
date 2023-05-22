@@ -1,4 +1,4 @@
-import { Grid, Typography, Button, Container, Card, CardContent, } from '@mui/material';
+import { Grid, Typography, Button, Container, Card, CardContent, Stack, Box, Switch, CardHeader } from '@mui/material';
 
 import { useNavigate, } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
@@ -12,6 +12,9 @@ import { useSnackbar } from 'notistack';
 import { TypeIdentification, CreatePerson } from '../../../../../models/common.model';
 import { FormClient } from '../FormClient.component';
 import { UpdateClientDto } from '../../dto/update-client.dto';
+import { TitlePage } from '../../../components/TitlePage.component';
+import { Label } from '../../../../../components/ui';
+import { useUpdateClient } from '../../hooks/useClients';
 
 
 
@@ -26,7 +29,7 @@ export const EditClient = () => {
 
   }
 
-  const { loading, callEndpoint } = useFetchAndLoad();
+  const updateClientMutation = useUpdateClient();
 
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -37,9 +40,19 @@ export const EditClient = () => {
   // Remove id from objects
   const { id, person, ...restClient } = activeClient!;
 
-  const { id: idI, ...identification } = person.identification;
 
-  const { id: idP, ...restPerson } = person;
+  let identification = {
+    type: TypeIdentification.CEDULA,
+    num: ''
+  };
+
+  if(person.identification){
+    const { id: identificationId, ...rest } = person.identification;
+    identification = { ...rest };
+  }
+
+
+  const { id: personId, ...restPerson } = person;
 
 
   const personN: CreatePerson = { ...restPerson, identification };
@@ -52,81 +65,141 @@ export const EditClient = () => {
 
     const { identification, ...dataClient } = form;
 
-    if (form.address === "") {
-      delete dataClient.address;
+    if (form.address === "") delete dataClient.address;
 
+    if (form.numPhone === "") delete dataClient.numPhone;
+
+    if(form.email === "") delete dataClient.email;
+
+    let clientUpdated: UpdateClientDto = {
+      ...dataClient,
+      id: activeClient!.id,
     }
-
-    if (form.numPhone === "") {
-      delete dataClient.numPhone;
-
-    }
-
-
-    let clientUpdated: UpdateClientDto
 
     if (identification.type === TypeIdentification.CEDULA && identification.num.length === 10
       || identification.type === TypeIdentification.RUC && identification.num.length === 13
     ) {
-
       clientUpdated = {
-        ...dataClient,
-        id: activeClient!.id,
+        ...clientUpdated,
         typeIdentification: identification.type,
         numberIdentification: identification.num
       }
-    } else {
-      clientUpdated = {
-        ...dataClient,
-        id: activeClient!.id,
-      };
     }
 
+    console.log({clientUpdated})
+    
+    updateClientMutation.mutateAsync(clientUpdated)
+      .then((data) => {
+        dispatch(updateClient(data))
+      })
 
-    // await callEndpoint(updateClientS(activeClient!.id, clientUpdated))
-    //   .then((resp) => {
-    //     const { data } = resp;
-    //     dispatch(updateClient(data.client))
-    //     enqueueSnackbar('El cliente ha sido actualizada', { variant: 'success' })
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     enqueueSnackbar('error', { variant: 'error' })
+  }
 
-    //   })
+
+  const submitChangeStatus = async () => {
+
+    const updateClientDto: UpdateClientDto = {
+      id: activeClient!.id,
+      isActive: !activeClient!.isActive
+    }
+
+    updateClientMutation.mutateAsync(updateClientDto)
+      .then((data) => {
+        dispatch(updateClient(data))
+      })
+
   }
 
 
   return (
     <>
 
+      <TitlePage title={`Editar cliente`} />
 
-      <Container maxWidth={'md'}>
 
-        <Grid container display='flex' justifyContent='space-between'>
-          <Grid item display='flex' justifyContent='left' alignItems='center'>
-            <Button onClick={() => navigate(-1)}>
-              <ArrowBack />
-            </Button>
-            <Typography variant='h6'>{
-              `${activeClient!.person.firstName} ${activeClient!.person.lastName}`
 
-            }
-            </Typography>
 
-          </Grid>
+      <Grid container spacing={2}>
+
+        <Grid item xs={12} lg={4}>
+
+          <Card
+
+          >
+
+            <CardHeader
+              action={
+                <>
+                  <Label
+                    color={activeClient!.isActive ? 'success' : 'error'}
+                  >
+                    {
+                      activeClient!.isActive ? 'Activo' : 'Inactivo'
+                    }
+                  </Label>
+                </>
+              }
+            />
+
+            <CardContent>
+
+              <Typography variant='h4' align='center' mt={5}>
+                {
+                  activeClient!.person.firstName + ' ' + activeClient!.person.lastName
+                }
+
+
+              </Typography>
+
+              <Typography variant='subtitle2' align='center' mb={5}>
+                {
+                  activeClient!.person.email
+                }
+              </Typography>
+
+              <Stack
+                spacing={2}
+              >
+
+                <Box
+                  display='flex'
+                  justifyContent='space-between'
+                >
+
+                  <Box>
+
+                    <Typography variant='h5' >Baneado</Typography>
+                    <Typography variant='subtitle2' >Deshabilitar cuenta</Typography>
+
+                  </Box>
+
+                  <Switch
+                    checked={!activeClient!.isActive}
+                    color='success'
+                    onChange={() => submitChangeStatus()}
+                  />
+                </Box>
+
+
+              </Stack>
+
+            </CardContent>
+
+          </Card>
 
         </Grid>
-        <Card>
-          <CardContent>
+        <Grid item xs={12} lg={8}>
+          <Card>
+            <CardContent>
 
-            <FormClient onSubmit={onSubmit} client={client} loading={loading} msg={'Editar'} />
+              <FormClient onSubmit={onSubmit} client={client} loading={updateClientMutation.isLoading} msg={'Editar'} />
 
 
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-      </Container>
+        </Grid>
+      </Grid>
 
 
 

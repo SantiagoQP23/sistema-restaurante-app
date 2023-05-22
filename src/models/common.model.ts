@@ -34,7 +34,7 @@ export interface IPerson {
 export interface CreatePerson{
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   numPhone?: string;
   identification: CreateIdentification;
 }

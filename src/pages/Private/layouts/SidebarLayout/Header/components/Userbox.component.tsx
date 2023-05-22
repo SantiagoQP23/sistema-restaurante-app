@@ -43,10 +43,10 @@ const UserBoxButton = styled(Button)(
         padding-right: ${theme.spacing(1)};
 `
 );
+// background: ${grey[900]};
 
 const MenuUserBox = styled(Box)(
   ({ theme }) => `
-        background: ${grey[900]};
         padding: ${theme.spacing(2)};
 `
 );
@@ -148,7 +148,7 @@ export const Userbox = () => {
          
             <ListItemButton
 
-              to="/management/profile/details"
+              to="/users/account"
               component={NavLink}
             >
               <ListItemIcon>

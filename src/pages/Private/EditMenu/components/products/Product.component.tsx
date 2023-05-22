@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 
-import { Typography, Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch, CardHeader } from '@mui/material/';
+import { Typography,
+  CardActionArea,
+  Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch, CardHeader } from '@mui/material/';
 
-import { DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { DeleteOutline, EditOutlined, MoreHoriz } from '@mui/icons-material';
 
 import { IProduct } from '../../../../../models';
 import { setActiveProduct } from '../../../../../redux';
@@ -12,7 +14,7 @@ import { Label } from '../../../../../components/ui';
 import { ProductStatus, ProductStatusSpanish } from '../../../../../models/menu.model';
 import { useSnackbar } from 'notistack';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { updateProduct as updateProductS } from '../../services/sections.service';
+import { updateProduct as updateProductS } from '../../services/menu.service';
 import { updateProduct } from '../../../../../redux/slices/menu/menu.thunks';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 
@@ -63,6 +65,7 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
       <Card
       // sx={{ 
       //   display: 'flex',
+      //   flexDirection: 'column',
       //    }} 
       >
         {/* <CardMedia
@@ -72,39 +75,42 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
           alt="Product"
         /> */}
 
+        <CardActionArea onClick={() => editProduct()}>
+
         <CardHeader
           title={producto.name}
           subheader={`$ ${producto.price}`}
           action={
-            
-              producto.isActive
-                ? <Label color='info'>
 
-                  {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
-
-                </Label>
-                : <Label color='error'>
-                  Eliminado
-                </Label>
-            
+            <IconButton >
+              <MoreHoriz />
+            </IconButton>
           }
 
         />
 
+        <Box
+          sx={{
+            display: 'flex',
+            px: 2,
+            pb: 1
+          }}
+        >
 
+        {
+          producto.isActive
+          ? <Label color='info'>
 
+              {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
 
-      
+            </Label>
+            : <Label color='error'>
+              Eliminado
+            </Label>
+        }
+        </Box>
 
-        
-          <Typography ml={2} >{producto.description ? producto.description : 'No se ha añadido descripción'}</Typography>
-
-
-
-          {/* <Typography variant="body1" color='white' >Categoría: {producto.category.name}</Typography> */}
-       
-
-        <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+        {/* <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
 
           <Tooltip title='Editar'>
 
@@ -116,15 +122,17 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
               <EditOutlined />
             </IconButton>
           </Tooltip>
-          <Switch checked={producto.isActive} onClick={() => changeStatusProduct(producto)} color={producto.isActive ? 'success' : 'error'} />
 
 
 
 
-        </CardActions>
+        </CardActions> */}
+
+          {/* <Switch checked={producto.isActive} onClick={() => changeStatusProduct(producto)} color={producto.isActive ? 'success' : 'error'} /> */}
 
 
 
+        </CardActionArea>
 
       </Card>
 

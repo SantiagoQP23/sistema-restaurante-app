@@ -7,6 +7,7 @@ export interface CreateCategoryDto {
 
 
 export interface UpdateCategoryDto {
+  id: string;
   name?: string;
   sectionId?: string;
   isActive?: boolean;

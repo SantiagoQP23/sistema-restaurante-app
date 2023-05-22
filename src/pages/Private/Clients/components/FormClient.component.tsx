@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ICreateClient } from '../../../../models/client.model';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import { Grid, Select, MenuItem, TextField, Typography, Button } from '@mui/material';
+import { Grid, Select, MenuItem, TextField, Typography, Button, FormControl, InputLabel } from '@mui/material';
 import { TypeIdentification } from '../../../../models/common.model';
 
 
@@ -31,52 +31,8 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2} mt={1}>
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name='identification.type'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) =>
-                <>
-                  <Select
-                    labelId="select-seccion"
-                    label="Tipo de identificación"
-                    fullWidth
-                    margin='dense'
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    error={!!errors.identification?.type}
-                  >
-                    <MenuItem value={TypeIdentification.CEDULA}>Cédula</MenuItem>
-                    <MenuItem value={TypeIdentification.RUC}>RUC</MenuItem>
-                  </Select>
-                </>
-              } />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-
-            <TextField
-
-              label="Número de identificación"
-              fullWidth
-              type='number'
-              {
-              ...register('identification.num', {
-               
-
-                minLength: { value: lenghtIdentification, message: `Minimo ${lenghtIdentification} caracteres` },
-                maxLength: { value: lenghtIdentification, message: `Máximo ${lenghtIdentification} caracteres` },
-
-
-              })
-              }
-              helperText={<Typography color="red">{errors.identification?.num?.message} </ Typography>}
-            />
-          </Grid>
-
+      <FormControl component='form' onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2} >
 
           <Grid item xs={12} sm={6} >
 
@@ -93,16 +49,13 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
                     return 'No se permiten números en este campo';
                   }
                 }
-
-
-
               })
               }
               helperText={<Typography color="red">{errors.firstName?.message} </ Typography>}
               onKeyDown={(e) => {
-
-
-                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                
+                const allowedCharsRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]*$/;
+                if (!allowedCharsRegex.test(e.key)) {
                   e.preventDefault();
                 }
               }
@@ -120,7 +73,7 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
                 required: 'Este campo es requerido',
                 minLength: { value: 2, message: 'Minimo 2 caracteres' },
 
-               
+
 
 
                 validate: (value: any) => {
@@ -139,13 +92,65 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               onKeyDown={(e) => {
 
 
-                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                const allowedCharsRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]*$/;
+                if (!allowedCharsRegex.test(e.key)) {
                   e.preventDefault();
                 }
               }
               }
             />
           </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Controller
+              name='identification.type'
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) =>
+                <>
+                <FormControl fullWidth>
+
+                  <InputLabel id="select-seccion">Tipo de identificación</InputLabel>
+                  <Select
+                    labelId="select-seccion"
+                    label="Tipo de identificación"
+                    fullWidth
+                    margin='dense'
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    error={!!errors.identification?.type}
+                  >
+                    <MenuItem value={TypeIdentification.CEDULA}>Cédula</MenuItem>
+                    <MenuItem value={TypeIdentification.RUC}>RUC</MenuItem>
+                  </Select>
+                    </FormControl>
+                </>
+              } />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+
+            <TextField
+
+              label="Número de identificación"
+              fullWidth
+              type='number'
+              {
+              ...register('identification.num', {
+
+
+                minLength: { value: lenghtIdentification, message: `Minimo ${lenghtIdentification} caracteres` },
+                maxLength: { value: lenghtIdentification, message: `Máximo ${lenghtIdentification} caracteres` },
+
+
+              })
+              }
+              helperText={<Typography color="red">{errors.identification?.num?.message} </ Typography>}
+            />
+          </Grid>
+
+
+
 
 
           <Grid item xs={12} sm={6}>
@@ -156,7 +161,7 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
               fullWidth
               {
               ...register('email', {
-              
+
                 pattern: {
                   value: /\S+@\S+\.\S+/,
                   message: "Email no válido"
@@ -207,28 +212,21 @@ export const FormClient: FC<Props> = ({ client, onSubmit, loading, msg }) => {
             />
           </Grid>
 
-          <Grid item xs={12} >
+          <Grid item xs={12} display='flex' justifyContent='right' >
             <LoadingButton
-              variant='outlined'
+              variant='contained'
               type='submit'
               loading={loading}
             >
               {msg || 'Guardar'}
             </LoadingButton>
 
-            {
-              loading &&
-              <Button
-                color='error'
-                variant='outlined'
-              >Cancelar</Button>
-            }
           </Grid>
 
 
 
         </Grid>
-      </form >
+      </FormControl >
 
 
     </>

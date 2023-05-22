@@ -1,8 +1,9 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 import {
-  Box, Card, Checkbox, IconButton,
-  LinearProgress, Switch, Table, TableBody, TableCell,
+  Box, Card, Checkbox, CircularProgress, IconButton,
+  InputBase,
+  LinearProgress, Paper, Switch, Table, TableBody, TableCell,
   TableContainer, TableHead, TablePagination, TableRow,
   Tooltip, Typography, useTheme
 } from '@mui/material/';
@@ -20,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import { statusModalDeleteClient, updateClient as updateClientS } from '../../services/clients.service';
 import { useSnackbar } from 'notistack';
 import { useClients } from '../../hooks/useClients';
+import SearchIcon from '@mui/icons-material/Search';
+import { Label } from '../../../../../components/ui';
 
 
 interface Props {
@@ -74,9 +77,13 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 
 
   return (
+
+
+
+
     < TableRow >
       <TableCell padding='checkbox'>
-        <Switch checked={client.isActive} onClick={() => submitChangeStatus(client)} color={client.isActive ? 'success' : 'warning'} />
+        {/* <Switch checked={client.isActive} onClick={() => submitChangeStatus(client)} color={client.isActive ? 'success' : 'warning'} /> */}
 
 
       </TableCell>
@@ -138,9 +145,12 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
           {client.person?.email}
         </Typography>
       </TableCell>
+      <TableCell>
+       <Label color={client.isActive ? 'success' : 'error'}>{client.isActive ? 'Activo' : 'Inactivo'}</Label>
+      </TableCell>
 
       <TableCell align="right">
-        <Tooltip title="Edit Order" arrow>
+        <Tooltip title="Editar cliente" arrow>
           <IconButton
             sx={{
               '&:hover': {
@@ -181,18 +191,21 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
 
-  const {  clientsQuery, page, setPage, limit, setLimit} = useClients();
+  const {  clientsQuery, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, handleChangeTerm, term} = useClients();
 
-  const handlePageChange = (event: any, newPage: number): void => {
-    setPage(newPage);
-    clientsQuery.refetch();
-  };
-  
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-    clientsQuery.refetch();
-  };
 
+
+
+
+  const updateList = () => {
+    clientsQuery.refetch();
+
+  }
+
+  useEffect(() => {
+
+    updateList();
+  }, [page, rowsPerPage, term])
 
 
 
@@ -200,6 +213,39 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
 
   return (
+<>
+    <Paper
+        component="form"
+        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center'}}
+      >
+
+        <InputBase
+          type='text'
+          onChange={handleChangeTerm}
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Buscar cliente"
+          inputProps={{ 'aria-label': 'Buscar cliente' }}
+          value={term}
+        />
+        <IconButton
+          type="button"
+          sx={{ p: '10px' }}
+          aria-label="search"
+          onClick={updateList}
+        >
+          {
+            clientsQuery.isLoading
+              ? <CircularProgress size={20} />
+              : <SearchIcon />
+          }
+        </IconButton>
+
+
+      </Paper>
+
+
+
+
     <Box sx={{ height: 400, width: '100%', my: 1 }} >
 
       <Card>
@@ -210,13 +256,15 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
               <TableRow>
                 <TableCell padding="checkbox">
-                  Estado
+                  <Checkbox  />
+                 
                 </TableCell>
                 <TableCell>Nombres</TableCell>
                 <TableCell>Tipo de identificación</TableCell>
                 <TableCell>Número de identificación</TableCell>
                 <TableCell>address</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Estado</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
 
@@ -239,10 +287,10 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
           <TablePagination
             component="div"
             count={clientsQuery.data?.length || 0}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handleLimitChange}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             page={page}
-            rowsPerPage={limit}
+            rowsPerPage={rowsPerPage}
             rowsPerPageOptions={[5, 10, 25, 30]}
           />
         </Box>
@@ -252,5 +300,7 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
 
     </Box>
+</>
+
   );
 }

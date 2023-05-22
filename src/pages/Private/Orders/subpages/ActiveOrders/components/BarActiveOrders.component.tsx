@@ -93,7 +93,7 @@ export const BarActiveOrders = () => {
                     subheader={
                       order.client
                         ? order.client?.person.firstName + ' ' + order.client?.person.lastName
-                        : 'N.A.'
+                        : '-'
                     }
 
                     action={

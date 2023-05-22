@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createClient, getClient, getClients, updateClient } from "../services"
 import { IClient } from "../../../../models";
 import { useSnackbar } from "notistack";
@@ -6,33 +6,43 @@ import { CreateClientDto } from "../dto/create-client.dto";
 import { UpdateClientDto } from "../dto/update-client.dto";
 import { PaginationDto } from "../dto/pagination.dto";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 
 
 export const useClients = () => {
 
-  const [page, setPage] = useState<number>(0);
+  const dispatch = useDispatch();
 
-  const [limit, setLimit] = useState<number>(10);
+  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePaginationAsync();
 
   const [term, setTerm] = useState<string>('');
 
-  const clientsQuery =  useQuery<{clients: IClient[], length: number}>(['clients', {page, limit, term}], 
-  (data) => getClients(page, limit, term)
+  const clientsQuery = useQuery<{ clients: IClient[], length: number }>(['clients', { page, rowsPerPage, term }],
+    (data) => getClients(page, rowsPerPage, term)
   )
+
+  const handleChangeTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    if (event && event.target)
+      setTerm(event.target.value);
+  };
+
+
 
   return {
     clientsQuery,
 
     page,
 
-    setPage,
+    handleChangePage,
 
-    limit,
+    rowsPerPage,
 
-    setLimit,
+    handleChangeRowsPerPage,
 
+    handleChangeTerm,
 
-    setTerm,
     term
 
   }
@@ -41,14 +51,14 @@ export const useClients = () => {
 
 export const useClient = (id: string, enabled = true) => {
   return useQuery<IClient>(['client', id], () => getClient(id), {
-     enabled,
-     retry: false,
-     });
+    enabled,
+    retry: false,
+  });
 
 }
 
 
-export const useCreateCliente = (callback?: () => void) => {
+export const useCreateCliente = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -58,13 +68,9 @@ export const useCreateCliente = (callback?: () => void) => {
     onSuccess: (data) => {
       enqueueSnackbar('Cliente creado', { variant: 'success' });
 
-
-
-      callback && callback();
     },
 
     onError: (error) => {
-      console.log(error);
       enqueueSnackbar('Error al crear cliente', { variant: 'error' });
     }
 
@@ -76,7 +82,7 @@ export const useCreateCliente = (callback?: () => void) => {
 }
 
 
-export const useUpdateClient = (callback?: () => void) => {
+export const useUpdateClient = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -85,11 +91,8 @@ export const useUpdateClient = (callback?: () => void) => {
 
     onSuccess: (data) => {
       enqueueSnackbar('Cliente actualizado', { variant: 'success' });
-
-      callback && callback();
     },
     onError: (error) => {
-      console.log(error);
       enqueueSnackbar('Error al actualizar cliente', { variant: 'error' });
     }
 

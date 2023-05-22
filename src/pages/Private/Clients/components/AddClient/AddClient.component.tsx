@@ -10,6 +10,8 @@ import { Container, Card, CardContent, Button, Grid, Typography } from '@mui/mat
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { CreateClientDto } from '../../dto/create-client.dto';
+import { TitlePage } from '../../../components/TitlePage.component';
+import { useCreateCliente } from '../../hooks/useClients';
 
 
 
@@ -34,6 +36,8 @@ export const AddClient = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
+  const { mutateAsync, isLoading } = useCreateCliente();
+
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -42,36 +46,35 @@ export const AddClient = () => {
 
   async function onSubmit(form: ICreateClient) {
 
-    const {identification,...dataClient} = form;
+    const { identification, ...dataClient } = form;
 
-    if( form.address === "" ){
-      delete dataClient.address;
+    if (form.address === "") delete dataClient.address;
 
-    }
+    if (form.numPhone === "") delete dataClient.numPhone;
 
-    if( form.numPhone === "" ){
-      delete dataClient.numPhone;
+    if (form.email === "") delete dataClient.email;
 
-    }
-    
-    const newClient: CreateClientDto ={
+    let newClient: CreateClientDto = {
       ...dataClient,
-      typeIdentification: identification.type,
-      numberIdentification: identification.num
-    }   
+    }
 
-    // await callEndpoint(createClient(newClient))
-    //   .then((resp) => {
-    //     const { data } = resp;
-    //     dispatch(addClient(data.client))
-    //     enqueueSnackbar('El cliente ha sido creado', { variant: 'success' })
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     enqueueSnackbar('error', { variant: 'error' })
+    if (identification.type === TypeIdentification.CEDULA && identification.num.length === 10
+      || identification.type === TypeIdentification.RUC && identification.num.length === 13
+    ) {
+      newClient = {
+        ...newClient,
+        typeIdentification: identification.type,
+        numberIdentification: identification.num
+      }
+    }
 
-    //   })
-
+  
+    mutateAsync(newClient)
+      .then((data) => {
+        dispatch(addClient(data));
+        navigate('/clients');
+      }
+      )
 
 
   }
@@ -81,27 +84,15 @@ export const AddClient = () => {
   return (
     <>
 
+      <TitlePage title="Nuevo cliente" />
+
 
       <Container maxWidth={'sm'}>
 
-        <Grid container display='flex' justifyContent='space-between'>
-          <Grid item display='flex' justifyContent='left' alignItems='center'>
-            <Button onClick={() => navigate(-1)}>
-              <ArrowBack />
-            </Button>
-            <Typography variant='h6'>{
-
-              "Añadir Cliente"
-            }
-            </Typography>
-
-          </Grid>
-
-        </Grid>
 
         <Card>
           <CardContent>
-            <FormClient onSubmit={onSubmit} client={client} loading={loading} />
+            <FormClient onSubmit={onSubmit} client={client} loading={isLoading} />
 
           </CardContent>
         </Card>

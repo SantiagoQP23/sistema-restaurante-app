@@ -23,15 +23,11 @@ const Clients = () => {
 
   return (
     <>
-      <PageTitleWrapper>
-        <PageTitle
-          heading='Clientes'
-          subHeading='Administración de clientes del restaurante'
-          docs="/menu"
-        />
-      </PageTitleWrapper>
+      
 
       <Container maxWidth='lg'>
+
+
         <Outlet />
       </Container>
     </>

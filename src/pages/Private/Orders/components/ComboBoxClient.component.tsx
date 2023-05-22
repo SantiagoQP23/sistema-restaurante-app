@@ -13,10 +13,10 @@ interface Props {
   handleChangeClient: (client: IClient | null) => void;
 }
 
-export const ComboBoxClient: FC<Props> = ({client, handleChangeClient}) => {
+export const ComboBoxClient: FC<Props> = ({ client, handleChangeClient }) => {
 
 
-  const { clientsQuery, term, setTerm } = useClients();
+  const { clientsQuery, term, handleChangeTerm } = useClients();
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -28,9 +28,9 @@ export const ComboBoxClient: FC<Props> = ({client, handleChangeClient}) => {
   }, [term])
 
 
-  console.log({client})
+  console.log({ client })
 
- 
+
 
 
 
@@ -54,8 +54,9 @@ export const ComboBoxClient: FC<Props> = ({client, handleChangeClient}) => {
         }}
 
         onInputChange={(event, newInputValue) => {
-          setTerm(newInputValue);
-        }}
+          handleChangeTerm(event as any);
+        }
+        }
         fullWidth
 
       />

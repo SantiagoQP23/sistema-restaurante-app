@@ -12,7 +12,7 @@ import { Label } from '../../../../../components/ui';
 import Switch from '@mui/material/Switch';
 import { useSnackbar } from 'notistack';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { updateSection as updateSectionS } from '../../services/sections.service';
+import { updateSection as updateSectionS } from '../../services/menu.service';
 
 interface Props {
   seccion: ISection,

@@ -1,4 +1,13 @@
-import { CreatePerson, Identification, IPerson } from './common.model';
+import { CreatePerson, Identification } from './common.model';
+
+export interface IPerson {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  identification?: Identification
+  numPhone?: string;
+}
 
 
 export interface IClient {

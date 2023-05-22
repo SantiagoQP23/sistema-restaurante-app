@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 
   DialogTitle, Button, TextField, Select, MenuItem,
-  InputAdornment, Typography, Grid, InputLabel, styled, Box, Card, Avatar, Input, IconButton, Stack, CardHeader
+  InputAdornment, Typography, Grid, InputLabel, styled, Box, Card, Avatar, Input, IconButton, Stack, CardHeader, Switch, FormControlLabel
 
 } from '@mui/material/';
 
@@ -26,13 +26,14 @@ import {
   createProduct,
   updateProduct as updateProductS,
   updateProductImage
-} from '../../services/sections.service';
+} from '../../services/menu.service';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../../../hooks';
 import { addProduct, updateProduct } from '../../../../../redux/slices/menu/menu.thunks';
-import { Container } from '@mui/material';
+import { Container, FormControl } from '@mui/material';
 import { CardContent } from '@mui/material/';
+import { useCreateProduct, useUpdateImageProduct, useUpdateProduct } from '../../hooks/useProducts';
 
 
 
@@ -43,6 +44,7 @@ const initialProduct = {
   price: 0,
   description: '',
   status: ProductStatus.AVAILABLE,
+  isActive: false
 }
 
 
@@ -97,6 +99,10 @@ interface IFormProductImage {
 
 
 
+
+
+
+
 export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
 
   const { register, handleSubmit, formState: { errors }, control, reset, watch } = useForm<{ file: FileList }>({
@@ -110,24 +116,23 @@ export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
 
   const dispatch = useAppDispatch();
 
+  const {mutateAsync, isLoading} = useUpdateImageProduct();
+
 
   const convert2base64 = (file: File) => {
 
     const reader = new FileReader();
-
+  
     reader.onloadend = () => {
       setImage(reader.result?.toString())
     }
-
+  
     reader.readAsDataURL(file);
   }
-
-
-
+  
 
 
   const onSubmit = async (data: { file: FileList }) => {
-    console.log({ data });
 
     if (data.file.length === 0) {
       enqueueSnackbar('Debe seleccionar una imagen', { variant: 'error' });
@@ -136,22 +141,12 @@ export const FormProductImage: FC<IFormProductImage> = ({ product }) => {
 
     convert2base64(data.file[0]);
 
-    await callEndpoint(updateProductImage(product.id, { file: data.file[0] }))
-      .then((resp) => {
-        console.log(resp);
+    mutateAsync({file: data.file[0], id: product.id})
+    .then((data) => {
+      dispatch(updateProduct(data));
+      dispatch(setActiveProduct({...product, ...data}));
 
-        const { data } = resp;
-
-
-        dispatch(updateProduct(data.product))
-        dispatch(setActiveProduct({ ...product, ...data.product }))
-        enqueueSnackbar('Imagen actualizada', { variant: 'success' });
-      })
-      .catch((err) => {
-        console.log(err);
-        enqueueSnackbar('Error al actualizar la imagen', { variant: 'error' });
-      })
-
+    });
 
   }
 
@@ -200,10 +195,6 @@ export const EditProduct: FC<Props> = ({ }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
-
   const { activeProduct, activeCategory, activeSection } = useSelector(selectMenu);
 
   let product: ICreateProduct;
@@ -211,10 +202,10 @@ export const EditProduct: FC<Props> = ({ }) => {
   if (activeProduct) {
 
     const { id, category, images, ...restProduct } = activeProduct!;
-    product = { ...restProduct, categoryId: activeProduct.category.id };
+    product = { ...restProduct, categoryId: activeProduct.category.id, isActive: activeProduct.isActive };
 
   } else {
-    product = { ...initialProduct, categoryId: activeCategory!.id };
+    product = { ...initialProduct, categoryId: activeCategory!.id, isActive: true };
   }
 
   //  activeProduct ? { ...activeProduct, categoryId: activeProduct.category.id } : initialForm(activeCategory!.id!);
@@ -223,257 +214,312 @@ export const EditProduct: FC<Props> = ({ }) => {
     defaultValues: product
   });
 
+  const createProductMutation = useCreateProduct();
+
+  const updateProductMutation = useUpdateProduct();
+
   // Actualizar o crear un producto
   async function onSubmit(form: ICreateProduct) {
 
-    console.log(form);
-
     if (activeProduct) {
-      await callEndpoint(updateProductS(activeProduct.id, form))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data.product);
-          dispatch(updateProduct(data.product))
-          dispatch(setActiveProduct({ ...activeProduct, ...data.product }))
-          enqueueSnackbar('El producto ha sido actualizada', { variant: 'success' })
 
+      console.log(form)
+
+      updateProductMutation.mutateAsync({ ...form, id: activeProduct.id })
+        .then((data) => {
+          dispatch(updateProduct(data));
+          dispatch(setActiveProduct({ ...activeProduct, ...data }));
         })
-        .catch((err) => {
-          console.log(err)
-          enqueueSnackbar('Ya existe', { variant: 'error' })
-
-        });
 
     } else {
-      console.log('añadir')
-      await callEndpoint(createProduct(form))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data.product);
-          dispatch(addProduct(data.product))
-          dispatch(setActiveProduct(data.product))
-          enqueueSnackbar('El producto ha sido añadido', { variant: 'success' })
-          reset()
 
-        })
-        .catch((err) => {
-          console.log(err)
-          enqueueSnackbar('No se pudo crear el producto', { variant: 'error' })
+      const { isActive, ...data } = form;
+
+      createProductMutation.mutateAsync(data)
+        .then((data) => {
+          dispatch(addProduct(data));
+          dispatch(setActiveProduct(data));
 
         });
+
     }
 
-  }
-  const cancel = () => {
-    //dispatch(resetActiveProduct())
   }
 
 
   return (
     <>
 
-    
-
-        <Stack direction='row' spacing={1} alignItems='center'>
-
-          <Button onClick={() => navigate(-1)}>
-            <ArrowBack />
-          </Button>
-          <Typography variant='h4'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
-        </Stack>
 
 
-        <Stack
-          direction={{ sx: 'column', lg: 'row' }}
-          spacing={1}
-        >
+      <Stack direction='row' spacing={1} alignItems='center'>
+
+        <Button onClick={() => navigate(-1)}>
+          <ArrowBack />
+        </Button>
+        <Typography variant='h4'>{activeProduct ? activeProduct!.name : "Añadir Producto"}</Typography>
+      </Stack>
+
+
+      <Stack
+        direction={{ sx: 'column', lg: 'row' }}
+        spacing={1}
+      >
+        {
+          activeProduct &&
           <Card
-            sx={{
-              mb: 1
-            }}
+            sx={{ mb: 1 }}
           >
 
-            <CardHeader 
+            <CardHeader
               title='Imagen del producto'
             />
             <CardContent>
-
-
-            {
-              activeProduct &&
               <FormProductImage product={activeProduct} />
-            }
             </CardContent>
 
 
           </Card>
+        }
 
 
 
 
-          <Card>
-            
-          <CardHeader 
-              title='Información del producto'
-            />
-            <CardContent>
+        <Card>
 
-              <Grid item xs={12}>
+          <CardHeader
+            title='Información del producto'
+          />
+          <CardContent>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <Grid container spacing={1} mb={1}>
+            <Grid item xs={12}>
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={1} mb={1}>
+
+
+
+                  <Grid item xs={12} sm={8}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      label="Nombre del producto"
+                      type="text"
+                      fullWidth
+
+                      {
+                      ...register('name', {
+                        required: 'Este campo es requerido',
+                        minLength: { value: 2, message: 'Minimo 2 caracteres' },
+
+
+                      })
+                      }
+                      helperText={<Typography color="red">{errors.name?.message} </ Typography>}
+                    />
+
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+
+                    <TextField
+                      label="Precio"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AttachMoney />
+                          </InputAdornment>
+                        ),
+                      }}
+                      margin='dense'
+                      fullWidth
+                      type='number'
+                      inputProps={{
+                        step: 0.25,
+                      }}
+
+                      {
+                      ...register('price', {
+                        required: 'Este campo es requerido',
+                        min: { value: 0, message: 'El valor debe ser mayor a 0' },
+                        valueAsNumber: true,
+
+                      })
+                      }
+                      helperText={<Typography color="red">{errors.price?.message} </ Typography>}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+
+                    <TextField
+                      label="Descripcion del producto"
+                      margin="dense"
+                      multiline
+                      rows={4}
+                      fullWidth
+                      {
+                      ...register('description', {
+                        minLength: { value: 10, message: 'Minimo 10 caracteres' },
+
+
+                      })
+                      }
+                      helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Controller
+                      name='status'
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) =>
+                        <>
+
+                          <FormControl
+                            fullWidth
+                          >
+                            <InputLabel id='select-estado'>Estado</InputLabel>
+
+                            <Select
+                              labelId="select-estado"
+                              label="Estado"
+                              fullWidth
+                              margin='dense'
+                              value={value}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              error={!!errors.status?.type}
+                            >
+                              <MenuItem value={ProductStatus.AVAILABLE}>Disponible</MenuItem>
+                              <MenuItem value={ProductStatus.OUT_OF_SEASON}>Fuera de temporada</MenuItem>
+                              <MenuItem value={ProductStatus.OUT_OF_STOCK}>Fuera de stock</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </>
+                      } />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+
+                    {/* <FormControl> */}
+
+                    <Controller
+                      name='categoryId'
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) =>
+                        <>
+                          <FormControl
+                            fullWidth
+                          >
+
+                            <InputLabel id='select-categoria'>Categoría</InputLabel>
+                            <Select
+                              label="Categoría"
+
+                              margin='dense'
+                              fullWidth
+                              value={value}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              error={!!errors.categoryId}
+                            >
+                              {
+                                activeSection!.categories.map(categoria => (
+                                  <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
+
+                                ))
+                              }
+                            </Select>
+                          </FormControl>
+                        </>
+                      }
+                    />
+
+                    {/* </FormControl> */}
+                  </Grid>
+                  <Grid item xs={12}>
+
+                  </Grid>
+                </Grid>
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+
+                  <FormControlLabel
+                    label='Estado'
+                    control={
+                      <Controller
+                        name='isActive'
+                        control={control}
+                        render={({ field: { onChange, onBlur, value } }) =>
+                          <Switch
+                            checked={value}
+                            onChange={onChange}
+                            color='success'
+                          // onClick={() => changeStatusProduct(producto)}
+                          // color={activeProduct?.isActive ? 'success' : 'error'}
+                          />
+                        } />
+                    } />
+
+
+                  {/* <FormControlLabel
+                    label='Estado'
+                    control={
+                      
+                      <Controller 
+                      name='isActive'
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => 
+  <>
+<Switch
+  
+  {
+  ...register('isActive', {
+  })
+  }
+
+  // onClick={() => changeStatusProduct(producto)}
+  color={activeProduct?.isActive ? 'success' : 'error'}
+
+   />
+                      </>
+                     
+                      
+  />
+
 
                 
 
-                      <Grid item xs={12} sm={8}>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          label="Nombre del producto"
-                          type="text"
-                          fullWidth
+                    }</FormControlLabel> */}
 
-                          {
-                          ...register('name', {
-                            required: 'Este campo es requerido',
-                            minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                  <LoadingButton
+                    variant='contained'
+                    loading={createProductMutation.isLoading || updateProductMutation.isLoading}
+                    type='submit'
+                  >
+                    {activeProduct ? 'Editar' : "Crear"}
+                  </LoadingButton>
 
 
-                          })
-                          }
-                          helperText={<Typography color="red">{errors.name?.message} </ Typography>}
-                        />
+                  {/* {
+                    loading && <Button
+                      color='error'
+                      variant='outlined'
+                      onClick={() => cancelEndpoint()}
+                    >
+                      Cancelar
+                    </Button>
+                  } */}
+                </Box>
 
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-
-                        <TextField
-                          label="Precio"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <AttachMoney />
-                              </InputAdornment>
-                            ),
-                          }}
-                          margin='dense'
-                          fullWidth
-                          type='number'
-                          inputProps={{
-                            step: 0.25,
-                          }}
-
-                          {
-                          ...register('price', {
-                            required: 'Este campo es requerido',
-                            min: { value: 0, message: 'El valor debe ser mayor a 0' },
-                            valueAsNumber: true,
-
-                          })
-                          }
-                          helperText={<Typography color="red">{errors.price?.message} </ Typography>}
-
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-
-                        <TextField
-                          label="Descripcion del producto"
-                          margin="dense"
-                          multiline
-                          rows={4}
-                          fullWidth
-                          {
-                          ...register('description', {
-                            minLength: { value: 10, message: 'Minimo 10 caracteres' },
+              </form>
 
 
-                          })
-                          }
-                          helperText={<Typography color="red">{errors.description?.message} </ Typography>}
-
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Controller
-                          name='status'
-                          control={control}
-                          render={({ field: { onChange, onBlur, value } }) =>
-                            <>
-                              <InputLabel id='select-estado'>Estado</InputLabel>
-
-                              <Select
-                                labelId="select-estado"
-                                label="Tipo de identificación"
-                                fullWidth
-                                margin='dense'
-                                value={value}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                error={!!errors.status?.type}
-                              >
-                                <MenuItem value={ProductStatus.AVAILABLE}>Disponible</MenuItem>
-                                <MenuItem value={ProductStatus.OUT_OF_SEASON}>Fuera de temporada</MenuItem>
-                                <MenuItem value={ProductStatus.OUT_OF_STOCK}>Fuera de stock</MenuItem>
-                              </Select>
-                            </>
-                          } />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Controller
-                          name='categoryId'
-                          control={control}
-                          render={({ field: { onChange, onBlur, value } }) =>
-                            <>
-                              <InputLabel id='select-categoria'>Categoria</InputLabel>
-                              <Select
-                                label="select-categoria"
-                                margin='dense'
-                                fullWidth
-                                value={value}
-                                onChange={onChange}
-                                onBlur={onBlur}
-                                error={!!errors.categoryId}
-                              >
-                                {
-                                  activeSection!.categories.map(categoria => (
-                                    <MenuItem key={categoria.id!} value={categoria.id!}>{categoria.name}</MenuItem>
-
-                                  ))
-                                }
-                              </Select>
-                            </>
-                          }
-                        />
-
-                      </Grid>
-                      <Grid item xs={12}>
-                        <LoadingButton
-                          variant='outlined'
-                          loading={loading}
-                          type='submit'
-                        >
-                          {activeProduct ? 'Editar' : "Crear"}
-                        </LoadingButton>
-
-
-                        {
-                          loading && <Button
-                            color='error'
-                            variant='outlined'
-                            onClick={() => cancelEndpoint()}
-                          >
-                            Cancelar
-                          </Button>
-                        }
-
-                      </Grid>
-                    </Grid>
-
-                </form>
-
-
-              </Grid>
+            </Grid>
 
 
 
@@ -481,12 +527,12 @@ export const EditProduct: FC<Props> = ({ }) => {
 
 
 
-            </CardContent>
+          </CardContent>
 
-          </Card>
-        </Stack>
+        </Card>
+      </Stack>
 
-  
+
 
     </>
   )

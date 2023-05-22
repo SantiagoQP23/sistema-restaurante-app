@@ -6,7 +6,7 @@ import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { deleteSection,  selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
-import { deleteSection as deleteSectionS } from "../../services/sections.service";
+import { deleteSection as deleteSectionS } from "../../services/menu.service";
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 
 

@@ -49,9 +49,8 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
               helperText={<Typography color="red">{errors.firstName?.message} </ Typography>}
 
               onKeyDown={(e) => {
-
-
-                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                const allowedCharsRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]*$/;
+                if (!allowedCharsRegex.test(e.key)) {
                   e.preventDefault();
                 }
               }
@@ -69,22 +68,14 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
               ...register('lastName', {
                 required: 'Este campo es requerido',
                 minLength: { value: 2, message: 'Mínimo 2 caracteres' },
-                // validar que solo entre texto
-
-
-
-
-
               })
               }
-
 
               helperText={<Typography color="red">{errors.lastName?.message} </ Typography>}
 
               onKeyDown={(e) => {
-
-
-                if (!/^[a-zA-Z ]*$/.test(e.key)) {
+                const allowedCharsRegex = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]*$/;
+                if (!allowedCharsRegex.test(e.key)) {
                   e.preventDefault();
                 }
               }
@@ -94,8 +85,8 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
 
           <Grid item xs={12} sm={6}>
 
-            <FormControl 
-            fullWidth
+            <FormControl
+              fullWidth
             >
 
               <Controller
@@ -146,30 +137,30 @@ export const FormUser: FC<Props> = ({ user, onSubmit, loading, isNew, onReset })
           <Grid item xs={12} sm={6}>
 
             <FormControl fullWidth>
-            <Controller
-              name='role.name'
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) =>
-                <>
+              <Controller
+                name='role.name'
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) =>
+                  <>
 
-                  <InputLabel id="select-identification">Rol</InputLabel>
-                  <Select
-                    labelId="select-identification"
-                    label="Rol"
-                    fullWidth
-                    margin='dense'
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    error={!!errors.role?.name?.message}
-                  >
-                    <MenuItem value={ValidRoles.admin}>Administrador</MenuItem>
-                    <MenuItem value={ValidRoles.mesero}>Mesero</MenuItem>
-                    <MenuItem value={ValidRoles.despachador}>Despachador</MenuItem>
+                    <InputLabel id="select-identification">Rol</InputLabel>
+                    <Select
+                      labelId="select-identification"
+                      label="Rol"
+                      fullWidth
+                      margin='dense'
+                      value={value}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      error={!!errors.role?.name?.message}
+                    >
+                      <MenuItem value={ValidRoles.admin}>Administrador</MenuItem>
+                      <MenuItem value={ValidRoles.mesero}>Mesero</MenuItem>
+                      <MenuItem value={ValidRoles.despachador}>Despachador</MenuItem>
 
-                  </Select>
-                </>
-              } />
+                    </Select>
+                  </>
+                } />
             </FormControl>
           </Grid>
 

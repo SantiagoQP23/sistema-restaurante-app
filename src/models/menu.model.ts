@@ -77,5 +77,6 @@ export interface ICreateProduct{
   description: string;
   categoryId: string;
   status: ProductStatus;
+  isActive: boolean;
   
 }

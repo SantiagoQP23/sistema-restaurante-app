@@ -90,31 +90,6 @@ export const UsersList = () => {
         }
       />
 
-      <Grid container justifyContent="space-between" alignItems="center">
-
-
-
-
-        <Grid item>
-
-    
-        </Grid>
-
-        {/* <Grid item>
-
-          <Button
-            sx={{ mt: { xs: 2, md: 0 } }}
-            variant="contained"
-            startIcon={<AddTwoToneIcon fontSize="small" />}
-            onClick={createUser}
-          >
-            Añadir usuario
-          </Button>
-
-        </Grid> */}
-
-      </Grid>
-
       <UsersTable  />
 
       <DeleteUser />

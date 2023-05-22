@@ -7,7 +7,7 @@ import {  selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../../../../hooks/useRedux';
 import { useSnackbar } from 'notistack';
-import { deleteCategory as deleteCategoryS } from "../../services/sections.service";
+import { deleteCategory as deleteCategoryS } from "../../services/menu.service";
 import { deleteCategory } from "../../../../../redux/slices/menu/menu.thunks";
 
 

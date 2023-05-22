@@ -69,22 +69,6 @@ export const EditUser = () => {
       })
 
 
-
-
-
-    // await callEndpoint(updateUserS(activeUser!.id, userUpdated))
-    //   .then((resp) => {
-    //     const { data } = resp;
-    //     dispatch(updateUser(data));
-
-    //     enqueueSnackbar('Usuario actualizado', { variant: 'success' });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
-    //   }
-    //   )
-
   }
 
   
@@ -119,20 +103,6 @@ export const EditUser = () => {
       console.log(err);
       enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
     });
-
-
-    // await callEndpoint(resetPasswordUser(data))
-
-    //   .then((resp) => {
-    //     const { data } = resp;
-    //     console.log(data)
-    //     enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     enqueueSnackbar('Error al resetear contraseña', { variant: 'error' });
-    //   }
-    //   )
 
   }
 

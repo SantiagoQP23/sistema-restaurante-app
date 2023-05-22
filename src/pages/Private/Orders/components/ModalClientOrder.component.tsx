@@ -4,7 +4,7 @@ import { Typography, Accordion, AccordionSummary, AccordionDetails, Button, Dial
 import { Add, AddCardRounded, AddCircleOutlined, AddCircleRounded, AddRounded, DriveFileRenameOutlineOutlined } from "@mui/icons-material";
 import { InputSearch } from "../../../../components/ui";
 import { useFetchAndLoad } from "../../../../hooks";
-import { IClient } from "../../../../models";
+import { IClient, ICreateClient } from "../../../../models";
 import { getClient } from "../../Clients/services";
 import { OrderContext } from '../context/Order.context';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,10 +15,14 @@ import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
 import { UpdateOrderDto } from '../dto/update-order.dto';
 import { statusModalClientOrder } from "../services/sharing-information.service";
-import { useClients } from "../../Clients/hooks/useClients";
+import { useClients, useCreateCliente } from "../../Clients/hooks/useClients";
 import { queryClient } from '../../../../main';
 import { LoadingButton } from "@mui/lab";
 import { FormNewClientBasic } from './FormNewClientBasic.component';
+import { FormClient } from "../../Clients/components/FormClient.component";
+import { TypeIdentification } from "../../../../models/common.model";
+import { CreateClientDto } from "../../Clients/dto/create-client.dto";
+import { useUpdateOrder } from "../hooks/useUpdateOrder";
 
 
 interface Props {
@@ -30,6 +34,18 @@ interface DataClientProps {
 }
 
 
+const initialClient: ICreateClient = {
+  lastName: "",
+  firstName: "",
+  identification: {
+    type: TypeIdentification.CEDULA,
+    num: "",
+  },
+  numPhone: "",
+  address: "",
+  email: "",
+}
+
 
 
 export const ModalClientOrder: FC<Props> = (
@@ -40,7 +56,10 @@ export const ModalClientOrder: FC<Props> = (
 
   const suscription$ = statusModalClientOrder.getSubject();
 
-  const { clientsQuery, term, setTerm } = useClients();
+  const { clientsQuery, term, handleChangeTerm } = useClients();
+
+  const clientForm = initialClient;
+
 
 
   const { client, setClient } = useContext(OrderContext);
@@ -60,23 +79,59 @@ export const ModalClientOrder: FC<Props> = (
     setOpen(false);
   }
 
+  const {updateOrder} = useUpdateOrder();
 
-  const setClientOrder = () => {
 
-    const data: UpdateOrderDto = {
-      id: activeOrder!.id,
-      clientId: client!.id
+  const clientAddMutation = useCreateCliente();
+
+  const onSubmit = (data: ICreateClient) => {
+
+
+
+    const { identification, ...dataClient } = data;
+
+    if (data.address === "") delete dataClient.address;
+
+    if (data.numPhone === "") delete dataClient.numPhone;
+
+    if (data.email === "") delete dataClient.email;
+
+    let newClient: CreateClientDto = {
+      ...dataClient,
     }
 
-    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
-      console.log(res);
-      if (res.ok) {
-        dispatch(setActiveOrder(res.order!));
-      } else {
-        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
+    if (identification.type === TypeIdentification.CEDULA && identification.num.length === 10
+      || identification.type === TypeIdentification.RUC && identification.num.length === 13
+    ) {
+      newClient = {
+        ...newClient,
+        typeIdentification: identification.type,
+        numberIdentification: identification.num
       }
-    });
+    }
+
+    
+
+    clientAddMutation.mutateAsync(newClient).then((res) => {
+
+      if(!activeOrder){
+
+        setClient(res);
+      }else {
+        updateOrder({
+          id: activeOrder.id,
+          clientId: res.id
+        });
+
+      }
+
+      handleClose();
+    })
+   
+
   }
+
+
 
 
 
@@ -110,61 +165,32 @@ export const ModalClientOrder: FC<Props> = (
 
         <DialogContent>
 
-          {/* <Autocomplete
-            id="combo-box-client"
+  
+              {/* <FormNewClientBasic callback={handleClose} /> */}
+              <FormClient
+              
+                client={clientForm}
+                onSubmit={onSubmit}
+                loading={clientAddMutation.isLoading}
+              
+              />
+   
 
-
-            filterOptions={(x) => x}
-            options={clientsQuery.data || []}
-            getOptionLabel={(option) => option.person.firstName + ' ' + option.person.lastName}
-            value={client}
-
-            renderInput={(params) => <TextField {...params} label="Cliente" variant="outlined" />}
-
-            onChange={(event, newValue: IClient | null) => {
-              setClient(newValue);
-              // setClients(newValue ? [newValue, ...clients] : clients)
-
-            }}
-
-            onInputChange={(event, newInputValue) => {
-              setTerm(newInputValue);
-            }}
-
-          /> */}
-
-
-
-
-              <FormNewClientBasic callback={handleClose} />
-
-{/* 
-          <Accordion sx={{ width: '100%' }} >
-            <AccordionSummary
-              expandIcon={<AddCircleOutlined />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-              sx={{ p: 0, m: 0 }}
-            >
-              <Typography variant='h5'>
-                Nuevo cliente
-
-
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ p: 0, m: 0 }}>
-
-            </AccordionDetails>
-          </Accordion> */}
 
         </DialogContent>
 
 
-        <DialogActions>
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            }}
+        >
           <Button
             onClick={() => setOpen(false)}
             variant='outlined'
-          >Cerrar</Button>
+            color='error'
+          >Cancelar</Button>
         </DialogActions>
 
       </Dialog>

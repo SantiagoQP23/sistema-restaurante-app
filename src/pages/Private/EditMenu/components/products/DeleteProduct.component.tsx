@@ -4,7 +4,7 @@ import {  useSelector } from "react-redux";
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import {  selectMenu } from "../../../../../redux";
 import { LoadingButton } from '@mui/lab';
-import { deleteProduct as deleteProductS } from "../../services/sections.service";
+import { deleteProduct as deleteProductS } from "../../services/menu.service";
 import { useSnackbar } from 'notistack';
 import { deleteProduct } from "../../../../../redux/slices/menu/menu.thunks";
 import { useAppDispatch } from '../../../../../hooks/useRedux';

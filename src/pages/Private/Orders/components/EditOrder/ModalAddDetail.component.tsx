@@ -68,7 +68,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
         data.description = description;
       }
 
-      console.log({data})
+      console.log({ data })
 
       createOrderDetail(data);
 
@@ -108,16 +108,45 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
           setOpen(false)
           setDescription('');
         }}
+
       >
-        <DialogTitle>Añadir Producto</DialogTitle>
+        {/* <DialogTitle>Añadir Producto</DialogTitle> */}
 
         <DialogContent>
           <Typography variant="h4" mb={1}>{detail?.product.name}</Typography>
+          <Typography variant="h6" mb={1}>${detail?.product.price}</Typography>
 
-          <Typography variant="body2">{detail?.product.description}</Typography>
+
+
+          <Typography variant="h5" >Descripción</Typography>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-wrap' }} >{detail?.product.description}</Typography>
+
+
+          <FormControl fullWidth>
+            <TextField
+              id="descripcion-pedido"
+              label="Notas"
+              margin="dense"
+              multiline
+              rows={4}
+              defaultValue={description}
+
+              onBlur={(e) => {
+                console.log(e.target.value);
+                setDescription(e.target.value);
+
+              }
+              }
+
+
+            />
+
+
+          </FormControl>
+
 
           <Stack direction='row' alignItems='center' justifyContent='space-between' my={2}>
-            <Typography variant="body2" >Cantidad</Typography>
+            <Typography variant="h5" >Cantidad</Typography>
             <Box display='flex' alignItems='center'>
 
               <IconButton
@@ -142,27 +171,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
 
 
-          <FormControl fullWidth>
-            <TextField
-              id="descripcion-pedido"
-              label="Notas"
-              margin="dense"
-              multiline
-              rows={4}
-              defaultValue={description}
-              
-              onBlur={(e) => {
-                console.log(e.target.value);
-                setDescription(e.target.value);
 
-              }
-            }
-            variant='filled'
-            
-            />
-
-
-          </FormControl>
 
 
 

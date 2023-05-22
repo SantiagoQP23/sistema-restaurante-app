@@ -35,6 +35,10 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/tables': 'Mesas',
   '/tables/edit': 'Editar',
   '/tables/add': 'Nueva mesa',
+  '/clients': 'Clientes',
+  '/clients/edit': 'Editar',
+  '/clients/add': 'Nuevo cliente',
+
 };
 
 
@@ -52,6 +56,7 @@ function LinkRouter(props: LinkRouterProps) {
 interface Props {
   title: string,
   action?: React.ReactNode;
+  breadcrumbEnd?: string; 
 }
 
 export const TitlePage: FC<Props> = ({ title, action }) => {
