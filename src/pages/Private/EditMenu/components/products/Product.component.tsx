@@ -45,14 +45,14 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
 
   const changeStatusProduct = async (product: IProduct) => {
 
-    await callEndpoint(updateProductS(product.id, { isActive: !product.isActive }))
-      .then((res) => {
-        dispatch(updateProduct({ ...product, isActive: !product.isActive }));
+    // await callEndpoint(updateProductS(product.id, { isActive: !product.isActive }))
+    //   .then((res) => {
+    //     dispatch(updateProduct({ ...product, isActive: !product.isActive }));
 
-      })
-      .catch((err) => {
-        enqueueSnackbar(err.message, { variant: 'error' })
-      })
+    //   })
+    //   .catch((err) => {
+    //     enqueueSnackbar(err.message, { variant: 'error' })
+    //   })
 
 
   }

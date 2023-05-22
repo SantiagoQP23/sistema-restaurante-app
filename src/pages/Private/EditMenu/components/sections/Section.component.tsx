@@ -56,19 +56,19 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu })
 
   const changeStatusSection = async (seccion: ISection) => {
 
-    await callEndpoint(updateSectionS(seccion.id, { isActive: !seccion.isActive }))
-      .then((resp) => {
-        const { data } = resp;
-        console.log(data.section)
+    // await callEndpoint(updateSectionS(seccion.id, { isActive: !seccion.isActive }))
+    //   .then((resp) => {
+    //     const { data } = resp;
+    //     console.log(data.section)
 
-        dispatch(updateSection({ ...seccion, isActive: !seccion.isActive }))
+    //     dispatch(updateSection({ ...seccion, isActive: !seccion.isActive }))
 
-      })
-      .catch((err) => {
+    //   })
+    //   .catch((err) => {
 
-        enqueueSnackbar('Ya existe', { variant: 'error' })
+    //     enqueueSnackbar('Ya existe', { variant: 'error' })
 
-      });
+    //   });
 
   }
 

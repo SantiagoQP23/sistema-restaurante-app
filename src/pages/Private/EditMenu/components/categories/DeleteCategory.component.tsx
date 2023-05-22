@@ -34,18 +34,18 @@ export const DeleteCategory: FC<Props> = ({isOpen, closeModal }) => {
 
     console.log('Modal eliminar')
 
-    await callEndpoint(deleteCategoryS(category!.id))
+    // await callEndpoint(deleteCategoryS(category!.id))
 
-      .then((res) => {
+    //   .then((res) => {
 
-        enqueueSnackbar('Categoría eliminada', { variant: 'success' });
-        dispatch(deleteCategory(category!));
-        closeModal();
-      })
-      .catch((err) => {
+    //     enqueueSnackbar('Categoría eliminada', { variant: 'success' });
+    //     dispatch(deleteCategory(category!));
+    //     closeModal();
+    //   })
+    //   .catch((err) => {
         
-        enqueueSnackbar('Error al eliminar la categoría', { variant: 'error' });
-      })
+    //     enqueueSnackbar('Error al eliminar la categoría', { variant: 'error' });
+    //   })
 
     closeModal()
 

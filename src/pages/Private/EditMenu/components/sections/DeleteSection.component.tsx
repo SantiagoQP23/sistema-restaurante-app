@@ -32,20 +32,20 @@ export const DeleteSection: FC<Props> = ({ isOpen, closeModal }) => {
 
     console.log('Modal eliminar')
 
-    await callEndpoint(deleteSectionS(section!.id))
-      .then((res) => {
+    // await callEndpoint(deleteSectionS(section!.id))
+    //   .then((res) => {
 
-        enqueueSnackbar('Sección eliminada', { variant: 'success' });
-        dispatch(deleteSection(section!.id));
-        closeModal();
-      })
-      .catch((err) => {
+    //     enqueueSnackbar('Sección eliminada', { variant: 'success' });
+    //     dispatch(deleteSection(section!.id));
+    //     closeModal();
+    //   })
+    //   .catch((err) => {
 
-        enqueueSnackbar('Error al eliminar la sección', { variant: 'error' });
+    //     enqueueSnackbar('Error al eliminar la sección', { variant: 'error' });
 
-        closeModal()
+    //     closeModal()
 
-      })
+    //   })
 
   }
 

@@ -64,25 +64,25 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria, handleOpenMe
   }
 
 
-  const changeStatusCategory = async (categoria: ICategory) => {
+  // const changeStatusCategory = async (categoria: ICategory) => {
 
-    await callEndpoint(updateCategoryS(categoria.id, { isActive: !categoria.isActive }))
-      .then((resp) => {
-        const { data } = resp;
+  //   await callEndpoint(updateCategoryS(categoria.id, { isActive: !categoria.isActive }))
+  //     .then((resp) => {
+  //       const { data } = resp;
 
-        dispatch(updateCategory({ ...categoria, isActive: !categoria.isActive }));
-        //dispatch(setActiveCategory({ ...categoria, ...data.category }))
-        enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
+  //       dispatch(updateCategory({ ...categoria, isActive: !categoria.isActive }));
+  //       //dispatch(setActiveCategory({ ...categoria, ...data.category }))
+  //       enqueueSnackbar('La categoría ha sido actualizada', { variant: 'success' })
 
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('Ya existe', { variant: 'error' })
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //       enqueueSnackbar('Ya existe', { variant: 'error' })
 
-      });
+  //     });
 
 
-  }
+  // }
 
   return (
     <>
