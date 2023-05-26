@@ -321,14 +321,18 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
             <ListItemButton
-                onClick={handleOpenMenuRestaurant}
-                selected={openMenuRestaurant}
+                // onClick={handleOpenMenuRestaurant}
+                // selected={openMenuRestaurant}
                 sx={{
                   '&:hover': {
-                    backgroundColor: '#aaaa',
+                    backgroundColor: '#555',
                   },
                 }}
 
+                component={RouterLink}
+                onClick={closeSidebar}
+                to="/menu/edit"
+                disableRipple
               >
                 <ListItemIcon>
                   <TableChartTwoToneIcon />
@@ -338,15 +342,13 @@ function SidebarMenu() {
                     Menú del restaurante
                   </Typography>
                 </ListItemText>
-                {openOrders ? <ExpandLess /> : <ExpandMore />}
+                {/* {openOrders ? <ExpandLess /> : <ExpandMore />} */}
               </ListItemButton>
-              <Collapse in={openMenuRestaurant} sx={{ pl: 2 }}>
+              {/* <Collapse in={openMenuRestaurant} sx={{ pl: 2 }}>
                 <ListItem component="div">
                   <Button
                     disableRipple
-                    component={RouterLink}
-                    onClick={closeSidebar}
-                    to="/menu/edit"
+                   
 
                     startIcon={<ListAlt />}
                  
@@ -357,7 +359,7 @@ function SidebarMenu() {
                   
                 </ListItem>
 
-              </Collapse>
+              </Collapse> */}
 
 
 

@@ -24,6 +24,8 @@ import { DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
 import Userbox from '../Header/components/Userbox.component';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectAuth } from '../../../../../redux';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -67,6 +69,9 @@ export const BoxUser = ({onClick}: {onClick: () => void}) => {
 
   const theme = useTheme();
 
+  const {user} = useSelector(selectAuth);
+
+
 
   return (
     <Box
@@ -89,8 +94,8 @@ export const BoxUser = ({onClick}: {onClick: () => void}) => {
     }}
 
   >
-    <Typography variant='h6' textAlign='center' >Santiago Quirumbay</Typography>
-    <Typography variant='body1' textAlign='center'>Administrador</Typography>
+    <Typography variant='h6' textAlign='center' >{user!.person.firstName} {user!.person.lastName}</Typography>
+    <Typography variant='body1' textAlign='center'>{user!.role.name}</Typography>
   </Box>
   )
 }

@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { useSelector } from 'react-redux';
 
-import { Box, Typography, styled, LinearProgress, Tooltip, IconButton, useTheme } from '@mui/material';
+import { Box, Typography, styled, LinearProgress, Tooltip, IconButton, useTheme, ListItemButton, ListItemText, ListItemAvatar } from '@mui/material';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
@@ -50,7 +50,63 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
     <>
 
       <Tooltip title={`Editar ${detail.product.name}`} arrow>
-        <Box component='div'
+
+        <ListItemButton
+          onClick={editDetail}
+          sx={{
+            border: `1px solid ${theme.colors.alpha.black[10]}`,
+            py: 1.5,
+          }}
+
+
+        >
+          <ListItemAvatar>
+            <Typography
+              variant='h5'
+              color={detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'}
+
+            >{detail.quantity}</Typography>
+          </ListItemAvatar>
+
+          <ListItemText
+            primary={detail.product.name}
+            primaryTypographyProps={
+              {
+                variant: 'h5',
+                color: detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'
+              }
+
+            }
+
+            secondary={
+              <>
+                <Typography
+
+                  whiteSpace='pre-wrap'
+                  variant='body1'
+
+                >
+                  {detail.description}
+
+                </Typography>
+                {
+
+                  detail.quantity !== detail.qtyDelivered && <LinearProgressWrapper
+                    value={(detail.qtyDelivered * 100) / detail.quantity}
+                    color="primary"
+                    variant="determinate"
+                  />
+                }
+
+              </>
+            }
+
+          />
+
+
+        </ListItemButton>
+
+        {/* <Box component='div'
           sx={{
 
             p: 0.5,
@@ -72,11 +128,14 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
           onClick={editDetail}
 
-        >
+        > */}
 
-          <Box display="flex" alignItems="center" justifyContent="space-between" mb={0.5}>
+        {/* <Box display="flex" alignItems="center" justifyContent="space-between" mb={0.5}>
             <Box >
-              <Typography variant='h4'>
+              <Typography 
+              variant='h4'
+                color={detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'}
+              >
                 {`${detail.quantity} -  ${detail.product.name}`}
 
               </Typography>
@@ -98,10 +157,11 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
             color="primary"
             variant="determinate"
           />
-          }
+          } 
+          */}
 
 
-        </Box>
+        {/* </Box> */}
 
       </Tooltip>
 

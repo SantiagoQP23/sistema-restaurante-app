@@ -85,7 +85,7 @@ export const CardActiveOrder: FC<Props> = ({
     
             }}
             spacing={1}
-            p={1}
+             p={0.5}
           >
 
 

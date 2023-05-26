@@ -14,7 +14,7 @@ import { es } from 'date-fns/locale';
 
 import { useSnackbar } from 'notistack';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DetailInProgress } from './';
 import { Label } from '../../../../../../components/ui';
@@ -23,7 +23,7 @@ import { UpdateOrderDto } from '../../../dto/update-order.dto';
 import { OrderStatus, IOrderDetail, TypeOrder } from '../../../../../../models/orders.model';
 import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
-import { setActiveOrder } from '../../../../../../redux';
+import { selectMenu, setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
@@ -120,6 +120,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
   const { details } = order;
 
+  const {sections} = useSelector(selectMenu);
+
   const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -156,234 +158,228 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   return (
     <>
 
-    
 
-        <Card
 
-          sx={{
+      <Card
 
-            // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
-            // borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
-            border: (theme) => `1px solid ${theme.palette[color].main}`,
-          }}
-          variant='elevation'
+        sx={{
 
+          // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
+          // borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
+          border: (theme) => `1px solid ${theme.palette[color].main}`,
+        }}
+        variant='elevation'
+
+      >
+
+
+
+        <Stack
+          sx={{ p: 1 }}
+          spacing={1}
         >
-
-
-
           <Stack
-            sx={{ p: 1 }}
-            spacing={1}
+            direction='row'
+            justifyContent='space-between'
           >
-            <Stack
-              direction='row'
-              justifyContent='space-between'
-            >
-              <Box
-                flexBasis='50%'
+
+
+
+            <Box flexBasis='50%'   >
+              <Typography
+                variant="body1"
+                fontWeight='bold'
               >
-                <Typography variant='body1' fontWeight='bold'>N° {order.num}</Typography>
+                {
+                  order.type === TypeOrder.IN_PLACE
 
-              </Box>
+                    ?
+                    `Mesa ${order.table?.name}`
+                    : 'Para llevar'
 
+                }
 
-              <Box
-                flexBasis='50%'
-              >
-
-
-
-
-                <Typography
-                  variant="body1"
-                  fontWeight='bold'
-                >
-                  {
-                    order.type === TypeOrder.IN_PLACE
-
-                      ?
-                      `Mesa ${order.table?.name}`
-                      : 'Para llevar'
-
-                  }
-
-                </Typography>
-              </Box>
-
-
-            </Stack>
-
-            <Box>
-              <Typography variant='caption'>Cliente</Typography>
-              <Typography variant='body1' fontWeight='bold'>
-                {order.client?.person.firstName} {order.client?.person.lastName}
               </Typography>
             </Box>
-            <Box>
 
-              <Typography variant='caption'>Mesero</Typography>
-              <Typography variant='body1' fontWeight='bold'>
-                {order.user.person.firstName} {order.user.person.lastName}
-              </Typography>
+            <Box flexBasis='50%' >
+              <Typography variant='body1' fontWeight='bold'>N° {order.num}</Typography>
+
             </Box>
-            <Typography variant='body2'  >
-              {'Creado ' +
-                formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-                })}
-            </Typography>
 
           </Stack>
 
+          <Box>
+            <Typography variant='caption'>Cliente</Typography>
+            <Typography variant='body1' fontWeight='bold'>
+              {order.client?.person.firstName} {order.client?.person.lastName}
+            </Typography>
+          </Box>
+          <Box>
+
+            <Typography variant='caption'>Mesero</Typography>
+            <Typography variant='body1' fontWeight='bold'>
+              {order.user.person.firstName} {order.user.person.lastName}
+            </Typography>
+          </Box>
+          <Typography variant='body2'  >
+            {'Creado ' +
+              formatDistance(new Date(order.createdAt), new Date(), {
+                addSuffix: true,
+                includeSeconds: true,
+                locale: es
+              })}
+          </Typography>
+
+        </Stack>
 
 
-          <Divider sx={{ mb: 1 }} />
 
-          <Stack
-            spacing={1}
-            sx={{ px: 1 }}
-          >
+        <Divider 
+        sx={{ mb: 1, mx: 5 }} 
+        />
 
-            {
-              details.filter(detail => detail.quantity !== detail.qtyDelivered)
-                .map(detail => (
+        <Stack
+          spacing={1}
+          sx={{ px: 1 }}
+        >
+          
 
-                  <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+          {
+            details.filter(detail => detail.quantity !== detail.qtyDelivered)
+              .map(detail => (
 
-                ))
+                <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
 
-            }
-            
-            {/* {
-              order.status === OrderStatus.IN_PROGRESS || order.status === OrderStatus.DELIVERED
-                ?
-                <>
-                
-                </>
+              ))
 
-                :
-                details.map(detail => (
-                  <Grid key={detail.id} item xs={12} >
-                    <PendingDetail detail={detail} />
-                  </Grid>
-                )
-                )
-            } */}
+          }
 
-            {
-              details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
-              <>
+
+
+          {
+            details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
+            <>
+              <Stack
+                direction='row'
+                justifyContent='space-between'
+                alignItems='center'
+                onClick={handleExpanded}
+              >
+                <ListItemText>
+                  <Typography variant='body1' >Productos entregados</Typography>
+                </ListItemText>
+
+                {expanded ? <ExpandLess /> : <ExpandMore />}
+
+              </Stack>
+
+              <Collapse
+                in={expanded}
+              >
                 <Stack
-                  direction='row'
-                  justifyContent='space-between'
-                  alignItems='center'
-                  onClick={handleExpanded}
-
+                  spacing={1}
+                 
                 >
 
-
-
-                  <ListItemText>
-
-                    <Typography variant='body1' >Productos entregados</Typography>
-                  </ListItemText>
-
-
-                  {expanded ? <ExpandLess /> : <ExpandMore />}
-
-
-
-                </Stack>
-
-                <Collapse
-                  in={expanded}
-                >
 
                   {
                     details.filter(detail => detail.quantity === detail.qtyDelivered)
                       .map(detail => (
-                        <Grid key={detail.id} item xs={12} >
-                          <DetailDispatched detail={detail} orderId={order.id} />
-                        </Grid>
+
+                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+
                       ))
 
                   }
+                </Stack>
 
-                </Collapse>
+              </Collapse>
 
-              </>
-
-
-
-            }
-
-          </Stack>
+            </>
 
 
 
-          <CardActions>
+          }
+
+        </Stack>
+
+        <Divider 
+        sx={{ my: 1, mx: 5 }} 
+        />
 
 
 
 
-            {
-              order.status === OrderStatus.PENDING
-                ? <Button
+        <CardActions>
+
+
+
+
+          {
+            order.status === OrderStatus.PENDING
+              ? <Button
+                fullWidth
+                variant='contained'
+                startIcon={<PlayArrow />}
+                onClick={() => {
+                  changeStatusOrder(OrderStatus.IN_PROGRESS)
+                  setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+
+                }}
+                color={color}
+                size='small'
+
+
+              >Iniciar</Button>
+              : order.status === OrderStatus.IN_PROGRESS
+              &&
+              < >
+                <Button
                   fullWidth
-                  variant='text'
-                  startIcon={<PlayArrow />}
+                  
+                  variant='contained'
+                  startIcon={<ArrowBack />}
                   onClick={() => {
-                    changeStatusOrder(OrderStatus.IN_PROGRESS)
-                    setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+                    changeStatusOrder(OrderStatus.PENDING)
+                    setStatusFilter && setStatusFilter(OrderStatus.PENDING)
 
                   }}
                   color={color}
+                  size='small'
 
-                >Iniciar</Button>
-                : order.status === OrderStatus.IN_PROGRESS
-                &&
-                < >
-                  <Button
-                    fullWidth
-                    startIcon={<ArrowBack />}
-                    variant='text'
-                    onClick={() => {
-                      changeStatusOrder(OrderStatus.PENDING)
-                      setStatusFilter && setStatusFilter(OrderStatus.PENDING)
 
-                    }}
-                    color={color}
+                >
+                  Pendiente
+                </Button>
 
-                  >
-                    Pendiente
-                  </Button>
+                {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
 
-                  {/* <Button variant='contained' onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}>Entregar todo</Button> */}
-
-                </ >
+              </ >
 
 
 
 
-            }
-            <Button
-              onClick={() => {
-                navigate(`/orders/edit/${order.id}`)
-              }}
-              size='small'
-              color={color}
-            >
-              <EditOutlined />
-            </Button>
+          }
 
-          </CardActions>
+          <Button
+            onClick={() => {
+              navigate(`/orders/edit/${order.id}`)
+            }}
+            size='small'
+            color={color}
+            variant='outlined'
+            fullWidth
+          >
+            {/* <EditOutlined /> */}
+            Editar
+          </Button>
+
+        </CardActions>
 
 
-        </Card>
-   
+      </Card>
+
 
 
     </>
