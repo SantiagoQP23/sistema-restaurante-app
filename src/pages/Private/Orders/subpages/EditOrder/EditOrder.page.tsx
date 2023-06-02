@@ -63,7 +63,7 @@ export const EditOrder = () => {
   const {data, isLoading} = useOrder(orderId!);
 
 
-  dispatch(setActiveOrder(data));
+  dispatch(setActiveOrder(data!));
 
   useEffect(() => {
     if (activeOrder) {
