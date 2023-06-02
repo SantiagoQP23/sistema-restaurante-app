@@ -2,7 +2,7 @@ import { FC, useContext, useEffect } from 'react';
 
 
 
-import { Box, IconButton, Typography,  } from '@mui/material';
+import { Box, IconButton, ListItemAvatar, ListItemButton, ListItemText, TableCell, TableRow, Typography, } from '@mui/material';
 
 import { AddCircleOutline, RemoveCircleOutline, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { ICreateOrderDetail, IOrderDetail } from '../../../../../../models';
@@ -48,60 +48,14 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   }, [counter])
 
 
-  
+
   return (
     <>
+      <TableRow>
+      
 
-    <Box
-      sx={{
-        // border: '1px solid #ddd',
-
-        // borderRadius: '8px',
-        p:1 
-      }}
-    >
-
-
-
-
-
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography
-            variant="h5"
-            color="initial"
-          >
-
-            {detalle.product.name} -
-          </Typography>
-
-          <Typography variant='subtitle1'>
-            $ {detalle.product.price}
-          </Typography>
-        </Box>
-
-
-
-
-      </Box>
-
-
-      <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-
-        <Typography variant="body2" color={detalle.description ? "orange" : "gray"}>
-
-          {detalle.description ? detalle.description : "Normal"}
-          <IconButton
-            onClick={editDescription}
-          >
-            <EditOutlined />
-          </IconButton>
-
-        </Typography>
-
-        <Box alignContent="right" >
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
+        <TableCell align='center'>
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
 
             {
               counter > 1
@@ -135,17 +89,49 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
               <AddCircleOutline />
             </IconButton>
 
-            <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detalle.product.price * counter}</Typography>
           </Box>
+        </TableCell>
+
+        <TableCell>
+          <Typography variant='h5' noWrap>{detalle.product.name}</Typography>
+          <Typography variant='body1'>$ {detalle.product.price}</Typography>
+
+        </TableCell>
+
+        <TableCell>
+
+          <Typography variant="body2" whiteSpace='pre-wrap'>
+
+            {detalle.description ? detalle.description : "Normal"}
+
+
+          </Typography>
+
+        </TableCell>
+
+        <TableCell align='center'>
+          <Typography variant="body1" >$ {detalle.product.price * counter}</Typography>
+        </TableCell>
+
+        <TableCell
+          align='center'
+        >
+          <IconButton
+            onClick={editDescription}
+          >
+            <EditOutlined />
+          </IconButton>
+        </TableCell>
 
 
 
-        </Box>
-      </Box>
-      </Box>
 
 
-      
+
+
+
+      </TableRow>
+
 
 
     </>

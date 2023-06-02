@@ -11,9 +11,11 @@ import {
   Collapse,
   ListItemButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton
 } from '@mui/material';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
 import { SidebarContext } from '../../../../contexts/SidebarContext';
 
 import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
@@ -181,7 +183,7 @@ const SubMenuWrapper = styled(Box)(
 );
 
 function SidebarMenu() {
-  
+
   const { closeSidebar } = useContext(SidebarContext);
 
   const [openOrders, setOpenOrders] = useState(true);
@@ -201,6 +203,8 @@ function SidebarMenu() {
 
 
   const { user } = useSelector(selectAuth);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -236,30 +240,26 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
 
+            
 
-              <ListItemButton
-                onClick={handleOpenOrders}
-                selected={openOrders}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: '#aaaa',
-                  },
-                }}
+              <ListItem
 
               >
-                <ListItemIcon>
-                  <TableChartTwoToneIcon />
-                </ListItemIcon>
-                <ListItemText >
-                  <Typography variant='h5'>
+                <Button
+                  startIcon={<TableChartTwoToneIcon />}
+                  endIcon={openOrders ? <ExpandLess /> : <ExpandMore />}
+                  onClick={handleOpenOrders}
+                >
+                 Pedidos
 
-                    Pedidos
-                  </Typography>
-                </ListItemText>
-                {openOrders ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
+                </Button>
 
-              <Collapse in={openOrders} sx={{ pl: 2 }}>
+
+              </ListItem>
+
+              <Collapse in={openOrders} >
+
+
                 <ListItem component="div">
                   <Button
                     disableRipple
@@ -273,20 +273,7 @@ function SidebarMenu() {
                     Lista
                   </Button>
                 </ListItem>
-                <ListItem component="div">
-                  <Button
-                    disableRipple
-                    component={RouterLink}
-                    onClick={closeSidebar}
-                    to="/orders/add"
-
-                    startIcon={<RestaurantOutlinedIcon />}
-
-                  >
-                    Nuevo pedido
-
-                  </Button>
-                </ListItem>
+               
 
 
 
@@ -320,48 +307,22 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div">
-            <ListItemButton
-                // onClick={handleOpenMenuRestaurant}
-                // selected={openMenuRestaurant}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: '#555',
-                  },
-                }}
 
-                component={RouterLink}
-                onClick={closeSidebar}
-                to="/menu/edit"
-                disableRipple
-              >
-                <ListItemIcon>
-                  <TableChartTwoToneIcon />
-                </ListItemIcon>
-                <ListItemText >
-                  <Typography variant='h5'>
-                    Menú del restaurante
-                  </Typography>
-                </ListItemText>
-                {/* {openOrders ? <ExpandLess /> : <ExpandMore />} */}
-              </ListItemButton>
-              {/* <Collapse in={openMenuRestaurant} sx={{ pl: 2 }}>
-                <ListItem component="div">
-                  <Button
-                    disableRipple
-                   
-
-                    startIcon={<ListAlt />}
-                 
-                    end
-                  >
-                    Secciones
-                  </Button>
+              <ListItem 
+                
+                >
+                <Button
+                  startIcon={<RestaurantOutlinedIcon />}
                   
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/menu/edit"
+                >
+                  Menú del restaurante
+                </Button>
                 </ListItem>
 
-              </Collapse> */}
-
-
+            
 
               <ListItem component="div">
                 <Button

@@ -1,7 +1,7 @@
 import { FC, useContext } from "react";
 
 
-import { Card, CardHeader, CardContent, Box, Button, Typography, TextField, Divider, Grid, Chip, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
+import { Card, CardHeader, CardContent, Box, Button, Typography, TextField, Divider, Grid, Chip, ToggleButtonGroup, ToggleButton, IconButton, List, ListItemButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Stack } from '@mui/material';
 import { TypeOrder } from "../../../../../../models";
 import { ModalClientOrder } from "../../../components";
 import { TableOrder } from "../../../components/ReceiptOrder/TableOrder.component";
@@ -24,15 +24,26 @@ const TextFieldPeople: FC = () => {
 
   const { people, setPeople } = useContext(OrderContext);
 
+  const handleChangePeople = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    if (Number(e.target.value) <= 0) return;
+
+    setPeople(Number(e.target.value));
+
+  }
+
   return (
     <>
 
       <TextField
         type='number'
         value={people}
-        onChange={(e) => { setPeople(Number(e.target.value)) }}
-        size="small"
+        onChange={handleChangePeople}
+
         fullWidth
+        label='Personas'
+
+
       />
 
     </>
@@ -82,27 +93,56 @@ export const OrderDetails = () => {
 
         <Divider />
 
-        <Box>
 
-          <Grid container spacing={1} sx={{ pb: 2 }}>
-            {
-              details.length > 0
-                ? details.map((detail) => (
+        <TableContainer>
 
-                  <Grid key={detail.product.name} item xs={12}>
-                    <NewOrderDetail detalle={detail} />
-                    <Divider />
+          <Table>
 
-                  </Grid>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Cantidad
+                </TableCell>
+                <TableCell>
+                  Producto
+                </TableCell>
+                <TableCell>
+                  Descripción
+                </TableCell>
+                <TableCell>
+                  Subtotal
+                </TableCell>
+                <TableCell>
+                  Acciones
+                </TableCell>
+              </TableRow>
+            </TableHead>
 
-                ))
-                : <Grid item xs={12}>
-                  <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
-                </Grid>
+            <TableBody>
 
-            }
-          </Grid>
-        </Box>
+
+              {
+                details.length > 0
+                  ? details.map((detail) => (
+                    <>
+                      <NewOrderDetail detalle={detail} />
+                    </>
+
+
+                  ))
+                  : (<TableRow>
+                    <TableCell colSpan={5}>
+
+                      <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
+                    </TableCell>
+                  </TableRow>)
+
+              }
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+
 
       </Card>
 
@@ -150,20 +190,18 @@ export const NewOrderSummary = () => {
         <CardContent>
 
 
-          <Grid container spacing={1}
+          <Grid container spacing={2}
             alignItems='center'
 
           >
-            <Grid item xs={4}>
 
-              <Typography variant='h6'>Tipo de orden</Typography>
-            </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={12}>
               <ToggleButtonGroup
                 value={typeOrder}
                 onChange={(e, value) => setTypeOrder(value)}
                 exclusive
                 size="small"
+                fullWidth
               >
                 <ToggleButton
                   value={TypeOrder.TAKE_AWAY}
@@ -181,13 +219,9 @@ export const NewOrderSummary = () => {
             </Grid>
 
 
-            <Grid item xs={4}>
 
-              <Typography variant='h6' mt={1}>Personas</Typography>
-            </Grid>
-
-
-            <Grid item xs={8}>
+            <Grid item xs={6}>
+              {/* <Typography variant='h6'>Personas</Typography> */}
               <TextFieldPeople />
             </Grid>
 
@@ -195,12 +229,9 @@ export const NewOrderSummary = () => {
             {
               typeOrder === TypeOrder.IN_PLACE && (
                 <>
-                  <Grid item xs={4}>
-                    <Typography variant='h6' mt={1}>Mesa</Typography>
 
-                  </Grid>
-
-                  <Grid item xs={8}>
+                  <Grid item xs={6}>
+                    {/* <Typography variant='subtitle1'>Mesa</Typography> */}
                     <TableOrder />
                   </Grid>
 
@@ -210,50 +241,32 @@ export const NewOrderSummary = () => {
               )
             }
 
-            <Grid item xs={4}>
 
-              <Typography variant='h6'>Cliente </Typography>
+            <Grid item xs={12} >
 
-            </Grid>
-
-
-            <Grid item xs={8} display='flex'>
 
               <ComboBoxClient client={client} handleChangeClient={setClient} />
-              <IconButton
-                size="small"
-                onClick={editClient}
 
-              >
-                <AddOutlined />
-              </IconButton>
+              <Box display='flex' flexDirection='row-reverse' mt={1}>
 
+                <Button
+                  size="small"
+                  onClick={editClient}
+                  startIcon={<AddOutlined />}
+                  variant="outlined"
+                >
+                  Nuevo cliente
+                </Button>
 
-            </Grid>
-
-            <Grid item xs={4}>
-            </Grid>
-
-
-            <Grid item xs={8}>
+              </Box>
             </Grid>
 
           </Grid>
-
-
-
-
 
           <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
             <Typography variant='h4' fontWeight='bold'>Total </Typography>
             <Typography variant='h4' fontWeight='bold'>${amount}</Typography>
-          </Box>
-
-
-
-          <Box mt={2}>
-
           </Box>
 
 

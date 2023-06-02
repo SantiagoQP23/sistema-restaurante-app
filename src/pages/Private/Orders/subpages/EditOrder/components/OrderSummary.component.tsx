@@ -89,25 +89,33 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
               <Stack spacing={1} direction='row'>
 
+                <PeopleOrder people={order.people} />
+
                 {
                   order.type === "IN_PLACE" as TypeOrder &&
                   <OrderTable />
 
                 }
-                <PeopleOrder people={order.people} />
               </Stack>
+
+
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <ComboBoxClient client={order.client || null} handleChangeClient={handleChangeClient} />
 
               </Box>
 
             </Stack>
-            <Box display='flex' justifyContent='right' >
+            <Box display='flex' flexDirection='row-reverse' mt={1}>
+
               <Button
+                size="small"
                 onClick={editClient}
+                startIcon={<AddOutlined />}
+                variant="outlined"
               >
-                Añadir cliente
+                Nuevo cliente
               </Button>
+
             </Box>
 
 
@@ -196,17 +204,28 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <Typography variant='h4' fontWeight='bold'>${order.amount}</Typography>
             </Box>
 
-            <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-              <Button
-                startIcon={<DeleteOutline />}
-                color='error'
-                onClick={eliminarPedido}
-                disabled={orderDelivered}
-                size='small'
-              >
-                Eliminar
-              </Button>
+            <Box 
+            display='flex' 
+            justifyContent='space-between' 
+            alignItems='flex-start' mt={2}>
 
+              <Box>
+
+                <Button
+                  startIcon={<DeleteOutline />}
+                  color='error'
+                  onClick={eliminarPedido}
+                  disabled={orderDelivered}
+                  size='small'
+                >
+                  Eliminar
+                </Button>
+
+                {
+                  orderDelivered &&
+                  <Typography variant='subtitle1'>Este pedido no se puede eliminar porque ya tiene productos entregados</Typography>
+                }
+              </Box>
               <Button
                 variant='contained'
                 onClick={() => { navigate('receipt') }}
@@ -218,6 +237,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                 Pago
               </Button>
             </Box>
+
 
           </CardContent>
         </Card>

@@ -149,22 +149,7 @@ export const EditOrder = () => {
                 </Box>
               </Stack>
             </>
-          // <Grid container spacing={1}>
-
-          //   <Grid container spacing={1} item xs={12} sm={7} alignContent='start' sx={{
-          //     display: { xs: 'none', md: 'flex' },
-          //   }}>
-          //   </Grid>
-
-          //   <Grid item xs={12} sm={5} >
-
-          //     <MenuAddProduct />
-
-
-
-          //   </Grid>
-
-          // </Grid>
+         
         }
 
       </Container>

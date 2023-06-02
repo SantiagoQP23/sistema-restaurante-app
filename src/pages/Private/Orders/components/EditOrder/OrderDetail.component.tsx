@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress } from '@mui/material';
+import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress, TableCell, TableRow } from '@mui/material';
 
 import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined, CloseOutlined, CurtainsSharp, CheckCircle, Pending } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../models';
@@ -117,7 +117,93 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
   return (
     <>
 
-      <Box
+
+      <TableRow>
+
+
+        <TableCell align='center'>
+          <Box display='flex' justifyContent='space-between' alignItems='center' >
+
+           
+
+
+                <IconButton
+                  onClick={() => {
+                    decrement()
+
+                  }}
+                >
+                  <RemoveCircleOutline />
+                </IconButton>
+
+            <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
+            <IconButton
+              onClick={() => {
+                increment()
+                
+              }}
+              >
+              <AddCircleOutline />
+            </IconButton>
+
+              {
+                counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
+                <IconButton
+                  disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
+                  color='primary'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQuantityDetail()
+                  }}
+                >
+                  <SaveOutlined />
+                </IconButton>
+  
+              }
+          </Box>
+        </TableCell>
+
+        <TableCell>
+          <Typography variant='h5' noWrap>{detail.product.name}</Typography>
+          <Typography variant='body1'>$ {detail.product.price}</Typography>
+
+        </TableCell>
+
+        <TableCell>
+
+          <Typography variant="body2" whiteSpace='pre-wrap'>
+
+            {detail.description ? detail.description : "Normal"}
+
+
+          </Typography>
+
+        </TableCell>
+
+        <TableCell align='center'>
+          <Typography variant="body1" >$ {detail.product.price * counter}</Typography>
+        </TableCell>
+
+        <TableCell
+          align='center'
+        >
+          <IconButton
+            onClick={editDetail}
+          >
+            <EditOutlined />
+          </IconButton>
+        </TableCell>
+
+
+
+
+
+
+
+
+      </TableRow>
+
+      {/* <Box
         sx={{
          p: 1,
           borderRadius: '5px',
@@ -147,24 +233,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
           }}
         >
 
-{/* {
-              detail.qtyDelivered === detail.quantity ?
-            <IconButton
-              size='small'
-              sx={{ color: 'success.main' }}
-            >
-              <CheckCircle />
-            </IconButton>
-            :
-            <IconButton
-              
-              size='small'
-              sx={{ color: 'warning.main' }}
-            >
-              <Pending />
-            </IconButton>
 
-            } */}
 
           <Typography
             variant="h5"
@@ -280,14 +349,14 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
           <Typography variant="body1" textAlign='right' fontWeight='bold'>$ {detail.amount}</Typography>
 
 
-        </Box>
-        {/* <LinearProgressWrapper
+        </Box> */}
+      {/* <LinearProgressWrapper
           value={(detail.qtyDelivered * 100) / detail.quantity}
           color="primary"
           variant="determinate"
         /> */}
 
-      </Box>
+      {/* </Box> */}
 
 
 

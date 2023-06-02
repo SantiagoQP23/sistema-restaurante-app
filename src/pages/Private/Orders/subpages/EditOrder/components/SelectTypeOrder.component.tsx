@@ -46,13 +46,7 @@ export const SelectTypeOrder = () => {
 
 
   return (<>
-    <Box
-      display='flex' gap={2} alignItems='center'
-      justifyContent='space-between'
-    >
-    <Typography variant='h6'>Tipo de orden</Typography>
-      <Box>
-
+   
 
         <ToggleButtonGroup
           value={activeOrder!.type}
@@ -61,6 +55,7 @@ export const SelectTypeOrder = () => {
 
           exclusive
           size='small'
+          fullWidth
         >
           <ToggleButton
             value={"TAKE_AWAY"}
@@ -75,9 +70,7 @@ export const SelectTypeOrder = () => {
             Para servir
           </ToggleButton>
         </ToggleButtonGroup>
-      </Box>
-
-    </Box>
+     
   </>
   )
 }

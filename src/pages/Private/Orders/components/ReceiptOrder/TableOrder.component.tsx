@@ -156,8 +156,10 @@ export const TableOrder: FC<Props> = ({ table: tableOrder  = {id: '', name: ''}}
           ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
           : 
           <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Mesa</InputLabel>
             <Select
               labelId="demo-simple-select-label"
+              label="Mesa"
               id="demo-simple-select"
               value={table?.id}
               
@@ -165,7 +167,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder  = {id: '', name: ''}}
               onChange={(e) => changeTable(e.target.value)}
 
              
-              size='small'
+             
             >
               <MenuItem value="">
                 Ninguno

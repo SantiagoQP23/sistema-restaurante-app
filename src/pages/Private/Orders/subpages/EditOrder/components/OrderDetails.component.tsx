@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { Box, Typography, Grid, Divider, Button, Card, CardHeader } from '@mui/material';
+import { Box, Typography, Grid, Divider, Button, Card, CardHeader, TableContainer, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { OrderDetail } from "../../../components/EditOrder/OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
 import { OrderContext } from '../../../context/Order.context';
@@ -47,40 +47,69 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
         }
         />
 
-        <Box
-          sx={{
-            px: 1,
-            pb: 2
 
-          }}
-        >
+        <Divider />
 
+        <TableContainer>
+          <Table>
+          <TableHead>
+              <TableRow>
+                <TableCell>
+                  Cantidad
+                </TableCell>
+                <TableCell>
+                  Producto
+                </TableCell>
+                <TableCell>
+                  Descripción
+                </TableCell>
+                <TableCell>
+                  Subtotal
+                </TableCell>
+                <TableCell>
+                  Acciones
+                </TableCell>
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+
+          
+    
        
 
         {
           orderDetails.length === 0
-            ? <Typography variant="body1" color="textSecondary" align='center'>No hay productos en este pedido</Typography>
+            ? (<TableRow>
+              <TableCell colSpan={5}>
+
+                <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
+              </TableCell>
+            </TableRow>)
+
             :
-            <Grid container spacing={1}>
-              {
+          
+              
                 orderDetails.map((detail) => {
 
                   if (detail.isActive)
                     return (
-                      <Grid key={detail.id} item xs={12}>
-
-                        <Divider />
-                        <OrderDetail detail={detail} />
+                                      
+                        <OrderDetail key={detail.id} detail={detail} />
 
 
-                      </Grid>
+                   
                     )
                 })
-              }
-              <ModalUpdateDetail />
-            </Grid>
-        }
-        </Box>
+              
+              
+            }
+      
+      </TableBody>
+          </Table>
+        </TableContainer>
+
+            <ModalUpdateDetail />
 
       </Card>
 

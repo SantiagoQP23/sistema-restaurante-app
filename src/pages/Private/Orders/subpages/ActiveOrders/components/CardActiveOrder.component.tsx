@@ -44,7 +44,8 @@ export const CardActiveOrder: FC<Props> = ({
          
           width: alignment === 'horizontal' ? 'auto' : '325px',
         
-          // bgcolor: 'transparent',
+        
+          border: 'none'
 
         }}
       >
@@ -52,17 +53,17 @@ export const CardActiveOrder: FC<Props> = ({
         <CardHeader
           title={
             <>
-              <Label
-                color={color}
-              >
-                {title}
-              </Label>
-
+              {title}
             </>
           }
 
-          subheader={
-            `${orders.length} pedidos`
+          action={
+              <Label
+                color={color}
+              >
+                {orders.length}
+              </Label>
+            
           }
 
         />

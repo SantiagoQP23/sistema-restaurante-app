@@ -2,7 +2,9 @@ import { FC } from 'react'
 
 import { useSelector } from 'react-redux';
 
-import { Box, Typography, styled, LinearProgress, Tooltip, IconButton, useTheme, ListItemButton, ListItemText, ListItemAvatar } from '@mui/material';
+import { Box, Typography, styled, LinearProgress, 
+  Tooltip, IconButton, useTheme, ListItemButton, ListItemIcon,
+  ListItemText, ListItemAvatar, CircularProgress, Stack, Chip } from '@mui/material';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 
@@ -60,16 +62,61 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
 
         >
-          <ListItemAvatar>
-            <Typography
+          {/* <Box
+             sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 2
+             }}
+          > */}
+
+            {/* <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+              <CircularProgress
+                variant="determinate"
+                size={25}
+                value={detail.qtyDelivered * 100 / detail.quantity}
+                sx={{ color: 'success.main' }}
+              />
+              <Box
+                sx={{
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  position: 'absolute',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  component="div"
+                // sx={{ color: detail.qtyDelivered === detail.quantity ? 'success.main' : 'warning.main' }}
+
+                >{detail.quantity}</Typography>
+              </Box>
+            </Box> */}
+
+            {/* <Typography
               variant='h5'
               color={detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'}
+              
 
             >{detail.quantity}</Typography>
-          </ListItemAvatar>
+          </Box> */}
+
+            <ListItemIcon>
+              <Chip 
+              label={detail.quantity}
+                variant={detail.qtyDelivered !== detail.quantity ? 'filled' : 'outlined'}
+              />
+
+            </ListItemIcon>
 
           <ListItemText
-            primary={detail.product.name}
+            primary={ `${detail.product.name}`}
             primaryTypographyProps={
               {
                 variant: 'h5',
@@ -91,11 +138,22 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
                 </Typography>
                 {
 
-                  detail.quantity !== detail.qtyDelivered && <LinearProgressWrapper
-                    value={(detail.qtyDelivered * 100) / detail.quantity}
-                    color="primary"
-                    variant="determinate"
-                  />
+                  detail.quantity !== detail.qtyDelivered && detail.quantity > 1 &&
+
+                  (
+                    <>
+                      <Stack direction='row' alignItems='center' spacing={1} >
+
+                        <Typography variant='subtitle1'>{detail.qtyDelivered}</Typography>
+                        <LinearProgressWrapper
+                          value={(detail.qtyDelivered * 100) / detail.quantity}
+                          color="primary"
+                          variant="determinate"
+
+                        />
+                      </Stack>
+                    </>
+                  )
                 }
 
               </>

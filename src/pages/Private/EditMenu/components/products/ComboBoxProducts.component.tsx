@@ -2,7 +2,7 @@ import { useSelector } from "react-redux"
 import { selectMenu } from "../../../../../redux";
 import { Autocomplete, TextField, darken, lighten, styled } from "@mui/material";
 import { IProduct } from "../../../../../models";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { findProductsByName, getCategories, getProducts } from "../../../../../helpers";
 import { sharingInformationService } from "../../../Orders/services/sharing-information.service";
 
@@ -22,10 +22,14 @@ const GroupItems = styled('ul')({
   padding: 0,
 });
 
+interface Props {
+  onFocus?: (event: React.FocusEvent<HTMLDivElement, Element>) => void;
+}
 
 
 
-export const ComboBoxProducts = () => {
+
+export const ComboBoxProducts: FC<Props> = ({onFocus}) => {
 
 
   const { sections } = useSelector(selectMenu);
@@ -86,11 +90,13 @@ export const ComboBoxProducts = () => {
           </li>
         )}
 
+        onFocus={onFocus}
 
 
 
 
-        renderInput={(params) => <TextField {...params} label="Producto" variant="outlined" />}
+
+        renderInput={(params) => <TextField {...params} label="Buscar producto" variant="outlined" />}
         fullWidth
       />
 

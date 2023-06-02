@@ -1,4 +1,6 @@
-import { Grid, Typography, Button, Container, Card, CardContent, Stack, Box, Switch, CardHeader } from '@mui/material';
+import { useState } from 'react';
+
+import { Grid, Typography, Button, Container, Card, CardContent, Stack, Box, Switch, CardHeader, Tabs, Tab } from '@mui/material';
 
 import { useNavigate, } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
@@ -17,6 +19,11 @@ import { Label } from '../../../../../components/ui';
 import { useUpdateClient } from '../../hooks/useClients';
 
 
+enum ViewClient {
+  INFO = 'info',
+  HISTORY = 'history'
+}
+
 
 
 export const EditClient = () => {
@@ -28,6 +35,8 @@ export const EditClient = () => {
     navigate('/clients')
 
   }
+
+  const [view, setView] = useState<ViewClient>(ViewClient.INFO);
 
   const updateClientMutation = useUpdateClient();
 
@@ -46,7 +55,7 @@ export const EditClient = () => {
     num: ''
   };
 
-  if(person.identification){
+  if (person.identification) {
     const { id: identificationId, ...rest } = person.identification;
     identification = { ...rest };
   }
@@ -69,7 +78,7 @@ export const EditClient = () => {
 
     if (form.numPhone === "") delete dataClient.numPhone;
 
-    if(form.email === "") delete dataClient.email;
+    if (form.email === "") delete dataClient.email;
 
     let clientUpdated: UpdateClientDto = {
       ...dataClient,
@@ -86,8 +95,8 @@ export const EditClient = () => {
       }
     }
 
-    console.log({clientUpdated})
-    
+    console.log({ clientUpdated })
+
     updateClientMutation.mutateAsync(clientUpdated)
       .then((data) => {
         dispatch(updateClient(data))
@@ -189,15 +198,36 @@ export const EditClient = () => {
 
         </Grid>
         <Grid item xs={12} lg={8}>
-          <Card>
-            <CardContent>
 
-              <FormClient onSubmit={onSubmit} client={client} loading={updateClientMutation.isLoading} msg={'Editar'} />
+          <Stack spacing={1}>
+
+            <Tabs
+              value={view}
+              onChange={(e, value) => setView(value)}
+            >
+              <Tab label="Información" value={ViewClient.INFO} />
+              <Tab label="Historial de pedidos" value={ViewClient.HISTORY} />
+            </Tabs>
+
+            {
+              view === ViewClient.INFO ?
+                (
+                  <Card>
+                    <CardContent>
+
+                      <FormClient onSubmit={onSubmit} client={client} loading={updateClientMutation.isLoading} msg={'Editar'} />
 
 
-            </CardContent>
-          </Card>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <>
+                    Historial de pedidos
+                  </>
+                )
+            }
 
+          </Stack>
         </Grid>
       </Grid>
 

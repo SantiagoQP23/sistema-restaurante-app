@@ -45,7 +45,7 @@ export const ComboBoxClient: FC<Props> = ({ client, handleChangeClient }) => {
         getOptionLabel={(option) => option.person.firstName + ' ' + option.person.lastName}
         value={client}
 
-        renderInput={(params) => <TextField {...params} label="Cliente" variant="outlined" />}
+        renderInput={(params) => <TextField {...params} label="Cliente (opcional)" variant="outlined" />}
 
         onChange={(event, newValue: IClient | null) => {
           handleChangeClient(newValue);

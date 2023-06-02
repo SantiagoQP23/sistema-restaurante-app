@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Collapse,
-  Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar
+  Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar, Tab, Tabs
 } from '@mui/material';
 
 import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore } from '@mui/icons-material';
@@ -28,6 +28,7 @@ import { selectMenu, setActiveOrder } from '../../../../../../redux';
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
 import { Stack, ListItemButton, ListItemText } from '@mui/material';
+import { BtnAddProduct } from './BtnAddProduct.component';
 
 interface Props {
   order: IOrder;
@@ -114,13 +115,19 @@ const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detai
 
 }
 
+enum StatusDetail {
+  NOT_DELIVERED = 'NOT_DELIVERED',
+  DELIVERED = 'DELIVERED'
 
+}
 
 export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
+  // const color= "primary";
+
   const { details } = order;
 
-  const {sections} = useSelector(selectMenu);
+  const { sections } = useSelector(selectMenu);
 
   const { socket } = useContext(SocketContext);
 
@@ -167,6 +174,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
           // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
           // borderBottom: (theme) => `1px solid ${theme.palette[color].main}`,
           border: (theme) => `1px solid ${theme.palette[color].main}`,
+          // bgcolor: (theme) => theme.colors[color].lighter,
         }}
         variant='elevation'
 
@@ -235,29 +243,63 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
 
 
-        <Divider 
-        sx={{ mb: 1, mx: 5 }} 
-        />
-
         <Stack
           spacing={1}
           sx={{ px: 1 }}
         >
-          
 
+          <Tabs
+            value={expanded ? 1 : 0}
+            onChange={handleExpanded}
+            indicatorColor='primary'
+
+            sx={{
+              '& .MuiTabs-indicator': {
+                backgroundColor: color === 'success' ? 'success.main' : color === 'error' ? 'error.main' : color === 'warning' ? 'warning.main' : color === 'info' ? 'info.main' : color === 'primary' ? 'primary.main' : 'secondary.main',
+                borderRadius: '10px 10px 0 0',
+                borderColor: 'transparent',
+                borderBottom:  `2px solid ${color}`
+              }
+            }}
+            
+          >
+            <Tab label='Por entregar' disabled={order.status === OrderStatus.DELIVERED}/>
+            <Tab label='Entregado'/>
+          </Tabs>
+
+          
           {
-            details.filter(detail => detail.quantity !== detail.qtyDelivered)
+            !expanded 
+            ? details.filter(detail => detail.quantity !== detail.qtyDelivered)
               .map(detail => (
 
                 <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
 
               ))
+              : 
+              details.filter(detail => detail.quantity === detail.qtyDelivered).length >= 1
+              ?
+                details.filter(detail => detail.quantity === detail.qtyDelivered)
+                  .map(detail => (
+
+                    <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
+
+                  ))
+              : (
+                <Typography variant='body1' color='gray' my={5} textAlign='center'>
+                  No hay productos entregados
+                </Typography>
+              )
+              
 
           }
 
 
+          <BtnAddProduct order={order} />
 
-          {
+
+
+          {/* {
             details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
             <>
               <Stack
@@ -279,7 +321,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               >
                 <Stack
                   spacing={1}
-                 
+
                 >
 
 
@@ -300,15 +342,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
 
 
-          }
+          } */}
 
         </Stack>
-
-        <Divider 
-        sx={{ my: 1, mx: 5 }} 
-        />
-
-
 
 
         <CardActions>
@@ -337,8 +373,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               < >
                 <Button
                   fullWidth
-                  
-                  variant='contained'
+
+                  variant='outlined'
                   startIcon={<ArrowBack />}
                   onClick={() => {
                     changeStatusOrder(OrderStatus.PENDING)

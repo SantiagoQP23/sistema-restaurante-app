@@ -112,12 +112,12 @@ export const OrderTable: FC<Props> = () => {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
+                    
                     value={table}
-                    label="Mesa del pedido"
+                    label="Mesa"
 
                     onChange={(e) => changeTable(e.target.value)}
                     disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
-                    size='small'
                     fullWidth
 
                   >
