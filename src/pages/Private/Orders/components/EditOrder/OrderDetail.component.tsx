@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress, TableCell, TableRow } from '@mui/material';
+import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress, TableCell, TableRow, Stack } from '@mui/material';
 
 import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined, CloseOutlined, CurtainsSharp, CheckCircle, Pending } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../models';
@@ -46,7 +46,7 @@ const LinearProgressWrapper = styled(LinearProgress)(
 
 export const OrderDetail: FC<Props> = ({ detail }) => {
 
-  const { state: counter, increment, decrement } = useCounter(detail.quantity, 1, 500, 1);
+  const { state: counter, increment, decrement } = useCounter(detail.quantity, 1, 500, detail.qtyDelivered);
 
   const dispatch = useDispatch();
 
@@ -124,42 +124,42 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
         <TableCell align='center'>
           <Box display='flex' justifyContent='space-between' alignItems='center' >
 
-           
 
 
-                <IconButton
-                  onClick={() => {
-                    decrement()
 
-                  }}
-                >
-                  <RemoveCircleOutline />
-                </IconButton>
+            <IconButton
+              onClick={() => {
+                decrement()
+
+              }}
+            >
+              <RemoveCircleOutline />
+            </IconButton>
 
             <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography>
             <IconButton
               onClick={() => {
                 increment()
-                
+
               }}
-              >
+            >
               <AddCircleOutline />
             </IconButton>
 
-              {
-                counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
-                <IconButton
-                  disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
-                  color='primary'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    updateQuantityDetail()
-                  }}
-                >
-                  <SaveOutlined />
-                </IconButton>
-  
-              }
+            {
+              counter !== detail.quantity && counter > 0 && counter >= detail.qtyDelivered &&
+              <IconButton
+                disabled={!counter || counter === detail.quantity || counter < detail.qtyDelivered}
+                color='primary'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateQuantityDetail()
+                }}
+              >
+                <SaveOutlined />
+              </IconButton>
+
+            }
           </Box>
         </TableCell>
 
@@ -178,6 +178,21 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
           </Typography>
 
+        </TableCell>
+
+        <TableCell align='center'>
+         
+            <Stack direction='row' alignItems='center' spacing={1} >
+
+              <Typography variant='subtitle1'>{detail.qtyDelivered}</Typography>
+              <LinearProgressWrapper
+                value={(detail.qtyDelivered * 100) / detail.quantity}
+                color="primary"
+                variant="determinate"
+
+              />
+            </Stack>
+         
         </TableCell>
 
         <TableCell align='center'>

@@ -16,38 +16,9 @@ export const OrderRouter: RouteObject =
   path: PrivateRoutes.ORDERS,
   element: <Orders />,
   children: [
-    {
-      path: '',
-      element: <ListOrders />
-    },
 
     {
-      path: 'add/menu',
-      element: <Menu />
-    },
-    
-    {
-      path: 'edit/:orderId',
-      element: <EditOrder />
-    },
-    {
-      path: 'edit/:orderId/products',
-      element: <AddProductsOrder />
-    },
-    {
-      path: 'add',
-      element: <AddOrder />
-    },
-    {
-      path: 'add/products',
-      element: <MenuNewOrder />
-    },
-    {
-      path: 'edit/:orderId/receipt',
-      element: <ReceiptOrder />
-    },
-    {
-      path: 'actives',
+      path: '',
       element: <ActiveOrders />,
       children: [
         {
@@ -56,7 +27,37 @@ export const OrderRouter: RouteObject =
         }
       ]
 
-    }
+    },
+    {
+      path: 'list',
+      element: <ListOrders />
+    },
+    {
+      path: 'list/edit/:orderId',
+      element: <EditOrder />
+    },
+    {
+      path: 'list/edit/:orderId/products',
+      element: <AddProductsOrder />
+    },
+    {
+      path: 'list/edit/:orderId/receipt',
+      element: <ReceiptOrder />
+    },
+    {
+      path: 'add',
+      element: <AddOrder />
+    },
+    {
+      path: 'add/menu',
+      element: <Menu />
+    },
+    {
+      path: 'add/products',
+      element: <MenuNewOrder />
+    },
+   
+   
   ]
 
 }

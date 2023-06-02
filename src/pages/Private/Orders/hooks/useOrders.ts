@@ -8,6 +8,10 @@ import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
 import { CreateOrderDetailDto } from '../dto/create-order.dto';
 import { useDispatch } from 'react-redux';
 import { setActiveOrder } from '../../../../redux';
+import { useQuery } from '@tanstack/react-query';
+import { getOrder } from '../services/orders.service';
+import { IOrder } from '../../../../models';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -32,23 +36,45 @@ export const useOrders = () => {
       setLoading(false);
       if (!ok) {
         enqueueSnackbar(msg, { variant: 'error' });
-      }else {
+      } else {
         enqueueSnackbar(msg, { variant: 'success' });
       }
 
     })
   }
 
- 
-  
-
-
-
   return {
     updateOrderDetail,
-    loading  
-
-
+    loading
 
   }
 }
+
+
+export const useOrder = (id: string) => {
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  return useQuery<IOrder>(['order', id], () => getOrder(id), {
+    enabled: !!id,
+    onSuccess: (data) => {
+      const order = data;
+
+      dispatch(setActiveOrder(order));
+  
+      if(order.isPaid)  {
+        navigate(`/orders/list/edit/${id}/receipt`, { replace: true })
+  
+      }
+    }
+  })
+
+
+
+
+
+}
+
+

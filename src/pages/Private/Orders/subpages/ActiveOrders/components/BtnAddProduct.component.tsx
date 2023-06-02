@@ -79,7 +79,6 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
               fullWidth
               variant="outlined"
               onClick={handleAddProduct}
-              size='small'
               color='secondary'
 
 

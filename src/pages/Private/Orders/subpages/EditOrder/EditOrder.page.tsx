@@ -29,6 +29,7 @@ import { OrderSummary } from './components/';
 import { Container, Stack, Box } from '@mui/material';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { OrderDetails } from './components/OrderDetails.component';
+import { useOrder } from '../../hooks';
 
 
 
@@ -47,26 +48,11 @@ export const EditOrder = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
+
+
   const dispatch = useDispatch();
 
 
-  const getOrderCall = async () => await callEndpoint(getOrder(orderId!));
-
-  const loadOrderState = async () => {
-    console.log('loadOrderState')
-    const resp = await getOrderCall();
-
-    const order = resp.data;
-    dispatch(setActiveOrder(order));
-
-    if(order.isPaid)  {
-      navigate(`/orders/edit/${orderId}/receipt`, { replace: true })
-
-    }
-
-
-
-  }
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -74,7 +60,10 @@ export const EditOrder = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const {data, isLoading} = useOrder(orderId!);
 
+
+  dispatch(setActiveOrder(data));
 
   useEffect(() => {
     if (activeOrder) {
@@ -84,7 +73,7 @@ export const EditOrder = () => {
 
 
   useEffect(() => {
-    loadOrderState();
+  
 
     return () => {
       reset();
@@ -110,11 +99,7 @@ export const EditOrder = () => {
         />
 
         {
-          loading
-        }
-
-        {
-          loading
+          isLoading
             ?
             <>
               <CircularProgress />

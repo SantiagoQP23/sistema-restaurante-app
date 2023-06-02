@@ -56,16 +56,25 @@ export const getOrdersByDate = (find?: FindOrderByDate) => {
 }
 
 
-export const getOrder = (orderId: string) => {
+export const getOrder = async (orderId: string): Promise<IOrder> => {
 
-  const controller = loadAbort();
+  const {data} = await restauranteApi.get<IOrder>(`orders/${orderId}`);
 
-  return {
-    call: restauranteApi.get<IOrder>(`orders/${orderId}`,
+  return data;
 
-      { signal: controller.signal }),
-    controller
-
-  }
 
 }
+
+// export const getOrder = (orderId: string) => {
+
+//   const controller = loadAbort();
+
+//   return {
+//     call: restauranteApi.get<IOrder>(`orders/${orderId}`,
+
+//       { signal: controller.signal }),
+//     controller
+
+//   }
+
+// }

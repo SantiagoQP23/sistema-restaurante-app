@@ -29,6 +29,8 @@ import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
 import { Stack, ListItemButton, ListItemText } from '@mui/material';
 import { BtnAddProduct } from './BtnAddProduct.component';
+import { queryClient } from '../../../../../../main';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   order: IOrder;
@@ -126,6 +128,11 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   // const color= "primary";
 
   const { details } = order;
+
+
+  const queryClient = useQueryClient();
+
+  queryClient.prefetchQuery(['order', order.id], () => order)
 
   const { sections } = useSelector(selectMenu);
 
@@ -298,52 +305,6 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
           <BtnAddProduct order={order} />
 
 
-
-          {/* {
-            details.filter(detail => detail.quantity === detail.qtyDelivered).length > 0 &&
-            <>
-              <Stack
-                direction='row'
-                justifyContent='space-between'
-                alignItems='center'
-                onClick={handleExpanded}
-              >
-                <ListItemText>
-                  <Typography variant='body1' >Productos entregados</Typography>
-                </ListItemText>
-
-                {expanded ? <ExpandLess /> : <ExpandMore />}
-
-              </Stack>
-
-              <Collapse
-                in={expanded}
-              >
-                <Stack
-                  spacing={1}
-
-                >
-
-
-                  {
-                    details.filter(detail => detail.quantity === detail.qtyDelivered)
-                      .map(detail => (
-
-                        <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
-
-                      ))
-
-                  }
-                </Stack>
-
-              </Collapse>
-
-            </>
-
-
-
-          } */}
-
         </Stack>
 
 
@@ -400,7 +361,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
           <Button
             onClick={() => {
-              navigate(`/orders/edit/${order.id}`)
+              navigate(`/orders/list/edit/${order.id}`)
             }}
             size='small'
             color={color}

@@ -37,7 +37,7 @@ export const useCreateOrder = () => {
       setLoading(false);
       if (resp.ok) {
 
-        navigate('/orders/actives');
+        navigate('/orders');
         reset();
       } else {
         enqueueSnackbar(resp.msg, { variant: 'error' });

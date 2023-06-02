@@ -1,5 +1,5 @@
 import { ArrowBack, Done, DownloadOutlined, Edit, EditOutlined, SendOutlined } from "@mui/icons-material";
-import { Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader, IconButton, Tooltip } from '@mui/material';
+import { Button, Grid, Typography, Container, Card, CardContent, Box, Stack, CardHeader, IconButton, Tooltip, TableContainer, Table, TableBody, TableHead, TableRow, TableCell } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
@@ -33,7 +33,7 @@ export const ReceiptOrder = () => {
   const endEdit = () => {
 
     if (activeOrder) {
-      !activeOrder.isPaid ? navigate('/orders/edit/' + activeOrder.id) : navigate('/orders')
+      !activeOrder.isPaid ? navigate('/orders/list/edit/' + activeOrder.id) : navigate('/orders')
     }
 
   }
@@ -227,58 +227,78 @@ export const ReceiptOrder = () => {
 
             </Box>
 
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Cantidad</TableCell>
+                    <TableCell>Producto</TableCell>
+                    <TableCell align="right">Precio</TableCell>
+                    <TableCell align="right">Subtotal</TableCell>
 
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
+                  </TableRow>
+                </TableHead>
 
-              <Typography variant="h4" fontWeight='bold'>Productos</Typography>
+                <TableBody>
+                  {
+                    activeOrder.details.map((detail, index) => {
+                      return (
+                        <>
+                          <TableRow key={detail.id}>
+                            <TableCell>{detail.quantity}</TableCell>  
+                            <TableCell>{detail.product.name}</TableCell>
+                            <TableCell align="right">${detail.product.price}</TableCell>
+                            <TableCell align="right">${detail.amount}</TableCell>
+
+                           
+                          </TableRow>
+
+                        </>
+                      )
+                    })
+
+                  }
+
+                  <TableRow>
+                    <TableCell colSpan={2}></TableCell>
+                    <TableCell>
+
+                    <Typography variant='h5'>Subtotal</Typography>
+                    </TableCell>
+                    <TableCell align="right">${activeOrder.amount}</TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell colSpan={2}></TableCell>
+                    <TableCell>
+
+                    <Typography variant='h5'>Descuento</Typography>
+                    </TableCell>
+                    <TableCell align="right">${activeOrder.discount}</TableCell>
+
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell colSpan={2}></TableCell>
+                    <TableCell >
+                      <Typography variant='h4'>Total</Typography>
+                      </TableCell>
+                    <TableCell align="right">${activeOrder.total}</TableCell>
+
+                  </TableRow>
 
 
-            </Box>
-            <Divider sx={{ my: 1 }} />
-            {
-              activeOrder.details.map((detail, index) => {
-                return (
-                  <>
-                    <Box key={detail.id} display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-                      <Box>
-                        <Typography variant='h5'> {detail.quantity} - {detail.product.name}</Typography>
-                        <Typography variant='subtitle1'>${detail.product.price}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant='h5'>${detail.amount}</Typography>
-                      </Box>
+
+                </TableBody>
 
 
 
-                    </Box>
-                    <Divider sx={{ my: 1 }} />
-                  </>
-                )
-              })
 
-            }
-
-            <Box display='flex' justifyContent='right' alignItems='center' mt={2}>
-
-              <Typography variant='h6'> Subtotal:  ${activeOrder.amount}</Typography>
-            </Box>
+              </Table>
 
 
-            <Box display='flex' justifyContent='right' alignItems='center' mt={2}>
+            </TableContainer>
 
-
-              <Typography variant='h6'>Descuento:  ${activeOrder.discount}</Typography>
-            </Box>
-
-            <Box display='flex' justifyContent='right' alignItems='center' mt={2}>
-
-              <Typography variant='h4' > Total: ${activeOrder.total}</Typography>
-            </Box>
-
-
-            <Box display='flex' justifyContent='center' alignItems='center' mt={2}>
-
-            </Box>
 
           </CardContent>
 

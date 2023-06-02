@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
 
 import { AddOutlined, DeleteOutline, EditOutlined, PointOfSaleOutlined, ShoppingCart } from "@mui/icons-material";
-import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider } from '@mui/material';
+import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip } from '@mui/material';
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { IClient, OrderStatus, OrderStatusSpanish } from "../../../../../../models";
@@ -204,26 +204,35 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <Typography variant='h4' fontWeight='bold'>${order.amount}</Typography>
             </Box>
 
-            <Box 
-            display='flex' 
-            justifyContent='space-between' 
-            alignItems='flex-start' mt={2}>
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              alignItems='flex-start' mt={2}>
 
               <Box>
 
-                <Button
-                  startIcon={<DeleteOutline />}
-                  color='error'
-                  onClick={eliminarPedido}
-                  disabled={orderDelivered}
-                  size='small'
+                <Tooltip
+                  title={!orderDelivered
+                    ? 'Eliminar pedido' :
+                    'Este pedido no se puede eliminar porque ya tiene productos entregados'}
                 >
-                  Eliminar
-                </Button>
+                  <span>
+
+                    <Button
+                      startIcon={<DeleteOutline />}
+                      color='error'
+                      onClick={eliminarPedido}
+                      disabled={orderDelivered}
+                      size='small'
+                    >
+                      Eliminar
+                    </Button>
+                  </span>
+                </Tooltip>
 
                 {
                   orderDelivered &&
-                  <Typography variant='subtitle1'>Este pedido no se puede eliminar porque ya tiene productos entregados</Typography>
+                  <Typography variant='subtitle1'></Typography>
                 }
               </Box>
               <Button

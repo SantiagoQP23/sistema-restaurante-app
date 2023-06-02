@@ -240,7 +240,7 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
 
-            
+
 
               <ListItem
 
@@ -250,7 +250,7 @@ function SidebarMenu() {
                   endIcon={openOrders ? <ExpandLess /> : <ExpandMore />}
                   onClick={handleOpenOrders}
                 >
-                 Pedidos
+                  Pedidos
 
                 </Button>
 
@@ -260,12 +260,30 @@ function SidebarMenu() {
               <Collapse in={openOrders} >
 
 
+
+
+
+
                 <ListItem component="div">
                   <Button
                     disableRipple
                     component={RouterLink}
                     onClick={closeSidebar}
                     to="/orders"
+                    startIcon={<DeliveryDiningOutlinedIcon />}
+                    end
+                  >
+                    Pedidos Activos
+                  </Button>
+                </ListItem>
+
+
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/orders/list"
 
                     startIcon={<ListAlt />}
                     end
@@ -273,22 +291,7 @@ function SidebarMenu() {
                     Lista
                   </Button>
                 </ListItem>
-               
 
-
-
-                <ListItem component="div">
-                  <Button
-                    disableRipple
-                    component={RouterLink}
-                    onClick={closeSidebar}
-                    to="/orders/actives"
-                    startIcon={<DeliveryDiningOutlinedIcon />}
-                    end
-                  >
-                    Pedidos Activos
-                  </Button>
-                </ListItem>
               </Collapse>
 
 
@@ -308,21 +311,21 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
 
-              <ListItem 
-                
-                >
+              <ListItem
+
+              >
                 <Button
                   startIcon={<RestaurantOutlinedIcon />}
-                  
+
                   component={RouterLink}
                   onClick={closeSidebar}
                   to="/menu/edit"
                 >
                   Menú del restaurante
                 </Button>
-                </ListItem>
+              </ListItem>
 
-            
+
 
               <ListItem component="div">
                 <Button

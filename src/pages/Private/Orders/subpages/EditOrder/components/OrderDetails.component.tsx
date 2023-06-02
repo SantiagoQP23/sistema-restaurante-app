@@ -64,6 +64,9 @@ export const OrderDetails: FC<Props> = ({ details: orderDetails }) => {
                   Descripción
                 </TableCell>
                 <TableCell>
+                  Estado
+                </TableCell>
+                <TableCell>
                   Subtotal
                 </TableCell>
                 <TableCell>
