@@ -6,16 +6,16 @@ import { IOrderDetail } from "../../../../models";
 import { statusModalEditOrderDetail } from "../services/orders.service";
 import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid, Stack } from '@mui/material';
 import { useCounter, useOrders } from '../hooks';
-import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline } from '@mui/icons-material';
+import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline, CloseFullscreen, Close } from '@mui/icons-material';
 import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
 import { LoadingButton } from '@mui/lab';
 import { DeleteOrderDetailDto } from '../dto/delete-order-detail.dto';
 import { useDeleteOrderDetail } from '../hooks/useDeleteOrderDetail';
+import { useUpdateOrderDetail } from '../hooks/useUpdateOrderDetail';
 
 
 
 export const ModalEditOrderDetail = () => {
-
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -25,27 +25,27 @@ export const ModalEditOrderDetail = () => {
 
   const [open, setOpen] = useState(false);
 
+
+  // form
   const [description, setDescription] = useState(detail?.description || '');
   const [discount, setDiscount] = useState(detail?.discount || 0);
 
   const { loading: loadingDelete, deleteOrderDetail } = useDeleteOrderDetail();
 
 
-  const {
-    state: counterQtyDelivered,
-    increment: incrementQtyDelivered,
-    decrement: decrementQtyDelivered,
-    setCounter: setCounterQtyDelivered
-  } = useCounter(0, 1, detail?.quantity);
 
-  const {
-    state: counterQty,
-    increment: incrementQty,
-    decrement: decrementQty,
-    setCounter: setCounterQty
-  } = useCounter(0, 1, 100, detail?.qtyDelivered);
+  const qtyCounter = useCounter(0, 1, 100, detail?.qtyDelivered)
 
-  const { updateOrderDetail, loading } = useOrders();
+  const qtyDeliveredCounter = useCounter(0, 1, detail?.quantity);
+
+  // const {
+  //   state: counterQty,
+  //   increment: incrementQty,
+  //   decrement: decrementQty,
+  //   setCounter: setCounterQty
+  // } = useCounter(0, 1, 100, detail?.qtyDelivered);
+
+  const { update, loading } = useUpdateOrderDetail();
 
 
   const subscription$ = statusModalEditOrderDetail.getSubject();
@@ -56,13 +56,13 @@ export const ModalEditOrderDetail = () => {
     const data: UpdateOrderDetailDto = {
       orderId: orderId!,
       id: detail!.id,
-      qtyDelivered: counterQtyDelivered,
-      quantity: counterQty,
+      qtyDelivered: qtyDeliveredCounter.state,
+      quantity: qtyCounter.state,
       description,
       discount
     }
 
-    updateOrderDetail(data)
+    update(data)
 
     closeModal()
 
@@ -77,7 +77,7 @@ export const ModalEditOrderDetail = () => {
 
     }
 
-    updateOrderDetail(data)
+    update(data)
     closeModal()
   }
 
@@ -108,8 +108,8 @@ export const ModalEditOrderDetail = () => {
       setDetail(data.detalle);
       setOpen(data.value);
       setOrderId(data.orderId);
-      setCounterQtyDelivered(data.detalle.qtyDelivered);
-      setCounterQty(data.detalle.quantity);
+      qtyDeliveredCounter.setCounter(data.detalle.qtyDelivered);
+      qtyCounter.setCounter(data.detalle.quantity);
       setDescription(data.detalle.description);
       setDiscount(data.detalle.discount);
 
@@ -129,20 +129,29 @@ export const ModalEditOrderDetail = () => {
           justifyContent: 'space-between',
           alignItems: 'center'
         }}
-      ><b>{detail?.product.name}</b>
+
+
+      >
+        <b>{detail?.product.name}</b>
+
+        <IconButton>
+          <Close onClick={closeModal} />
+        </IconButton>
 
       </DialogTitle>
-      <Divider />
+
+
+
       <DialogContent>
 
 
 
 
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
 
 
           <Grid item xs={12}>
-            <FormHelperText>Ingrese aquí los pedidos especiales del cliente</FormHelperText>
+            {/* <FormHelperText>Ingrese aquí los pedidos especiales del cliente</FormHelperText> */}
             <TextField
               id="descripcion-pedido"
               label="Notas"
@@ -192,19 +201,19 @@ export const ModalEditOrderDetail = () => {
 
           </Grid>
 
-          <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography variant='h5'>Cantidad: </Typography>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' alignItems='center' >
+            <Typography variant='h5'>Cantidad </Typography>
             <Box display='flex' alignItems='center'>
 
               <IconButton
-                onClick={decrementQty}
+                onClick={qtyCounter.decrement}
               >
                 <RemoveCircleOutline />
               </IconButton>
 
-              <Typography sx={{ width: 40, textAlign: 'center' }}>{counterQty}</Typography>
+              <Typography sx={{ width: 40, textAlign: 'center' }}>{qtyCounter.state}</Typography>
               <IconButton
-                onClick={incrementQty}
+                onClick={qtyCounter.increment}
               >
                 <AddCircleOutline />
               </IconButton>
@@ -213,22 +222,22 @@ export const ModalEditOrderDetail = () => {
 
           </ Grid>
 
-          <Grid item xs={12} display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography>Cantidad entregada: </Typography>
+          <Grid item xs={6} display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
+            <Typography variant='h5'>Entregado </Typography>
 
 
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <Box display='flex' alignItems='center'>
 
                 <IconButton
-                  onClick={decrementQtyDelivered}
+                  onClick={qtyDeliveredCounter.decrement}
                 >
                   <RemoveCircleOutline />
                 </IconButton>
 
-                <Typography sx={{ width: 40, textAlign: 'center' }}>{counterQtyDelivered}</Typography>
+                <Typography sx={{ width: 40, textAlign: 'center' }}>{qtyDeliveredCounter.state}</Typography>
                 <IconButton
-                  onClick={incrementQtyDelivered}
+                  onClick={qtyDeliveredCounter.increment}
                 >
                   <AddCircleOutline />
                 </IconButton>
@@ -242,21 +251,16 @@ export const ModalEditOrderDetail = () => {
 
 
 
+
           </ Grid>
+
+
         </ Grid>
 
-        <Stack direction='row' justifyContent='right'>
+        <Stack direction='row' justifyContent='center' mt={1}>
 
-          <LoadingButton
-            startIcon={<CheckOutlined />}
-            variant='outlined'
-            onClick={deliverDetail}
-            disabled={counterQtyDelivered === detail?.quantity}
-            size='small'
-            loading={loading}
-          >{
-              detail?.qtyDelivered === detail?.quantity ? 'Entregado' : 'Marcar como entregado'
-            }</LoadingButton>
+
+
 
         </Stack>
 
@@ -276,6 +280,7 @@ export const ModalEditOrderDetail = () => {
 
                 onClick={deleteDetail}
                 loading={loadingDelete}
+                variant='text'
               >
                 <DeleteOutline />
               </LoadingButton>
@@ -287,7 +292,19 @@ export const ModalEditOrderDetail = () => {
           display='flex' gap={1}
         >
 
-          <Button variant='outlined' onClick={closeModal}>Cerrar</Button>
+          {
+            detail?.qtyDelivered !== detail?.quantity &&
+            <LoadingButton
+              startIcon={<CheckOutlined />}
+              variant='outlined'
+              onClick={deliverDetail}
+
+              size='small'
+              loading={loading}
+            >
+              Entregar
+            </LoadingButton>}
+
           <LoadingButton
             variant='contained'
             onClick={updateDetail}

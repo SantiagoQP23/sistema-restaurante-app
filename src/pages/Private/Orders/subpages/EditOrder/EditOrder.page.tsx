@@ -48,22 +48,13 @@ export const EditOrder = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
-
-
   const dispatch = useDispatch();
 
-
-
   const { activeOrder } = useSelector(selectOrders);
-
-
 
   const { enqueueSnackbar } = useSnackbar();
 
   const {data, isLoading} = useOrder(orderId!);
-
-
-  dispatch(setActiveOrder(data!));
 
   useEffect(() => {
     if (activeOrder) {
