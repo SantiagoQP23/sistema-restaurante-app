@@ -9,9 +9,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { OrderProvider } from './context/Order.context';
 
 
-import { ModalDeleteOrder } from './components/EditOrder/ModalDeleteOrder.component';
-import { ModalPayOrder } from './components/ReceiptOrder/ModalPayOrder.component';
-import { ModalDiscountOrder } from './components/ReceiptOrder/ModalDiscountOrder.component';
+import { ModalDeleteOrder } from './components/modals/ModalDeleteOrder.component';
+import { ModalPayOrder } from './components/modals/ModalPayOrder.component';
+import { ModalDiscountOrder } from './components/modals/ModalDiscountOrder.component';
 import { EventsOnSocket } from './interfaces/events-sockets.interface';
 import { useAsync, useFetchAndLoad } from "../../../hooks";
 import { IOrder } from "../../../models";
@@ -26,6 +26,7 @@ import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
 import { LoadingButton } from '@mui/lab';
 import { ModalAddDetail } from "./components/EditOrder";
+import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
 
 
 
@@ -158,6 +159,7 @@ export const Orders = () => {
       <ModalDiscountOrder />
       <ModalPayOrder />
       <ModalEditOrderDetail />
+      <ModalDeleteOrderDetail />
 
       <ModalAddDetail />
 

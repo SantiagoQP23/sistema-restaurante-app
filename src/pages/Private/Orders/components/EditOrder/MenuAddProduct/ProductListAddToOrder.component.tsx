@@ -4,7 +4,7 @@ import { IProduct } from "../../../../../../models"
 import { ProductAddToOrder } from "./ProductAddToOrder.component"
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
-import { ProductNewOrder } from '../../../subpages/AddOrder/components/ProductNewOrder.component';
+import { ProductNewOrder } from '../../../views/AddOrder/components/ProductNewOrder.component';
 
 
 interface ProductsListProps {

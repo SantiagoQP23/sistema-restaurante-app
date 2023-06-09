@@ -11,6 +11,7 @@ export const statusModalDiscountOrder = new SubjectModalPayOrder();
 export const statusModalPayOrder = new SubjectModalPayOrder();
 
 export const statusModalEditOrderDetail = new SubjectEditOrderDetail();
+export const statusModalDeleteOrderDetail = new SubjectEditOrderDetail();
 
 export const getOrdersToday = () => {
 

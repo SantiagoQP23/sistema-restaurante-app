@@ -3,7 +3,7 @@ import { RouteObject } from 'react-router-dom';
 
 import { PrivateRoutes } from '../../../../models/routes.model';
 
-const Menu = lazy(() => import('../Menu.page'))
+const Menu = lazy(() => import('../../Orders/views/Menu/Menu.view'))
 
 export const MenuRouter: RouteObject = {
 

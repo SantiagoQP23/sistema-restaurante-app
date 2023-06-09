@@ -10,7 +10,7 @@ import { Sections } from "../../../Menu/components";
 import { findProductsByName, getProducts } from "../../../../../helpers";
 import { useModal } from "../../../../../hooks";
 import { ICreateOrderDetail } from '../../../../../models/orders.model';
-import { ModalAddDetail } from './ModalAddDetail.component';
+import { ModalAddDetail } from '../modals/ModalAddDetail.component';
 
 import { ProductListAddToOrder } from './MenuAddProduct/ProductListAddToOrder.component';
 

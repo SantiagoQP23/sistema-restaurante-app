@@ -1,0 +1,12 @@
+export { default as ActiveOrders } from './ActiveOrders/ActiveOrders.view';
+export * from './ActiveOrders/components';
+export * from './AddOrder/AddOrder.view';
+export * from './AddOrder/components';
+export * from './EditOrder/EditOrder.view';
+export * from './Menu/Menu.view';
+export * from './Menu/MenuAddProductsOrder.component';
+export * from './Menu/components';
+export * from './OrderReceipt/OrderReceipt.view';
+export * from './OrderReceipt/pdf/PdfReceiptOrder.component';
+export * from './OrdersList/OrdersList.view';
+export * from './OrdersList/components';

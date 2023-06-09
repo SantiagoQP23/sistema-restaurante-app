@@ -6,7 +6,6 @@ import SidebarLayout from '../layouts/SidebarLayout/SidebarLayout.component';
 
 import { PrivateRoutes } from "../../../models";
 import { OrderRouter } from '../Orders/router';
-import { MenuRouter } from '../Menu/router/Menu.router';
 import { MenuEditRouter } from '../EditMenu/router/MenuEdit.router';
 import { ClientsRouter } from '../Clients/router/Clients.router';
 import { TablesRouter } from '../Tables/router/Tables.router';

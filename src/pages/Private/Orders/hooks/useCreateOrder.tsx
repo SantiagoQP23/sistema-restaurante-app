@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setActiveOrder } from "../../../../redux";
 import { useSnackbar } from "notistack";
 import { SocketResponseOrder } from "../interfaces/responses-sockets.interface";
-import { OrderContext } from "../context/Order.context";
+import { OrderActionType, OrderContext } from "../context/Order.context";
 import { useNavigate } from "react-router-dom";
 
 
@@ -21,7 +21,7 @@ export const useCreateOrder = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const {reset} = useContext(OrderContext);
+  const {dispatch: dispatchReducer} = useContext(OrderContext);
 
   const navigate = useNavigate();
 
@@ -37,8 +37,9 @@ export const useCreateOrder = () => {
       setLoading(false);
       if (resp.ok) {
 
+        dispatchReducer({ type: OrderActionType.RESET})
         navigate('/orders');
-        reset();
+       
       } else {
         enqueueSnackbar(resp.msg, { variant: 'error' });
       }

@@ -1,6 +1,6 @@
-export * from './AllMenu.component';
+export * from '../../Orders/views/Menu/components/AllMenu.component';
 
-export * from './ListProducts.component';
-export * from './ListProducts.component';
-export * from './Product.component';
-export * from './Sections.component';
+export * from '../../Orders/views/Menu/components/ListProducts.component';
+export * from '../../Orders/views/Menu/components/ListProducts.component';
+export * from '../../Orders/views/Menu/components/Product.component';
+export * from '../../Orders/views/Menu/components/Sections.component';
