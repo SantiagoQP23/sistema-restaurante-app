@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { ICreateClient } from "../../../../models";
 import { CreateClientDto } from "../../Clients/dto/create-client.dto";
 import { useCreateCliente } from "../../Clients/hooks/useClients";
-import { OrderContext } from "../context/Order.context";
+import { OrderActionType, OrderContext } from "../context/Order.context";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../redux";
 import { useUpdateOrder } from "../hooks/useUpdateOrder";
@@ -23,7 +23,7 @@ export const FormNewClientBasic: FC<Props> = ({callback}) => {
     defaultValues: { lastName: '', firstName: '' }
   });
 
-  const {setClient} = useContext(OrderContext);
+  const {dispatch} = useContext(OrderContext);
 
   const {activeOrder} = useSelector(selectOrders);
 
@@ -39,7 +39,7 @@ export const FormNewClientBasic: FC<Props> = ({callback}) => {
 
       if(!activeOrder){
 
-        setClient(res);
+        dispatch({type: OrderActionType.SET_CLIENT, payload: res});
       }else {
         updateOrder({
           id: activeOrder.id,

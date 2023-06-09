@@ -1,1 +1,1 @@
-export * from './Menu.page';
+export * from '../Orders/views/Menu/Menu.view';

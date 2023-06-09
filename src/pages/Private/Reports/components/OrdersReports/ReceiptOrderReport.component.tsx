@@ -9,7 +9,7 @@ import { Label } from "../../../../../components/ui";
 import { OrderStatus, OrderStatusSpanish } from "../../../../../models";
 import { selectOrders } from "../../../../../redux";
 import { statusModalDiscountOrder, statusModalPayOrder } from "../../../Orders/services/orders.service";
-import { PdfReceiptOrder } from '../../../Orders/components/ReceiptOrder/pdf/PdfReceiptOrder.component';
+import { PdfReceiptOrder } from '../../../Orders/views/OrderReceipt/pdf/PdfReceiptOrder.component';
 
 
 

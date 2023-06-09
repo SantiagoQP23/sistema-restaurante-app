@@ -16,7 +16,7 @@ import BaseLayout from "./layouts/BaseLayout"
 import { PrivateRouter } from "./router"
 import { SidebarProvider } from "./contexts/SidebarContext"
 
-import { SnackbarProvider } from 'notistack'
+import { SnackbarProvider, useSnackbar, closeSnackbar } from 'notistack'
 import { CircularProgress, IconButton } from "@mui/material"
 import { getTables } from "./Tables/services"
 import { ITable } from '../../models/table.model';
@@ -31,6 +31,7 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 export const Private = () => {
 
   const content = useRoutes(PrivateRouter);
+
 
   const dispatch = useDispatch();
 
@@ -80,17 +81,17 @@ export const Private = () => {
 
 
   return (
-   
+
 
     <SnackbarProvider
       maxSnack={3}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       autoHideDuration={3000}
-    // action={(key) => (
-    //   <IconButton onClick={() => { console.log('dismissed'); }}>
-    //     <CloseTwoToneIcon />
-    //   </IconButton>
-    // )}
+      action={(key) => (
+        <IconButton color="inherit" onClick={() => { closeSnackbar(key) }}>
+          <CloseTwoToneIcon />
+        </IconButton>
+      )}
 
     >
       <OrderProvider>
@@ -105,7 +106,7 @@ export const Private = () => {
         </ SidebarProvider>
       </OrderProvider>
     </SnackbarProvider>
-    
+
   )
 }
 

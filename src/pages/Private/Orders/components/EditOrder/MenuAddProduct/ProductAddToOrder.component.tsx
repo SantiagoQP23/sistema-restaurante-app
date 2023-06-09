@@ -30,7 +30,6 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
   const { activeOrder } = useSelector(selectOrders);
 
   const [subtotal, setSubtotal] = useState(counter * product.price);
-  const { addDetail, details } = useContext(OrderContext);
 
   useEffect(() => {
     setSubtotal(counter * product.price)
@@ -40,54 +39,51 @@ export const ProductAddToOrder: FC<PropsProduct> = ({ product }) => {
 
   const dispatch = useDispatch();
 
-
-
-
   const { socket } = useContext(SocketContext);
 
 
-  const updateOrderDetail = (detail: IOrderDetail) => {
-    const data: UpdateOrderDetailDto = {
-      orderId: activeOrder!.id,
-      id: detail.id,
-      quantity: detail.quantity + counter
-    }
+  // const updateOrderDetail = (detail: IOrderDetail) => {
+  //   const data: UpdateOrderDetailDto = {
+  //     orderId: activeOrder!.id,
+  //     id: detail.id,
+  //     quantity: detail.quantity + counter
+  //   }
 
-    socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+  //   socket?.emit(EventsEmitSocket.updateOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
 
-      if (ok) {
-        dispatch(setActiveOrder(order!))
+  //     if (ok) {
+  //       dispatch(setActiveOrder(order!))
 
-      } else {
-        enqueueSnackbar(msg, { variant: 'error' });
-      }
+  //     } else {
+  //       enqueueSnackbar(msg, { variant: 'error' });
+  //     }
 
-    });
+  //   });
 
-  }
+  // }
 
 
-  const createOrderDetail = () => {
-    const data: CreateOrderDetailDto = {
+  // const createOrderDetail = () => {
+  //   const data: CreateOrderDetailDto = {
 
-      orderId: activeOrder!.id,
-      productId: product.id,
-      quantity: counter
-    }
+  //     orderId: activeOrder!.id,
+  //     productId: product.id,
+  //     quantity: counter
+  //   }
 
-    console.log(data);
+  //   console.log(data);
 
-    socket?.emit(EventsEmitSocket.addOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
+  //   socket?.emit(EventsEmitSocket.addOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
 
-      if (ok) {
-        dispatch(setActiveOrder(order!))
+  //     if (ok) {
+  //       dispatch(setActiveOrder(order!))
 
-      } else {
-        enqueueSnackbar(msg, { variant: 'error' });
-      }
+  //     } else {
+  //       enqueueSnackbar(msg, { variant: 'error' });
+  //     }
 
-    });
-  }
+  //   });
+  // }
 
 
 

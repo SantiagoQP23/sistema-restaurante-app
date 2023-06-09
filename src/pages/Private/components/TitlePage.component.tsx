@@ -107,7 +107,6 @@ export const TitlePage: FC<Props> = ({ title, action }) => {
       </Stack>
 
       {action}
-      {/* <Typography variant='subtitle1'> <b>Menú</b> {" >"} <b>Productos</b> </Typography> */}
     </Stack>
 
   )
