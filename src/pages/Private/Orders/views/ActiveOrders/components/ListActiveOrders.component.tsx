@@ -118,7 +118,7 @@ export const ListActiveOrders = () => {
             <Tab
              label={
               <>
-                <Typography variant='h5' component='span' >Pendientes</Typography>
+                <Typography variant='h5' component='span' >Entregados</Typography>
                 <Chip
                   label={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}
                   color='warning'
