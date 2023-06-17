@@ -5,21 +5,34 @@ import { useQuery } from "@tanstack/react-query";
 import { IncomeByUser, getIncomesByUser } from "../../services/dashboard.service";
 import { EditOutlined } from "@mui/icons-material";
 import { useEffect } from "react";
+import { useDateFilter } from '../../../../../hooks/useDateFilter';
+import { Period } from "../../../../../models/period.model";
 
 
 export const CardIncomesByUser = () => {
 
 
   const {
-    period, page, endDate, startDate, nextPage, prevPage, rowsPerPage,
-    handleChangeStartDate,
+    period,
+    startDate,
+    endDate,
+    endDateChecked,
+    handleChangeEndDate,
+    handleChangeEndDateChecked,
     handleChangePeriod,
+    handleChangeStartDate,
+    
+
+  } = useDateFilter(Period.TODAY);
+
+  const {
+   page, nextPage, prevPage, rowsPerPage,
+   
     handleChangePage,
     handleChangeRowsPerPage,
-    endDateChecked,
-    handleChangeEndDateChecked,
+  
 
-    handleChangeEndDate } = usePaginationAsync();
+     } = usePaginationAsync();
 
 
   const { data, refetch, isLoading, isFetching } = useQuery<IncomeByUser[]>(['best-selling-products', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {

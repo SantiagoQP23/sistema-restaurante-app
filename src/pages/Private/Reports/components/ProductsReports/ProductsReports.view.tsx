@@ -17,6 +17,7 @@ import { selectMenu } from '../../../../../redux';
 import { getProducts } from '../../../../../helpers/menu.helper';
 import { FormControlLabel, ListItemButton, ListItemSecondaryAction } from '@mui/material';
 import { TitlePage } from '../../../components/TitlePage.component';
+import { useDateFilter } from '../../../../../hooks/useDateFilter';
 
 
 
@@ -24,16 +25,26 @@ export const ProductsReports = () => {
 
 
   const {
-    period, page, endDate, startDate, nextPage, prevPage, rowsPerPage,
-    handleChangeStartDate,
+    period,
+    startDate,
+    endDate,
+    endDateChecked,
+    handleChangeEndDate,
+    handleChangeEndDateChecked,
     handleChangePeriod,
+    handleChangeStartDate,
+    
+
+  } = useDateFilter(Period.TODAY);
+
+  const {
+   page, nextPage, prevPage, rowsPerPage,
+   
     handleChangePage,
     handleChangeRowsPerPage,
-    endDateChecked,
-    handleChangeEndDateChecked,
+  
 
-    handleChangeEndDate } = usePaginationAsync();
-
+     } = usePaginationAsync();
 
   const { data, refetch, isLoading, isFetching } = useQuery<ResultBestSellingProducts>(['best-selling-products', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
     return getBestSellingProducts({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })

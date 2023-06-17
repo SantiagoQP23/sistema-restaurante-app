@@ -22,21 +22,32 @@ import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useQuery } from '@tanstack/react-query';
 import { Period } from '../../../../../models/period.model';
 import { TitlePage } from '../../../components/TitlePage.component';
+import { useDateFilter } from '../../../../../hooks/useDateFilter';
 
 
 export const IncomesReports = () => {
 
   const {
-    period, page, endDate, startDate, nextPage, prevPage, rowsPerPage,
-    handleChangeStartDate,
+    period,
+    startDate,
+    endDate,
+    endDateChecked,
+    handleChangeEndDate,
+    handleChangeEndDateChecked,
     handleChangePeriod,
+    handleChangeStartDate,
+    
+
+  } = useDateFilter(Period.WEEK);
+
+  const {
+   page, nextPage, prevPage, rowsPerPage,
+   
     handleChangePage,
     handleChangeRowsPerPage,
-    endDateChecked,
-    handleChangeEndDateChecked,
+  
 
-    handleChangeEndDate } = usePaginationAsync(Period.WEEK);
-
+     } = usePaginationAsync();
 
   const { data, isFetching, refetch, isLoading } = useQuery<DateIncome[]>(['incomes', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
     return getIncomesDate({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })

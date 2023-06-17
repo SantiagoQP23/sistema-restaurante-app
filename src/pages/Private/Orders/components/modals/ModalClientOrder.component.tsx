@@ -56,7 +56,7 @@ export const ModalClientOrder: FC<Props> = (
 
   const suscription$ = statusModalClientOrder.getSubject();
 
-  const { clientsQuery, term, handleChangeTerm } = useClients();
+  const { clientsQuery, search, handleChangeSearch } = useClients();
 
   const clientForm = initialClient;
 
@@ -136,7 +136,7 @@ export const ModalClientOrder: FC<Props> = (
 
     clientsQuery.refetch();
 
-  }, [term])
+  }, [search])
 
   useEffect(() => {
 
