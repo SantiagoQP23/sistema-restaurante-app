@@ -10,16 +10,17 @@ import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
 import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
 import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 import { CounterInput } from "../../../components/CounterInput.component";
+import { IOrder } from "../../../../../../models";
 
 interface Props {
-  people: number;
+  order: IOrder
 }
 
 
-export const PeopleCounter: FC<Props> = ({ }) => {
+export const PeopleCounter: FC<Props> = ({ order }) => {
 
 
-  const [people, setPeople] = useState<number>();
+  const [people, setPeople] = useState<number>(order.people);
 
   const { socket } = useContext(SocketContext);
 
@@ -30,13 +31,6 @@ export const PeopleCounter: FC<Props> = ({ }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { updateOrder, loading } = useUpdateOrder();
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number(event.target.value)
-    if (num < 1) return setPeople(1);
-
-    setPeople(Number(event.target.value))
-  }
 
   const handleChangePeople = (value: number) => {
     setPeople(value);
@@ -56,15 +50,6 @@ export const PeopleCounter: FC<Props> = ({ }) => {
   }
 
 
-  useEffect(() => {
-
-    setPeople(activeOrder?.people);
-
-    return () => {
-      setPeople(0);
-    }
-  }, [activeOrder])
-
 
   return (
     <>
@@ -79,7 +64,7 @@ export const PeopleCounter: FC<Props> = ({ }) => {
 
 
         <CounterInput
-          value={people || 1}
+          value={people}
           onChange={handleChangePeople}
           min={1}
 

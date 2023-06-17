@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 
-import { RemoveCircleOutline, AddCircleOutline } from "@mui/icons-material"
-import { Stack, IconButton, TextField } from "@mui/material"
+import { RemoveCircleOutline, AddCircleOutline, AddBoxOutlined, AddBox, Add, Remove } from "@mui/icons-material"
+import { Stack, IconButton, TextField, Divider, InputBase } from "@mui/material"
 import { useCounter } from "../hooks"
 
 
@@ -55,6 +55,7 @@ export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange })
         // divider={<Divider orientation="vertical" flexItem />}
         sx={{
           borderRadius: '8px',
+          // border: '1px solid #ccc',
 
         }}
       >
@@ -68,21 +69,40 @@ export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange })
         </IconButton>
 
 
-        <TextField
-          style={{ marginLeft: '1px', textAlign: 'center' }}
+        {/* <TextField
+        
           value={counter}
           onChange={handleChange}
           type='number'
-          variant='outlined'
           size='small'
           inputProps={{
             min: 0.5,
             step: step || 0.5,
             
           }}
+          variant='standard'
 
-          sx={{ input: { textAlign: "center" } }}
+          
+          
+
+          sx={{ input: { textAlign: "center" } , borderBottom:  "none" }}
+        /> */}
+
+        <InputBase
+
+          value={counter}
+          onChange={handleChange}
+          type='number'
+          size='small'
+          inputProps={{
+            min: 0.5,
+            step: step || 0.5,
+
+          }}
+
+          sx={{ input: { textAlign: "center" }, borderBottom: "none" }}
         />
+
 
         <IconButton
           size="small"

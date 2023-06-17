@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
-import { Box, alpha, lighten, useTheme, Breadcrumbs, Link, Stack, Typography, Divider } from '@mui/material';
+import { FC, ReactNode, useContext } from 'react';
+import { Box, alpha, lighten, useTheme, Breadcrumbs, Link, Stack, Typography, Divider, styled, CssBaseline } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from './Sidebar/Sidebar.component';
@@ -9,14 +9,43 @@ import { ValidRoles } from '../../router';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../redux';
 import { UnauthorizedPage } from '../../../Status/Unauthorized.page';
+import { SidebarContext } from '../../contexts/SidebarContext';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
   allowedRoles?: string[];
 }
 
+const drawerWidth = 300;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  marginTop: theme.header.height,
+  // padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
+
+
+
+
+
 const SidebarLayout: FC<SidebarLayoutProps> = ({ }) => {
   const theme = useTheme();
+
+  const {open } = useContext(SidebarContext );
 
   const { user } = useSelector(selectAuth);
 
@@ -24,10 +53,11 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ }) => {
     <>
       <Box
         sx={{
-          flex: 1,
-          height: '100%',
+          display: 'flex',
+          // flex: 1,
+          // height: '100%',
 
-          '.MuiPageTitle-wrapper': {
+         /*  '.MuiPageTitle-wrapper': {
             background:
               theme.palette.mode === 'dark'
                 ? theme.colors.alpha.trueWhite[5]
@@ -46,9 +76,10 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ }) => {
                   theme.colors.alpha.black[100],
                   0.05
                 )}`
-          }
+          } */
         }}
       >
+        <CssBaseline />
         <Header />
         <Sidebar />
         <Box
@@ -57,17 +88,26 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ }) => {
             zIndex: 5,
             display: 'block',
             flex: 1,
+            width: '100%',
             pt: `${theme.header.height}`,
-            [theme.breakpoints.up('lg')]: {
-              ml: `${theme.sidebar.width}`
-            }
+            // [theme.breakpoints.up('lg')]: {
+            //   ml: `${theme.sidebar.width}`
+            // }
           }}
         >
-          <Box display="block">
+
+        {/* <Main open={open} > */}
+
+          {/* <Box component="main" sx={{ 
+            pt: (theme) => theme.header.height,  
+            zIndex: 5,
+            display: 'block',
+            flex: 1,
+            }}> */}
             {/* <BreadcrumbsRouter /> */}
             <Outlet />
 
-
+            </Box>
 
             {/* {
                 user && allowedRoles.includes(user.role.name) 
@@ -75,9 +115,9 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ }) => {
                 : <UnauthorizedPage />
 
               } */}
-          </Box>
+         
 
-        </Box>
+        {/* </Main> */}
         {/* <Divider />
 
         <Stack spacing={2}>

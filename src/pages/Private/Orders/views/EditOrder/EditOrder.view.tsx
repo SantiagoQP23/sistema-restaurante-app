@@ -88,7 +88,7 @@ export const EditOrder = () => {
 
                 <Grid item xs={12} md={8}>
                   <OrderDetails
-                    details={activeOrder.details}
+                   order={activeOrder}
                   />
 
                 </Grid>

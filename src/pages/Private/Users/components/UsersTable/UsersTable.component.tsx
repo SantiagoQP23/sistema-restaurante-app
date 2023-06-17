@@ -196,10 +196,10 @@ export const UsersTable: FC<Props> = ({ }) => {
   const {
     usersQuery,
     page,
-    term,
+    search,
     rowsPerPage,
 
-    handleChangeTerm,
+    handleChangeSearch,
     handleChangePage,
     handleChangeRowsPerPage
   } = useUsers();
@@ -235,7 +235,7 @@ export const UsersTable: FC<Props> = ({ }) => {
   useEffect(() => {
 
     updateList();
-  }, [page, rowsPerPage, term])
+  }, [page, rowsPerPage, search])
 
 
   return (
@@ -251,11 +251,11 @@ export const UsersTable: FC<Props> = ({ }) => {
 
         <InputBase
           type='text'
-          onChange={handleChangeTerm}
+          onChange={handleChangeSearch}
           sx={{ ml: 1, flex: 1 }}
           placeholder="Buscar usuario"
           inputProps={{ 'aria-label': 'Buscar usuario' }}
-          value={term}
+          value={search}
         />
         <IconButton
           type="button"

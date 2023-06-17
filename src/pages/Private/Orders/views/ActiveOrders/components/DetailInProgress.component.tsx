@@ -14,6 +14,7 @@ import { selectAuth } from '../../../../../../redux';
 import { Text } from '../../../../components';
 import { statusModalDispatchDetail, statusModalEditOrderDetail } from '../../../services/orders.service';
 import { Label } from '../../../../../../components/ui';
+import { MoreVertOutlined } from '@mui/icons-material';
 
 
 const LinearProgressWrapper = styled(LinearProgress)(
@@ -53,11 +54,15 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
       {/* <Tooltip title={`Editar ${detail.product.name}`} arrow> */}
 
-        <ListItemButton
-          onClick={editDetail}
+        <Box
+         
           sx={{
-            border: `1px solid ${theme.colors.alpha.black[10]}`,
-            py: 1.5,
+            // border: `1px solid ${theme.colors.alpha.black[10]}`,
+            // py: 1.5,
+            // backgroundColor: `${theme.colors.alpha.black[5]}`,
+            alignItems: 'center',
+            display: 'flex',
+            p:1,
           }}
 
 
@@ -122,7 +127,7 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
             primary={ `${detail.product.name}`}
             primaryTypographyProps={
               {
-                variant: 'h5',
+                variant: 'h4',
                 color: detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'
               }
 
@@ -164,8 +169,14 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
           />
 
+          <IconButton
+             onClick={editDetail}
+          >
+            <MoreVertOutlined />
+          </IconButton>
 
-        </ListItemButton>
+
+        </Box>
 
         {/* <Box component='div'
           sx={{

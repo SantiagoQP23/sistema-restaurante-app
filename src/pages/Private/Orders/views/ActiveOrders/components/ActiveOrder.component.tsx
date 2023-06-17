@@ -3,7 +3,7 @@ import { FC, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Collapse,
+  Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
   Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar, Tab, Tabs, Chip
 } from '@mui/material';
 
@@ -27,10 +27,11 @@ import { selectMenu, setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail } from '../../../services/orders.service';
-import { Stack, ListItemButton, ListItemText } from '@mui/material';
+import { Stack, ListItemButton, ListItemText, FormControlLabel } from '@mui/material';
 import { BtnAddProduct } from './BtnAddProduct.component';
 import { queryClient } from '../../../../../../main';
 import { useQueryClient } from '@tanstack/react-query';
+import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
 
 interface Props {
   order: IOrder;
@@ -150,6 +151,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
     setExpanded(!expanded);
   };
 
+  const { updateOrder, loading } = useUpdateOrder()
+
+
 
   const changeStatusOrder = (status: OrderStatus) => {
 
@@ -158,26 +162,33 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
       status
     }
 
-    socket?.emit(EventsEmitSocket.updateOrder, data, (res: SocketResponseOrder) => {
-      console.log(res);
-      if (res.ok) {
-        dispatch(setActiveOrder(res.order!));
-      } else {
-        enqueueSnackbar('No se pudo actualizar el cliente', { variant: 'error' })
-      }
-    });
+    updateOrder(data);
 
   }
 
   return (
     <>
+
+{/* <Stack direction='row' spacing={1} alignItems='center'>
+
+<AccessTimeOutlined color='secondary' fontSize='small' />
+<Typography variant='body2'  >
+  {'Creado ' +
+    formatDistance(new Date(order.createdAt), new Date(), {
+      addSuffix: true,
+      includeSeconds: true,
+      locale: es
+    })}
+</Typography>
+
+</Stack> */}
       <Stack spacing={1} direction='row' my={1}>
 
         <Chip
           label={`N° ${order.num}`}
 
           icon={<Numbers />}
-
+      color={color}
         />
         <Chip
           icon={<TableRestaurant />}
@@ -185,11 +196,11 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             order.type === TypeOrder.IN_PLACE
 
               ?
-              `Mesa ${order.table?.name}`
+              `Mesa ${order.table?.name || ''}`
               : 'Para llevar'
 
           }
-
+            color={color}
         />
 
       </Stack>
@@ -199,9 +210,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
         sx={{
 
           // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
-          border: (theme) => `1px solid ${theme.palette[color].main}`,
-          borderBottom: (theme) => `5px solid ${theme.palette[color].main}`,
-          // bgcolor: (theme) => theme.colors[color].lighter,
+          // border: (theme) => `2px solid ${theme.palette[color].main}`,
+          borderTop: (theme) => `5px solid ${theme.palette[color].main}`,
+          backgroundColor: (theme) => `${theme.colors.alpha.black}`,
         }}
         variant='elevation'
 
@@ -212,6 +223,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
         <Stack
           sx={{ p: 1 }}
           spacing={1.5}
+          // divider={<Divider  />}
         >
           {/* <Stack
             direction='row'
@@ -289,19 +301,110 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
         </Stack>
 
-        <Divider sx={{ mb: 0.5 }} />
+        <Divider sx={{ mb: 0.5, mx: 1 }} />
 
         <Stack
           spacing={1.5}
           sx={{ px: 1 }}
         >
 
+          {/* <RadioGroup
+
+            value={expanded ? 1 : 0}
+            onChange={handleExpanded}
+
+          >
+
+            <Stack direction='row' justifyContent='center'>
+
+              <FormControlLabel value={0} control={<Radio color={color} />}
+                label={
+                  <Box display='flex' alignItems='center'>
+                    <Typography variant='h6' fontWeight={!expanded ? 'bold' : ''}>Por entregar</Typography>
+                    <Label color={color}>
+                      {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+                    </Label>
+                  </Box>
+                }
+
+              />
+              <FormControlLabel value={1} control={<Radio color={color} />}
+                label={
+                  <Box display='flex' alignItems='center'>
+                    <Done />
+                    <Label color={color}>
+                      {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
+                    </Label>
+                  </Box>
+                }
+              />
+            </Stack>
+
+
+          </RadioGroup> */}
+
+          {/* <ToggleButtonGroup
+            value={expanded ? 1 : 0}
+            onChange={handleExpanded}
+            exclusive
+            size='small'
+            color='success'
+            
+          >
+            <ToggleButton
+              onChange={handleExpanded}
+              value={0}
+
+            // sx={{
+            //   '&.MuiToggleButton-root': {
+            //     color: color + '.main',
+            //     borderColor: color + '.main',
+            //     '&.Mui-selected': {
+            //       color: '#000',
+            //       backgroundColor: color + '.main',
+            //       '&:hover': {
+            //         backgroundColor: color + '.main',
+            //       }
+            //     },
+            //     '&:hover': {
+            //       backgroundColor: color + '.main',
+            //     }
+            //   }
+            // }}
+            >
+              Por entregar
+              <Label color={color}>
+                {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+              </Label>
+            </ToggleButton>
+
+            <ToggleButton
+              onChange={handleExpanded}
+              value={1}
+            // sx={{
+            >
+              <Done />
+              <Label color={color}>
+                {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
+              </Label>
+            </ToggleButton>
+
+          </ToggleButtonGroup> */}
+
           <Tabs
             value={expanded ? 1 : 0}
             onChange={handleExpanded}
             indicatorColor='primary'
+            // allowScrollButtonsMobile
+            variant='scrollable'
+            scrollButtons='auto'
 
             sx={{
+
+              zIndex: 1,
+
+
+
               '& .MuiTabs-indicator': {
                 // backgroundColor: color + '.main',
                 backgroundColor: 'transparent',
@@ -310,26 +413,28 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 borderColor: 'transparent',
                 boxShadow: 'none',
                 borderRadius: '0',
+                color: 'text.primary',
 
                 // border: '0 0 3px 0 solid' + color + '.main',
                 // border: `2px solid ${color + '.main'}`,
-                color: color + '.main',
+                // color: color + '.main',
 
               },
               '& .MuiTab-indicatorSpan': {
                 backgroundColor: color + '.main',
                 borderRadius: '10px 10px 0 0',
-                color: color + '.main',
+                color: 'text.primary',
 
 
               },
               '& .Mui-selected': {
-                color: color + '.main',
                 borderRadius: '0',
-                borderBottom: (theme) => `4px solid ${theme.palette[color].main}`,
+                borderBottom: (theme) => `3px solid ${theme.palette[color].main}`,
+                color: (theme) => 'text.primary',
+                // color: (theme) => theme.colors[color].main,
               },
               '& .Mui-selected:hover': {
-                color: color + '.main',
+                color: (theme) => theme.palette[color].main,
               },
 
               // }, '& .MuiTab-root': {
@@ -340,21 +445,54 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             }}
 
           >
-            <Tab disabled={order.status === OrderStatus.DELIVERED} label='Por entregar' />
-            <Tab icon={<Done />} />
+            <Tab 
+            disabled={order.status === OrderStatus.DELIVERED} 
+            label='Por entregar'
+            icon={
+              <Label color={color}>
+                {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+              </Label>
+            }
+            
+            iconPosition='end'
+
+            sx={{
+              '&.Mui-selected, &.Mui-selected:hover':{
+                color: (theme) => theme.colors.alpha.black[100]
+                            }
+            }}
+            
+            />
+            <Tab 
+            label={
+             'Entregado'
+              
+            }
+            icon={
+              <Label color={color}>
+                {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
+              </Label>
+            }
+            iconPosition='end'
+            sx={{
+              '&.Mui-selected, &.Mui-selected:hover':{
+                color: (theme) => theme.colors.alpha.black[100]
+              }
+            }}
+             />
           </Tabs>
 
 
           {
             !expanded
-              ? details.filter(detail => detail.quantity !== detail.qtyDelivered)
+              ? details?.filter(detail => detail.quantity !== detail.qtyDelivered)
                 .map(detail => (
 
                   <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
 
                 ))
               :
-              details.filter(detail => detail.quantity === detail.qtyDelivered).length >= 1
+              details?.filter(detail => detail.quantity === detail.qtyDelivered).length >= 1
                 ?
                 details.filter(detail => detail.quantity === detail.qtyDelivered)
                   .map(detail => (
@@ -394,7 +532,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             order.status === OrderStatus.PENDING
               ? <Button
 
-                variant='contained'
+                // variant='contained'
                 startIcon={<PlayArrow />}
                 onClick={() => {
                   changeStatusOrder(OrderStatus.IN_PROGRESS)
@@ -410,7 +548,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               &&
               < >
                 <Button
-                  variant='outlined'
+                  // variant='outlined'
                   onClick={() => {
                     changeStatusOrder(OrderStatus.PENDING)
                     setStatusFilter && setStatusFilter(OrderStatus.PENDING)
@@ -422,9 +560,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
                 <Tooltip title="Entregar pedido. Próximamente." arrow>
                   <Button
-                    variant='contained'
+                    // variant='contained'
                     color={color}
-                    // onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
+                   onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
                   ><DoneAll /></Button>
                 </Tooltip>
 
@@ -441,7 +579,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             }}
             // size='small'
             color={color}
-            variant='outlined'
+            // variant='outlined'
             startIcon={<EditOutlined />}
 
           >

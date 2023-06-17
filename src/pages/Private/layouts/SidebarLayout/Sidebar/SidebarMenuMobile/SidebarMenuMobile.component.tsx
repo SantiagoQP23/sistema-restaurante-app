@@ -48,10 +48,6 @@ const MenuWrapper = styled(Box)(
 `
 );
 
-
-
-
-
 const SubMenuWrapper = styled(Box)(
   ({ theme }) => `
     .MuiList-root {
@@ -173,7 +169,7 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
-function SidebarMenu() {
+function SidebarMenuMobile() {
 
   const { closeSidebar, open, toggleSidebar } = useContext(SidebarContext);
 
@@ -204,8 +200,6 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
 
-             
-
             </List>
           </SubMenuWrapper>
         </List> */}
@@ -213,7 +207,7 @@ function SidebarMenu() {
         <List
           component="div"
           subheader={
-            open &&
+           
             <ListSubheader
 
               component="div" disableSticky>
@@ -230,7 +224,11 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
 
-              <ListItem disablePadding>
+
+
+              <ListItem
+                disablePadding
+              >
                 <ListItemButton
                   onClick={handleOpenOrders}
 
@@ -238,13 +236,14 @@ function SidebarMenu() {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    color: 'text.primary',
                   }}
 
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 3 : 'auto',
+                      mr:  3 ,
                       justifyContent: 'center',
                     }}
                   >
@@ -252,12 +251,10 @@ function SidebarMenu() {
                   </ListItemIcon>
 
 
-                  <ListItemText primary={"Pedidos"} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={"Pedidos"} sx={{ opacity: 1 }} />
 
                   {
-                    open
-                      ? openOrders ? <ExpandLess /> : <ExpandMore />
-                      : null
+                   openOrders ? <ExpandLess /> : <ExpandMore />
 
                   }
 
@@ -265,13 +262,12 @@ function SidebarMenu() {
 
               </ListItem>
 
-
               <Collapse in={openOrders} >
 
-              {
-                navItemsOrders.map((item, index) => (
 
-                  <ListItem component="div" key={item.to}>
+                {
+                  navItemsOrders.map((item, index) => ( 
+                    <ListItem component="div" key={item.to}>
 
                     <ListItemButton
 
@@ -281,10 +277,10 @@ function SidebarMenu() {
                       to={item.to}
                       sx={{
                         minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
+                        justifyContent: 'center',
                         px: 2.5,
+                        color: 'text.primary',
                         '&.active': {
-                          color: 'text.primary',
                           bgcolor: 'action.selected',
                           fontWeight: 'fontWeightBold',
                         },
@@ -295,7 +291,7 @@ function SidebarMenu() {
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
-                          mr: open ? 3 : 'auto',
+                          mr: 3,
                           justifyContent: 'center',
                         }}
                       >
@@ -303,22 +299,16 @@ function SidebarMenu() {
 
                       </ListItemIcon>
 
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                      <ListItemText primary={item.title} sx={{  }} />
 
                     </ListItemButton>
-
-
-
-
 
                   </ListItem>
 
                 ))
-              }
+                }
 
               </Collapse>
-
-
 
             </List>
           </SubMenuWrapper>
@@ -327,7 +317,7 @@ function SidebarMenu() {
         <List
           component="div"
           subheader={
-            open && <ListSubheader component="div" disableSticky>
+          <ListSubheader component="div" disableSticky>
               <Typography
                 color='text.primary'
 
@@ -355,10 +345,10 @@ function SidebarMenu() {
                       to={item.to}
                       sx={{
                         minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
+                        justifyContent: 'center',
                         px: 2.5,
+                        color: 'text.primary',
                         '&.active': {
-                          color: 'text.primary',
                           bgcolor: 'action.selected',
                           fontWeight: 'fontWeightBold',
                         },
@@ -368,7 +358,7 @@ function SidebarMenu() {
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
-                          mr: open ? 3 : 'auto',
+                          mr: 3,
                           justifyContent: 'center',
                         }}
                       >
@@ -376,7 +366,7 @@ function SidebarMenu() {
 
                       </ListItemIcon>
 
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                      <ListItemText primary={item.title} sx={{  }} />
 
                     </ListItemButton>
 
@@ -389,10 +379,9 @@ function SidebarMenu() {
                 ))
               }
 
-              {
-                user && user.role.name === 'admin' && (navItemsAdmin2.map((item, index) => (
-
-                  <ListItem component="div" key={item.to}>
+                {
+                   user && user.role.name === 'admin' && (navItemsAdmin2.map((item, index) => (
+                    <ListItem component="div" key={item.to}>
 
                     <ListItemButton
 
@@ -402,10 +391,10 @@ function SidebarMenu() {
                       to={item.to}
                       sx={{
                         minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
+                        justifyContent: 'center',
                         px: 2.5,
+                        color: 'text.primary',
                         '&.active': {
-                          color: 'text.primary',
                           bgcolor: 'action.selected',
                           fontWeight: 'fontWeightBold',
                         },
@@ -415,7 +404,7 @@ function SidebarMenu() {
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
-                          mr: open ? 3 : 'auto',
+                          mr: 3,
                           justifyContent: 'center',
                         }}
                       >
@@ -423,27 +412,31 @@ function SidebarMenu() {
 
                       </ListItemIcon>
 
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                      <ListItemText primary={item.title} sx={{  }} />
 
                     </ListItemButton>
+
+
+
+
 
                   </ListItem>
 
                 ))
-
-                )
-
-              }
+              )
+                }
 
             </List>
 
-         
+
+           
           </SubMenuWrapper>
         </List>
 
+        
       </MenuWrapper>
     </>
   );
 }
 
-export default SidebarMenu;
+export default SidebarMenuMobile;

@@ -16,21 +16,7 @@ interface Props {
 export const ComboBoxClient: FC<Props> = ({ client, handleChangeClient }) => {
 
 
-  const { clientsQuery, term, handleChangeTerm } = useClients();
-
-  const { activeOrder } = useSelector(selectOrders);
-
-  useEffect(() => {
-
-    clientsQuery.refetch();
-
-
-  }, [term])
-
-
-  console.log({ client })
-
-
+  const { clientsQuery, search, handleChangeSearch } = useClients();
 
 
 
@@ -48,16 +34,22 @@ export const ComboBoxClient: FC<Props> = ({ client, handleChangeClient }) => {
         renderInput={(params) => <TextField {...params} label="Cliente (opcional)" variant="outlined" />}
 
         onChange={(event, newValue: IClient | null) => {
+
+         
           handleChangeClient(newValue);
           // setClients(newValue ? [newValue, ...clients] : clients)
 
         }}
+        noOptionsText="Sin clientes"
+
 
         onInputChange={(event, newInputValue) => {
-          handleChangeTerm(event as any);
+          handleChangeSearch(event as any);
         }
         }
         fullWidth
+
+        // loading={clientsQuery.isLoading}
 
       />
     </>

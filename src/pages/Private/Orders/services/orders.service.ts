@@ -2,6 +2,10 @@ import { loadAbort } from '../../../../helpers/load-abort-axios.helper';
 import restauranteApi from '../../../../api/restauranteApi';
 import { IOrder } from '../../../../models/orders.model';
 import { SubjectDescriptionDetail, SubjectDispatchDetail, SubjectModalDeleteOrder, SubjectModalPayOrder, SubjectEditOrderDetail } from '../helpers/subject-orders.helper';
+import { PaginationDto } from '../../Clients/dto/pagination.dto';
+import { FilterDto } from '../../Reports/services/dashboard.service';
+import { DateFiltePaginationDto } from '../../dto';
+import { FilterOrdersDto } from '../dto/filter-orders.dto';
 
 
 export const statusModalDescriptionDetail = new SubjectDescriptionDetail();
@@ -12,6 +16,53 @@ export const statusModalPayOrder = new SubjectModalPayOrder();
 
 export const statusModalEditOrderDetail = new SubjectEditOrderDetail();
 export const statusModalDeleteOrderDetail = new SubjectEditOrderDetail();
+
+
+export interface OrdersResponse {
+  orders: IOrder[];
+  count: number;
+}
+
+
+export const getOrders = async (filterDto: FilterOrdersDto) => {
+
+  const { limit=10, offset = 0, ...restFilter } = filterDto;
+
+  console.log(filterDto)
+ 
+  const {data} = await  restauranteApi.get<OrdersResponse>(`orders`,
+    {
+      params: {
+        ...restFilter,
+        offset: limit * offset,
+        limit
+      }
+
+    }
+  );
+
+  return data;
+}
+
+export const getActiveOrders = async (filterDto: DateFiltePaginationDto) => {
+
+  const { period, startDate, endDate, limit=10, offset = 0 } = filterDto;
+ 
+  const {data} = await  restauranteApi.get<IOrder[]>(`orders/actives`,
+    {
+      params: {
+        period,
+        startDate,
+        endDate,
+        offset: limit * offset,
+        limit
+      }
+    }
+  );
+
+  return data;
+}
+
 
 export const getOrdersToday = () => {
 

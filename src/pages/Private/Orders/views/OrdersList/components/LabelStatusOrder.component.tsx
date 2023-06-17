@@ -3,13 +3,14 @@ import { FC } from "react";
 
 import { Label } from "../../../../../../components/ui";
 import { OrderStatus } from "../../../../../../models";
+import { Chip } from '@mui/material';
 
 
 const colorStatusOrderMap: {
   [key: string]: "primary" | "secondary" | "error" | "warning" | "success" | "info" | undefined
 } = {
   'PENDING': 'success',
-  'IN_PROGRESS': 'primary',
+  'IN_PROGRESS': 'info',
   'unpaid': 'warning',
   'DELIVERED': 'info',
   'CANCELLED': 'error',
@@ -39,10 +40,12 @@ export const LabelStatusOrder: FC<Props> = (
   
 
   return (
-    <Label
+    <Chip
       color={colorStatusOrderMap[status]}
-    >
-      {textStatusOrderMap[status]}
-    </Label>
+      label={textStatusOrderMap[status]}
+      size="small"
+     
+    />
+
   )
 }

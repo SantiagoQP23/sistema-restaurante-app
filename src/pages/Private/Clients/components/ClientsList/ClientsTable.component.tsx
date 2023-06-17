@@ -191,24 +191,7 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
 
-  const {  clientsQuery, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, handleChangeTerm, term} = useClients();
-
-
-
-
-
-  const updateList = () => {
-    clientsQuery.refetch();
-
-  }
-
-  useEffect(() => {
-
-    updateList();
-  }, [page, rowsPerPage, term])
-
-
-
+  const {  clientsQuery, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, handleChangeSearch, search} = useClients();
 
 
 
@@ -221,17 +204,17 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
         <InputBase
           type='text'
-          onChange={handleChangeTerm}
+          onChange={handleChangeSearch}
           sx={{ ml: 1, flex: 1 }}
           placeholder="Buscar cliente"
           inputProps={{ 'aria-label': 'Buscar cliente' }}
-          value={term}
+          value={search}
         />
         <IconButton
           type="button"
           sx={{ p: '10px' }}
           aria-label="search"
-          onClick={updateList}
+          // onClick={updateList}
         >
           {
             clientsQuery.isLoading

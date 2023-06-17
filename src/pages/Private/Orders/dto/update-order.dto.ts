@@ -6,6 +6,7 @@ export interface UpdateOrderDto{
   id: string;
   tableId?: string;
   clientId?: string;
+  userId?: string;
   people?: number;
   status?: string;
   discount?: number;

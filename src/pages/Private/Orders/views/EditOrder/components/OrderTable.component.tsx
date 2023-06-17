@@ -28,7 +28,7 @@ export const OrderTable: FC<Props> = () => {
 
   const { activeOrder } = useSelector(selectOrders);
 
-  const [table, setTable] = useState<string | undefined >(activeOrder?.table?.id);
+  const [table, setTable] = useState<string | undefined>(activeOrder?.table?.id);
 
   const { tables } = useSelector(selectTables);
 
@@ -48,7 +48,7 @@ export const OrderTable: FC<Props> = () => {
 
   const changeTable = (tableId: string) => {
 
-  
+
 
     const updateOrderDto: UpdateOrderDto = {
       id: activeOrder!.id,
@@ -105,21 +105,23 @@ export const OrderTable: FC<Props> = () => {
           ? (<Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>)
           : <>
             {
-              loading ? <CircularProgress size={20}/>
+              loading ? <CircularProgress size={20} />
                 :
                 (<FormControl fullWidth >
                   <Typography variant='subtitle1'>Mesa </Typography>
                   <Select
-                   
-                  
-                    
+
+
+
                     value={table}
-                 
+
 
                     onChange={(e) => changeTable(e.target.value)}
                     disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
-                   
+
                     size='small'
+
+                    error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
 
                   >
                     {
@@ -131,6 +133,10 @@ export const OrderTable: FC<Props> = () => {
                     }
 
                   </Select>
+                  {
+                    TypeOrder.IN_PLACE === activeOrder!.type && !table
+                    && <Typography color='error' variant='subtitle1'>Seleccione una mesa</Typography>
+                  }
                 </FormControl>)}
           </>
       }

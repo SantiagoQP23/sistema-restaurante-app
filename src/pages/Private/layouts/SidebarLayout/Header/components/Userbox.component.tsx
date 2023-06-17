@@ -152,6 +152,7 @@ export const Userbox = () => {
 
               to="/users/account"
               component={NavLink}
+              onClick={handleClose}
             >
               {/* <ListItemIcon>
                 <AccountBoxTwoToneIcon fontSize="small" />

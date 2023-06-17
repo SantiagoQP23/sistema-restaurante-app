@@ -83,11 +83,19 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu })
           onClick={() => editarCategorias()}
         >
 
-          <CardHeader
-            title={seccion.name}
-            subheader={`Categorías: ${seccion.categories.length}`}
-            action={
+         
 
+          <CardContent>
+
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 1
+              
+
+            }}>
+              <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
               <IconButton
                 onClick={(e) => {
                   e.stopPropagation();
@@ -96,55 +104,18 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu })
               >
                 <MoreHorizOutlined />
               </IconButton>
-              // <Switch checked={seccion.isActive}
-              //   onClick={(e) => {
-              //     e.stopPropagation();
-              //     changeStatusSection(seccion)
-
-              //   }}
-              //   color={seccion.isActive ? 'success' : 'warning'}
-              // />
-
-            }
-          />
-
-
-
-          <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Label color={seccion.isActive ? 'success' : 'error'}>{seccion.isActive ? 'Activo' : 'Eliminado'}</Label>
-            {/* <Box >
-              <Button
-                size='small'
-                onClick={
-                  (e) => {
-                    e.stopPropagation();
-                    editarSeccion()
-                  }
-                }
-              >
-                Editar
-              </Button>
             </Box>
-               */}
-            {/* <Box >
-            <Tooltip title='Editar' >
-              <IconButton color='primary'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  editarSeccion();
-                }}
-              >
-                <EditOutlined />
-              </IconButton>
-            </Tooltip>
 
+            <Typography variant='h4'>
+              {seccion.name}
 
-          
+            </Typography>
+            <Typography variant='subtitle1' mt={1}>
+              {`Categorías: ${seccion.categories.length}`}
+            </Typography>
 
-          </Box> */}
-            {/* <Switch checked={seccion.isActive} onClick={() => changeStatusSection(seccion)} color={seccion.isActive ? 'success' : 'warning'} /> */}
+          </CardContent>
 
-          </CardActions>
         </CardActionArea>
 
 

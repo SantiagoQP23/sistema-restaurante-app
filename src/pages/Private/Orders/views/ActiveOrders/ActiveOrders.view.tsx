@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { Clock } from '../OrdersList/components/Clock.component';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { BarActiveOrders } from './components/BarActiveOrders.component';
+import { useActiveOrders } from '../../hooks';
+import { Box } from '@mui/material/';
 
 
 export const ActiveOrders = () => {
@@ -21,25 +23,16 @@ export const ActiveOrders = () => {
 
   const navigate = useNavigate();
 
+  const {activeOrdersQuery} = useActiveOrders();
 
-  const refreshOrders = () => {
 
-    callEndpoint(getOrdersToday())
-      .then((resp) => {
 
-        const { data } = resp;
-
-        dispatch(loadOrders(data));
-
-        dispatch(setLastUpdatedOrders(new Date().toISOString()));
-      })
-  }
 
   return (
     <>
 
 
-      <Container maxWidth="lg" sx={{ mb: 4 }} >
+      <Container maxWidth="xl" sx={{ mb: 4 }} >
         <TitlePage
           title='Pedidos activos'
           action={
@@ -48,7 +41,7 @@ export const ActiveOrders = () => {
               <LoadingButton
                 variant="text"
                 loading={loading}
-                onClick={refreshOrders}
+                onClick={() => activeOrdersQuery.refetch()}
                 size='small'
               >
                 <Cached />
@@ -72,9 +65,10 @@ export const ActiveOrders = () => {
 
         <Clock />
 
-        <Divider sx={{mb: 1}}/>
-        <BarActiveOrders />
-        <Divider sx={{ mb: 1 }} />
+        {/* <Divider sx={{mb: 1}}/> */}
+       
+
+       
 
 
         <Outlet />
@@ -86,12 +80,6 @@ export const ActiveOrders = () => {
         </Typography>
 
       </Container>
-
-
-
-
-
-
 
       <DespachoDetalle />
 

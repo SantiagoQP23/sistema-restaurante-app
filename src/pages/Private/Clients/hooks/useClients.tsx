@@ -5,45 +5,42 @@ import { useSnackbar } from "notistack";
 import { CreateClientDto } from "../dto/create-client.dto";
 import { UpdateClientDto } from "../dto/update-client.dto";
 import { PaginationDto } from "../dto/pagination.dto";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
+import { useSearch } from "../../../../hooks/useSearch";
 
 
 export const useClients = () => {
 
   const dispatch = useDispatch();
 
-  const { page, rowsPerPage, handleChangePage, handleChangeRowsPerPage } = usePaginationAsync();
+  const pagination = usePaginationAsync();
+  
+  const {search, handleChangeSearch} = useSearch();
 
-  const [term, setTerm] = useState<string>('');
+  
 
-  const clientsQuery = useQuery<{ clients: IClient[], length: number }>(['clients', { page, rowsPerPage, term }],
-    (data) => getClients(page, rowsPerPage, term)
+  const clientsQuery = useQuery<{ clients: IClient[], length: number }>(
+    ['clients', {  limit: pagination.rowsPerPage, offset: pagination.page, search }],
+    (data) => getClients({
+      limit: pagination.rowsPerPage,
+      offset: pagination.page,
+      search
+    })
   )
 
-  const handleChangeTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-    if (event && event.target)
-      setTerm(event.target.value);
-  };
-
+  useEffect(() => {
+    clientsQuery.refetch();
+  }, [search, pagination.page, pagination.rowsPerPage])
 
 
   return {
     clientsQuery,
+    handleChangeSearch,
+    search,
 
-    page,
-
-    handleChangePage,
-
-    rowsPerPage,
-
-    handleChangeRowsPerPage,
-
-    handleChangeTerm,
-
-    term
+   ...pagination,
 
   }
 }

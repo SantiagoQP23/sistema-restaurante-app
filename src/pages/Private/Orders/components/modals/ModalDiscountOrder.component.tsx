@@ -81,6 +81,10 @@ export const ModalDiscountOrder = () => {
     })
   }, [])
 
+  if (!order) {
+    return null;
+  }
+
 
   return (
     <Dialog
@@ -94,16 +98,12 @@ export const ModalDiscountOrder = () => {
         Descuento de pedido
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          <Typography variant='h6'>Total: {order?.amount}</Typography>
-        </DialogContentText>
+      
+          <Typography variant='h6' mb={1}><b>Total: </b>$ {order?.amount}</Typography>
+      
 
         <FormControl fullWidth>
-          {
-            order &&
-            <FormHelperText>El descuento debe ser menor a {(order?.amount * 0.05).toFixed(2)}</FormHelperText> 
-
-          }
+         
 
           <TextField
             label="Descuento"
@@ -123,6 +123,7 @@ export const ModalDiscountOrder = () => {
 
             onChange={handleChange}
            value={discount}
+           helperText={`El descuento debe ser menor a ${(order?.amount * 0.05).toFixed(2)}`}
           />
 
 
@@ -134,7 +135,11 @@ export const ModalDiscountOrder = () => {
 
       </DialogContent>
 
-      <DialogActions>
+      <DialogActions
+        sx={{
+          justifyContent: 'center'
+        }}
+      >
         <Button
           onClick={() => {
             setOpen(false)

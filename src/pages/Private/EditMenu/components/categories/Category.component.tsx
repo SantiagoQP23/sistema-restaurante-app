@@ -91,42 +91,67 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria, handleOpenMe
 
         <CardActionArea onClick={() => establecerCategoria()}>
 
-        <CardHeader
-          title={categoria.name}
-          subheader={`Productos: ${categoria.products.length}`}
-          action={
-            <IconButton
-              aria-label="settings"
-              onClick={(event) => {
-                event.stopPropagation();
-                handleOpenMenu(event, categoria)
-              }}
-            >
-              <MoreHoriz />
-            </IconButton>
-          }
-        />
+          {/* <CardHeader
+            title={categoria.name}
+            subheader={`Productos: ${categoria.products.length}`}
+          
+          />
+ */}
 
-        <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <CardContent>
 
-          <Box>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 1
 
-            <Label
-              color={categoria.isActive ? 'success' : 'error'}
-            >
-              {categoria.isActive ? 'Activo' : 'Eliminado'}
-            </Label>
 
-            {/* <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
+            }}>
+              <Label
+                color={categoria.isActive ? 'success' : 'error'}
+              >
+                {categoria.isActive ? 'Activo' : 'Eliminado'}
+              </Label>
+
+              <IconButton
+                aria-label="settings"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleOpenMenu(event, categoria)
+                }}
+              >
+                <MoreHoriz />
+              </IconButton>
+
+
+
+
+            </Box>
+
+            <Typography variant='h4'>
+              {categoria.name}
+
+            </Typography>
+
+            <Typography variant='subtitle1' mt={1}>
+              {`Productos: ${categoria.products.length}`}
+            </Typography>
+
+          </CardContent>
+
+
+
+
+
+
+              {/* <Button variant="outlined" size='small' onClick={() => establecerCategoria()} >
               Ver Productos
 
             </Button> */}
 
-          </Box>
-
-
-          <Box >
-            {/* <Tooltip title="Editar">
+          
+              {/* <Tooltip title="Editar">
 
               <IconButton color='primary'
                 onClick={() => editarCategoria()}
@@ -138,7 +163,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria, handleOpenMe
             </Tooltip>
             <Switch checked={categoria.isActive} onClick={() => changeStatusCategory(categoria)} color={categoria.isActive ? 'success' : 'error'} /> */}
 
-            {/* <Tooltip title="Eliminar">
+              {/* <Tooltip title="Eliminar">
 
               <IconButton
                 color='error'
@@ -149,8 +174,7 @@ export const Category: FC<Props> = ({ categoria, eliminarCategoria, handleOpenMe
 
               </IconButton>
             </Tooltip> */}
-          </Box>
-        </CardActions>
+          
         </CardActionArea>
       </Card>
 

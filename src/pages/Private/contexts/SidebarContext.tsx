@@ -4,6 +4,9 @@ type SidebarContext = {
   sidebarToggle: any;
   toggleSidebar: () => void;
   closeSidebar: () => void;
+  handleDrawerOpen: () => void;
+  handleDrawerClose: () => void;
+  open: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -16,7 +19,19 @@ interface Props {
 }
 
 export const SidebarProvider: FC<Props> = ({ children }) => {
-  const [sidebarToggle, setSidebarToggle] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+
+  };
+
+  const [sidebarToggle, setSidebarToggle] = useState<boolean>(false);
   const toggleSidebar = () => {
     setSidebarToggle(!sidebarToggle);
   };
@@ -26,7 +41,7 @@ export const SidebarProvider: FC<Props> = ({ children }) => {
 
   return (
     <SidebarContext.Provider
-      value={{ sidebarToggle, toggleSidebar, closeSidebar }}
+      value={{ sidebarToggle, toggleSidebar, closeSidebar, handleDrawerOpen, handleDrawerClose, open }}
     >
       {children}
     </SidebarContext.Provider>

@@ -58,10 +58,10 @@ export const OrderDetails = () => {
                 <TableCell>
                   Descripción
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   Subtotal
-                </TableCell>
-                <TableCell>
+                </TableCell> */}
+                <TableCell align="center">
                   Acciones
                 </TableCell>
               </TableRow>

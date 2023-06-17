@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 
-import { Typography,
+import {
+  Typography,
   CardActionArea,
-  Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch, CardHeader } from '@mui/material/';
+  Grid, Box, Button, Card, CardContent, IconButton, CardActions, CardMedia, Tooltip, Switch, CardHeader
+} from '@mui/material/';
 
 import { DeleteOutline, EditOutlined, MoreHoriz } from '@mui/icons-material';
 
@@ -76,41 +78,72 @@ export const Product: FC<Props> = ({ producto, eliminarProducto }) => {
         /> */}
 
         <CardActionArea onClick={() => editProduct()}>
+          {/* 
+          <CardHeader
+            title={producto.name}
+            subheader={`$ ${producto.price}`}
+           
 
-        <CardHeader
-          title={producto.name}
-          subheader={`$ ${producto.price}`}
-          action={
+          /> */}
 
-            <IconButton >
-              <MoreHoriz />
-            </IconButton>
-          }
 
-        />
+          <CardContent>
 
-        <Box
-          sx={{
-            display: 'flex',
-            px: 2,
-            pb: 1
-          }}
-        >
 
-        {
-          producto.isActive
-          ? <Label color='info'>
 
-              {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 1
 
-            </Label>
-            : <Label color='error'>
-              Eliminado
-            </Label>
-        }
-        </Box>
 
-        {/* <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            }}>
+
+              {
+                producto.isActive
+                  ? <Label color='info'>
+
+                    {ProductStatusSpanish[`${producto.status as ProductStatus}`]}
+
+                  </Label>
+                  : <Label color='error'>
+                    Eliminado
+                  </Label>
+              }
+
+
+              <IconButton >
+                <MoreHoriz />
+              </IconButton>
+
+
+
+            </Box>
+            <Typography variant='h4'>
+              {producto.name}
+
+            </Typography>
+
+            <Typography variant='subtitle1' mt={1}>
+              {`Precio: $${producto.price}`}
+            </Typography>
+          </CardContent>
+
+
+
+          <Box
+            sx={{
+              display: 'flex',
+              px: 2,
+              pb: 1
+            }}
+          >
+
+
+          </Box>
+
+          {/* <CardActions sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
 
           <Tooltip title='Editar'>
 

@@ -1,3 +1,6 @@
+import { useContext } from 'react';
+
+
 import {
   Box,
   List,
@@ -10,7 +13,11 @@ import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import { ListItemButton } from '@mui/material';
+import { ListItemButton, IconButton } from '@mui/material';
+import { SidebarContext } from '../../../../contexts/SidebarContext';
+
+import MenuIcon from '@mui/icons-material/Menu';
+
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -37,7 +44,7 @@ const ListWrapper = styled(Box)(
                             transition: all .2s;
                             border-radius: ${theme.general.borderRadiusLg};
                             content: "";
-                            background: ${theme.colors.primary.main};
+                            // background: ${theme.colors.primary.main};
                         }
                     }
                 }
@@ -65,50 +72,96 @@ const ListWrapper = styled(Box)(
 
 function HeaderMenu() {
   const ref = useRef<any>(null);
-  const [isOpen, setOpen] = useState<boolean>(false);
 
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
+  const { open, handleDrawerOpen } = useContext(SidebarContext);
 
-  const handleClose = (): void => {
-    setOpen(false);
-  };
 
   return (
     <>
-      <ListWrapper
+      {/* <ListWrapper
         sx={{
           display: {
             xs: 'none',
-            md: 'block'
+            md: 'block',
           }
         }}
+      > */}
+      <List disablePadding component={Box}
+        sx={{
+          display: {
+            xs: 'none',
+            md: 'flex',
+          },            color: 'inherit',
+          gap: 1
+
+        }
+        }
+
       >
-        <List disablePadding component={Box} display="flex">
-          <ListItemButton
-            classes={{ root: 'MuiListItem-indicators' }}
 
-            component={NavLink}
-            to="/orders"
-          >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
-              primary="Pedidos"
-            />
-          </ListItemButton>
-          <ListItemButton
-            classes={{ root: 'MuiListItem-indicators' }}
+        <ListItemButton
+          onClick={handleDrawerOpen}
+          sx={{
+            ml: 1,
+            color: 'text.primary',
+            backgroundColor: (theme) => theme.header.background,
 
-            component={NavLink}
-            to="/tables"
+            ...(open && { display: 'none' })
+
+          }}
+        >
+          <MenuIcon />
+
+        </ListItemButton>
+        {/* <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerOpen}
           >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
-              primary="Mesas"
-            />
-          </ListItemButton>
-          {/* 
+          </IconButton> */}
+
+        <ListItemButton
+          // classes={{ root: 'MuiListItem-indicators' }}
+
+          component={NavLink}
+          to="/orders"
+          sx={{
+            ml: 2,
+            color: 'text.primary',
+            '&.active': {
+              color: 'text.primary',
+              bgcolor: 'action.selected',
+              fontWeight: 'fontWeightBold',
+            },
+          }}
+        >
+          <ListItemText
+            primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
+            primary="Pedidos"
+          />
+        </ListItemButton>
+        <ListItemButton
+          // classes={{ root: 'MuiListItem-indicators' }}
+
+          component={NavLink}
+          to="/tables"
+          sx={{
+            color: 'text.primary',
+            '&.active': {
+              bgcolor: 'action.selected',
+              fontWeight: 'fontWeightBold',
+            },
+          }}
+        >
+          <ListItemText
+            primaryTypographyProps={{
+              noWrap: true, variant: 'h4', color: 'inherit'
+            }}
+            primary="Mesas"
+          />
+        </ListItemButton>
+        {/* 
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}
             button
@@ -127,8 +180,8 @@ function HeaderMenu() {
               }
             />
           </ListItem> */}
-        </List>
-      </ListWrapper>
+      </List>
+      {/* </ListWrapper> */}
       {/* <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/overview">
           Overview

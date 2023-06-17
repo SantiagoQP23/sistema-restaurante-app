@@ -62,7 +62,7 @@ export const ReceiptOrder = () => {
 
   return (
     <>
-      <Container maxWidth='xl'>
+      <Container maxWidth='lg'>
 
         <TitlePage
           title='Comprobante de pedido'
@@ -147,20 +147,23 @@ export const ReceiptOrder = () => {
             }
             action={
 
-              <>
-                <LabelStatusOrder status={
-                  activeOrder.status === OrderStatus.DELIVERED && !activeOrder.isPaid
-                    ? "unpaid"
-                    : activeOrder.status
+              <Stack spacing={1} >
+                <Box display='flex' justifyContent='right'>
 
-                } />
+                  <LabelStatusOrder status={
+                    activeOrder.status === OrderStatus.DELIVERED && !activeOrder.isPaid
+                      ? "unpaid"
+                      : activeOrder.status
+
+                  } />
+                </Box>
                 <Box>
-                  <Typography variant='h5' fontWeight='bold'>Pedido N° {activeOrder.num}</Typography>
+                  <Typography variant='h4' >Pedido N° {activeOrder.num}</Typography>
 
                 </Box>
 
 
-              </>
+              </Stack>
 
             }
 
@@ -171,7 +174,7 @@ export const ReceiptOrder = () => {
 
 
             <Stack
-              spacing={1}
+              spacing={2}
               direction={{ xs: 'column', sm: 'row' }}
             // Establecer el tamaño de los elementos
 
@@ -180,45 +183,43 @@ export const ReceiptOrder = () => {
               <Box
                 flexBasis='50%'
               >
-                <Typography variant='caption' >Cliente</Typography>
-                <Typography variant='h6'>{activeOrder.client?.person.firstName} {activeOrder.client?.person.lastName}</Typography>
-                <Typography variant='h6'>{activeOrder.client?.address}</Typography>
-                <Typography variant='h6'>{activeOrder.client?.person.email}</Typography>
-                <Typography variant='h6'>{activeOrder.client?.person.numPhone}</Typography>
+                <Typography variant='h5' mb={1}>Cliente</Typography>
+                <Typography variant='body1'>{activeOrder.client?.address}</Typography>
+                <Typography variant='body1'>{activeOrder.client?.person.email}</Typography>
+                <Typography variant='body1'>{activeOrder.client?.person.numPhone}</Typography>
+                <Typography variant='body1'>{activeOrder.client?.person.firstName} {activeOrder.client?.person.lastName}</Typography>
               </Box>
               <Box
                 flexBasis='50%'
               >
-                <Typography variant='caption' >Mesero</Typography>
-                <Typography variant='h6'>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName}</Typography>
+                <Typography variant='h5' mb={1}>Mesero</Typography>
+                <Typography variant='body1'>{activeOrder.user.person.firstName} {activeOrder.user.person.lastName}</Typography>
+                <Typography variant='body1'>{activeOrder.user.person.email}</Typography>
+                <Typography variant='body1'>{activeOrder.user.person.numPhone}</Typography>
+
               </Box>
 
 
 
             </Stack>
 
-            <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-
-
-            </Box>
-
+          
             <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
               <Box>
-                <Typography variant='caption' >Mesa</Typography>
-                <Typography variant='h6' >{activeOrder.table?.name}</Typography>
+                <Typography variant='h5' mb={1}>Mesa</Typography>
+                <Typography variant='body1' >{activeOrder.table?.name}</Typography>
 
 
               </Box>
               <Box>
-                <Typography variant='caption' >Fecha</Typography>
-                <Typography variant='h6'>{format(new Date(activeOrder?.createdAt), 'dd MMMM yyyy HH:mm', { locale: es })}</Typography>
+                <Typography variant='h5' mb={1}>Fecha</Typography>
+                <Typography variant='body1'>{format(new Date(activeOrder?.createdAt), 'dd MMMM yyyy HH:mm', { locale: es })}</Typography>
               </Box>
 
               <Box>
-                <Typography variant='caption' >Personas</Typography>
-                <Typography variant='h6' >{activeOrder?.people}</Typography>
+                <Typography variant='h5' mb={1}>Personas</Typography>
+                <Typography variant='body1' >{activeOrder?.people}</Typography>
               </Box>
 
             </Box>
@@ -244,13 +245,17 @@ export const ReceiptOrder = () => {
                     activeOrder.details.map((detail, index) => {
                       return (
                         <>
-                          <TableRow key={detail.id}>
-                            <TableCell>{detail.quantity}</TableCell>  
-                            <TableCell>{detail.product.name}</TableCell>
+                          <TableRow key={detail.id} sx={{
+                            whiteSpace: 'nowrap'
+                          }}>
+                            <TableCell align="center">{detail.quantity}</TableCell>
+                            <TableCell sx={{
+                              fontWeight: 'bold'
+                            }}>{detail.product.name}</TableCell>
                             <TableCell align="right">${detail.product.price}</TableCell>
                             <TableCell align="right">${detail.amount}</TableCell>
 
-                           
+
                           </TableRow>
 
                         </>
@@ -260,30 +265,61 @@ export const ReceiptOrder = () => {
                   }
 
                   <TableRow>
-                    <TableCell colSpan={2}></TableCell>
-                    <TableCell>
 
-                    <Typography variant='h5'>Subtotal</Typography>
+                    <TableCell
+                      align="right"
+                      colSpan={3}
+                      sx={{
+                        border: 'none'
+                      }}
+                    >
+
+
+                      <Typography variant='h5'>Subtotal</Typography>
                     </TableCell>
-                    <TableCell align="right">${activeOrder.amount}</TableCell>
+                    <TableCell align="right"
+                      sx={{
+                        border: 'none'
+                      }}
+                    >${activeOrder.amount}</TableCell>
                   </TableRow>
 
                   <TableRow>
-                    <TableCell colSpan={2}></TableCell>
-                    <TableCell>
+                    <TableCell
+                      align="right"
+                      colSpan={3}
+                      sx={{
+                        border: 'none'
+                      }}
+                    >
 
-                    <Typography variant='h5'>Descuento</Typography>
+                      <Typography variant='h5'>Descuento</Typography>
                     </TableCell>
-                    <TableCell align="right">${activeOrder.discount}</TableCell>
+                    <TableCell align="right"
+                      sx={{
+                        border: 'none'
+                      }}
+                    >${activeOrder.discount}</TableCell>
 
                   </TableRow>
 
                   <TableRow>
-                    <TableCell colSpan={2}></TableCell>
-                    <TableCell >
+
+                    <TableCell
+
+                      align="right"
+                      colSpan={3}
+                      sx={{
+                        border: 'none'
+                      }}
+                    >
                       <Typography variant='h4'>Total</Typography>
-                      </TableCell>
-                    <TableCell align="right">${activeOrder.total}</TableCell>
+                    </TableCell>
+                    <TableCell align="right"
+                      sx={{
+                        border: 'none'
+                      }}
+                    >${activeOrder.total}</TableCell>
 
                   </TableRow>
 

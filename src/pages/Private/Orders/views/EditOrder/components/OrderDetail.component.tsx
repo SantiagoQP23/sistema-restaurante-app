@@ -121,6 +121,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
         sx={{
           whiteSpace: 'nowrap'
         }}
+        
       >
 
 
@@ -186,7 +187,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
         </TableCell>
 
-        <TableCell align='center'>
+        <TableCell align='right'>
           {
           detail.discount > 0 &&
           <Typography variant="subtitle1" >$ {detail.product.price * quantity} - $ {detail.discount}</Typography>

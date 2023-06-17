@@ -4,26 +4,11 @@ import { SelectChangeEvent } from "@mui/material";
 
 
 
-export const usePaginationAsync = (periodo = Period.TODAY) => {
+export const usePaginationAsync = () => {
 
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const [period, setPeriod] = useState<Period>(periodo);
-
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-
-  const [endDate, setEndDate] = useState<Date | null>();
-
-  const [endDateChecked, setEndDateChecked] = useState(false);
-
-  const handleChangeEndDateChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDateChecked(event.target.checked);
-
-  };
-
-
 
   const nextPage = () => {
     setPage(page + 1);
@@ -46,33 +31,13 @@ export const usePaginationAsync = (periodo = Period.TODAY) => {
     resetPage();
   };
 
-  const handleChangePeriod = (event: SelectChangeEvent) => {
-    setPeriod(event.target.value as Period);
-    resetPage();
-  };
-
-  const handleChangeStartDate = (newValue: Date | null) => {
-    setStartDate(newValue);
-    resetPage();
-  };
-
-  const handleChangeEndDate = (newValue: Date | null) => {
-    setEndDate(newValue);
-    resetPage();
-  };
-
-  
-
+ 
   return {
     
     // Getters
     page,
     rowsPerPage,
-    period,
-    startDate,
-    endDate,
-    endDateChecked,
-    
+   
     // Setters
     nextPage,
     prevPage,
@@ -82,10 +47,7 @@ export const usePaginationAsync = (periodo = Period.TODAY) => {
     // Handlers
     handleChangePage,
     handleChangeRowsPerPage,
-    handleChangePeriod,
-    handleChangeStartDate,
-    handleChangeEndDate,
-    handleChangeEndDateChecked
+  
 
 
   }

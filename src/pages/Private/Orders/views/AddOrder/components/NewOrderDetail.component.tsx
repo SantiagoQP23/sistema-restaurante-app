@@ -79,7 +79,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
         <TableCell>
           <Typography variant='h5' noWrap>{detalle.product.name}</Typography>
-          <Typography variant='body1'>$ {detalle.product.price}</Typography>
+          {/* <Typography variant='body1'>$ {detalle.product.price}</Typography> */}
 
         </TableCell>
 
@@ -94,9 +94,9 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
         </TableCell>
 
-        <TableCell align='center'>
+        {/* <TableCell align='center'>
           <Typography variant="body1" >$ {detalle.product.price * quantity}</Typography>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell
           align='center'
@@ -107,7 +107,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
           <IconButton
             onClick={editDescription}
-            color='primary'
+            color='inherit'
           >
             <EditOutlined />
           </IconButton>

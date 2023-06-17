@@ -5,27 +5,36 @@ import logo from '../../../../../assets/logo3.png'
 
 import {
   Box,
-  Drawer,
+  
   alpha,
-  styled,
+  
   Divider,
-  useTheme,
   Button,
   lighten,
   darken,
   Tooltip,
-  Typography
+  Typography,
+  IconButton,
+  Drawer,
+  
 } from '@mui/material';
+
+import MuiDrawer from '@mui/material/Drawer';
+
 
 import SidebarMenu from './SidebarMenu/SidebarMenu.component';
 import { LogoSign, Scrollbar } from '../../../components';
 import { ToggleButtonGroup, ToggleButton, Card } from '@mui/material';
-import { DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
+import { ChevronLeft, DarkMode, JoinFullSharp, LightMode } from '@mui/icons-material';
 import { ThemeContext } from '../../../../../theme/ThemeProvider';
 import Userbox from '../Header/components/Userbox.component';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../redux';
+
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import SidebarMenuMobile from './SidebarMenuMobile/SidebarMenuMobile.component';
+
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -40,7 +49,47 @@ const SidebarWrapper = styled(Box)(
 );
 
 
-const Title = () => {
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+
+const DrawerPersistent = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  }),
+);
+
+
+const Title = ({open}: {open: boolean}) => {
   return (
     <>
       {/* Logo del restaurante */}
@@ -48,15 +97,18 @@ const Title = () => {
         display='flex'
         alignItems='center'
         gap={2}
+        sx={{
+          ml: open ? 3 : 0.75,
+        }}
       >
 
-        <img src={logo} alt='logo' width='70px' style={{ borderRadius: 8 }} />
+        <img src={logo} alt='logo' width='60px' style={{ borderRadius: 8 }} />
 
 
         <Box>
 
-          <Typography variant='subtitle1' color='white' >Restaurante</Typography>
-          <Typography variant='h4' color='white' >Doña Yoli</Typography>
+          <Typography variant='subtitle1' color='text.primary' >Restaurante</Typography>
+          <Typography variant='h4' color='text.primary' >Doña Yoli</Typography>
         </Box>
       </Box>
 
@@ -100,10 +152,22 @@ export const BoxUser = ({onClick}: {onClick: () => void}) => {
   )
 }
 
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  height: theme.header.height,
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const drawerWidth = 300;
 
 
 function Sidebar() {
-  const { sidebarToggle, toggleSidebar, closeSidebar } = useContext(SidebarContext);
+  
+  const { sidebarToggle, toggleSidebar, closeSidebar, open, handleDrawerClose } = useContext(SidebarContext);
 
   const navigate = useNavigate();
 
@@ -119,7 +183,7 @@ function Sidebar() {
 
   return (
     <>
-      <SidebarWrapper
+      {/* <SidebarWrapper
         sx={{
           display: {
             xs: 'none',
@@ -135,15 +199,40 @@ function Sidebar() {
           boxShadow:
             theme.palette.mode === 'dark' ? theme.sidebar.boxShadow : 'none'
         }}
-      >
+      > */}
+         <DrawerPersistent
+        // sx={{
+        //   width: drawerWidth,
+        //   flexShrink: 0,
+        //   '& .MuiDrawer-paper': {
+          //     width: drawerWidth,
+          //     boxSizing: 'border-box',
+          //   },
+          // }}
+          variant="permanent"
+          sx={{
+            display: {
+              xs: 'none',
+              lg: 'inline-block'
+            },
+          }}
+          
+          open={open}
+          >
+
+          <DrawerHeader>
+
+
+
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeft />
+
+            </IconButton>
+
+          </DrawerHeader>
         <Scrollbar
           height={'100%'}
         >
-          <Box mx={2} my={1}>
-
-
-
-
             {/* <Box
               mx={2}
               sx={{
@@ -152,12 +241,14 @@ function Sidebar() {
             >
               <LogoSign />
             </Box> */}
+            <Box  mt={1}>
 
-            <Title />
+            <Title open={open} />
 
-          </Box>
+            </Box>
+        
 
-          <BoxUser onClick={navigateAccount} />
+          {/* <BoxUser onClick={navigateAccount} /> */}
 
           {/* <Divider
             sx={{
@@ -186,6 +277,9 @@ function Sidebar() {
             background: theme.colors.alpha.trueWhite[10]
           }}
         />
+
+        {
+          open && 
         <Box p={2} textAlign='center'>
 
           <Typography>Desarrollado por </Typography>
@@ -195,31 +289,35 @@ function Sidebar() {
 
 
         </Box>
-      </SidebarWrapper>
+        }
+      </DrawerPersistent>
+
+      {/* </SidebarWrapper> */}
       <Drawer
         sx={{
-          boxShadow: `${theme.sidebar.boxShadow}`
+          boxShadow: `${theme.sidebar.boxShadow}`,
+          zIndex: theme.zIndex.drawer + 3
         }}
         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
         open={sidebarToggle}
         onClose={closeSidebar}
         variant="temporary"
-        elevation={9}
+        elevation={10}
       >
         <SidebarWrapper
-          sx={{
-            background:
-              theme.palette.mode === 'dark'
-                ? theme.colors.alpha.white[100]
-                : darken(theme.colors.alpha.black[100], 0.5)
-          }}
+          // sx={{
+          //   background:
+          //     theme.palette.mode === 'dark'
+          //       ? theme.colors.alpha.white[100]
+          //       : darken(theme.colors.alpha.black[100], 0.5)
+          // }}
         >
           <Scrollbar
             height={'100%'}
           >
-            <Box mx={2} my={1}>
+            <Box mx={2} my={1} mt={3}>
 
-              <Title />
+              <Title open={open} />
 
 
             </Box>
@@ -235,21 +333,19 @@ function Sidebar() {
               }}
             /> */}
 
-            <BoxUser onClick={navigateAccount} />
+            {/* <BoxUser onClick={navigateAccount} /> */}
 
-            <SidebarMenu />
+            <SidebarMenuMobile />
 
           </Scrollbar>
 
           <Divider
-            sx={{
-              background: theme.colors.alpha.trueWhite[10]
-            }}
+           
           />
           <Box p={1} textAlign='center' >
 
-            <Typography>Desarrollado por </Typography>
-            <Typography variant='h5' >Santiago Quirumbay</Typography>
+            <Typography color='text.primary'>Desarrollado por </Typography>
+            <Typography variant='h5' color='text.primary'>Santiago Quirumbay</Typography>
 
           </Box>
         </SidebarWrapper>

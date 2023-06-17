@@ -3,6 +3,7 @@ import {FC} from 'react';
 import { Label } from "../../../../../../components/ui"
 import { IOrder, OrderStatus } from "../../../../../../models"
 import { Tab, Tabs } from '@mui/material';
+import { Order } from '../../../../Reports/components/OrdersReports/Order.component';
 
 
 interface StyledTabsProps {
@@ -59,8 +60,10 @@ interface StyledTabsProps {
 
 interface Props {
   orders: IOrder[],
-  statusOrderFilter: string,
-  changeStatus: (event: React.SyntheticEvent, newValue: string) => void
+  statusOrderFilter: OrderStatus | null,
+  changeStatus: (value: OrderStatus | null) => void,
+  isPaid: boolean | null,
+  changeIsPaid: (value: boolean | null) => void,
 
 }
 
@@ -68,58 +71,85 @@ interface Props {
 export const TabsOrderStatus:FC<Props> = (
   {
     orders,
+    isPaid,
     statusOrderFilter,
-    changeStatus
+    changeStatus,
+    changeIsPaid
+  
   }
 ) => {
+
+
   return (
     <Tabs
 
       value={statusOrderFilter}
      
-      onChange={changeStatus}
+      onChange={(e, newValue: OrderStatus | null | 'paid' ) => {
+
+
+         if (newValue === 'paid') {
+          changeIsPaid(true);
+          changeStatus(null);
+          return;
+         }
+
+        // if (newValue === null) {
+
+
+        // if (newValue === 'unpaid') {
+        //   changeStatus(OrderStatus.DELIVERED);
+          
+
+        // } else if(newValue === OrderStatus.DELIVERED){
+        //   changeStatus(newValue);
+        //   changeIsPaid(true);
+          
+        // } else {
+
+        //   changeIsPaid(false);
+        //   changeStatus(newValue);
+        // }
+
+
+          changeStatus(newValue);
+      }}
       variant="scrollable"
     >
 
       <Tab
         label='Todos'
-        icon={<Label color='info'>{orders.length}</Label>}
+        // icon={<Label color='info'>{orders.length}</Label>}
         iconPosition='end'
-        value={'all'}
+        value={null}
       // onClick={() => setView('list')}
       />
       <Tab
         label='Pendiente'
         value={OrderStatus.PENDING}
-        icon={<Label color='success'>{orders.filter(order => order.status === OrderStatus.PENDING).length}</Label>}
+        // icon={<Label color='success'>{orders.filter(order => order.status === OrderStatus.PENDING).length}</Label>}
         iconPosition='end'
       // onClick={() => setView('list')}
       />
       <Tab
         label='En preparación'
         value={OrderStatus.IN_PROGRESS}
-        icon={<Label color='primary'>{orders.filter(order => order.status === OrderStatus.IN_PROGRESS).length}</Label>}
+        // icon={<Label color='primary'>{orders.filter(order => order.status === OrderStatus.IN_PROGRESS).length}</Label>}
         iconPosition='end'
       // onClick={() => setView('list')}
       />
       <Tab
-        label='Por pagar'
-        value={'unpaid'}
-        icon={<Label color='warning'>{orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}</Label>}
-        iconPosition='end'
-      // onClick={() => setView('list')}
-      />
-      <Tab
-        label='Pagados'
+        label='Entregados'
         value={OrderStatus.DELIVERED}
-        icon={<Label color='info'>{orders.filter(order => order.isPaid).length}</Label>}
+        // icon={<Label color='warning'>{orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}</Label>}
         iconPosition='end'
       // onClick={() => setView('list')}
       />
+      
       <Tab
         label='Cancelados'
         value={OrderStatus.CANCELLED}
-        icon={<Label color='error'>{orders.filter(order => order.status === OrderStatus.CANCELLED).length}</Label>}
+        // icon={<Label color='error'>{orders.filter(order => order.status === OrderStatus.CANCELLED).length}</Label>}
         iconPosition='end'
       // onClick={() => setView('list')}
       />

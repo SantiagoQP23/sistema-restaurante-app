@@ -50,6 +50,7 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
       <Card
         sx={{
           // bgcolor: 'transparent',
+           boxShadow: 'none',
         }}
       >
         {
@@ -77,9 +78,9 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
             : (<Button
               startIcon={<Add />}
               fullWidth
-              variant="outlined"
+             variant="text"
               onClick={handleAddProduct}
-              color='secondary'
+              color='inherit'
 
 
             >

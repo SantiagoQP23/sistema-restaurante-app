@@ -5,6 +5,7 @@ import { TypeIdentification } from '../../../../models/common.model';
 import { CreateClientDto } from '../dto/create-client.dto';
 import { UpdateClientDto } from '../dto/update-client.dto';
 import { SubjectDeleteClient } from '../helpers/subjects-clients.helper';
+import { FilterClientsDto } from "../dto/filter-clients.dto";
 
 
 export const statusModalDeleteClient = new SubjectDeleteClient();
@@ -20,22 +21,18 @@ export const getClient = async (term: string): Promise<IClient> => {
 }
 
 
-export const getClients = async (page = 0, limit = 10, term?: string): Promise<{clients: IClient[], length: number}> => {
+export const getClients = async (clientsDto: FilterClientsDto): Promise<{clients: IClient[], length: number}> => {
 
   const params = new URLSearchParams();
 
-  if (term) {
-    params.append('term', term);
-  }
+  const {offset = 0, limit = 5, search} = clientsDto;
 
-  params.append('offset', page.toString());
-  params.append('limit', limit.toString());
 
   const { data } = await restauranteApi.get<{clients: IClient[], length: number}>(`clients/`,{
     params: {
-      offset: page * limit,
+      offset: offset * limit ,
       limit,
-      term
+      search
   }
   })
 

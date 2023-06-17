@@ -27,25 +27,27 @@ import { Cached, Replay } from "@mui/icons-material";
 import { LoadingButton } from '@mui/lab';
 import { ModalAddDetail } from "./components/EditOrder";
 import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
+import { useActiveOrders } from "./hooks";
 
 
 
 export const Orders = () => {
 
-
   const dispatch = useDispatch();
+
+  const {activeOrdersQuery} = useActiveOrders();
+
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
   const { activeOrder } = useSelector(selectOrders)
 
-
-
-
   const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
 
+
+  // listener new order
   useEffect(() => {
 
     socket?.on(EventsOnSocket.newOrder, ({ order }: { order: IOrder }) => {
@@ -68,27 +70,18 @@ export const Orders = () => {
   }, [socket]);
 
 
+  // listener update order
   useEffect(() => {
 
     socket?.on(EventsOnSocket.updateOrder, ({ msg, order }: SocketResponseOrder) => {
 
-      console.log('Se ha actualizado un pedido')
       dispatch(updateOrder(order!));
 
-      console.log(order)
-
-
-
-      console.log(order?.id, activeOrder?.id)
       if (activeOrder?.id === order?.id) {
         dispatch(setActiveOrder(order!))
       }
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
-      // enqueueSnackbar(`${msg}`, { variant: 'success' });
-
-
-      //dispatch(pedidoAddNew(pedido))
 
     });
 
@@ -98,6 +91,7 @@ export const Orders = () => {
 
   }, [socket]);
 
+  // listener delete order
   useEffect(() => {
 
     socket?.on(EventsOnSocket.deleteOrder, ({ order }: SocketResponseOrder) => {
@@ -125,16 +119,16 @@ export const Orders = () => {
   }
 
 
-  const getOrdersCall = async () => await callEndpoint(getOrdersToday());
+  // const getOrdersCall = async () => await callEndpoint(getOrdersToday());
 
-  const loadOrdersState = (data: IOrder[]) => {
-    dispatch(loadOrders(data));
+  // const loadOrdersState = (data: IOrder[]) => {
+  //   dispatch(loadOrders(data));
 
-    dispatch(setLastUpdatedOrders(new Date().toISOString()))
+  //   dispatch(setLastUpdatedOrders(new Date().toISOString()))
 
-  }
+  // }
 
-  useAsync(getOrdersCall, loadOrdersState, () => { }, []);
+  // useAsync(getOrdersCall, loadOrdersState, () => { }, []);
 
 
 

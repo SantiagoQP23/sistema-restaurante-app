@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectOrders, setActiveOrder } from '../../../../redux/slices/orders/orders.slice';
 import { UpdateOrderDto } from '../dto/update-order.dto';
 import { selectTables } from '../../../../redux/slices/tables/tables.slice';
+import { TypeOrder } from '../../../../models/orders.model';
 
 interface Props {
   table?: ITable;
@@ -19,7 +20,7 @@ interface Props {
 export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' } }) => {
 
 
-  const { state: { table }, dispatch: dispatchReducer } = useContext(OrderContext);
+  const { state: { table, typeOrder }, dispatch: dispatchReducer } = useContext(OrderContext);
 
   const { socket } = useContext(SocketContext);
 
@@ -154,7 +155,8 @@ export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' }
         tables.length === 0
           ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
           :
-          <FormControl fullWidth>
+          <FormControl fullWidth
+          >
             <Typography variant='subtitle1'>Mesa </Typography>
 
             <Select
@@ -167,6 +169,7 @@ export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' }
 
               size='small'
 
+              error={TypeOrder.IN_PLACE === typeOrder && !table}
             >
               <MenuItem value="">
                 Ninguno
@@ -180,6 +183,10 @@ export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' }
               }
 
             </Select>
+            {
+              TypeOrder.IN_PLACE === typeOrder && !table && 
+              <Typography color='error' variant='subtitle1'>Seleccione una mesa</Typography>
+            }
           </FormControl>
       }
 

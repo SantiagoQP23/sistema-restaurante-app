@@ -6,6 +6,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { SubjectDeleteUser } from '../helpers/subjects-users.helper';
 import { PaginationDto } from '../../Clients/dto/pagination.dto';
 import { ChangePasswordDto } from '../dto/change-password.dto';
+import { FilterUsersDto } from '../dto/filterUsers.dto';
 
 
 export const statusModalDeleteUser = new SubjectDeleteUser();
@@ -21,18 +22,17 @@ export const getUser = async (term: string): Promise<IUser> => {
 }
 
 
-export const getUsers = async (pagination: PaginationDto): Promise<{users: IUser[], count: number}> => {
+export const getUsers = async (pagination: FilterUsersDto): Promise<{users: IUser[], count: number}> => {
 
-  const {page, limit, term} = pagination;
+  const {offset = 0, limit = 5, search} = pagination;
 
   const resp = await restauranteApi.get<{users: IUser[], count: number}>(`users/` ,{
     params: {
-      offset: page * limit,
+      offset: offset   * limit ,
       limit,
-      term
+      search
   }});
 
-  console.log(resp.data);
 
   return resp.data;
 

@@ -315,6 +315,7 @@ export const ModalEditOrderDetail = () => {
             variant='contained'
             onClick={updateDetail}
             loading={loading}
+            color='success'
           >Actualizar</LoadingButton>
        
       </DialogActions>

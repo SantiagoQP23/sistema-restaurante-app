@@ -2,16 +2,17 @@ import { FC, useState } from 'react';
 
 import { styled, alpha } from '@mui/material/styles';
 
-import { Toolbar, Stack, OutlinedInput, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { OrderStatus } from '../../../../../../models';
+import { Toolbar, Stack, OutlinedInput, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Box } from '@mui/material';
+import { IUser, OrderStatus } from '../../../../../../models';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../../redux';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
+import { ComboBoxUser } from '../../../components/ComboBoxUser.component';
 
 
 
 const StyledRoot = styled(Toolbar)(({ theme }) => ({
-  height: 96,
+  // height: 96,
   display: 'flex',
   justifyContent: 'space-between',
   padding: theme.spacing(0, 1, 0, 3),
@@ -35,54 +36,32 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 
 interface Props {
-  filterWaiter: string,
-  changeWaiter: (waiterId: string) => void,
+
+  handleChangeUser: (value: IUser | null) => void,
+  user: IUser | null,
   statusOrderFilter: string,
   changeStatus?: (status: string) => void,
+  startDate: Date | null,
+  handleChangeStartDate: (date: Date | null) => void,
+  endDate: Date | null,
+  handleChangeEndDate: (date: Date | null) => void,
 }
 
 
-export const OrderListToolbar: FC<Props> = ({ filterWaiter, changeWaiter, statusOrderFilter, changeStatus }) => {
-
-  const { user } = useSelector(selectAuth);
-
-  const [date, setDate] = useState<Date | null>(
-    new Date(),
-  );
-
-
-  const handleChange = async (newValue: Date | null) => {
-
-    if (newValue === null) {
-      return;
-    }
-
-    // const dateStr = formatDate(newValue);
-
-    // console.log('dateStr', dateStr)
-
-    // await callEndpoint(getOrdersByDate({ startDate: dateStr }))
-    //   .then(resp => {
-    //     console.log('resp', resp.data)
-    //     setOrders(resp.data)
-    //   })
-    //   .catch(err => {
-    //     enqueueSnackbar('Error al obtener los pedidos', { variant: 'error' })
-    //   })
-
-
-    setDate(newValue);
-
-  };
-
-
+export const OrderListToolbar: FC<Props> = ({
+  handleChangeUser,
+  user,
+  statusOrderFilter, changeStatus,
+  startDate, handleChangeStartDate,
+  endDate, handleChangeEndDate,
+}) => {
 
 
   return (
     <StyledRoot
     >
 
-      <Stack
+      {/* <Stack
         direction='row'
         p={2}
         spacing={1}
@@ -94,9 +73,17 @@ export const OrderListToolbar: FC<Props> = ({ filterWaiter, changeWaiter, status
           overflowX: 'auto',
         }}
 
+      > */}
+
+      <Grid container spacing={2}
+        sx={{
+          p: 1,
+        }}
       >
 
 
+
+        {/* 
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Mesero</InputLabel>
           <Select
@@ -107,24 +94,44 @@ export const OrderListToolbar: FC<Props> = ({ filterWaiter, changeWaiter, status
             onChange={(e) => changeWaiter(e.target.value)}
           >
             <MenuItem key={"all"} value={"all"}>Todos</MenuItem>
-            {
-              user &&
-              <MenuItem key={user?.id} value={user?.id}>{user!.username}</MenuItem>
-            }
+            
 
           </Select>
-        </FormControl>
+        </FormControl> */}
 
 
-        <DesktopDatePicker
-          label="Fecha"
-          inputFormat="yyyy-MM-dd"
-          value={date}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} />}
-          maxDate={new Date()}
+        <Grid item xs={6} sm={4} md={3} lg={2}>
+          <DesktopDatePicker
+            label="Fecha de inicio"
+            inputFormat="yyyy-MM-dd"
+            value={startDate}
+            onChange={handleChangeStartDate}
+            renderInput={(params) => <TextField {...params} />}
+            maxDate={new Date()}
 
-        />
+          />
+        </Grid>
+
+        <Grid item xs={6} sm={4} md={3} lg={2}>
+
+          <DesktopDatePicker
+            label="Fecha de fin"
+            inputFormat="yyyy-MM-dd"
+            value={endDate}
+            onChange={handleChangeEndDate}
+            renderInput={(params) => <TextField {...params} />}
+            maxDate={new Date()}
+            minDate={startDate || undefined}
+
+          />
+        </Grid>
+
+
+        <Grid item xs={12} sm={4} md={4} lg={4}>
+
+          <ComboBoxUser user={user} handleChangeUser={handleChangeUser} />
+
+        </Grid>
 
 
 
@@ -152,7 +159,7 @@ export const OrderListToolbar: FC<Props> = ({ filterWaiter, changeWaiter, status
           </FormControl> */}
 
 
-      </Stack>
+      </Grid>
 
 
 

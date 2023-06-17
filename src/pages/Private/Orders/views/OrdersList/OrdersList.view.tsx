@@ -9,7 +9,8 @@ import {
   MenuItem, Box, Container, TableContainer, TableBody,
   TableHead, TableRow, TableCell, Table, Popover,
   Card,
-  Typography
+  Typography,
+  LinearProgress
 } from '@mui/material';
 
 
@@ -29,10 +30,11 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { OrderListToolbar } from './components/OrderListToolbar.component';
 import { Checkbox } from '@mui/material/';
-import { TablePagination, IconButton } from '@mui/material';
+import { TablePagination, IconButton, CircularProgress } from '@mui/material';
 import { TabsOrderStatus } from './components/TabsOrderStatus.component';
 import { LabelStatusOrder } from './components/LabelStatusOrder.component';
 import { usePagination } from '../../../../../hooks/usePagination';
+import { useOrders } from '../../hooks';
 
 
 // function applySortFilter(array: IOrder[], comparator, query) {
@@ -84,7 +86,6 @@ const filterOrders = (orders: IOrder[], waiter: string, status: string): IOrder[
 export const ListOrders = () => {
   // const [view, setView] = useState('list');
 
-  const { user } = useSelector(selectAuth);
   const { orders, activeOrder } = useSelector(selectOrders);
 
 
@@ -95,11 +96,28 @@ export const ListOrders = () => {
 
   const [selected, setSelected] = useState<string[]>([]);
 
-  const [filterWaiter, setFilterWaiter] = useState(user?.id || 'all');
 
-  const filteredOrders = filterOrders(orders, filterWaiter, statusOrderFilter);
 
-  const { page, handleChangePage, handleChangeRowsPerPage, rowsPerPage, paginatedList, resetPage } = usePagination<IOrder>(filteredOrders);
+  // const filteredOrders = filterOrders(orders, filterWaiter, statusOrderFilter);
+
+  const {
+    page,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    rowsPerPage,
+    resetPage,
+    ordersQuery,
+    startDate, handleChangeStartDate,
+     handleChangeUser, 
+     status, 
+     handleChangeStatus, user,
+     isPaid, handleChangeIsPaid,
+      endDate, handleChangeEndDate
+
+     
+
+  } = useOrders();
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -119,15 +137,15 @@ export const ListOrders = () => {
   }
 
 
-  const changeWaiter = (waiter: string) => {
-    resetPage();
-    setFilterWaiter(waiter);
-  }
+  // const changeWaiter = (waiter: string) => {
+  //   resetPage();
+  //   setFilterWaiter(waiter);
+  // }
 
-  const changeStatus = (event: React.SyntheticEvent, newValue: string) => {
-    resetPage();
-    setStatusOrderFilter(newValue);
-  }
+  // const changeStatus = (event: React.SyntheticEvent, newValue: string) => {
+  //   resetPage();
+  //   setStatusOrderFilter(newValue);
+  // }
 
 
 
@@ -160,18 +178,33 @@ export const ListOrders = () => {
             }}
           >
             <TabsOrderStatus
-              changeStatus={changeStatus}
-              statusOrderFilter={statusOrderFilter}
+              changeStatus={handleChangeStatus}
+              statusOrderFilter={status}
               orders={orders}
+              isPaid={isPaid}
+              changeIsPaid={handleChangeIsPaid}
 
             />
           </Box>
 
           <OrderListToolbar
-            changeWaiter={changeWaiter}
-            filterWaiter={filterWaiter}
+           
             statusOrderFilter={statusOrderFilter}
+            startDate={startDate}
+            handleChangeStartDate={handleChangeStartDate}
+            endDate={endDate}
+            handleChangeEndDate={handleChangeEndDate}
+            handleChangeUser={handleChangeUser}
+            user={user}
           />
+
+          <Typography>
+            {
+              ordersQuery.isFetching && (
+                <LinearProgress />
+              )
+            }
+          </Typography>
 
 
 
@@ -219,7 +252,7 @@ export const ListOrders = () => {
 
 
                 {
-                  paginatedList.length === 0 && (
+                  ordersQuery.data?.count === 0 && (
                     <TableRow
 
                     >
@@ -235,7 +268,7 @@ export const ListOrders = () => {
                 }
 
                 {
-                  paginatedList.map((order) => (
+                  ordersQuery.data?.orders.map((order) => (
                     <TableRow
                       hover
                       key={order.id}
@@ -253,13 +286,13 @@ export const ListOrders = () => {
                         <Checkbox />
                       </TableCell>
                       <TableCell
-                       
-                       >
-                         Mesa {order.table?.name}
-                       </TableCell>
+
+                      >
+                        Mesa {order.table?.name}
+                      </TableCell>
                       <TableCell
-                         
-                       
+
+
                       >
                         {order.user.person.firstName} {order.user.person.lastName}
                       </TableCell>
@@ -267,13 +300,13 @@ export const ListOrders = () => {
                         {order.client?.person.firstName} {order.client?.person.lastName}
                       </TableCell>
 
-                    
+
                       <TableCell>
                         {format(new Date(order.createdAt), 'dd/MM/yyyy HH:mm')}
                       </TableCell>
                       <TableCell
 
-                      
+
 
                       >
                         <LabelStatusOrder status={
@@ -284,12 +317,12 @@ export const ListOrders = () => {
                         } />
                       </TableCell>
                       <TableCell
-                       
+
                       >
                         $ {order.total}
                       </TableCell>
                       <TableCell align='center'
-                       
+
                       >
                         {/* <IconButton onClick={(e) => handleOpenMenu(e, order)}>
                             <MoreVert />
@@ -328,7 +361,7 @@ export const ListOrders = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={filteredOrders.length}
+            count={ordersQuery.data?.count || 0}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

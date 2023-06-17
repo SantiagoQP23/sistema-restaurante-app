@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Label } from '../../../../../../components/ui';
 import { IProduct } from '../../../../../../models';
 import { ProductStatus, ProductStatusSpanish } from '../../../../../../models/menu.model';
-import { IconButton, Stack } from '@mui/material';
+import { IconButton, Stack, Chip } from '@mui/material';
 import { AddShoppingCart } from '@mui/icons-material';
 import { sharingInformationService } from '../../../services/sharing-information.service';
 
@@ -25,7 +25,7 @@ const StyledProductImg = styled('img')({
 
 export const Product: FC<Props> = ({ product }) => {
 
-  
+
   const addProductoToOrder = () => {
 
     sharingInformationService.setSubject(
@@ -35,7 +35,7 @@ export const Product: FC<Props> = ({ product }) => {
         quantity: 1
       }
     )
-    }
+  }
 
   return (
     < >
@@ -43,16 +43,18 @@ export const Product: FC<Props> = ({ product }) => {
 
       <Card
         sx={{
-          
+
         }}
       >
 
         <Box sx={{ pt: '100%', position: 'relative' }}>
           {
-            product.status && (
-              <Label
 
-                color={(product.status === ProductStatus.AVAILABLE && 'success') || 'info'}
+
+            product.status !== ProductStatus.AVAILABLE && (
+              <Chip
+
+                color='warning'
 
                 sx={{
                   zIndex: 9,
@@ -61,9 +63,10 @@ export const Product: FC<Props> = ({ product }) => {
                   position: 'absolute',
                   textTransform: 'uppercase',
                 }}
-              >
-                {ProductStatusSpanish[`${product.status as ProductStatus}`]}
-              </Label>
+                size='small'
+
+                label={ProductStatusSpanish[`${product.status as ProductStatus}`]}
+              />
             )
           }
 
@@ -88,12 +91,18 @@ export const Product: FC<Props> = ({ product }) => {
 
           <Stack direction='row' justifyContent='space-between' alignItems='center'>
             <Typography variant="h5" >$ {product.price}</Typography>
-            <IconButton
-              color='primary'
-              onClick={addProductoToOrder}
-            >
-              <AddShoppingCart />
-            </IconButton>
+
+            {
+              product.status === ProductStatus.AVAILABLE && (
+                <IconButton
+                  color='primary'
+                  onClick={addProductoToOrder}
+                >
+                  <AddShoppingCart />
+                </IconButton>
+
+              )
+            }
           </Stack>
 
         </Stack>
