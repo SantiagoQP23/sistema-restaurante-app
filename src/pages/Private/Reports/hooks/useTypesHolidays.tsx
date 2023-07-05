@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { TypeHoliday } from "../components/AffluenceSimulator/models/type-holiday.model"
-import { createHoliday, deleteHoliday, getTypesHolidays, updateHoliday } from "../components/AffluenceSimulator/services/holidays.service"
+import { TypeHoliday } from "../models/type-holiday.model"
+import { createHoliday, deleteHoliday, getTypesHolidays, updateHoliday } from "../services/holidays.service"
 import { useSnackbar } from "notistack"
-import { UpdateHolidayDto } from "../components/AffluenceSimulator/dto/update-holiday.dto"
-import { Holiday } from "../components/AffluenceSimulator/models/holiday.model"
-import { CreateHolidayDto } from "../components/AffluenceSimulator/dto/create-holiday.dto"
+import { UpdateHolidayDto } from "../views/FootfallSimulation/dto/update-holiday.dto"
+import { Holiday } from "../models/holiday.model"
+import { CreateHolidayDto } from "../views/FootfallSimulation/dto/create-holiday.dto"
 
 
 
@@ -12,9 +12,6 @@ export const useTypesHolidays = () => {
   return useQuery<TypeHoliday[]>(['typesHolidays'], getTypesHolidays)
 
 }
-
-
-
 
 export const useUpdateTypeHoliday = (callback?: () => void) => {
 

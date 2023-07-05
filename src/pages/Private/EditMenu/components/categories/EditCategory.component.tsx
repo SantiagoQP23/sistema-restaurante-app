@@ -2,8 +2,6 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { useSnackbar } from 'notistack';
-
 import { TextField, Button, Select, MenuItem, Typography, InputLabel, Grid, CardHeader, CardContent } from '@mui/material/';
 // MOdal
 
@@ -12,15 +10,14 @@ import { ICreateCategory } from '../../../../../models/menu.model';
 
 import { LoadingButton } from '@mui/lab';
 
-import { useAppDispatch, useFetchAndLoad } from '../../../../../hooks';
-import {
-  createCategory,
-  updateCategory as updateCategoryS
-} from '../../services/menu.service';
+import { useAppDispatch } from '../../../../../hooks';
+
 import { ArrowBack } from '@mui/icons-material';
 import { addCategory, updateCategory } from '../../../../../redux/slices/menu/menu.thunks';
 import { resetActiveCategory, selectMenu, setActiveCategory } from '../../../../../redux';
 import { Container, FormControl, Card } from '@mui/material';
+
+
 import { useCreateCategory, useUpdateCategory } from '../../hooks/useCategories';
 
 

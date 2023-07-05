@@ -27,7 +27,7 @@ export const ListActiveOrders = () => {
 
 
 
-  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
+  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus | null>(OrderStatus.PENDING);
 
   const [alignment, setAlignment] = useState<string>('horizontal');
 
@@ -40,7 +40,7 @@ export const ListActiveOrders = () => {
   };
 
 
-  const ordersFiltered = orders.filter(order => order.status === statusOrderFilter);
+  const ordersFiltered = statusOrderFilter ? orders.filter(order => order.status === statusOrderFilter) : orders;
 
 
 
@@ -54,7 +54,7 @@ export const ListActiveOrders = () => {
             /> */}
 
 
-      <BarActiveOrders />
+      {/* <BarActiveOrders /> */}
       {/* <Divider sx={{ mb: 1 }} /> */}
 
 
@@ -98,11 +98,14 @@ export const ListActiveOrders = () => {
 
             '& .MuiTabs-indicator': {
               backgroundColor:
-                statusOrderFilter === OrderStatus.PENDING
-                  ? 'success.main'
-                  : statusOrderFilter === OrderStatus.IN_PROGRESS
-                    ? 'info.main'
-                    : 'warning.main',
+                !statusOrderFilter
+                  ? 'primary.main'
+                  :
+                  statusOrderFilter === OrderStatus.PENDING
+                    ? 'success.main'
+                    : statusOrderFilter === OrderStatus.IN_PROGRESS
+                      ? 'info.main'
+                      : 'warning.main',
               borderRadius: '10px 10px 0 0',
               borderColor: 'transparent',
               borderBottom: 'transparent',
@@ -111,6 +114,24 @@ export const ListActiveOrders = () => {
 
           }}
         >
+          <Tab
+            label={
+              <>
+                <Typography variant='h5' component='span' >Todos</Typography>
+                <Chip
+                  label={orders.length}
+                  color='primary'
+                  size='small'
+                  sx={{ ml: 1 }}
+                />
+              </>}
+            value={null}
+            onClick={() => setStatusOrderFilter(null)}
+            icon={<DeliveryDining />}
+            iconPosition='start'
+
+
+          />
 
           <Tab
             label={
@@ -170,6 +191,18 @@ export const ListActiveOrders = () => {
 
       </Box>
 
+        {/* <Step>
+          <StepButton>Step 1</StepButton>
+        </Step>
+        <Step>
+          <StepButton>Step 2</StepButton>
+        </Step>
+        <Step>
+          <StepButton>Step 3</StepButton>
+        </Step>
+
+         */}
+
       {/* <Divider />
           </Card> */}
       {/* <Box py={1} px={0.5} minHeight={400} >
@@ -195,6 +228,8 @@ export const ListActiveOrders = () => {
           }
         </Box> */}
       <Box py={1} px={0.5} minHeight={400} >
+      {/* <Stepper> */}
+
 
         {
           ordersFiltered.length === 0
@@ -205,15 +240,20 @@ export const ListActiveOrders = () => {
 
                   <>
                     <Grid item key={order.id} xs={12} sm={6} md={4}>
+                    
 
                       <ActiveOrder key={order.id} order={order}
                         color={order.status === OrderStatus.PENDING ? 'success' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'warning'}
-                      />
+                        />
+                       
                     </Grid>
                   </>
                 ))}
             </Grid>
         }
+
+      {/* </Stepper> */}
+
       </Box>
 
 
@@ -283,6 +323,8 @@ export const ListActiveOrders = () => {
 
       }} elevation={5}>
 
+       
+
         <BottomNavigation
           showLabels
           value={statusOrderFilter}
@@ -291,6 +333,24 @@ export const ListActiveOrders = () => {
           }}
 
         >
+
+          <BottomNavigationAction sx={{
+            '& .Mui-selected': {
+              color: (theme) => theme.palette.primary.main,
+              // borderColor: (theme) => theme.palette.primary.main,
+              borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+            }
+
+          }} label="Todos" value={null} icon={
+            <Chip
+              label={orders.length}
+              color='primary'
+              size='small'
+            />
+          } />
+          
+
+
           <BottomNavigationAction sx={{
             '& .Mui-selected': {
               color: (theme) => theme.palette.success.main,
@@ -314,7 +374,7 @@ export const ListActiveOrders = () => {
               }
 
             }}
-            label="En preparación" value={OrderStatus.IN_PROGRESS} icon={
+            label="Preparando" value={OrderStatus.IN_PROGRESS} icon={
               <Chip
                 label={orders.filter(order => order.status === OrderStatus.IN_PROGRESS).length}
                 color='info'

@@ -38,7 +38,7 @@ export const useUpdateOrderDetail = () => {
         enqueueSnackbar('Detalle actualizado', { variant: 'success' });
 
       } else {
-        enqueueSnackbar(msg, { variant: 'error' });
+        enqueueSnackbar(msg, { variant: 'error', });
       }
 
     });

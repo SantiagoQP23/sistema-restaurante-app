@@ -15,7 +15,7 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
-import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
+import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, ViewKanban } from '@mui/icons-material';
 
 
 
@@ -38,7 +38,7 @@ export const navItemsOrders: NavItem[] = [
 
   {
     title: 'Pedidos Activos',
-    icon: <DeliveryDiningOutlinedIcon />,
+    icon: <ViewKanban />,
     to: '/orders'
   },
   {
@@ -64,6 +64,12 @@ export const navItemsManagement: NavItem[] = [
     icon: <Groups3OutlinedIcon />,
     to: '/clients'
   },
+  {
+    title: 'Proveedores',
+    icon: <LocalShipping />,
+    to: '/suppliers'
+  }
+
 ]
 
 
@@ -72,6 +78,11 @@ export const navItemsAdmin2: NavItem[] = [
     title: 'Usuarios',
     icon: <PeopleOutlineIcon />,
     to: '/users'
+  },
+  {
+    title: 'Balance',
+    icon: <MonetizationOn />,
+    to: '/balance'
   },
   {
     title: 'Reportes',

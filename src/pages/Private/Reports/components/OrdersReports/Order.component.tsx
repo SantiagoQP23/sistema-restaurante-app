@@ -39,7 +39,7 @@ export const Order: FC<Props> = (
             </Typography>
           </Box>
 
-          <Typography variant="h6" >Cliente: {order.client?.person.firstName} {order.client?.person.lastName} </Typography>
+          {/* <Typography variant="h6" >Cliente: {order.client?.person.firstName} {order.client?.person.lastName} </Typography> */}
 
 
           <Typography variant="h6" >Mesero: {order.user?.person.firstName} {order.user?.person.lastName} </Typography>

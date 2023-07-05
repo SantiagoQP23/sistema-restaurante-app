@@ -1,5 +1,6 @@
 import { IUser, IClient, IProduct } from '.';
 import { ITable } from './table.model';
+import { Invoice } from '../pages/Private/Orders/models/Invoice.model';
 
 export enum OrderStatus {
   PENDING = 'PENDING',
@@ -18,6 +19,13 @@ export enum TypeOrder {
 }
 
 
+export enum PaymentMethod {
+  CASH = 'CASH',
+  // CARD = 'CARD',
+  TRANSFER = 'TRANSFER',
+}
+
+
 
 export enum OrderStatusSpanish {
   PENDING = 'PENDIENTE',
@@ -28,12 +36,10 @@ export enum OrderStatusSpanish {
 }
 
 export interface IOrder {
-
-  amount: number;
-  client?: IClient;
+  notes: string;
+  deliveryTime: Date;
   createdAt: Date;
   details: IOrderDetail[];
-  discount: number;
   id: string;
   isPaid: boolean;
   num: number;
@@ -44,21 +50,9 @@ export interface IOrder {
   type: TypeOrder;
   updatedAt: Date;
   user: IUser;
+
+  invoices: Invoice[];
 }
-
-
-
-
-export enum DetailStatus {
-  PENDING = 'PENDING',
-  COOKING = 'COOKING',
-  READY = 'READY',
-  DELIVERED = 'DELIVERED',
-  RETURNED = 'RETURNED',
-}
-
-
-
 
 export interface IOrderDetail{
 
@@ -68,9 +62,9 @@ export interface IOrderDetail{
 
   qtyDelivered: number;
 
-  amount: number;
+  qtyPaid: number;
 
-  status: DetailStatus;
+  amount: number;
   
   description: string;
 
@@ -82,7 +76,9 @@ export interface IOrderDetail{
 
   isActive: boolean;
 
-  discount: number;
+  price: number;
+
+  
 
  }
 

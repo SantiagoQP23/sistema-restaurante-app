@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Stack } from '@mui/material';
 import { FC, useContext } from "react";
 import { CounterInput } from "../../../components/CounterInput.component";
 import { OrderContext, OrderActionType } from "../../../context/Order.context";
@@ -13,17 +13,19 @@ export const PeopleCounter: FC = () => {
 
   return (
     <>
-   
+      <Stack direction='row' justifyContent='space-between'>
+        <Typography variant='subtitle1' >Personas</Typography>
+        <CounterInput
+          value={state.people || 1}
+          onChange={handleChangePeople}
+          min={1}
 
-      <Typography variant='subtitle1' >Personas</Typography>
-      <CounterInput
-        value={state.people || 1}
-        onChange={handleChangePeople}
-        min={1}
-        
         />
 
-     
+      </Stack>
+
+
+
     </>
   )
 }

@@ -85,7 +85,7 @@ export const ModalDeleteOrder: FC = () => {
             }</Typography>
 
           </Box>
-          
+{/*           
           {
             order?.client &&
 
@@ -94,7 +94,7 @@ export const ModalDeleteOrder: FC = () => {
               <Typography variant="body1" color="text.primary">{`${order?.client?.person.firstName} ${order?.client?.person.lastName}`}</Typography>
             </Box>
             )
-          }
+          } */}
 
 
 

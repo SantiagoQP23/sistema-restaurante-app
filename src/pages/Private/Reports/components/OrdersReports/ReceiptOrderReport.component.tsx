@@ -131,7 +131,7 @@ export const ReceiptOrderReport = () => {
             </Box>
 
             <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
-              <Typography variant='body1'>Cliente: <b>{activeOrder?.client?.person.firstName} {activeOrder?.client?.person.lastName} </b></Typography>
+              {/* <Typography variant='body1'>Cliente: <b>{activeOrder?.client?.person.firstName} {activeOrder?.client?.person.lastName} </b></Typography> */}
 
 
             </Box>
@@ -173,14 +173,14 @@ export const ReceiptOrderReport = () => {
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
               <Typography variant='h4' fontWeight='bold'>Subtotal </Typography>
-              <Typography variant='h4' fontWeight='bold'>${activeOrder.amount}</Typography>
+              {/* <Typography variant='h4' fontWeight='bold'>${activeOrder.amount}</Typography> */}
             </Box>
 
 
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
               <Typography variant='h4' fontWeight='bold'>Descuento </Typography>
-              <Typography variant='h4' fontWeight='bold'>${activeOrder.discount}</Typography>
+              {/* <Typography variant='h4' fontWeight='bold'>${activeOrder.discount}</Typography> */}
             </Box>
 
             <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>

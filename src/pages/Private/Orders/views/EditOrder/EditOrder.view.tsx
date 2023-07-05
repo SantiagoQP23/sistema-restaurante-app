@@ -4,9 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 // Material UI
-import {
-  Grid, Container, CircularProgress
-} from '@mui/material';
+import { Grid, Container, CircularProgress, Stepper, Step, StepLabel, Card, CardContent, Button, Stack, Tooltip } from '@mui/material';
 
 import { selectOrders, setActiveOrder } from '../../../../../redux';
 
@@ -15,17 +13,32 @@ import { OrderActionType, OrderContext } from '../../context/Order.context';
 import { OrderSummary, OrderDetails } from './components';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { useOrder } from '../../hooks';
+import { PayOrder } from './components/PayOrder.component';
+import { useInvoiceStore } from '../../store/invoiceStore';
+import { Account } from './components/Account.component';
+import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline } from '@mui/icons-material';
+import { DrawerInvoice } from './components/DrawerInvoice.component';
+import { useDrawerInvoiceStore } from '../../store/drawerInvoiceStore';
+import { statusModalDeleteOrder } from '../../services/orders.service';
+import { useModal } from '../../../../../hooks';
+import { ModalEditOrder } from './components/ModalEditOrder.component';
 
 
 export const EditOrder = () => {
 
   const navigate = useNavigate();
 
+
+  const { open: openDrawer, handleCloseDrawer } = useDrawerInvoiceStore(state => state);
+
   const { orderId } = useParams();
 
   if (!orderId) navigate('/orders');
 
+  const { step: activeStep, setStep: changeStep, handleBackStep, handleNextStep, resetDetails, reset } = useInvoiceStore(state => state);
+
   const { dispatch } = useContext(OrderContext);
+
 
   const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
 
@@ -33,9 +46,42 @@ export const EditOrder = () => {
 
   const { activeOrder } = useSelector(selectOrders);
 
- 
+
 
   const { data, isLoading } = useOrder(orderId!);
+
+
+  const BtnNext = () => (
+    <Button
+      color='inherit'
+      onClick={handleNextStep}
+      endIcon={<ArrowRight fontSize='small' />}
+      size='small'
+    >
+      Siguiente
+    </Button>
+  )
+
+  const BtnBack = () => (
+    <Button
+      color='inherit'
+      onClick={handleBackStep}
+      startIcon={<ArrowBackIos fontSize='small' />}
+      size='small'
+
+    >
+      Atras
+    </Button>
+  )
+
+
+  const eliminarPedido = () => {
+
+    if (activeOrder)
+      statusModalDeleteOrder.setSubject(true, activeOrder)
+  }
+
+
 
   useEffect(() => {
     if (activeOrder) {
@@ -46,28 +92,93 @@ export const EditOrder = () => {
 
   useEffect(() => {
 
-
+    changeStep(0);
     return () => {
       dispatch({ type: OrderActionType.RESET })
       setActiveOrder(null);
+      reset();
+
     }
   }, [])
+
+
+
+
+
+
 
 
   if (!activeOrder)
     return <></>;
 
 
-
-
-
   return (
     <>
+
+      <DrawerInvoice open={openDrawer} handleClose={handleCloseDrawer} />
 
       <Container maxWidth='xl'>
 
         <TitlePage
           title='Editar pedido'
+
+          action={
+            <>
+              <Stack direction='row' spacing={1}>
+                <Tooltip
+                  title={!orderDelivered
+                    ? 'Eliminar pedido' :
+                    'Este pedido no se puede eliminar porque ya tiene productos entregados'}
+                >
+                  <span>
+
+                    <Button
+                      startIcon={<DeleteOutline />}
+                      color='error'
+                      onClick={eliminarPedido}
+                      disabled={orderDelivered}
+                      variant='outlined'
+                      size='small'
+
+                    >
+                      Eliminar
+                    </Button>
+                  </span>
+                </Tooltip>
+
+                <Button
+                  startIcon={<Print />}
+                  variant='outlined'
+                  size='small'
+                >
+                  Imprimir
+                </Button>
+
+                {
+
+                  !activeOrder.isPaid && (
+
+                    <Button
+                      startIcon={<PointOfSaleOutlined />}
+                      variant='contained'
+                      size='small'
+                      onClick={() => changeStep(1)}
+                    >
+                      Cobrar
+
+                    </Button>
+                  )
+
+                }
+
+
+
+
+
+              </Stack>
+            </>
+
+          }
         />
 
         {
@@ -87,26 +198,78 @@ export const EditOrder = () => {
               >
 
                 <Grid item xs={12} md={8}>
-                  <OrderDetails
-                   order={activeOrder}
-                  />
+
+                  <Stepper activeStep={activeStep} alternativeLabel
+                    sx={{
+                      background: 'transparent'
+                    }}
+                  >
+                    <Step>
+                      <StepLabel>Carrito</StepLabel>
+                    </Step>
+
+                    <Step>
+                      <StepLabel>Cuenta</StepLabel>
+
+
+
+
+                      {
+                        //TODO productos y resumen de cuenta
+                      }
+
+                    </Step>
+                    <Step>
+                      <StepLabel>Pago</StepLabel>
+
+                    </Step>
+
+
+                  </Stepper>
+
+                  {
+                    activeStep === 0
+                    &&
+                    <>
+                      <OrderDetails order={activeOrder} />
+                    </>
+
+
+                  }
+
+                  {
+                    activeStep === 1 && <Account order={activeOrder} />
+                  }
+
+                  {
+
+                    activeStep === 2 && <>
+                      < PayOrder order={activeOrder} />
+
+                      <Stack direction='row'>
+                        <BtnBack />
+                      </Stack>
+
+                    </>
+                  }
+
 
                 </Grid>
 
                 <Grid item xs={12} md={4}>
-
                   <OrderSummary order={activeOrder} />
                 </Grid>
 
+                <Grid item xs={12} md={8}>
 
+
+                </Grid>
               </Grid>
             </>
 
         }
 
       </Container>
-
-
 
     </>
   )

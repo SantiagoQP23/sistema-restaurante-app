@@ -26,6 +26,10 @@ import { SocketResponseTable } from './Orders/interfaces/responses-sockets.inter
 import { selectAuth } from '../../redux/slices/auth/auth.slice';
 import { OrderProvider } from "./Orders/context/Order.context"
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
+import { useRestaurant } from "./Reports/hooks/useRestaurant"
+import { index } from '../Status/Maintenance/index';
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 
 
 export const Private = () => {
@@ -76,9 +80,10 @@ export const Private = () => {
 
   }, [socket]);
 
-  if (loading)
-    return <CircularProgress />
+  const {isLoading} = useRestaurant();
 
+  if (loading && isLoading)
+    return <CircularProgress />
 
   return (
 
@@ -91,9 +96,17 @@ export const Private = () => {
         <IconButton color="inherit" onClick={() => { closeSnackbar(key) }}>
           <CloseTwoToneIcon />
         </IconButton>
-      )}
+      )}   
+      dense
+
+      style={{
+        zIndex: 105500
+      }}
+     
 
     >
+         <LocalizationProvider dateAdapter={AdapterDateFns}>
+
       <OrderProvider>
 
         <SidebarProvider>
@@ -105,6 +118,7 @@ export const Private = () => {
 
         </ SidebarProvider>
       </OrderProvider>
+         </LocalizationProvider>
     </SnackbarProvider>
 
   )

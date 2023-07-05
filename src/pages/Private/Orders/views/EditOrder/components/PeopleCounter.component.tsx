@@ -1,5 +1,5 @@
 import { Done } from "@mui/icons-material";
-import { Box, TextField, IconButton, CircularProgress, Typography, Stack } from '@mui/material';
+import { Box, TextField, IconButton, CircularProgress, Typography, Stack, InputLabel } from '@mui/material';
 import { useSnackbar } from "notistack";
 import { FC, useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -56,8 +56,7 @@ export const PeopleCounter: FC<Props> = ({ order }) => {
 
 
 
-      <Typography variant='subtitle1' >Personas</Typography>
-
+      <InputLabel>Personas</InputLabel>
       <Stack direction='row'>
 
 

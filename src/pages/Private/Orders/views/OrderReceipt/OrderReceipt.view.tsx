@@ -7,7 +7,7 @@ import { Label } from "../../../../../components/ui";
 import { format } from "date-fns";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { statusModalPayOrder, statusModalDiscountOrder } from '../../services/orders.service';
-import { OrderStatus, OrderStatusSpanish } from '../../../../../models/orders.model';
+import { OrderStatus, OrderStatusSpanish, TypeOrder } from '../../../../../models/orders.model';
 import { Divider } from '@mui/material/';
 import { es } from "date-fns/locale";
 import { PdfReceiptOrder } from './pdf/PdfReceiptOrder.component';
@@ -180,7 +180,7 @@ export const ReceiptOrder = () => {
 
             >
 
-              <Box
+              {/* <Box
                 flexBasis='50%'
               >
                 <Typography variant='h5' mb={1}>Cliente</Typography>
@@ -188,7 +188,7 @@ export const ReceiptOrder = () => {
                 <Typography variant='body1'>{activeOrder.client?.person.email}</Typography>
                 <Typography variant='body1'>{activeOrder.client?.person.numPhone}</Typography>
                 <Typography variant='body1'>{activeOrder.client?.person.firstName} {activeOrder.client?.person.lastName}</Typography>
-              </Box>
+              </Box> */}
               <Box
                 flexBasis='50%'
               >
@@ -203,12 +203,17 @@ export const ReceiptOrder = () => {
 
             </Stack>
 
-          
+
             <Box display='flex' justifyContent='space-between' alignItems='center' my={2}>
 
               <Box>
                 <Typography variant='h5' mb={1}>Mesa</Typography>
-                <Typography variant='body1' >{activeOrder.table?.name}</Typography>
+                <Typography variant='body1' >{activeOrder.type === TypeOrder.IN_PLACE
+
+                  ?
+                  `Mesa ${activeOrder.table?.name || ''}`
+                  : 'Para llevar'
+                }</Typography>
 
 
               </Box>
@@ -264,7 +269,7 @@ export const ReceiptOrder = () => {
 
                   }
 
-                  <TableRow>
+                  {/* <TableRow>
 
                     <TableCell
                       align="right"
@@ -301,7 +306,7 @@ export const ReceiptOrder = () => {
                       }}
                     >${activeOrder.discount}</TableCell>
 
-                  </TableRow>
+                  </TableRow> */}
 
                   <TableRow>
 

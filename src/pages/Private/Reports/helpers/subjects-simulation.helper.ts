@@ -1,7 +1,7 @@
 
 
 import { Subject } from 'rxjs';
-import { Holiday } from '../components/AffluenceSimulator/models/holiday.model';
+import { Holiday } from '../models/holiday.model';
 
 
 export class SubjectHoliday {

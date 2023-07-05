@@ -1,4 +1,4 @@
-import { Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput, InputAdornment } from '@mui/material';
+import { Accordion, AccordionSummary, Typography, AccordionDetails, FormControl, InputLabel, Select, MenuItem, OutlinedInput, InputAdornment, Grid, Card, CardActionArea, CardContent, Box } from '@mui/material';
 import { FC, useContext } from "react"
 import { DriveFileRenameOutlineOutlined, TableRestaurant } from '@mui/icons-material';
 import { ITable } from "../../../../models";
@@ -17,10 +17,12 @@ interface Props {
   table?: ITable;
 }
 
-export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' } }) => {
+export const TableOrder: FC<Props> = (
+  // { table: tableOrder = { id: '', name: '' } }
+) => {
 
 
-  const { state: { table, typeOrder }, dispatch: dispatchReducer } = useContext(OrderContext);
+  const { state: { table: tableOrder, typeOrder }, dispatch: dispatchReducer } = useContext(OrderContext);
 
   const { socket } = useContext(SocketContext);
 
@@ -154,40 +156,50 @@ export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' }
       {
         tables.length === 0
           ? <Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>
-          :
-          <FormControl fullWidth
-          >
-            <Typography variant='subtitle1'>Mesa </Typography>
-
-            <Select
-
-              id="demo-simple-select"
-              value={table?.id}
-
-
-              onChange={(e) => changeTable(e.target.value)}
-
-              size='small'
-
-              error={TypeOrder.IN_PLACE === typeOrder && !table}
-            >
-              <MenuItem value="">
-                Ninguno
-              </MenuItem>
+          : <>
+            <Grid container spacing={1}>
               {
                 tables.map(table => (
+                  <Grid item key={table.id} xs={4} md={3}>
+                    <Card
+                      sx={{
+                        color: table.id === tableOrder?.id ? 'white' : table.isAvailable ? 'success.main' : 'error.main',
+                        bgcolor: table.id === tableOrder?.id ? table.isAvailable ? 'success.main' : 'error.main' : 'transparent',
 
-                  <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
+                      }
+                      }
+                    >
 
+                      <CardActionArea
+                        sx={{
+                        
+                          p: 1,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          flexDirection: 'column',
+                          width: '100%',
+                          gap: 1
+                        }}
+                        onClick={() => changeTable(table.id)}
+                      >
+                        
+
+                          <TableRestaurant
+                          
+                          // color={ table.isAvailable ? 'success' : 'error'}
+                          />
+                          <Typography variant='h5'>Mesa {table.name}</Typography>
+                        
+                      </CardActionArea>
+
+                    </Card>
+                  </Grid>
                 ))
-              }
 
-            </Select>
-            {
-              TypeOrder.IN_PLACE === typeOrder && !table && 
-              <Typography color='error' variant='subtitle1'>Seleccione una mesa</Typography>
-            }
-          </FormControl>
+              }
+            </Grid>
+
+          </>
       }
 
 
@@ -197,3 +209,37 @@ export const TableOrder: FC<Props> = ({ table: tableOrder = { id: '', name: '' }
     </>
   )
 }
+
+// <FormControl fullWidth
+// >
+//   <Typography variant='subtitle1'>Mesa </Typography>
+
+//   <Select
+
+//     id="demo-simple-select"
+//     value={table?.id}
+
+
+//     onChange={(e) => changeTable(e.target.value)}
+
+//     size='small'
+
+//     error={TypeOrder.IN_PLACE === typeOrder && !table}
+//   >
+//     <MenuItem value="">
+//       Ninguno
+//     </MenuItem>
+//     {
+//       tables.map(table => (
+
+//         <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
+
+//       ))
+//     }
+
+//   </Select>
+//   {
+//     TypeOrder.IN_PLACE === typeOrder && !table &&
+//     <Typography color='error' variant='subtitle1'>Seleccione una mesa</Typography>
+//   }
+// </FormControl>

@@ -35,7 +35,8 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
   const [detail, setDetail] = useState<IOrderDetail>();
 
   const [description, setDescription] = useState(detail?.description || '');
-  const [discount, setDiscount] = useState(detail?.discount || 0);
+  
+  const [price, setPrice] = useState(detail?.price || 0);
 
   const { } = useContext(OrderContext);
 
@@ -58,7 +59,7 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
       orderId: activeOrder!.id,
       id: detail!.id,
       description,
-      discount
+      price
     }
 
     console.log(data)
@@ -130,15 +131,15 @@ export const ModalUpdateDetail: FC<Props> = ({ }) => {
             />
 
             <TextField
-              id="descripcion-pedido"
-              label="Descuento"
+              id="preci"
+              label="Precio"
               margin="dense"
               type='number'
-              defaultValue={detail?.discount}
+              defaultValue={detail?.price}
               sx={{ width: 300 }}
               onBlur={(e) => {
                 console.log(e.target.value);
-                setDiscount(Number(e.target.value));
+                setPrice(Number(e.target.value));
 
               }
               }

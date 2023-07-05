@@ -23,6 +23,7 @@ import { FormClient } from "../../../Clients/components/FormClient.component";
 import { TypeIdentification } from "../../../../../models/common.model";
 import { CreateClientDto } from "../../../Clients/dto/create-client.dto";
 import { useUpdateOrder } from "../../hooks/useUpdateOrder";
+import { useInvoiceStore } from "../../store/invoiceStore";
 
 
 interface Props {
@@ -57,6 +58,8 @@ export const ModalClientOrder: FC<Props> = (
   const suscription$ = statusModalClientOrder.getSubject();
 
   const { clientsQuery, search, handleChangeSearch } = useClients();
+
+  const {setClient} = useInvoiceStore(state => state)
 
   const clientForm = initialClient;
 

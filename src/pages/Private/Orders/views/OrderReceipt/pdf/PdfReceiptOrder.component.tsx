@@ -44,12 +44,12 @@ export const PdfReceiptOrder: FC<Props> = ({ order }) => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Información del cliente</Text>
+          {/* <Text style={styles.subtitle}>Información del cliente</Text>
           <Text style={styles.text}>Nombre: {order.client?.person.firstName}</Text>
           <Text style={styles.text}>
             Dirección: {order.client?.address}
           </Text>
-          <Text style={styles.text}>Email: {order.client?.person.email}</Text>
+          <Text style={styles.text}>Email: {order.client?.person.email}</Text> */}
         </View>
 
         <View style={styles.section}>
@@ -68,8 +68,8 @@ export const PdfReceiptOrder: FC<Props> = ({ order }) => {
         </View>
         <View>
 
-          <Text style={styles.text}>Subtotal: ${order.amount}</Text>
-          <Text style={styles.text}>Descuento: ${order.discount}</Text>
+          {/* <Text style={styles.text}>Subtotal: ${order.amount}</Text>
+          <Text style={styles.text}>Descuento: ${order.discount}</Text> */}
           <Text style={styles.text}>Total: ${order.total}</Text>
 
         </View>

@@ -7,7 +7,7 @@ import {
   Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar, Tab, Tabs, Chip
 } from '@mui/material';
 
-import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done } from '@mui/icons-material';
+import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward } from '@mui/icons-material';
 
 import { formatDistance, subHours } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -169,7 +169,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   return (
     <>
 
-{/* <Stack direction='row' spacing={1} alignItems='center'>
+      {/* <Stack direction='row' spacing={1} alignItems='center'>
 
 <AccessTimeOutlined color='secondary' fontSize='small' />
 <Typography variant='body2'  >
@@ -182,28 +182,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 </Typography>
 
 </Stack> */}
-      <Stack spacing={1} direction='row' my={1}>
 
-        <Chip
-          label={`N° ${order.num}`}
-
-          icon={<Numbers />}
-      color={color}
-        />
-        <Chip
-          icon={<TableRestaurant />}
-          label={
-            order.type === TypeOrder.IN_PLACE
-
-              ?
-              `Mesa ${order.table?.name || ''}`
-              : 'Para llevar'
-
-          }
-            color={color}
-        />
-
-      </Stack>
 
       <Card
 
@@ -217,13 +196,48 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
         variant='elevation'
 
       >
+        <Stack direction='row' alignItems='center' justifyContent='space-between' px={1}>
 
+          <Stack spacing={1} direction='row' my={1} alignItems='flex-end' >
+
+            <Typography variant='h3'>{`N° ${order.num}`}</Typography>
+
+
+            <Chip
+              icon={<TableRestaurant />}
+              label={
+                <Typography variant='h5'> {
+                  order.type === TypeOrder.IN_PLACE
+
+                    ?
+                    `Mesa ${order.table?.name || ''}`
+                    : 'Para llevar'
+
+                }</Typography>
+              }
+
+              variant={order.type === TypeOrder.IN_PLACE ? 'filled' : 'outlined'}
+
+            />
+
+          </Stack>
+
+          <IconButton
+
+            onClick={() => {
+              navigate(`/orders/list/edit/${order.id}`)
+            }}
+          >
+            <Edit />
+          </IconButton>
+
+        </Stack>
 
 
         <Stack
           sx={{ p: 1 }}
           spacing={1.5}
-          // divider={<Divider  />}
+        // divider={<Divider  />}
         >
           {/* <Stack
             direction='row'
@@ -256,30 +270,30 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
           {/* </Stack> */}
 
-          {
-            order.client && (
-              <Box>
-                <Typography variant='caption'>Cliente</Typography>
+          {/* <Divider /> */}
 
-                <Stack direction='row' spacing={1} alignItems='center'>
+          {order.notes && <Box>
+            <Typography variant='subtitle2'>Notas</Typography>
 
-                  <Person color='secondary' fontSize='small' />
-                  <Typography variant='body1' fontWeight='bold'>
-                    {order.client?.person.firstName} {order.client?.person.lastName}
-                  </Typography>
-                </Stack>
-              </Box>
+            <Stack direction='row' spacing={1} alignItems='center'>
 
-            )
-          }
+              {/* <Person color='secondary' fontSize='small' /> */}
+              <Typography variant='body1' >
+                {order.notes}
+                {/* {order.client?.person.firstName} {order.client?.person.lastName} */}
+              </Typography>
+            </Stack>
+          </Box>}
+
+
 
           <Box>
 
-            <Typography variant='caption'>Mesero</Typography>
+            <Typography variant='subtitle2'>Mesero</Typography>
             <Stack direction='row' spacing={1} alignItems='center'>
 
               <Person color='secondary' fontSize='small' />
-              <Typography variant='body1' fontWeight='bold'>
+              <Typography variant='body1' >
                 {order.user.person.firstName} {order.user.person.lastName}
               </Typography>
             </Stack>
@@ -445,41 +459,41 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             }}
 
           >
-            <Tab 
-            disabled={order.status === OrderStatus.DELIVERED} 
-            label='Por entregar'
-            icon={
-              <Label color={color}>
-                {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
-              </Label>
-            }
-            
-            iconPosition='end'
-
-            sx={{
-              '&.Mui-selected, &.Mui-selected:hover':{
-                color: (theme) => theme.colors.alpha.black[100]
-                            }
-            }}
-            
-            />
-            <Tab 
-            label={
-             'Entregado'
-              
-            }
-            icon={
-              <Label color={color}>
-                {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
-              </Label>
-            }
-            iconPosition='end'
-            sx={{
-              '&.Mui-selected, &.Mui-selected:hover':{
-                color: (theme) => theme.colors.alpha.black[100]
+            <Tab
+              disabled={order.status === OrderStatus.DELIVERED}
+              label='Por entregar'
+              icon={
+                <Label color={color}>
+                  {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+                </Label>
               }
-            }}
-             />
+
+              iconPosition='end'
+
+              sx={{
+                '&.Mui-selected, &.Mui-selected:hover': {
+                  color: (theme) => theme.colors.alpha.black[100]
+                }
+              }}
+
+            />
+            <Tab
+              label={
+                'Entregado'
+
+              }
+              icon={
+                <Label color={color}>
+                  {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
+                </Label>
+              }
+              iconPosition='end'
+              sx={{
+                '&.Mui-selected, &.Mui-selected:hover': {
+                  color: (theme) => theme.colors.alpha.black[100]
+                }
+              }}
+            />
           </Tabs>
 
 
@@ -519,7 +533,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
         </Stack>
 
 
-        <Divider sx={{ mt: 1 }} />
+        <Divider sx={{ mt: 1, display: order.status === OrderStatus.DELIVERED ? 'none' : 'block' }} />
 
         <CardActions sx={{
           justifyContent: 'center',
@@ -539,8 +553,10 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                   setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
 
                 }}
-                color={color}
-              // size='small'
+                // color={color}
+                // size='small'
+                color='success'
+
 
 
               >Iniciar</Button>
@@ -553,18 +569,22 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                     changeStatusOrder(OrderStatus.PENDING)
                     setStatusFilter && setStatusFilter(OrderStatus.PENDING)
                   }}
-                  color={color}
+                  color='success'
+                  startIcon={<ArrowBack />}
+
+                // color={color}
                 >
-                  <ArrowBack />
+                  Pendiente
                 </Button>
 
-                <Tooltip title="Entregar pedido. Próximamente." arrow>
-                  <Button
-                    // variant='contained'
-                    color={color}
-                   onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
-                  ><DoneAll /></Button>
-                </Tooltip>
+                <Button
+                  // variant='contained'
+                  // color={color}
+                  color='warning'
+                  endIcon={<ArrowForward />}
+
+                  onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
+                >Entregado</Button>
 
               </ >
 
@@ -573,19 +593,18 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
           }
 
-          <Button
+          {/* <Button
             onClick={() => {
               navigate(`/orders/list/edit/${order.id}`)
             }}
             // size='small'
-            color={color}
+            color='secondary'
             // variant='outlined'
             startIcon={<EditOutlined />}
 
           >
-            {/* <EditOutlined /> */}
             Editar
-          </Button>
+          </Button> */}
 
         </CardActions>
 

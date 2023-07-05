@@ -41,7 +41,8 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/clients': 'Clientes',
   '/clients/edit': 'Editar',
   '/clients/add': 'Nuevo cliente',
-  
+  '/balance': 'Balance',
+
   '/reports': 'Dashboard',
   '/reports/products': 'Productos',
   '/reports/incomes': 'Ingresos',
@@ -66,47 +67,64 @@ function LinkRouter(props: LinkRouterProps) {
 interface Props {
   title: string,
   action?: React.ReactNode;
-  breadcrumbEnd?: string; 
+  breadcrumbEnd?: string;
 }
 
 export const TitlePage: FC<Props> = ({ title, action }) => {
 
   const location = useLocation();
-  
+
   const pathnames = location.pathname.split('/').filter((x) => x);
 
 
   return (
-    <Stack my={2} direction='row' alignItems='center' justifyContent='space-between'>
+    <Stack spacing={1}
+      my={2}
+      direction={{ xs: 'column', sm: 'row' }}
+      justifyContent={{ xs: 'normal', sm: 'space-between' }}
+      alignItems={{sm: 'center'}}  >
 
-      <Stack>
-        <Typography variant='h3' >{title}</Typography>
-        <Breadcrumbs separator={<CircleRounded sx={{fontSize: 6, color: '#888'}}/>}>
-          {pathnames.map((value, index) => {
+      <Stack
+        direction='row'
+        alignItems='center'
+        justifyContent='flex-start'
+      >
+        <Box>
 
-            const last = index === pathnames.length - 1;
-            const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+          <Typography variant='h3' >{title}</Typography>
+          <Breadcrumbs separator={<CircleRounded sx={{ fontSize: 6, color: '#888' }} />}>
+            {
+              pathnames.map((value, index) => {
 
-          
+                const last = index === pathnames.length - 1;
+                const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
-            if (breadcrumbNameMap[to]) {
 
-              return last ? (
-                <Typography color="text.primary" key={to}>
-                  {breadcrumbNameMap[to]}
-                </Typography>
-              ) : (
-                <LinkRouter underline="hover" color="inherit" to={to} key={to}>
-                  {breadcrumbNameMap[to]}
-                </LinkRouter>
-              );
 
-            }
-          })}
-        </Breadcrumbs>
+                if (breadcrumbNameMap[to]) {
+
+                  return last ? (
+                    <Typography color="text.primary" key={to}>
+                      {breadcrumbNameMap[to]}
+                    </Typography>
+                  ) : (
+                    <LinkRouter underline="hover" color="inherit" to={to} key={to}>
+                      {breadcrumbNameMap[to]}
+                    </LinkRouter>
+                  );
+
+                }
+              })}
+          </Breadcrumbs>
+        </Box>
       </Stack>
 
-      {action}
+
+      <Stack direction='row' justifyContent='flex-end' >
+
+        {action}
+
+      </Stack>
     </Stack>
 
   )

@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 
 
 
-import { Box, IconButton, ListItemAvatar, ListItemButton, ListItemText, TableCell, TableRow, Typography, } from '@mui/material';
+import { Box, IconButton, ListItemAvatar, ListItemButton, ListItemText, Stack, TableCell, TableRow, Typography, } from '@mui/material';
 
 import { AddCircleOutline, RemoveCircleOutline, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { ICreateOrderDetail, IOrderDetail } from '../../../../../../models';
@@ -25,7 +25,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
   const { dispatch } = useContext(OrderContext);
 
-  const update = () => { 
+  const update = () => {
     dispatch({ type: OrderActionType.UPDATE_DETAIL, payload: { ...detalle, quantity } });
   }
 
@@ -60,14 +60,54 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
   return (
     <>
-      <TableRow
+      <Box
         sx={{
           whiteSpace: 'nowrap',
+          display: 'flex',
+          flexDirection: 'column',
+          p: 1,
+          px: 2,
+          gap: 1
         }}
       >
 
+        <Stack direction='row' justifyContent='space-between' alignItems='flex-start' >
 
-        <TableCell align='center'>
+          <Stack>
+
+            <Typography variant='h5' noWrap>{detalle.product.name}</Typography>
+
+            <Typography variant="body2" whiteSpace='pre-wrap'>
+
+              {detalle.description && detalle.description }
+            </Typography>
+          </Stack>
+
+
+          <Stack direction='row' spacing={1}>
+
+            <IconButton
+              onClick={editDescription}
+              color='inherit'
+              size='small'
+              >
+              <EditOutlined />
+            </IconButton>
+            <IconButton
+              aria-label="Eliminar detalle"
+              onClick={deleteDetail}
+              disabled={false}
+              color='error'
+              size='small'
+            >
+              <DeleteOutline />
+            </IconButton>
+          </Stack>
+
+        </Stack>
+
+        <Stack direction='row' spacing={3} justifyContent='right' alignItems='center'>
+
           <CounterInput
             value={quantity}
             onChange={handleChangeQuantity}
@@ -75,51 +115,12 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
 
           />
-        </TableCell>
 
-        <TableCell>
-          <Typography variant='h5' noWrap>{detalle.product.name}</Typography>
-          {/* <Typography variant='body1'>$ {detalle.product.price}</Typography> */}
-
-        </TableCell>
-
-        <TableCell>
-
-          <Typography variant="body2" whiteSpace='pre-wrap'>
-
-            {detalle.description ? detalle.description : "Normal"}
+          <Typography variant='body1'>$ {detalle.product.price}</Typography>
+        </Stack>
 
 
-          </Typography>
-
-        </TableCell>
-
-        {/* <TableCell align='center'>
-          <Typography variant="body1" >$ {detalle.product.price * quantity}</Typography>
-        </TableCell> */}
-
-        <TableCell
-          align='center'
-        >
-
-
-
-
-          <IconButton
-            onClick={editDescription}
-            color='inherit'
-          >
-            <EditOutlined />
-          </IconButton>
-          <IconButton
-            aria-label="Eliminar detalle"
-            onClick={deleteDetail}
-            disabled={false}
-            color='error'
-          >
-            <DeleteOutline />
-          </IconButton>
-        </TableCell>
+        <Typography variant="h5" textAlign='right'>$ {detalle.product.price * quantity}</Typography>
 
 
 
@@ -128,7 +129,12 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
 
 
-      </TableRow>
+
+
+
+
+
+      </Box>
 
 
 

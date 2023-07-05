@@ -1,5 +1,5 @@
 import { createContext, FC, useState } from 'react';
-import { Holiday } from '../components/AffluenceSimulator/models/holiday.model';
+import { Holiday } from '../models/holiday.model';
 
 
 

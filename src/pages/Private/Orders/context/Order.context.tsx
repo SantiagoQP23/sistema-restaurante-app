@@ -14,7 +14,9 @@ export enum OrderActionType {
   ADD_DETAIL = 'add_detail',
   UPDATE_DETAIL = 'update_detail',
   DELETE_DETAIL = 'delete_detail',
-  RESET = 'reset'
+  RESET = 'reset',
+  SET_NOTES = 'set_notes',
+  SET_DELIVERY_TIME = 'set_delivery_time'
 }
 
 
@@ -23,9 +25,12 @@ interface IOrderState {
   client: IClient | null;
   details: ICreateOrderDetail[];
   table: ITable | undefined;
-  people: number | undefined;
+  people: number;
   typeOrder: TypeOrder;
   totalProducts: number;
+  notes: string;
+  deliveryTime: Date | null;
+
 
 }
 
@@ -38,7 +43,10 @@ const initialState: IOrderState = {
   table: undefined,
   people: 1,
   typeOrder: TypeOrder.IN_PLACE,
-  totalProducts: 0
+  totalProducts: 0,
+  notes: '',
+  deliveryTime: new Date()
+
 }
 
 
@@ -51,6 +59,8 @@ type ActionType =
   | { type: 'update_detail', payload: ICreateOrderDetail }
   | { type: 'delete_detail', payload: ICreateOrderDetail }
   | { type: 'reset' }
+  | { type: OrderActionType.SET_NOTES, payload: string }
+  | { type: OrderActionType.SET_DELIVERY_TIME, payload: Date | null }
 
 
 
@@ -62,6 +72,19 @@ const orderReducer = (state: typeof initialState, action: ActionType) => {
       return {
         ...state,
         client: action.payload
+      }
+
+    case OrderActionType.SET_NOTES:
+      return {
+        ...state,
+        notes: action.payload
+      }
+
+
+    case OrderActionType.SET_DELIVERY_TIME:
+      return {
+        ...state,
+        deliveryTime: action.payload
       }
 
     case OrderActionType.SET_TABLE:
@@ -144,6 +167,8 @@ const orderReducer = (state: typeof initialState, action: ActionType) => {
 interface IOrderContext {
   dispatch: React.Dispatch<ActionType>;
   state: IOrderState;
+  activeStep: number;
+  changeStep: (step: number) => void;
 
 
   // amount: number;
@@ -178,6 +203,15 @@ export const OrderContext = createContext({} as IOrderContext);
 export const OrderProvider: FC<Props> = ({ children }) => {
 
   const [state, dispatch] = useReducer(orderReducer, initialState);
+
+  const [activeStep, setActiveStep] = useState<number>(0);
+
+  const changeStep = (step: number) => {
+
+    setActiveStep(step);
+
+  }
+
 
 
   const [details, setDetails] = useState<ICreateOrderDetail[]>([]);
@@ -244,7 +278,8 @@ export const OrderProvider: FC<Props> = ({ children }) => {
         const orderDetail: CreateOrderDetailDto = {
           productId: detail.product.id,
           quantity: detail.quantity,
-          description: detail.description
+          description: detail.description,
+          price: detail.product.price
         }
         return orderDetail;
       }),
@@ -284,6 +319,8 @@ export const OrderProvider: FC<Props> = ({ children }) => {
         {
           state,
           dispatch,
+          activeStep,
+          changeStep,
         }
       }
     >

@@ -1,7 +1,7 @@
 import { FC, useContext, useState } from "react";
 
 
-import { Card, CardHeader, CardContent, Box, Button, Typography, Grid, ToggleButtonGroup, ToggleButton, IconButton, List, ListItemButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Stack, Divider } from '@mui/material';
+import { Card, CardHeader, CardContent, Box, Button, Typography, Grid, ToggleButtonGroup, ToggleButton, IconButton, List, ListItemButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Stack, Divider, TextField } from '@mui/material';
 import { IClient, TypeOrder } from "../../../../../../models";
 import { ModalClientOrder } from "../../../components";
 import { TableOrder } from "../../../components/TableOrder.component";
@@ -14,19 +14,35 @@ import { LoadingButton } from "@mui/lab";
 import { statusModalClientOrder } from "../../../services/sharing-information.service";
 import { ComboBoxClient } from "../../../components/ComboBoxClient.component";
 import { PeopleCounter } from "./PeopleCounter.component";
+import { DesktopDatePicker, DesktopTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
+
+
+interface Props {
+  step: number;
+}
 
 
 
-export const NewOrderSummary = () => {
+export const NewOrderSummary: FC<Props> = ({ step }) => {
 
 
   const { state, dispatch } = useContext(OrderContext);
 
-  const { amount, table, people, details, typeOrder, client } = state;
+  const { amount, table, people, details, typeOrder, client, deliveryTime, notes } = state;
 
   const [showClient, setShowClient] = useState<boolean>(!!client);
 
   const { createOrder, loading } = useCreateOrder();
+
+  const [date, setDate] = useState<Date | null>(new Date());
+
+  const handleChangeDate = (date: Date | null) => {
+    dispatch({ type: OrderActionType.SET_DELIVERY_TIME, payload: date })
+  }
+
+  const handleChangeNotes = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: OrderActionType.SET_NOTES, payload: e.target.value })
+  }
 
   const submitAddOrder = () => {
 
@@ -40,10 +56,14 @@ export const NewOrderSummary = () => {
         const orderDetail: CreateOrderDetailDto = {
           productId: detail.product.id,
           quantity: detail.quantity,
-          description: detail.description
+          description: detail.description,
+          price: detail.product.price
+
         }
         return orderDetail;
       }),
+      notes,
+
 
       people,
       typeOrder
@@ -54,13 +74,6 @@ export const NewOrderSummary = () => {
 
 
   }
-
-  const handleChangeClient = (value: IClient | null) => {
-
-    dispatch({ type: OrderActionType.SET_CLIENT, payload: value })
-
-  }
-
 
   const openModalAddClient = () => {
     statusModalClientOrder.setSubject({ value: true });
@@ -83,68 +96,33 @@ export const NewOrderSummary = () => {
             <CardHeader title='Información del pedido' />
             <CardContent>
 
+              <Stack direction='column' spacing={2}>
 
-              <Grid container spacing={2}
-                alignItems='center'
+                <TextField
+                  id="descripcion-pedido"
+                  label="Notas"
+                  margin="dense"
+                  multiline
+                  rows={4}
 
-              >
+                  // defaultValue={detail?.description}
+                  fullWidth
 
-                <Grid item xs={12}>
-                  <ToggleButtonGroup
-                    value={typeOrder}
-                    onChange={(e, value) => dispatch({ type: OrderActionType.SET_TYPE_ORDER, payload: value })}
-                    exclusive
-                    size="small"
-                    fullWidth
-                  >
-                    <ToggleButton
-                      value={TypeOrder.TAKE_AWAY}
-                    >
-                      <DeliveryDining />
-                      Para llevar
-                    </ToggleButton>
-                    <ToggleButton
-                      value={TypeOrder.IN_PLACE}
-                    >
-                      <LocalDining />
-                      Para servir
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </Grid>
+                  value={notes}
+                  onChange={handleChangeNotes}
 
 
-
-                <Grid item xs={6}>
-                  <PeopleCounter />
-                </Grid>
+                />
 
 
-                {
-                  typeOrder === TypeOrder.IN_PLACE && (
-                    <>
+                <PeopleCounter />
 
-                      <Grid item xs={6}>
-                        <TableOrder />
-                      </Grid>
-
-
-
-                    </>
-                  )
-                }
-
-
-
-
-              </Grid>
-
-
-
+              </ Stack>
 
             </CardContent>
           </Box>
 
-          <Box>
+          {/* <Box>
 
             <CardHeader title='Información del cliente'
               action={
@@ -153,9 +131,9 @@ export const NewOrderSummary = () => {
                   onClick={() => setShowClient(!showClient)}
                 >
                   {
-                     !showClient && client
-                     ?  <Visibility />
-                     : <EditOutlined />
+                    !showClient && client
+                      ? <Visibility />
+                      : <EditOutlined />
                   }
                 </IconButton>
               }
@@ -204,7 +182,7 @@ export const NewOrderSummary = () => {
 
 
             </CardContent>
-          </Box>
+          </Box> */}
 
           <Box display='flex' justifyContent='space-between' alignItems='center' p={2}>
 
@@ -219,15 +197,15 @@ export const NewOrderSummary = () => {
 
       </Card>
 
-      <LoadingButton
+      {<LoadingButton
         variant='contained'
-        disabled={details.length <= 0}
+        disabled={details.length <= 0 || !(step === 1) || (!table && typeOrder === TypeOrder.IN_PLACE)}
         onClick={submitAddOrder}
         fullWidth
         loading={loading}
       >
         Crear pedido
-      </LoadingButton>
+      </LoadingButton>}
 
     </ Box>
 

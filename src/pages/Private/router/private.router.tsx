@@ -11,6 +11,8 @@ import { ClientsRouter } from '../Clients/router/Clients.router';
 import { TablesRouter } from '../Tables/router/Tables.router';
 import { UsersRouter } from '../Users/router/Users.router';
 import { ReportsRouter } from '../Reports/router/Reports.router';
+import { BalanceRouter } from '../Balance/router/Balance.router';
+import { SuppliersRouter } from '../Suppliers/router/Suppliers.router';
 
 export enum ValidRoles {
   admin = 'admin',
@@ -32,6 +34,8 @@ export const PrivateRouter: RouteObject[] = [
       TablesRouter,
       UsersRouter,
       ReportsRouter,
+      BalanceRouter,
+      SuppliersRouter,
       {
         path: '/auth/login',
         element: <Navigate to={PrivateRoutes.MENU} />

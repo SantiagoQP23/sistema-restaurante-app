@@ -17,8 +17,6 @@ import { Box } from '@mui/material/';
 
 export const ActiveOrders = () => {
 
-  const { loading, callEndpoint } = useFetchAndLoad();
-
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -40,21 +38,23 @@ export const ActiveOrders = () => {
             <Stack direction='row' spacing={1}>
               <LoadingButton
                 variant="text"
-                loading={loading}
+                loading={activeOrdersQuery.isFetching}
                 onClick={() => activeOrdersQuery.refetch()}
                 size='small'
+                startIcon={<Cached />}
               >
-                <Cached />
+                Actualizar
               </LoadingButton>
 
               <Button
                
-                onClick={() => { navigate('/orders/add') }}
+                onClick={() => { navigate('/orders/add/menu') }}
                 color='primary'
                 variant='contained'
                 size='small'
+                startIcon={<Add />}
               >
-                <Add />
+                Nuevo pedido
               </Button>
             </Stack>
           }

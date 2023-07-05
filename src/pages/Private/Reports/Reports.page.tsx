@@ -9,11 +9,8 @@ import { TitlePage } from "../components/TitlePage.component";
 const Reports = () => {
   return (
     <>
-
-
       <Container maxWidth='lg'>
-
-      
+  
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <SimulationProvider >
 

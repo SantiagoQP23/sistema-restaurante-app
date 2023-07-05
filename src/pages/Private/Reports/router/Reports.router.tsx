@@ -2,15 +2,15 @@
 import {lazy} from 'react';
 import { RouteObject } from 'react-router-dom';
 import { PrivateRoutes } from '../../../../models';
-import { AffluencePrediction } from '../components/AffluencePrediction/AffluencePrediction.component';
-import { AffluenceSimulation } from '../components/AffluenceSimulator/AffluenceSimulation.component';
-import { SimulatorForms } from '../components/AffluenceSimulator/SimulatorForms';
-import { DashboardReports } from '../components/DashboardReports/DashboardReports.component';
-import { IncomesReports } from '../components/IncomesReports/IncomesReports.component';
+import { IncomesReports } from '../views/IncomesReports/IncomesReports.view';
 import { OrdersReports } from '../components/OrdersReports/OrdersReports.component';
 import { ReceiptOrderReport } from '../components/OrdersReports/ReceiptOrderReport.component';
 import { StaffPlaning } from '../components/StaffPlanning/StaffPlaning.component';
-import { ProductsReports } from '../components/ProductsReports/ProductsReports.view';
+import { ProductsReports } from '../views/ProductsReports/ProductsReports.view';
+import { DashboardReports } from '../components';
+import { FootFallSimulation } from '../views/FootfallSimulation/FootfallSimulation.view';
+import { SimulatorForms } from '../views/SimulatorForms/SimulatorForms.view';
+import { FootfallPrediction } from '../views/FootfallPrediction/FootfallPrediction.view';
 
 
 const Reports = lazy(() => import('../Reports.page'));
@@ -29,7 +29,7 @@ export const ReportsRouter: RouteObject = {
     },
     {
       path: 'simulation',
-      element: <AffluenceSimulation />
+      element: <FootFallSimulation />
 
     },
     {
@@ -39,7 +39,7 @@ export const ReportsRouter: RouteObject = {
     },
     {
       path: 'prediction',
-      element: <AffluencePrediction />
+      element: <FootfallPrediction />
     },
     {
       path: 'staff-planning',

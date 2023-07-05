@@ -1,13 +1,14 @@
 import { FC } from "react"
 
 import { Document, Page, View, Text, StyleSheet, Image } from '@react-pdf/renderer';
-import { IDay, TypeAffluence } from "../../models/day.interface";
+import { Footfall,  } from "../../models/day.interface";
 import { Staff } from '../../models/staff.interface';
 
 import logo from '../../../../../assets/logo.png'
+import { format } from "date-fns";
 
 interface Props {
-  days: IDay[],
+  footfalls: Footfall[],
   staffs: Staff[],
 }
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export const PdfStaffPlaning: FC<Props> = ({ days, staffs }) => {
+export const PdfStaffPlaning: FC<Props> = ({ footfalls, staffs }) => {
 
 
 
@@ -43,7 +44,9 @@ export const PdfStaffPlaning: FC<Props> = ({ days, staffs }) => {
           <Text style={{ textAlign: 'center', fontSize: 16, marginBottom: 5, fontWeight: 'bold' }}>Restaurante Doña Yoli</Text>
 
 
-          <Text style={{ fontSize: 12, marginBottom: 2 }}>Planificación de personal de {days[0].date} hasta {days[days.length - 1].date}   </Text>
+          <Text style={{ fontSize: 12, marginBottom: 2 }}>
+            Planificación de personal de {format(footfalls[0].date, 'YYYY-MM-dd') } hasta {format(footfalls[footfalls.length - 1].date, 'YYYY-MM-dd')}   
+            </Text>
         </View>
 
         <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: 'black' }}>
@@ -69,9 +72,9 @@ export const PdfStaffPlaning: FC<Props> = ({ days, staffs }) => {
             <Text style={styles.text}>Personal total</Text>
           </View>
         </View>
-        {days.map((day, index) => (
+        {footfalls.map((day, index) => (
           <View key={index} style={{ flexDirection: 'row', borderWidth: 1, borderColor: 'black' }}>
-            <View style={styles.column}>
+            {/* <View style={styles.column}>
               <Text style={styles.text}>{day.date}</Text>
             </View>
             <View style={styles.column}>
@@ -79,7 +82,7 @@ export const PdfStaffPlaning: FC<Props> = ({ days, staffs }) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.text}>{day.affluences.find(affluence => affluence.type === TypeAffluence["PREDICTED"])?.affluence}</Text>
-            </View>
+            </View> */}
             <View style={styles.column}>
               <Text style={styles.text}>{staffs[index].chefs}</Text>
             </View>

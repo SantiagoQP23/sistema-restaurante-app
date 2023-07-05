@@ -113,9 +113,10 @@ export const Userbox = () => {
 
         <UserBoxText>
 
-          <UserBoxLabel variant="body1">  {user.name} <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} /></UserBoxLabel>
+          <UserBoxLabel variant="body1">  {user.name} </UserBoxLabel>
           <UserBoxDescription variant="body2">
-            {user.jobtitle}
+            <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
+            {online ? ' En línea' : ' Desconectado'}
           </UserBoxDescription>
         </UserBoxText>
 
@@ -147,43 +148,43 @@ export const Userbox = () => {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-         
-            <ListItemButton
 
-              to="/users/account"
-              component={NavLink}
-              onClick={handleClose}
-            >
-              {/* <ListItemIcon>
+          <ListItemButton
+
+            to="/users/account"
+            component={NavLink}
+            onClick={handleClose}
+          >
+            {/* <ListItemIcon>
                 <AccountBoxTwoToneIcon fontSize="small" />
 
               </ListItemIcon> */}
-              <ListItemText primary="Mi perfil" />
-              <ListItemSecondaryAction>
-                <Label color="info">Nuevo</Label>
-              </ListItemSecondaryAction>
-            </ListItemButton>
+            <ListItemText primary="Mi perfil" />
+            <ListItemSecondaryAction>
+              <Label color="info">Nuevo</Label>
+            </ListItemSecondaryAction>
+          </ListItemButton>
 
 
-            <ListItemButton
-              onClick={() => !online && conectarSocket()}
-            >
+          <ListItemButton
+            onClick={() => !online && conectarSocket()}
+          >
 
 
-              <ListItemText primary={online ? 'Conectado' : 'Conectar'} />
+            <ListItemText primary={online ? 'Conectado' : 'Conectar'} />
 
-              <ListItemSecondaryAction>
-                <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
-                </ListItemSecondaryAction>
-
-
-
-            </ListItemButton>
-
-          
+            <ListItemSecondaryAction>
+              <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
+            </ListItemSecondaryAction>
 
 
-         
+
+          </ListItemButton>
+
+
+
+
+
 
           {/* 
           <ListItem

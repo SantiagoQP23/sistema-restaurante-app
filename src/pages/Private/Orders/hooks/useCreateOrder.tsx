@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import { SocketResponseOrder } from "../interfaces/responses-sockets.interface";
 import { OrderActionType, OrderContext } from "../context/Order.context";
 import { useNavigate } from "react-router-dom";
+import { statusModalAddOrder } from "../services/orders.service";
 
 
 
@@ -37,8 +38,9 @@ export const useCreateOrder = () => {
       setLoading(false);
       if (resp.ok) {
 
-        dispatchReducer({ type: OrderActionType.RESET})
-        navigate('/orders');
+        dispatchReducer({ type: OrderActionType.RESET});
+        statusModalAddOrder.setSubject(true, resp.order!);
+        // navigate('/orders');
        
       } else {
         enqueueSnackbar(resp.msg, { variant: 'error' });

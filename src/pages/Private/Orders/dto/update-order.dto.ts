@@ -1,6 +1,8 @@
 import { TypeOrder } from '../../../../models/orders.model';
 
 
+
+
 export interface UpdateOrderDto{
 
   id: string;
@@ -12,7 +14,8 @@ export interface UpdateOrderDto{
   discount?: number;
   typeOrder?: TypeOrder;
   isPaid?: boolean;
-
+  notes?: string;
+  deliveryTime?: Date;
 
 }
 

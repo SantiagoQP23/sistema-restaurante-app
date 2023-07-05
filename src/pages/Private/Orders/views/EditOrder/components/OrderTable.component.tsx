@@ -108,18 +108,16 @@ export const OrderTable: FC<Props> = () => {
               loading ? <CircularProgress size={20} />
                 :
                 (<FormControl fullWidth >
-                  <Typography variant='subtitle1'>Mesa </Typography>
+                  <InputLabel id='table-order-id'>Mesa</InputLabel>
                   <Select
 
-
-
+                    labelId='table-order-id'
+                    label='Mesa'
                     value={table}
 
 
                     onChange={(e) => changeTable(e.target.value)}
                     disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
-
-                    size='small'
 
                     error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
 

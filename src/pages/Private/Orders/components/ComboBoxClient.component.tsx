@@ -28,7 +28,7 @@ export const ComboBoxClient: FC<Props> = ({ client, handleChangeClient }) => {
 
         filterOptions={(x) => x}
         options={clientsQuery.data?.clients || []}
-        getOptionLabel={(option) => option.person.firstName + ' ' + option.person.lastName}
+        getOptionLabel={(option) => option.person.lastName + ' ' + option.person.firstName}
         value={client}
 
         renderInput={(params) => <TextField {...params} label="Cliente (opcional)" variant="outlined" />}

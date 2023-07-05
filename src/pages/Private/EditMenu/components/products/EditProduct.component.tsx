@@ -334,7 +334,7 @@ export const EditProduct: FC<Props> = ({ }) => {
                       fullWidth
                       type='number'
                       inputProps={{
-                        step: 0.25,
+                        step: 0.05,
                       }}
 
                       {

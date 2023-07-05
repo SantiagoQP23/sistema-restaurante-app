@@ -297,7 +297,7 @@ export const ListOrders = () => {
                         {order.user.person.firstName} {order.user.person.lastName}
                       </TableCell>
                       <TableCell>
-                        {order.client?.person.firstName} {order.client?.person.lastName}
+                        {order.notes}
                       </TableCell>
 
 

@@ -78,11 +78,11 @@ export const CardOrdersByStatus: FC<Props> = ({
                         </Box>
                         <Typography variant='body1' fontWeight='bold' >$ {order.total}</Typography>
                       </Box>
-                      {
+                      {/* {
                         order.client &&
                         <Typography variant='body1' >Cliente: {`${order.client.person.firstName} ${order.client.person.lastName}`}</Typography>
 
-                      }
+                      } */}
                       <Typography variant='body1' >Por: {`${order.user.person.firstName} ${order.user.person.lastName}`}</Typography>
                     </>
                   }

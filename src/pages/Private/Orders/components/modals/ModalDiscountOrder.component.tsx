@@ -16,74 +16,74 @@ export const ModalDiscountOrder = () => {
 
   const [open, setOpen] = useState(false);
 
-  const [order, setOrder] = useState<IOrder>();
+  // const [order, setOrder] = useState<IOrder>();
 
-  const subscription$ = statusModalDiscountOrder.getSubject();
+  // const subscription$ = statusModalDiscountOrder.getSubject();
 
-  const {socket} = useContext(SocketContext);
+  // const {socket} = useContext(SocketContext);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const [discount, setDiscount] = useState(0);
+  // const [discount, setDiscount] = useState(0);
 
-  const {enqueueSnackbar} = useSnackbar();
+  // const {enqueueSnackbar} = useSnackbar();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    const value = Number(e.target.value);
-    if (value < 0) {
-      setDiscount(0);
-      return;
+  //   const value = Number(e.target.value);
+  //   if (value < 0) {
+  //     setDiscount(0);
+  //     return;
       
-    }
+  //   }
 
-    if(value > (order!.amount * 0.05)) {
-      return;
-    }
-    setDiscount(value);
-  }
-
-
-  const payOrder = () => {
-
-    const data : UpdateOrderDto = {
-      id: order!.id,
-      discount
-    }
-
-    socket?.emit(EventsEmitSocket.updateOrder, data, ({ok, msg, order}: SocketResponseOrder) => {
-
-      console.log('RESPUESTA DEL SERVIDOR', ok, msg, order);
-      console.log('orden pagada', ok)
-      if(ok) {
-        console.log(order)
-        dispatch(setActiveOrder(order!));
-        setOpen(false);
-      }else{
-        enqueueSnackbar(msg, {variant: 'error'});
+  //   if(value > (order!.amount * 0.05)) {
+  //     return;
+  //   }
+  //   setDiscount(value);
+  // }
 
 
-      }
+  // const payOrder = () => {
+
+  //   const data : UpdateOrderDto = {
+  //     id: order!.id,
+  //     discount
+  //   }
+
+  //   socket?.emit(EventsEmitSocket.updateOrder, data, ({ok, msg, order}: SocketResponseOrder) => {
+
+  //     console.log('RESPUESTA DEL SERVIDOR', ok, msg, order);
+  //     console.log('orden pagada', ok)
+  //     if(ok) {
+  //       console.log(order)
+  //       dispatch(setActiveOrder(order!));
+  //       setOpen(false);
+  //     }else{
+  //       enqueueSnackbar(msg, {variant: 'error'});
 
 
-    });
-
-    setOpen(false);
-
-  }
+  //     }
 
 
-  useEffect(() => {
-    subscription$.subscribe((data) => {
-      setOrder(data.order);
-      setDiscount(data.order.discount)
-      setOpen(!!data.value);
-    })
-  }, [])
+  //   });
 
-  if (!order) {
-    return null;
-  }
+  //   setOpen(false);
+
+  // }
+
+
+  // useEffect(() => {
+  //   subscription$.subscribe((data) => {
+  //     setOrder(data.order);
+  //     setDiscount(data.order.discount)
+  //     setOpen(!!data.value);
+  //   })
+  // }, [])
+
+  // if (!order) {
+  //   return null;
+  // }
 
 
   return (
@@ -91,10 +91,10 @@ export const ModalDiscountOrder = () => {
       open={open}
       onClose={() => {
         setOpen(false)
-        setDiscount(0);
+        // setDiscount(0);
       }}
     >
-      <DialogTitle id="alert-dialog-title" textAlign='center' variant='h4'>
+      {/* <DialogTitle id="alert-dialog-title" textAlign='center' variant='h4'>
         Descuento de pedido
       </DialogTitle>
       <DialogContent>
@@ -149,7 +149,7 @@ export const ModalDiscountOrder = () => {
 
         >Cancelar</Button>
         <Button variant="contained" onClick={payOrder}>Descuento</Button>
-      </DialogActions>
+      </DialogActions> */}
     </Dialog>
 
   )

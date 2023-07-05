@@ -1,4 +1,3 @@
-import { DetailStatus } from "../../../../models";
 
 
 export interface UpdateOrderDetailDto {
@@ -6,7 +5,8 @@ export interface UpdateOrderDetailDto {
   quantity?: number;
   qtyDelivered?: number;
   description?: string;
-  status?: DetailStatus;
   orderId: string;
-  discount?: number;
+  price?: number;
+
+
 }

@@ -4,7 +4,7 @@ import { Card, CardContent, TextField, Typography, Grid, Divider, CardHeader, Bo
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { codes, IDay, WeatherbitCodes } from '../models/day.interface';
 import { useFetchAndLoad } from '../../../../hooks/useFetchAndLoad';
-import { getAffluenceDate, updateDay } from '../services/affluence.service';
+import { getDay, getOneFootfall } from '../services/footfall.service';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useSnackbar } from 'notistack';
@@ -12,6 +12,7 @@ import { Checkbox } from '@mui/material/';
 import { LoadingButton } from '@mui/lab';
 import { UpdateDayDto } from '../dto/update-day.dto';
 import Switch from '@mui/material/Switch';
+import { useQuery } from '@tanstack/react-query';
 
 
 const formatDate = (newValue: Date | string) => {
@@ -33,6 +34,15 @@ export const Day = () => {
     new Date(),
   );
 
+  const {data, isLoading, isFetching} = useQuery<IDay>(['day', formatDate(value!)], () => getDay(formatDate(value!)), {
+
+  });
+
+  const {} = useQuery(['footfall', formatDate(value!)], () => getOneFootfall(formatDate(value!)), {
+
+
+  });
+
 
   const { loading, callEndpoint } = useFetchAndLoad();
   const { enqueueSnackbar } = useSnackbar();
@@ -50,25 +60,13 @@ export const Day = () => {
       return;
     }
     const dateStr = formatDate(newValue);
-    requestDate(dateStr)
+   
 
     setValue(newValue);
 
   };
 
-  const requestDate = async (date: string) => {
-    await callEndpoint(getAffluenceDate(date))
-      .then((resp) => {
 
-        setDay(resp.data)
-      })
-      .catch((err) => {
-        setDay(undefined)
-
-      })
-
-
-  }
 
   const submitUpdateDay = async () => {
 
@@ -77,24 +75,14 @@ export const Day = () => {
     const data: UpdateDayDto = {
       holiday: checked,
       date: dateStr,
-      nameDay: day!.nameDay
+      name: day!.name
     }
 
-    await callEndpoint(updateDay(dateStr, data))
-      .then((resp) => { 
-        setDay(resp.data)
-        enqueueSnackbar('Se actualizó el día', { variant: 'success' })
-      })
-      .catch((err) => {
-        console.log(err)
-        enqueueSnackbar('No se pudo actualizar el día', { variant: 'error' })
-      })
   }
 
 
   useEffect(()=> {
-    if(value)
-      requestDate(formatDate(value!))
+  
   },[])
 
 
@@ -134,7 +122,7 @@ export const Day = () => {
               )
               : (
                 <>
-                  <Typography variant='body2' align="center">{day.nameDay}</Typography>
+                  <Typography variant='body2' align="center">{day.name}</Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant='subtitle1' align="center">{day.tempMax} °C</Typography>
                   <Typography variant='h5' align="center"> {day.temp} °C</Typography>
@@ -142,11 +130,7 @@ export const Day = () => {
                   <Typography variant='body2' align="center">{ codes[day.weatherCode].descriptionEs }</Typography>
                   <Divider sx={{ my: 1 }} />
                   <Typography variant='body1' align="center">Asistencia</Typography>
-                  <Typography variant='h6' align="center">{day.affluences[0].affluence}</Typography>
-                
-
-                 
-
+       
 
 
                 </>)

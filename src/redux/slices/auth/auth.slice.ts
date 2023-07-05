@@ -4,12 +4,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { IUser } from '../../../models';
 import { AppThunk, RootState } from "../../store";
+import { Restaurant } from "../../../pages/Private/Reports/models/restaurant.model";
 
 
 export interface AuthState {
   user: IUser | null,
   error?: string,
   status: 'checking' | 'authenticated' | 'not-authenticated';
+  restaurant: Restaurant | null;
 }
 /*
 usuario:  idUsuario: 1,
@@ -24,7 +26,9 @@ usuario:  idUsuario: 1,
 
 const initialState: AuthState = {
   status: 'checking',
-  user: null
+  user: null,
+  error: '',
+  restaurant: null
 };
 
 export const authSlice = createSlice({
@@ -47,6 +51,10 @@ export const authSlice = createSlice({
 
     },
     clearErrorMessage: (state) => {state.error = ''},
+    loadRestaurant: (state, { payload }: PayloadAction<Restaurant>) => {
+      state.restaurant = payload;
+    },
+
 
 
     /*  authUsuariosLoad: (state, action: PayloadAction<IUsuario[]>) => {
@@ -81,6 +89,7 @@ export const {
   onChecking,
   onLogin,
   onLogout,
+  loadRestaurant,
   /*  authUsuarioAdd,
    authUsuarioUpdate,
    authUsuarioDelete,

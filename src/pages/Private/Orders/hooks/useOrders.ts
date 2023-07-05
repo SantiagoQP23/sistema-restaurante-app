@@ -82,7 +82,7 @@ export const useActiveOrders = () => {
 
   const pagination = usePaginationAsync();
 
-  const dateFilter = useDateFilter(Period.MONTH);
+  const dateFilter = useDateFilter(Period.WEEK);
 
   const dispatch = useDispatch();
 
@@ -137,10 +137,10 @@ export const useOrder = (id: string) => {
 
       dispatch(setActiveOrder(order));
 
-      if (order.isPaid) {
-        navigate(`/orders/list/edit/${id}/receipt`, { replace: true })
+      // if (order.isPaid) {
+      //   navigate(`/orders/list/edit/${id}/receipt`, { replace: true })
 
-      }
+      // }
     }
   })
 

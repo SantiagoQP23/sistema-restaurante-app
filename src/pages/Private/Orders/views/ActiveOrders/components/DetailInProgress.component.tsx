@@ -60,8 +60,8 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
             // border: `1px solid ${theme.colors.alpha.black[10]}`,
             // py: 1.5,
             // backgroundColor: `${theme.colors.alpha.black[5]}`,
-            alignItems: 'center',
             display: 'flex',
+            alignItems: detail.quantity > 1 ? 'flex-start' : 'center',
             p:1,
           }}
 
@@ -150,15 +150,18 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
 
                   (
                     <>
-                      <Stack direction='row' alignItems='center' spacing={1} >
+                      <Stack direction='column' alignItems='right' mt={0.5} >
 
-                        <Typography variant='subtitle1'>{detail.qtyDelivered}</Typography>
                         <LinearProgressWrapper
                           value={(detail.qtyDelivered * 100) / detail.quantity}
                           color="info"
                           variant="determinate"
+                          sx={{
+                            width: '100%'
+                          }}
 
                         />
+                        <Typography variant='subtitle1' fontSize={12}>{detail.qtyDelivered} / {detail.quantity}</Typography>
                       </Stack>
                     </>
                   )

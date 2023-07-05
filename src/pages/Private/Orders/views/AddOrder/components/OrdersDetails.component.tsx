@@ -1,5 +1,5 @@
 import { AddShoppingCartOutlined } from "@mui/icons-material";
-import { Card, CardHeader, IconButton, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography } from "@mui/material";
+import { Card, CardHeader, IconButton, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Stack } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../../context/Order.context";
@@ -43,7 +43,7 @@ export const OrderDetails = () => {
         <Divider />
 
 
-        <TableContainer>
+        {/* <TableContainer>
 
           <Table>
 
@@ -58,21 +58,20 @@ export const OrderDetails = () => {
                 <TableCell>
                   Descripción
                 </TableCell>
-                {/* <TableCell>
-                  Subtotal
-                </TableCell> */}
+              
                 <TableCell align="center">
                   Acciones
                 </TableCell>
               </TableRow>
             </TableHead>
 
-            <TableBody>
+            <TableBody> */}
 
+              <Stack spacing={1} divider={<Divider />}>
 
               {
                 details.length > 0
-                  ? details.map((detail) => (
+                ? details.map((detail) => (
                     <>
                       <NewOrderDetail detalle={detail} key={detail.product.id}/>
                     </>
@@ -86,10 +85,11 @@ export const OrderDetails = () => {
                     </TableCell>
                   </TableRow>)
 
-              }
-            </TableBody>
+}
+</Stack>
+            {/* </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
 
 
 

@@ -61,7 +61,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
                   Producto
                 </TableCell>
                 <TableCell>
-                  Descripción
+                  Precio
                 </TableCell>
                 <TableCell>
                   Estado
@@ -131,7 +131,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
 
                   
                 >
-                  <Typography variant='h6' >${order.amount}</Typography>
+                  <Typography variant='h6' >${order.total}</Typography>
                 </TableCell>
 
               </TableRow>

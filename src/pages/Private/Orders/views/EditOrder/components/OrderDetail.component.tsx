@@ -121,11 +121,11 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
         sx={{
           whiteSpace: 'nowrap'
         }}
-        
+
       >
 
 
-        <TableCell align='center'>
+        <TableCell align='center' padding='checkbox'>
           <Box display='flex' justifyContent='space-between' alignItems='center' >
 
             <CounterInput
@@ -157,41 +157,44 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
         <TableCell>
           <Typography variant='h5' noWrap>{detail.product.name}</Typography>
-          <Typography variant='body1'>$ {detail.product.price}</Typography>
-
-        </TableCell>
-
-        <TableCell>
-
           <Typography variant="body2" whiteSpace='pre-wrap'>
 
-            {detail.description ? detail.description : "Normal"}
+            {detail.description && detail.description}
 
 
           </Typography>
 
         </TableCell>
 
-        <TableCell align='center'>
+        <TableCell>
 
-          <Stack direction='row' alignItems='center' spacing={1} >
+          <Typography variant='body1'>$ {detail.product.price}</Typography>
 
-            <Typography variant='subtitle1'>{detail.qtyDelivered}</Typography>
+        </TableCell>
+
+        <TableCell align='left'>
+
+          <Stack direction='column' alignItems='right' mt={0.5} >
+
             <LinearProgressWrapper
               value={(detail.qtyDelivered * 100) / detail.quantity}
-              color="primary"
+              color="info"
               variant="determinate"
+              sx={{
+                width: '100%'
+              }}
 
             />
+            <Typography variant='subtitle1' fontSize={12}>{detail.qtyDelivered} / {detail.quantity}</Typography>
           </Stack>
 
         </TableCell>
 
         <TableCell align='right'>
           {
-          detail.discount > 0 &&
-          <Typography variant="subtitle1" >$ {detail.product.price * quantity} - $ {detail.discount}</Typography>
-        }
+            // detail.discount > 0 &&
+            // <Typography variant="subtitle1" >$ {detail.product.price * quantity} - $ {detail.discount}</Typography>
+          }
           <Typography variant="body1" fontWeight='bold'>$ {detail.amount}</Typography>
         </TableCell>
 

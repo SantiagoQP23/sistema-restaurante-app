@@ -1,10 +1,9 @@
 export interface IDay {
   id: number;
-  date: string;
+  date: Date;
   precip: number;
   temp: number;
-  affluences: IAffluence[];
-  nameDay: string;
+  name: string;
   tempMax: number;
   tempMin: number;
   holiday: boolean;
@@ -19,16 +18,17 @@ export enum WeatherbitCodes {
 
 
 
-export enum TypeAffluence {
+export enum TypeFootfall {
   REAL = "REAL",
   SIMULATED = "SIMULATED",
   PREDICTED = "PREDICTED"
 }
 
-export interface IAffluence {
+export interface Footfall {
   id: number;
-  type: TypeAffluence;
-  affluence: number;
+  date: Date;
+  type: TypeFootfall;
+  quantity: number;
 }
 
 

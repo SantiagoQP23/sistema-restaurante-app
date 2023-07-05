@@ -72,6 +72,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
       const data: CreateOrderDetailDto = {
         orderId: activeOrder.id,
         productId: detail!.product.id,
+        price: detail!.product.price,
         quantity
       }
 
@@ -123,11 +124,16 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
           setOpen(false)
           setDescription('');
         }}
+        
 
       >
         {/* <DialogTitle>Añadir Producto</DialogTitle> */}
 
-        <DialogContent>
+        <DialogContent
+          sx={{
+            width: 300,
+          }}
+          >
 
           <Stack spacing={2}>
             <Box>
@@ -147,7 +153,27 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
               )
             }
 
-            <Divider />
+            {/* <Divider /> */}
+
+         
+
+            <Stack
+              direction='row' alignItems='center' justifyContent='flex-end'
+              my={2}
+            >
+              {/* <Typography variant="h5" >Cantidad</Typography> */}
+
+              <CounterInput
+                value={detail?.quantity || 1}
+                onChange={handleQuantityChange}
+
+
+              />
+              {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
+
+
+
+            </Stack>
 
             <FormControl fullWidth>
               <TextField
@@ -155,7 +181,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
                 label="Notas"
                 margin="dense"
                 multiline
-                rows={4}
+                rows={3}
                 defaultValue={description}
 
                 onBlur={(e) => {
@@ -170,24 +196,6 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
 
             </FormControl>
-
-            <Stack
-              direction='row' alignItems='center' justifyContent='space-between'
-              my={2}
-            >
-              <Typography variant="h5" >Cantidad</Typography>
-
-              <CounterInput
-                value={detail?.quantity || 1}
-                onChange={handleQuantityChange}
-
-
-              />
-              {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
-
-
-
-            </Stack>
 
           </Stack>
 

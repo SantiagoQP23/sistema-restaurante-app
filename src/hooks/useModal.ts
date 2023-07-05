@@ -13,5 +13,5 @@ export const useModal = (initialValue: boolean = false) => {
         setOpen(false);
       };
 
-    return {isOpen, handleOpen, handleClose};
+    return {isOpen, handleOpen, handleClose, setOpen};
 }

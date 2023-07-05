@@ -13,6 +13,7 @@ export const statusModalDispatchDetail = new SubjectDispatchDetail();
 export const statusModalDeleteOrder = new SubjectModalDeleteOrder();
 export const statusModalDiscountOrder = new SubjectModalPayOrder();
 export const statusModalPayOrder = new SubjectModalPayOrder();
+export const statusModalAddOrder = new SubjectModalPayOrder();
 
 export const statusModalEditOrderDetail = new SubjectEditOrderDetail();
 export const statusModalDeleteOrderDetail = new SubjectEditOrderDetail();

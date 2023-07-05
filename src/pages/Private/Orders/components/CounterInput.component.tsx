@@ -12,10 +12,11 @@ interface Props {
   max?: number;
   step?: number;
   onChange?: (value: number) => void;
+  fullWidth?: boolean;
 
 }
 
-export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange }) => {
+export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange, fullWidth = false }) => {
 
 
   const { state: counter, increment, decrement, setCounter } = useCounter(value, step, max, min);
@@ -50,14 +51,16 @@ export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange })
       <Stack
         direction='row'
         alignItems='center'
-        width={130}
+        width={fullWidth ? '100%': 130}
         justifyContent='center'
         // divider={<Divider orientation="vertical" flexItem />}
         sx={{
           borderRadius: '8px',
-          // border: '1px solid #ccc',
+          border: '1px solid #777',
+          // borderColor: 'inherit',
 
         }}
+        
       >
 
         <IconButton

@@ -18,7 +18,7 @@ export const ListProducts: FC<ProductsListProps> = ({ products }) => {
 
             if (product.isActive)
               return (
-                <Grid key={product.id} item xs={6} sm={6} lg={3}>
+                <Grid key={product.id} item xs={6} sm={6} lg={2}>
                   <Product product={product} />
 
                 </Grid>
