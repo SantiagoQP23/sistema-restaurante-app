@@ -1,75 +1,147 @@
+import { useState } from "react";
+
 import { TextFields } from "@mui/icons-material"
-import { Box, Button, Card, CardContent, CardHeader, InputLabel, Stack, Typography, TextField } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, InputLabel, Stack, Typography, TextField, Grid } from '@mui/material';
 import { DatePicker, DesktopDatePicker } from "@mui/x-date-pickers"
 import { format } from "date-fns"
+import { useCashRegister, useCreateCashRegister } from "../../../hooks/useCashRegister";
+import { CashRegister } from "../../../models/cash-register.model";
+import { LoadingButton } from "@mui/lab";
+import { CreateCashRegisterDto } from "../../../dto/create-cash-register.dto";
+import AddIcon from '@mui/icons-material/Add';
+import { CashRegisterInfo } from "./CashRegisterInfo.component";
 
 
 export const CashRegisterSummary = () => {
+
+  const [date, setDate] = useState<Date | null>(new Date());
+
+  const {cashRegisterQuery} = useCashRegister(format(date!, 'yyyy-MM-dd'));
+
+  const [initialAmount, setInitialAmount] = useState<number>(0);
+
+  const [cashRegister, setCashRegister] = useState<CashRegister | null>(null);
+
+  const { mutateAsync, isLoading } = useCreateCashRegister();
+
+
+
+  const handleChangeInitialAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = Number(event.target.value)
+
+
+
+    setInitialAmount(Number(event.target.value))
+
+  }
+
+  const handleChangeDate = async (date: Date | null) => {
+    setDate(date)
+
+    await cashRegisterQuery.refetch().then((resp) => {
+      console.log(resp.data)
+      setCashRegister(resp.data || null)
+    }
+    )
+  }
+
+  const onSubmitCreate = async () => {
+
+    const data: CreateCashRegisterDto = {
+      initialAmount
+    }
+
+    console.log(data)
+
+    await mutateAsync(data)
+      .then((data) => {
+
+        setCashRegister(data);
+        
+      })
+
+  }
+
 
 
 
   return (
     <Card>
-      <CardHeader title='Caja' 
+      <CardHeader title='Caja'
         action={
           <>
-            <DesktopDatePicker 
-              value={new Date()}
-              onChange={() => {}}
+            <DesktopDatePicker
+              label="Fecha"
+              value={date}
+              onChange={handleChangeDate}
               renderInput={(params) => <TextField size="small" {...params} />}
-              
-
-
+              maxDate={new Date()}
             />
           </>
         }
       />
       <CardContent>
-        <Stack direction='column' spacing={2} justifyContent='flex-end'>
-          <Box>
 
-            <InputLabel id="date">Fecha</InputLabel>
-            <Typography variant='h6' >{format(new Date(), 'yyyy-MM-dd')}</Typography>
-          </Box>
+        {
+          cashRegisterQuery.isFetching ? (
+            <Typography variant='h4' >Cargando...</Typography>
+          ) : null
+        }
 
-          <Box>
+        {
+          cashRegister ? (
+            <>
+             <CashRegisterInfo cashRegister={cashRegister} />
+            </>
 
-            <InputLabel id="date">Monto inicial</InputLabel>
-            <Typography variant='h5'  >$ 500.00</Typography>
+          )
+            : (
+              <Grid container spacing={2}>
+                <Grid item xs={12} >
+                  <Typography variant='h4' >Añadir caja</Typography>
+                </Grid>
 
-          </Box>
+                <Grid item xs={12} >
+                  <TextField
+                    label='Monto inicial'
+                    type='number'
+                    variant='outlined'
+                    fullWidth
+                    // size='small'
+                    value={initialAmount}
 
-          <Box>
+                    onChange={handleChangeInitialAmount}
 
-            <InputLabel id="date">Ventas</InputLabel>
-            <Typography variant='h4' color='success.main' >$ 500.00</Typography>
-          </Box>
-          <Box>
+                    InputProps={{
+                      startAdornment: <Typography variant='h6' >$   </Typography>,
+                      inputProps: {
+                        min: 0
+                      }
 
-            <InputLabel id="date">Ingresos</InputLabel>
-            <Typography variant='h4' color='success.main'>$ 500.00</Typography>
-
-          </Box>
-
-          <Box>
-
-            <InputLabel id="date">Gastos</InputLabel>
-            <Typography variant='h4' color='error.main'>$ 500.00</Typography>
-
-          </Box>
-          <Box>
-
-            <InputLabel id="date">Monto final</InputLabel>
-            <Typography variant='h3' >$ 777.00</Typography>
-          </Box>
+                    }}
 
 
-          <Button
-            variant='contained'
-          >
-            Cerrar caja
-          </Button>
-        </Stack>
+                  />
+
+                </Grid>
+
+                <Grid item xs={12} >
+                  <LoadingButton
+                    variant='contained'
+                    fullWidth
+                    loading={isLoading}
+                    onClick={onSubmitCreate}
+                  >
+                    Añadir
+                  </LoadingButton>
+                </Grid>
+
+
+              </Grid>
+            )
+        }
+
       </CardContent>
 
 
