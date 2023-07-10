@@ -28,7 +28,7 @@ export const statusModalStartOrder = new SubjectGenerator<ModalOrder>();
 
 
 export interface OrdersResponse {
-  orders: IOrder ;
+  orders: IOrder[] ;
   count: number;
 }
 

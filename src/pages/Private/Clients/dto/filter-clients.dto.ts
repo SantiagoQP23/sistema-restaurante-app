@@ -1,6 +1,6 @@
 
 
-import { PaginationDto, SearchDto } from "../../dto";
+import { PaginationDto, SearchDto } from "../../Common/dto";
 
 
 
