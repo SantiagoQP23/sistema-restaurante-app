@@ -16,6 +16,7 @@ export interface UpdateOrderDto{
   isPaid?: boolean;
   notes?: string;
   deliveryTime?: Date;
+  isClosed?: boolean;
 
 }
 

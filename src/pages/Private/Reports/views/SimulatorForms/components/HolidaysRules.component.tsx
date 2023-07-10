@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Holiday } from '../../../models/holiday.model';
-import { formatDateToPicker } from '../../../../helpers/format-date.helper';
+import { formatDateToPicker } from '../../../../Common/helpers/format-date.helper';
 import { statusModalHoliday, statusModalDeleteHoliday, getHolidays } from '../../../services/holidays.service';
 import { SimulationContext } from '../../../context/SimulationContext';
 import { useTypesHolidays } from '../../../hooks/useTypesHolidays';

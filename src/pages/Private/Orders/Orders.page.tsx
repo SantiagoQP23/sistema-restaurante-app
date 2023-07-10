@@ -14,20 +14,20 @@ import { ModalPayOrder } from './components/modals/ModalPayOrder.component';
 import { ModalDiscountOrder } from './components/modals/ModalDiscountOrder.component';
 import { EventsOnSocket } from './interfaces/events-sockets.interface';
 import { useAsync, useFetchAndLoad } from "../../../hooks";
-import { IOrder } from "../../../models";
+import { IOrder, ITable } from "../../../models";
 import { getOrdersToday } from './services/orders.service';
 import { useSnackbar } from "notistack";
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context";
-import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders } from "../../../redux";
+import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders, selectTables, updateTable } from "../../../redux";
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
 import { LoadingButton } from '@mui/lab';
 import { ModalAddDetail } from "./components/EditOrder";
 import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
-import { useActiveOrders } from "./hooks";
+import { useActiveOrders, useOrderHelper } from "./hooks";
 
 
 
@@ -35,12 +35,16 @@ export const Orders = () => {
 
   const dispatch = useDispatch();
 
-  const {activeOrdersQuery} = useActiveOrders();
+  const { activeOrdersQuery } = useActiveOrders();
+
+  const {sortOrdersByDeliveryTime} = useOrderHelper();
 
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
-  const { activeOrder } = useSelector(selectOrders)
+  const { tables } = useSelector(selectTables);
+
+  const { activeOrder } = useSelector(selectOrders);
 
   const { socket } = useContext(SocketContext);
 
@@ -57,6 +61,26 @@ export const Orders = () => {
 
       dispatch(addOrder(order))
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
+      sortOrdersByDeliveryTime();
+
+      // tables.forEach(table => {
+
+      //   let orders = table.orders;
+
+      //   if (table.id === order.table?.id) {
+      //     orders = [...orders!, order];
+      //   }
+
+      //   console.log({
+      //     table: {...table, orders }
+      //   })
+      //   dispatch(updateTable({...table, orders }));
+
+
+      // });
+
+
+      // TODO update table order
 
       //dispatch(pedidoAddNew(pedido))
 
@@ -82,6 +106,37 @@ export const Orders = () => {
       }
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
+      // TODO update table order
+
+      sortOrdersByDeliveryTime();
+
+
+      // let table = tables.find(t => t.id === order?.table?.id) ?? null;
+
+      // if (table) {
+
+      //   const orderInTable = table.orders?.find(o => o.id === order?.id) ?? null;
+
+      //   if (orderInTable) {
+      //     const index = table.orders?.indexOf(orderInTable) ?? -1;
+      //     if (index !== -1) {
+      //       table.orders?.splice(index, 1, order!);
+      //     }
+      //   } else {
+      //     let newOrders: IOrder[] = [];
+      //     if (table.orders) {
+      //       newOrders = [...table.orders, order!];
+      //     }
+
+      //     table = { ...table, orders: newOrders };
+
+      //   }
+
+      //   dispatch(updateTable(table));
+      // }
+
+
+
 
     });
 
@@ -101,6 +156,7 @@ export const Orders = () => {
       dispatch(deleteOrder(order!.id));
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
+      // TODO update table order
 
     });
 
@@ -137,16 +193,16 @@ export const Orders = () => {
 
 
 
-       
 
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-            <Outlet />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
 
-            <ModalClientOrder />
+        <Outlet />
 
-          </LocalizationProvider>
-      
+        <ModalClientOrder />
+
+      </LocalizationProvider>
+
 
 
       <ModalDeleteOrder />

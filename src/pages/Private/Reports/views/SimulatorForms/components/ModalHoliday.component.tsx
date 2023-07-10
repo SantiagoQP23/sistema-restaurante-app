@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { LoadingButton } from '@mui/lab';
 import { useMutation } from '@tanstack/react-query';
-import { formatDate, formatDateToPicker } from '../../../../helpers/format-date.helper';
+import { formatDate, formatDateToPicker } from '../../../../Common/helpers/format-date.helper';
 import { Holiday } from '../../../models/holiday.model';
 import { statusModalHoliday } from '../../../services/holidays.service';
 import { useCreateTypeHoliday, useUpdateTypeHoliday, useTypesHolidays } from '../../../hooks/useTypesHolidays';

@@ -163,8 +163,8 @@ export const TableOrder: FC<Props> = (
                   <Grid item key={table.id} xs={4} md={3}>
                     <Card
                       sx={{
-                        color: table.id === tableOrder?.id ? 'white' : table.isAvailable ? 'success.main' : 'error.main',
-                        bgcolor: table.id === tableOrder?.id ? table.isAvailable ? 'success.main' : 'error.main' : 'transparent',
+                        color: table.id === tableOrder?.id ? 'white' : table.isAvailable ? 'success.main' : 'secondary.main',
+                        bgcolor: table.id === tableOrder?.id ? table.isAvailable ? 'success.main' : 'secondary.main' : 'transparent',
 
                       }
                       }
@@ -172,7 +172,7 @@ export const TableOrder: FC<Props> = (
 
                       <CardActionArea
                         sx={{
-                        
+
                           p: 1,
                           display: 'flex',
                           justifyContent: 'center',
@@ -182,14 +182,9 @@ export const TableOrder: FC<Props> = (
                         }}
                         onClick={() => changeTable(table.id)}
                       >
-                        
+                        <TableRestaurant />
+                        <Typography variant='h5'>Mesa {table.name}</Typography>
 
-                          <TableRestaurant
-                          
-                          // color={ table.isAvailable ? 'success' : 'error'}
-                          />
-                          <Typography variant='h5'>Mesa {table.name}</Typography>
-                        
                       </CardActionArea>
 
                     </Card>

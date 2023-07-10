@@ -16,7 +16,7 @@ import {
   IconButton
 } from '@mui/material';
 import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
-import { SidebarContext } from '../../../../contexts/SidebarContext';
+import { SidebarContext } from '../../../../Common/contexts/SidebarContext';
 
 import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 

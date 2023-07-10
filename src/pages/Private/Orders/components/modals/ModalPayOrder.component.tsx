@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab"
-import { Dialog, DialogTitle, Divider, DialogContent, DialogContentText, DialogActions, Button, Typography, Stack, TextField, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import { Dialog, DialogTitle, Divider, DialogContent, DialogContentText, DialogActions, Button, Typography, Stack, TextField, Radio, RadioGroup, FormControlLabel, Box } from '@mui/material';
 import { FC, useContext, useEffect, useState } from "react"
 import { IOrder, OrderStatus, TypeOrder } from '../../../../../models/orders.model';
 import { statusModalPayOrder } from '../../services/orders.service';
@@ -38,7 +38,7 @@ export const ModalPayOrder: FC = () => {
 
     const data: UpdateOrderDto = {
       id: order!.id,
-      isPaid: true,
+      isClosed: true,
     };
 
     socket?.emit(EventsEmitSocket.updateOrder, data, (response: SocketResponse) => {
@@ -74,27 +74,16 @@ export const ModalPayOrder: FC = () => {
 
     <Dialog open={open} onClose={closeModal}>
 
-      <DialogTitle id="alert-dialog-title" textAlign='center' variant='h3'>
-        Pago de pedido
+      <DialogTitle id="alert-dialog-title" textAlign='center' variant='h4'>
+        Cerrar pedido
       </DialogTitle>
       <Divider />
       <DialogContent>
 
 
-        <Stack spacing={1}>
+        <Stack spacing={2}>
 
-          {/* {
-            order?.client && (
-              <Typography variant='h6' textAlign='left' >
-
-                <b>Cliente: </b>{`${order?.client?.person.firstName} ${order?.client?.person.lastName}`}
-
-              </Typography>
-
-            )
-          } */}
-
-          <Typography variant='h6' textAlign='left' >
+          <Typography variant='h6' textAlign='center' >
 
 
             <b>Mesa: </b>{`${order?.type === TypeOrder.IN_PLACE
@@ -106,41 +95,18 @@ export const ModalPayOrder: FC = () => {
 
           </Typography>
 
+            <Box>
+          <Typography variant='h4' textAlign='center' >
 
-          <Typography variant='h3' textAlign='center' >
-
-            {`Total de la orden: $${order?.total}`}
+            ¿Desea cerrar el pedido?
 
           </Typography>
-          <Divider />
-          <Typography variant='h4' >Forma de pago</Typography>
-          <RadioGroup name="use-radio-group" defaultValue="first" >
-            <FormControlLabel value="first" label="Efectivo" control={<Radio />} />
-            <FormControlLabel value="second" label="Transferencia" control={<Radio />} />
-          </RadioGroup>
 
-          <TextField
-            label='Cantidad'
-            variant='outlined'
-            type='number'
-            fullWidth
+          <Typography color='secondary' fontSize={12} textAlign='center' >
+            Luego de cerrar el pedido ya no podrá editarlo
 
-          />
-          <Divider />
-
-          <TextField
-            label='Nota de venta'
-            variant='outlined'
-            type='number'
-            fullWidth
-
-          />
-
-          <Button>
-            Imprimir nota de venta
-          </Button>
-
-
+          </Typography>
+              </Box>
 
         </Stack>
 

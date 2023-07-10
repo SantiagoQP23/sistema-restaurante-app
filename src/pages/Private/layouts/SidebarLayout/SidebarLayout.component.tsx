@@ -9,7 +9,7 @@ import { ValidRoles } from '../../router';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../redux';
 import { UnauthorizedPage } from '../../../Status/Unauthorized.page';
-import { SidebarContext } from '../../contexts/SidebarContext';
+import { SidebarContext } from '../../Common/contexts/SidebarContext';
 
 interface SidebarLayoutProps {
   children?: ReactNode;

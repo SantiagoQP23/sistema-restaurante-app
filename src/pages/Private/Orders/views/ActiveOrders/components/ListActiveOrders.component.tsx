@@ -15,6 +15,7 @@ import { AlignHorizontalLeft, AlignVerticalTop, DeliveryDining, DoneAllOutlined,
 import { Label } from '../../../../../../components/ui';
 import SidebarMenuMobile from '../../../../layouts/SidebarLayout/Sidebar/SidebarMenuMobile/SidebarMenuMobile.component';
 import { BarActiveOrders } from './BarActiveOrders.component';
+import { ModalStartOrder } from './ModalStartOrder.component';
 
 
 export const ListActiveOrders = () => {
@@ -47,6 +48,9 @@ export const ListActiveOrders = () => {
 
   return (
     <>
+
+      <ModalStartOrder />
+
       {/* <Card
       >
         <CardHeader 
@@ -102,10 +106,10 @@ export const ListActiveOrders = () => {
                   ? 'primary.main'
                   :
                   statusOrderFilter === OrderStatus.PENDING
-                    ? 'success.main'
+                    ? 'warning.main'
                     : statusOrderFilter === OrderStatus.IN_PROGRESS
                       ? 'info.main'
-                      : 'warning.main',
+                      : 'success.main',
               borderRadius: '10px 10px 0 0',
               borderColor: 'transparent',
               borderBottom: 'transparent',
@@ -139,7 +143,7 @@ export const ListActiveOrders = () => {
                 <Typography variant='h5' component='span' >Pendientes</Typography>
                 <Chip
                   label={orders.filter(order => order.status === OrderStatus.PENDING).length}
-                  color='success'
+                  color='warning'
                   size='small'
                   sx={{ ml: 1 }}
                 />
@@ -172,8 +176,8 @@ export const ListActiveOrders = () => {
               <>
                 <Typography variant='h5' component='span' >Entregados</Typography>
                 <Chip
-                  label={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}
-                  color='warning'
+                  label={orders.filter(order => order.status === OrderStatus.DELIVERED).length}
+                  color='success'
                   size='small'
                   sx={{ ml: 1 }}
                 />
@@ -243,7 +247,7 @@ export const ListActiveOrders = () => {
                     
 
                       <ActiveOrder key={order.id} order={order}
-                        color={order.status === OrderStatus.PENDING ? 'success' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'warning'}
+                        color={order.status === OrderStatus.PENDING ? 'warning' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'success'}
                         />
                        
                     </Grid>
@@ -353,15 +357,15 @@ export const ListActiveOrders = () => {
 
           <BottomNavigationAction sx={{
             '& .Mui-selected': {
-              color: (theme) => theme.palette.success.main,
+              color: (theme) => theme.palette.warning.main,
               // borderColor: (theme) => theme.palette.success.main,
-              borderBottom: (theme) => `2px solid ${theme.palette.success.main}`,
+              borderBottom: (theme) => `2px solid ${theme.palette.warning.main}`,
             }
 
           }} label="Pendientes" value={OrderStatus.PENDING} icon={
             <Chip
               label={orders.filter(order => order.status === OrderStatus.PENDING).length}
-              color='success'
+              color='warning'
               size='small'
             />
           } />
@@ -384,9 +388,9 @@ export const ListActiveOrders = () => {
           <BottomNavigationAction
             sx={{
               '& .Mui-selected': {
-                color: (theme) => theme.palette.warning.main,
+                color: (theme) => theme.palette.success.main,
                 // borderColor: (theme) => theme.palette.warning.main,
-                borderBottom: (theme) => `2px solid ${theme.palette.warning.main}`,
+                borderBottom: (theme) => `2px solid ${theme.palette.success.main}`,
               }
 
 
@@ -394,7 +398,7 @@ export const ListActiveOrders = () => {
             label="Entregados" value={OrderStatus.DELIVERED} icon={
               <Chip
                 label={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}
-                color='warning'
+                color='success'
                 size='small'
               />
 

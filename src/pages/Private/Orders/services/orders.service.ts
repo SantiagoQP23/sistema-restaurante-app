@@ -4,8 +4,14 @@ import { IOrder } from '../../../../models/orders.model';
 import { SubjectDescriptionDetail, SubjectDispatchDetail, SubjectModalDeleteOrder, SubjectModalPayOrder, SubjectEditOrderDetail } from '../helpers/subject-orders.helper';
 import { PaginationDto } from '../../Clients/dto/pagination.dto';
 import { FilterDto } from '../../Reports/services/dashboard.service';
-import { DateFiltePaginationDto } from '../../dto';
+import { DateFiltePaginationDto } from '../../Common/dto';
 import { FilterOrdersDto } from '../dto/filter-orders.dto';
+import { SubjectGenerator } from '../../Common/helpers/subject-generator.helper';
+
+interface ModalOrder{
+  value: boolean  ;
+  order: IOrder | null;
+}
 
 
 export const statusModalDescriptionDetail = new SubjectDescriptionDetail();
@@ -18,9 +24,11 @@ export const statusModalAddOrder = new SubjectModalPayOrder();
 export const statusModalEditOrderDetail = new SubjectEditOrderDetail();
 export const statusModalDeleteOrderDetail = new SubjectEditOrderDetail();
 
+export const statusModalStartOrder = new SubjectGenerator<ModalOrder>();
+
 
 export interface OrdersResponse {
-  orders: IOrder[];
+  orders: IOrder ;
   count: number;
 }
 

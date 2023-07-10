@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { formatDateToPicker, formatDate } from '../../../../helpers/format-date.helper';
+import { formatDateToPicker, formatDate } from '../../../../Common/helpers/format-date.helper';
 import { Restaurant } from '../../../models/restaurant.model';
 import { useRestaurant, useUpdateRestaurant } from '../../../hooks/useRestaurant';
 import { UpdateRestaurantDto } from '../../../dto/update-restaurant.dto';

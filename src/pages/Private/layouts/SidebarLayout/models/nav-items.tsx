@@ -15,7 +15,7 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
-import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, ViewKanban } from '@mui/icons-material';
+import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, TableRestaurant, ViewKanban } from '@mui/icons-material';
 
 
 
@@ -35,17 +35,23 @@ export const navItemsAdmin: NavItem[] = [
 ]
 
 export const navItemsOrders: NavItem[] = [
-
+  {
+    title: 'Mesas',
+    icon: <TableRestaurant />,
+    to: '/orders/'
+  },
   {
     title: 'Pedidos Activos',
     icon: <ViewKanban />,
-    to: '/orders'
+    to: '/orders/actives'
   },
   {
     title: 'Lista de pedidos',
     icon: <ListAlt />,
-    to: '/orders/list'
-  }
+    to: '/orders/list',
+
+  },
+
 ]
 
 export const navItemsManagement: NavItem[] = [

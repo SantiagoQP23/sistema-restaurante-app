@@ -3,7 +3,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { FC, useState } from "react";
 import { Controller, useForm } from "react-hook-form"
 import {  Holiday } from '../../../models/holiday.model';
-import { formatDate, formatDateToPicker } from '../../../../helpers/format-date.helper';
+import { formatDate, formatDateToPicker } from '../../../../Common/helpers/format-date.helper';
 import { CreateHolidayDto } from '../../FootfallSimulation/dto/create-holiday.dto';
 import { useTypesHolidays } from "../../../hooks/useTypesHolidays";
 

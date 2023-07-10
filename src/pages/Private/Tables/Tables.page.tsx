@@ -1,10 +1,13 @@
-import { Container } from "@mui/material"
-import { Outlet } from "react-router-dom"
+import { Container, Stack } from '@mui/material';
+import { Outlet, useNavigate } from "react-router-dom"
 import { PageTitle, PageTitleWrapper } from "../../../components/ui"
 import { TitlePage } from "../components/TitlePage.component"
+import { Button } from '@mui/material/';
 
 
 const Table = () => {
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -12,7 +15,20 @@ const Table = () => {
       <Container maxWidth='lg'>
         <TitlePage
           title='Mesas'
+          action={
+            <Stack>
+              <Button
+                variant='contained'
+                onClick={() => navigate('edit')}
+              >
+                Agregar
+              </Button>
+
+            </Stack>
+          }
+
         />
+
         <Outlet />
 
       </Container>

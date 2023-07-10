@@ -51,7 +51,7 @@ export const DeleteTable = () => {
   return (
     <Dialog open={open} onClose={closeModal}>
 
-    <DialogTitle id="alert-dialog-title" color='white'>
+    <DialogTitle id="alert-dialog-title" >
       Eliminar mesa
     </DialogTitle>
     <Divider />
@@ -60,8 +60,14 @@ export const DeleteTable = () => {
       {`¿Esta seguro de eliminar la mesa ${table?.name}?`}
       </DialogContentText>
     </DialogContent>
-    <DialogActions>
-      <Button onClick={closeModal} >Cancelar</Button>
+    <DialogActions
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <Button onClick={closeModal} color='inherit' >Cancelar</Button>
       <LoadingButton loading={loading} variant='contained' color='error' onClick={submitDeleteTable}>
         Aceptar
       </LoadingButton>

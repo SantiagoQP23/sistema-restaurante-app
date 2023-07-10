@@ -14,7 +14,7 @@ import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { ListItemButton, IconButton } from '@mui/material';
-import { SidebarContext } from '../../../../contexts/SidebarContext';
+import { SidebarContext } from '../../../../Common/contexts/SidebarContext';
 
 import MenuIcon from '@mui/icons-material/Menu';
 

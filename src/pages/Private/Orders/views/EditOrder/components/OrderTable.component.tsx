@@ -15,6 +15,9 @@ import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
 
 interface Props {
 
+  tableId: string;
+  setTable: (tableId: string) => void;
+
 }
 
 interface ChangeTableDto {
@@ -24,11 +27,11 @@ interface ChangeTableDto {
 
 
 
-export const OrderTable: FC<Props> = () => {
+export const OrderTable: FC<Props> = (
+  { tableId, setTable }
+) => {
 
   const { activeOrder } = useSelector(selectOrders);
-
-  const [table, setTable] = useState<string | undefined>(activeOrder?.table?.id);
 
   const { tables } = useSelector(selectTables);
 
@@ -38,10 +41,6 @@ export const OrderTable: FC<Props> = () => {
 
   const { loading, updateOrder } = useUpdateOrder();
 
-
-
-
-
   const { enqueueSnackbar } = useSnackbar();
 
 
@@ -50,50 +49,48 @@ export const OrderTable: FC<Props> = () => {
 
 
 
-    const updateOrderDto: UpdateOrderDto = {
-      id: activeOrder!.id,
-      tableId,
-    }
+    // const updateOrderDto: UpdateOrderDto = {
+    //   id: activeOrder!.id,
+    //   tableId,
+    // }
 
-    const changeTableDto: ChangeTableDto = {
-      previousTableId: activeOrder?.table?.id,
-      newTableId: tableId
-    }
+    // const changeTableDto: ChangeTableDto = {
+    //   previousTableId: activeOrder?.table?.id,
+    //   newTableId: tableId
+    // }
 
-    updateOrder(updateOrderDto)
-    //console.log('Actualizando mesas')
+    // updateOrder(updateOrderDto)
+    // //console.log('Actualizando mesas')
 
-    emitChangeTable(changeTableDto);
-
-  }
-
-
-
-  const emitChangeTable = (tablesId: ChangeTableDto) => {
-    socket?.emit(EventsEmitSocket.changeTable, tablesId, ({ ok, msg, order }: SocketResponseOrder) => {
-
-      console.log('response', ok);
-
-      if (ok) {
-
-
-      }
-
-      else {
-        enqueueSnackbar(msg, { variant: 'error' });
-      }
-    })
-
-
+    // emitChangeTable(changeTableDto);
 
   }
 
+  // const emitChangeTable = (tablesId: ChangeTableDto) => {
+  //   socket?.emit(EventsEmitSocket.changeTable, tablesId, ({ ok, msg, order }: SocketResponseOrder) => {
 
-  useEffect(() => {
+  //     console.log('response', ok);
 
-    setTable(activeOrder?.table?.id);
+  //     if (ok) {
 
-  }, [activeOrder]);
+
+  //     }
+
+  //     else {
+  //       enqueueSnackbar(msg, { variant: 'error' });
+  //     }
+  //   })
+
+
+
+  // }
+
+
+  // useEffect(() => {
+
+  //   setTable(activeOrder?.table?.id);
+
+  // }, [activeOrder]);
 
 
 
@@ -113,15 +110,16 @@ export const OrderTable: FC<Props> = () => {
 
                     labelId='table-order-id'
                     label='Mesa'
-                    value={table}
+                    value={tableId}
 
 
-                    onChange={(e) => changeTable(e.target.value)}
-                    disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
+                    onChange={(e) => setTable(e.target.value)}
+                    // disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
 
-                    error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
+                    // error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
 
                   >
+                    <MenuItem value=''>Ninguna</MenuItem>
                     {
                       tables.map(table => (
 
@@ -131,10 +129,7 @@ export const OrderTable: FC<Props> = () => {
                     }
 
                   </Select>
-                  {
-                    TypeOrder.IN_PLACE === activeOrder!.type && !table
-                    && <Typography color='error' variant='subtitle1'>Seleccione una mesa</Typography>
-                  }
+                  
                 </FormControl>)}
           </>
       }

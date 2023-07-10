@@ -52,35 +52,23 @@ export const CardTable: FC<Props> = ({ table }) => {
   return (
     <>
       <Card >
-          
-        <CardContent sx={{textAlign: 'center'}}>
-          <Box display='flex' alignItems='center' justifyContent='center' >
+
+        <CardHeader 
+          title={`Mesa ${table.name}`}
+          avatar={
+
             <TableRestaurantIcon />
-            <Typography variant="body1" fontWeight="bold" pl={1}>
-              Mesa {table.name}
-            </Typography>
-
-          </Box>
-          <Divider sx={{my: 1}} />
-
-          {
-            table.isAvailable 
-            ? <Label color='success'>Disponible</Label>
-            : <Label color='error'>Ocupado</Label>
-
           }
+          subheader={`Asientos: ${table.chairs}`}
+          titleTypographyProps={{
+            variant: 'h5'
+          }}
 
-          <Typography variant="body2" fontWeight="bold" >
-            Asientos: {table.chairs}
-          </Typography>
-          <Typography variant="body2" fontWeight="normal">
-            {table.description ? table.description : '...'}
-          </Typography>
-
-        </CardContent>
-        <CardActions sx={{display: 'flex', justifyContent: 'center'}}>
+          action={
+            <Box display='flex' alignItems='center'>
           <IconButton
             onClick={editTable}
+            color="primary"
           >
             <EditOutlined fontSize="medium" />
           </IconButton>
@@ -88,7 +76,12 @@ export const CardTable: FC<Props> = ({ table }) => {
           <IconButtonError onClick={deleteTable}>
             <DeleteTwoToneIcon fontSize="medium" />
           </IconButtonError>
-        </CardActions>
+
+              </Box>
+          }
+        />
+       
+       
       </Card>
     </>
   )

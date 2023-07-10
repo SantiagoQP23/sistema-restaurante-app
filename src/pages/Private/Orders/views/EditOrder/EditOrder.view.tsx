@@ -16,12 +16,13 @@ import { useOrder } from '../../hooks';
 import { PayOrder } from './components/PayOrder.component';
 import { useInvoiceStore } from '../../store/invoiceStore';
 import { Account } from './components/Account.component';
-import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline } from '@mui/icons-material';
+import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline, RemoveCircle } from '@mui/icons-material';
 import { DrawerInvoice } from './components/DrawerInvoice.component';
 import { useDrawerInvoiceStore } from '../../store/drawerInvoiceStore';
-import { statusModalDeleteOrder } from '../../services/orders.service';
+import { statusModalDeleteOrder, statusModalPayOrder } from '../../services/orders.service';
 import { useModal } from '../../../../../hooks';
 import { ModalEditOrder } from './components/ModalEditOrder.component';
+import { OrderStatus } from '../../../../../models';
 
 
 export const EditOrder = () => {
@@ -49,6 +50,11 @@ export const EditOrder = () => {
 
 
   const { data, isLoading } = useOrder(orderId!);
+
+  const handleCloseOrder = () => {
+    if (activeOrder)
+      statusModalPayOrder.setSubject(true, activeOrder);
+  }
 
 
   const BtnNext = () => (
@@ -125,26 +131,30 @@ export const EditOrder = () => {
           action={
             <>
               <Stack direction='row' spacing={1}>
-                <Tooltip
-                  title={!orderDelivered
-                    ? 'Eliminar pedido' :
-                    'Este pedido no se puede eliminar porque ya tiene productos entregados'}
-                >
-                  <span>
-
-                    <Button
-                      startIcon={<DeleteOutline />}
-                      color='error'
-                      onClick={eliminarPedido}
-                      disabled={orderDelivered}
-                      variant='outlined'
-                      size='small'
-
+                {
+                  !(activeOrder.status === OrderStatus.PENDING) && !activeOrder.isPaid && (
+                    <Tooltip
+                      title={!orderDelivered
+                        ? 'Eliminar pedido' :
+                        'Este pedido no se puede eliminar porque ya tiene productos entregados'}
                     >
-                      Eliminar
-                    </Button>
-                  </span>
-                </Tooltip>
+                      <span>
+
+                        <Button
+                          startIcon={<DeleteOutline />}
+                          color='error'
+                          onClick={eliminarPedido}
+                          disabled={orderDelivered}
+                          variant='outlined'
+                          size='small'
+
+                        >
+                          Eliminar
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  )
+                }
 
                 <Button
                   startIcon={<Print />}
@@ -169,6 +179,18 @@ export const EditOrder = () => {
                     </Button>
                   )
 
+                }
+                {
+                  activeOrder.isPaid && activeOrder.status === OrderStatus.DELIVERED && !activeOrder.isClosed && (
+                    <Button
+                      variant='contained'
+                      size='small'
+                      startIcon={<RemoveCircle />}
+                      onClick={handleCloseOrder}
+                    >
+                      Cerrar pedido
+                    </Button>
+                  )
                 }
 
 

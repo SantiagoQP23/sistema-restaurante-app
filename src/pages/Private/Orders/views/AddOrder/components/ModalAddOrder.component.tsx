@@ -70,7 +70,7 @@ export const ModalAddOrder: FC<Props> = ({  }) => {
 
 
         <DialogContent sx={{textAlign: 'center'}}>
-          <Typography variant='h3' mb={5}>Haz añadido un nuevo pedido</Typography>
+          <Typography variant='h3' mb={5}>Has añadido un nuevo pedido</Typography>
 
           <Typography variant='h4' mb={3}>Pedido N° {order?.num}</Typography>
 

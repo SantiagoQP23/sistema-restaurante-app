@@ -3,7 +3,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
-import { ITable } from "../../../models";
+import { IOrder, ITable } from "../../../models";
 
 
 export interface tablesState {
@@ -66,13 +66,16 @@ export const tablesSlice = createSlice({
 
       state.tables = copyArray
     },
-    setActiveTable: (state, action: PayloadAction<ITable>) => {
+    setActiveTable: (state, action: PayloadAction<ITable | null>) => {
       state.activeTable = action.payload
     },
     resetTables: () => ({ ...initialState }),
     resetactiveTable: (state) => {
       state.activeTable = null
-    },
+    }
+
+
+
   }
 
 });
@@ -86,6 +89,7 @@ export const {
   setActiveTable,
   resetTables,
   resetactiveTable,
+
 } = tablesSlice.actions;
 
 export const selectTables = (state: RootState) => state.tables;

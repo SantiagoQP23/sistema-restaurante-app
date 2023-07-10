@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SidebarContext } from '../../../contexts/SidebarContext';
+import { SidebarContext } from '../../../Common/contexts/SidebarContext';
 
 import logo from '../../../../../assets/logo3.png'
 

@@ -90,7 +90,7 @@ export const AddOrder = () => {
         <Grid container spacing={1}>
 
           <Grid item xs={12} md={8}>
-            <Stepper activeStep={activeStep} alternativeLabel sx={{
+            {/* <Stepper activeStep={activeStep} alternativeLabel sx={{
               background: 'transparent'
             }}>
               <Step >
@@ -99,14 +99,11 @@ export const AddOrder = () => {
               <Step>
                 <StepLabel> <Typography variant={activeStep === 1 ? 'h4' : 'body1'} >Mesa</Typography></StepLabel>
               </Step>
-              {/* <Step>
-                  <StepLabel>Resumen</StepLabel>
-                </Step> */}
+             
 
 
 
-
-            </Stepper>
+            </Stepper> */}
 
             {
               activeStep === 0 && (
@@ -119,12 +116,12 @@ export const AddOrder = () => {
                       startIcon={<ShoppingCart />}
                       fullWidth={false}
                       onClick={() => { navigate('/orders/menu') }}
-                      color='inherit'
+                      color='primary'
                     >
                       Añadir productos
                     </Button>
 
-                    <BtnNext />
+                    {/* <BtnNext /> */}
 
 
                   </Stack>

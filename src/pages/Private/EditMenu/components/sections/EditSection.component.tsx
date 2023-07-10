@@ -132,11 +132,11 @@ export const EditSection = () => {
         /> */}
 
               <LoadingButton
-                variant='outlined'
+                variant='contained'
                 type='submit'
                 loading={updateSectionMutation.isLoading || createSectionMutation.isLoading}
               >
-                {activeSection ? `Editar` : "Crear"}
+                {activeSection ? `Guardar` : "Crear"}
               </LoadingButton>
 
 

@@ -48,7 +48,7 @@ export const ActiveOrders = () => {
 
               <Button
                
-                onClick={() => { navigate('/orders/add/menu') }}
+                onClick={() => { navigate('/orders/tables') }}
                 color='primary'
                 variant='contained'
                 size='small'

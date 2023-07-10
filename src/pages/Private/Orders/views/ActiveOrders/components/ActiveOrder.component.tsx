@@ -7,9 +7,9 @@ import {
   Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar, Tab, Tabs, Chip
 } from '@mui/material';
 
-import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward } from '@mui/icons-material';
+import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward, Undo, PlayCircleOutline } from '@mui/icons-material';
 
-import { formatDistance, subHours } from 'date-fns';
+import { format, formatDistance, subHours } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 import { useSnackbar } from 'notistack';
@@ -26,12 +26,14 @@ import { SocketResponseOrder } from '../../../interfaces/responses-sockets.inter
 import { selectMenu, setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
-import { statusModalEditOrderDetail } from '../../../services/orders.service';
+import { statusModalEditOrderDetail, statusModalStartOrder } from '../../../services/orders.service';
 import { Stack, ListItemButton, ListItemText, FormControlLabel } from '@mui/material';
 import { BtnAddProduct } from './BtnAddProduct.component';
 import { queryClient } from '../../../../../../main';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
+import { LabelStatusOrder } from '../../OrdersList/components/LabelStatusOrder.component';
+import { useOrderHelper } from '../../../hooks/useOrders';
 
 interface Props {
   order: IOrder;
@@ -130,6 +132,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
   const { details } = order;
 
+  const { getFirstPendingOrder } = useOrderHelper();
+
 
   const queryClient = useQueryClient();
 
@@ -152,6 +156,30 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
   };
 
   const { updateOrder, loading } = useUpdateOrder()
+
+
+  const handleStartOrder = (order: IOrder) => {
+
+    // TODO
+    // Obtener el primer pedido pendiente 
+    const firstOrder = getFirstPendingOrder();
+
+    if (firstOrder.id === order.id) {
+      // Si el pedido es el primero en la lista de pedidos pendientes
+      // se puede iniciar
+
+      
+      console.log('es el primero')
+    } else {
+      // Si el pedido no es el primero en la lista de pedidos pendientes
+      console.log('hay un pedido pendiente')
+
+
+
+      statusModalStartOrder.setSubject({ value: true, order });
+    }
+
+  }
 
 
 
@@ -196,100 +224,145 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
         variant='elevation'
 
       >
-        <Stack direction='row' alignItems='center' justifyContent='space-between' px={1}>
 
-          <Stack spacing={1} direction='row' my={1} alignItems='flex-end' >
+        <CardHeader
+          title={
+            <Stack spacing={1} direction='row' my={1} alignItems='flex-end' >
 
-            <Typography variant='h3'>{`N° ${order.num}`}</Typography>
-
-
-            <Chip
-              icon={<TableRestaurant />}
-              label={
-                <Typography variant='h5'> {
-                  order.type === TypeOrder.IN_PLACE
-
-                    ?
-                    `Mesa ${order.table?.name || ''}`
-                    : 'Para llevar'
-
-                }</Typography>
-              }
-
-              variant={order.type === TypeOrder.IN_PLACE ? 'filled' : 'outlined'}
-
-            />
-
-          </Stack>
-
-          <IconButton
-
-            onClick={() => {
-              navigate(`/orders/list/edit/${order.id}`)
-            }}
-          >
-            <Edit />
-          </IconButton>
-
-        </Stack>
+              <Typography variant='h3'>{`N° ${order.num}`}</Typography>
 
 
-        <Stack
-          sx={{ p: 1 }}
-          spacing={1.5}
-        // divider={<Divider  />}
-        >
-          {/* <Stack
-            direction='row'
-            justifyContent='space-between'
-          >
+              {/* <Chip
+                icon={<TableRestaurant />}
+                label={
+                  <Typography variant='h5'> {
+                    order.type === TypeOrder.IN_PLACE
 
+                      ?
+                      `Mesa ${order.table?.name || ''}`
+                      : 'Para llevar'
 
-
-            <Box flexBasis='50%'   >
-              <Typography
-                variant="body1"
-                fontWeight='bold'
-              >
-                {
-                  order.type === TypeOrder.IN_PLACE
-
-                    ?
-                    `Mesa ${order.table?.name}`
-                    : 'Para llevar'
-
+                  }</Typography>
                 }
 
-              </Typography>
-            </Box> */}
+                variant={order.type === TypeOrder.IN_PLACE ? 'filled' : 'outlined'}
 
-          {/* <Box flexBasis='50%' >
-              <Typography variant='body1' fontWeight='bold'>N° {order.num}</Typography>
+              /> */}
 
-            </Box> */}
+            </Stack>
 
-          {/* </Stack> */}
+          }
 
-          {/* <Divider /> */}
-
-          {order.notes && <Box>
-            <Typography variant='subtitle2'>Notas</Typography>
-
+          subheader={
             <Stack direction='row' spacing={1} alignItems='center'>
 
-              {/* <Person color='secondary' fontSize='small' /> */}
-              <Typography variant='body1' >
-                {order.notes}
-                {/* {order.client?.person.firstName} {order.client?.person.lastName} */}
+              <AccessTimeOutlined color='secondary' fontSize='small' />
+              <Typography variant='body2'  >
+                {format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}
+
               </Typography>
+
             </Stack>
-          </Box>}
+
+          }
+
+          action={
+            <Stack direction='row' spacing={1} alignItems='center'>
+
+              <LabelStatusOrder status={order.status} />
+
+              <IconButton
+
+                onClick={() => {
+                  navigate(`/orders/list/edit/${order.id}`)
+                }}
+              >
+                <Edit />
+              </IconButton>
+
+            </Stack>
+
+          }
+
+
+        />
 
 
 
-          <Box>
 
-            <Typography variant='subtitle2'>Mesero</Typography>
+        <Grid container spacing={1} alignItems='center' px={1}>
+
+          <Grid item xs={4}>
+            <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Typography variant="body1" >
+              {'' +
+                formatDistance(new Date(order.deliveryTime), new Date(), {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es
+                })}
+            </Typography>
+
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
+
+          </Grid>
+
+          <Grid item xs={8}>
+
+            <Typography variant="h6" >
+              {order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
+
+            </Typography>
+
+          </Grid>
+
+          {
+            order.type === TypeOrder.IN_PLACE && (
+              <>
+                <Grid item xs={4}>
+                  <Typography variant='body2' color='secondary'>Mesa</Typography>
+
+                </Grid>
+
+                <Grid item xs={8}>
+
+                  <Typography variant="h6" >
+                    Mesa {order.table?.name || 'No seleccionada'}
+
+                  </Typography>
+
+                </Grid>
+              </>
+
+            )
+          }
+          <Grid item xs={4}>
+            <Typography variant='body2' color='secondary'>Personas</Typography>
+
+          </Grid>
+
+          <Grid item xs={8}>
+
+            <Typography variant="h6" >
+              {order.people}
+
+            </Typography>
+
+          </Grid>
+
+
+
+
+          <Grid item xs={4}>
+            <Typography variant='body2' color='secondary'>Mesero</Typography>
+          </Grid>
+
+          <Grid item xs={8}>
             <Stack direction='row' spacing={1} alignItems='center'>
 
               <Person color='secondary' fontSize='small' />
@@ -297,113 +370,48 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 {order.user.person.firstName} {order.user.person.lastName}
               </Typography>
             </Stack>
-          </Box>
 
-          <Stack direction='row' spacing={1} alignItems='center'>
+          </Grid>
 
-            <AccessTimeOutlined color='secondary' fontSize='small' />
-            <Typography variant='body2'  >
-              {'Creado ' +
-                formatDistance(new Date(order.createdAt), new Date(), {
-                  addSuffix: true,
-                  includeSeconds: true,
-                  locale: es
-                })}
-            </Typography>
+          {
+            order.notes
+            && (
+              <>
+                <Grid item xs={4}>
+                  <Typography variant='body2' color='secondary'>Notas</Typography>
 
-          </Stack>
+                </Grid>
 
-        </Stack>
+                <Grid item xs={8}>
+                  <Typography variant='body1' fontWeight='bold' >
+                    {order.notes}
+                    {/* {order.client?.person.firstName} {order.client?.person.lastName} */}
+                  </Typography>
 
-        <Divider sx={{ mb: 0.5, mx: 1 }} />
+                </Grid>
+              </>
+            )
+          }
+
+
+        </Grid>
+
+
+        {/* <Stack
+          sx={{ p: 1 }}
+          spacing={1.5}
+        // divider={<Divider  />}
+        >
+                  
+                  </Stack> */}
+
+        <Divider sx={{ mb: 0.5, mt: 1, mx: 1 }} />
 
         <Stack
           spacing={1.5}
           sx={{ px: 1 }}
         >
 
-          {/* <RadioGroup
-
-            value={expanded ? 1 : 0}
-            onChange={handleExpanded}
-
-          >
-
-            <Stack direction='row' justifyContent='center'>
-
-              <FormControlLabel value={0} control={<Radio color={color} />}
-                label={
-                  <Box display='flex' alignItems='center'>
-                    <Typography variant='h6' fontWeight={!expanded ? 'bold' : ''}>Por entregar</Typography>
-                    <Label color={color}>
-                      {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
-                    </Label>
-                  </Box>
-                }
-
-              />
-              <FormControlLabel value={1} control={<Radio color={color} />}
-                label={
-                  <Box display='flex' alignItems='center'>
-                    <Done />
-                    <Label color={color}>
-                      {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
-                    </Label>
-                  </Box>
-                }
-              />
-            </Stack>
-
-
-          </RadioGroup> */}
-
-          {/* <ToggleButtonGroup
-            value={expanded ? 1 : 0}
-            onChange={handleExpanded}
-            exclusive
-            size='small'
-            color='success'
-            
-          >
-            <ToggleButton
-              onChange={handleExpanded}
-              value={0}
-
-            // sx={{
-            //   '&.MuiToggleButton-root': {
-            //     color: color + '.main',
-            //     borderColor: color + '.main',
-            //     '&.Mui-selected': {
-            //       color: '#000',
-            //       backgroundColor: color + '.main',
-            //       '&:hover': {
-            //         backgroundColor: color + '.main',
-            //       }
-            //     },
-            //     '&:hover': {
-            //       backgroundColor: color + '.main',
-            //     }
-            //   }
-            // }}
-            >
-              Por entregar
-              <Label color={color}>
-                {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
-              </Label>
-            </ToggleButton>
-
-            <ToggleButton
-              onChange={handleExpanded}
-              value={1}
-            // sx={{
-            >
-              <Done />
-              <Label color={color}>
-                {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
-              </Label>
-            </ToggleButton>
-
-          </ToggleButtonGroup> */}
 
           <Tabs
             value={expanded ? 1 : 0}
@@ -547,16 +555,17 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               ? <Button
 
                 // variant='contained'
-                startIcon={<PlayArrow />}
+                startIcon={<PlayCircleOutline />}
                 onClick={() => {
-                  changeStatusOrder(OrderStatus.IN_PROGRESS)
-                  setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+                  // changeStatusOrder(OrderStatus.IN_PROGRESS)
+                  // setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
+                  handleStartOrder(order);
 
                 }}
                 // color={color}
                 // size='small'
-                color='success'
-
+                variant='outlined'
+                color='warning'
 
 
               >Iniciar</Button>
@@ -569,8 +578,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                     changeStatusOrder(OrderStatus.PENDING)
                     setStatusFilter && setStatusFilter(OrderStatus.PENDING)
                   }}
-                  color='success'
-                  startIcon={<ArrowBack />}
+                  color='warning'
+                  startIcon={<Undo />}
+                  variant='outlined'
 
                 // color={color}
                 >
@@ -580,8 +590,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 <Button
                   // variant='contained'
                   // color={color}
-                  color='warning'
-                  endIcon={<ArrowForward />}
+                  color='success'
+                  startIcon={<Check />}
+                  variant='outlined'
 
                   onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
                 >Entregado</Button>

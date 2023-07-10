@@ -50,6 +50,7 @@ export interface IOrder {
   type: TypeOrder;
   updatedAt: Date;
   user: IUser;
+  isClosed: boolean;
 
   invoices: Invoice[];
 }

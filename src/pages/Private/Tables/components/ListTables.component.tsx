@@ -51,7 +51,7 @@ export const ListTables = () => {
             {
              tables
               .map(table => (
-                <Grid item xs={6} sm={2} key={table.id}>
+                <Grid item xs={12} sm={3} key={table.id}>
 
                   <CardTable table={table} />
 

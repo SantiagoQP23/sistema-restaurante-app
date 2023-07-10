@@ -14,7 +14,7 @@ import { loadMenu, loadTables, updateTable } from "../../redux"
 import { IProduct, ICategory } from '../../models/menu.model';
 import BaseLayout from "./layouts/BaseLayout"
 import { PrivateRouter } from "./router"
-import { SidebarProvider } from "./contexts/SidebarContext"
+import { SidebarProvider } from "./Common/contexts/SidebarContext"
 
 import { SnackbarProvider, useSnackbar, closeSnackbar } from 'notistack'
 import { CircularProgress, IconButton } from "@mui/material"

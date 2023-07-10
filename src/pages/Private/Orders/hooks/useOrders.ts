@@ -6,11 +6,11 @@ import { UpdateOrderDetailDto } from '../dto/update-order-detail.dto';
 import { EventsEmitSocket } from '../interfaces/events-sockets.interface';
 import { SocketResponseOrder } from '../interfaces/responses-sockets.interface';
 import { CreateOrderDetailDto } from '../dto/create-order.dto';
-import { useDispatch } from 'react-redux';
-import { loadOrders, setActiveOrder, setLastUpdatedOrders } from '../../../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadOrders, selectOrders, setActiveOrder, setLastUpdatedOrders } from '../../../../redux';
 import { useQuery } from '@tanstack/react-query';
 import { OrdersResponse, getActiveOrders, getOrder, getOrders } from '../services/orders.service';
-import { IOrder } from '../../../../models';
+import { IOrder, OrderStatus } from '../../../../models';
 import { useNavigate } from 'react-router-dom';
 import { usePaginationAsync } from '../../../../hooks/usePaginationAsync';
 import { Period } from '../../../../models/period.model';
@@ -56,7 +56,7 @@ export const useOrders = () => {
     filter.table,
     filter.user,
     filter.isPaid,
-   
+
     filter.rowsPerPage
   ])
 
@@ -82,7 +82,7 @@ export const useActiveOrders = () => {
 
   const pagination = usePaginationAsync();
 
-  const dateFilter = useDateFilter(Period.WEEK);
+  const dateFilter = useDateFilter(Period.MONTH);
 
   const dispatch = useDispatch();
 
@@ -151,3 +151,51 @@ export const useOrder = (id: string) => {
 }
 
 
+
+export const useOrderHelper = () => {
+
+  const { orders } = useSelector(selectOrders);
+
+  const dispatch = useDispatch();
+
+
+  const sortOrdersByDeliveryTime = () => {
+
+    const ordersSorted = orders.sort((a, b) => {
+        
+        const aDate = new Date(a.deliveryTime).getTime();
+        const bDate = new Date(b.deliveryTime).getTime();
+  
+        return aDate - bDate;
+  
+      }
+    )
+
+    dispatch(loadOrders(ordersSorted));
+   
+
+  }
+
+
+
+  const getFirstPendingOrder = (): IOrder => {
+
+    const order = orders.find(order => order.status === OrderStatus.PENDING);
+
+    if (!order) {
+      throw new Error('No hay ordenes pendientes')
+    }
+
+    return order;
+
+  }
+
+  return {
+    getFirstPendingOrder,
+    sortOrdersByDeliveryTime
+
+
+  }
+
+
+}

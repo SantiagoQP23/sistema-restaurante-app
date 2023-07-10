@@ -1,7 +1,7 @@
 import { FC, useContext, useState } from "react";
 
 
-import { Card, CardHeader, CardContent, Box, Button, Typography, Grid, ToggleButtonGroup, ToggleButton, IconButton, List, ListItemButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Stack, Divider, TextField } from '@mui/material';
+import { Card, CardHeader, CardContent, Box, Button, Typography, Grid, ToggleButtonGroup, ToggleButton, IconButton, List, ListItemButton, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Stack, Divider, TextField, InputLabel } from '@mui/material';
 import { IClient, TypeOrder } from "../../../../../../models";
 import { ModalClientOrder } from "../../../components";
 import { TableOrder } from "../../../components/TableOrder.component";
@@ -70,6 +70,9 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
 
     };
 
+    if (typeOrder === TypeOrder.TAKE_AWAY)
+      delete order.tableId;
+
     createOrder(order)
 
 
@@ -97,6 +100,24 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
             <CardContent>
 
               <Stack direction='column' spacing={2}>
+
+                {
+                  typeOrder === TypeOrder.IN_PLACE && (
+                    <Box>
+                      <InputLabel>Mesa</InputLabel>
+                      <Typography variant='h5' fontWeight='bold'>
+                        {table?.name || 'Sin mesa'}
+                      </Typography>
+                    </Box>
+
+                  )
+                }
+                <Box>
+                  <InputLabel>Tipo de orden</InputLabel>
+                  <Typography variant='h5' fontWeight='bold'>
+                    {typeOrder === TypeOrder.IN_PLACE ? 'En el local' : 'Para llevar'}
+                  </Typography>
+                </Box>
 
                 <TextField
                   id="descripcion-pedido"
@@ -199,7 +220,7 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
 
       {<LoadingButton
         variant='contained'
-        disabled={details.length <= 0 || !(step === 1) || (!table && typeOrder === TypeOrder.IN_PLACE)}
+        disabled={details.length <= 0 || (!table && typeOrder === TypeOrder.IN_PLACE)}
         onClick={submitAddOrder}
         fullWidth
         loading={loading}

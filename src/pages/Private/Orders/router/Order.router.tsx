@@ -7,6 +7,7 @@ import { PrivateRoutes } from '../../../../models/routes.model';
 import { lazy } from 'react';
 import { Menu } from '../../Menu';
 import { AddProductsMenu } from '../views/Menu/components';
+import { Tables } from '../views/Tables/Tables.view';
 
 
 const Orders = lazy(() => import('../Orders.page'))
@@ -18,9 +19,16 @@ export const OrderRouter: RouteObject =
   path: PrivateRoutes.ORDERS,
   element: <Orders />,
   children: [
-
     {
       path: '',
+      element: <Tables />
+    },
+    {
+      path: 'tables',
+      element: <Tables />
+    },
+    {
+      path: 'actives',
       element: <ActiveOrders />,
       children: [
         {

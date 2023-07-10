@@ -133,7 +133,7 @@ export const ListOrders = () => {
 
   const addOrder = () => {
     dispatch(resetActiveOrder());
-    navigate('add');
+    navigate('tables');
   }
 
 

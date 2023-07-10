@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useContext } from 'react';
 
 import { AddOutlined, DeleteOutline, Edit, EditOutlined, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
-import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip, Grid, TextField, ListItem, ListItemText, List, ListItemSecondaryAction, ListItemAvatar, Avatar, ListItemButton } from '@mui/material';
+import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip, Grid, TextField, ListItem, ListItemText, List, ListItemSecondaryAction, ListItemAvatar, Avatar, ListItemButton, Chip } from '@mui/material';
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { IClient, IUser, OrderStatus, OrderStatusSpanish } from "../../../../../../models";
@@ -34,9 +34,9 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
   const navigate = useNavigate();
 
-  
 
-  const {handleClose, handleOpen, isOpen} = useModal();
+
+  const { handleClose, handleOpen, isOpen } = useModal();
 
 
   const { step: activeStep, handleNextStep } = useInvoiceStore(state => state)
@@ -120,7 +120,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
   return (
     <>
 
-<ModalEditOrder open={isOpen} closeModal={handleClose} order={order}/>
+      <ModalEditOrder open={isOpen} closeModal={handleClose} order={order} />
 
 
       <Stack
@@ -133,124 +133,142 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           alignItems='center'
           spacing={1}
         >
-          <LabelStatusOrder status={
+          {/* <LabelStatusOrder status={
             order.status === OrderStatus.DELIVERED && !order.isPaid
               ? "unpaid"
               : order.status
 
-          } />
+          } /> */}
 
-          
+
 
 
         </Stack>
 
         <Card>
+          <CardHeader
+            title={`Pedido N° ${order.num}`}
+            action={
+              <IconButton
+                // onClick={editClient}
+                onClick={handleOpen}
+                size='small'
+              >
+                <Edit />
+              </IconButton>
+            }
+
+            subheader={
+              <Typography variant='h5' color={order.isClosed ? 'secondary': 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado': 'Abierto'}</Typography>
+            }
+          />
+
           <CardContent>
 
-            <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
-              <Box>
-                <Typography variant='h4' fontWeight='bold'>Pedido N° {order.num}</Typography>
-
-              </Box>
-
-              <Box display='flex' gap={1}>
-                {/* <LabelStatusOrder status={
-                  order.status === OrderStatus.DELIVERED && !order.isPaid
-                    ? "unpaid"
-                    : order.status
-
-                } /> */}
-
-                <IconButton
-                  // onClick={editClient}
-                  onClick={handleOpen}
-                  size='small'
-                >
-                  <Edit />
-                </IconButton>
-
-
-              </Box>
-
-            </Box>
-
-
+            
             <Grid container spacing={2} alignItems='center'>
 
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
+              </Grid>
+
+              <Grid item xs={8}>
+                <Typography variant="body1" >
+                  {format(new Date(order.deliveryTime), 'dd/MM/yyy HH:mm')}
+                </Typography>
+
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
+
+              </Grid>
+
+              <Grid item xs={8}>
+
+                <Typography variant="h6" >
+                  {order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
+
+                </Typography>
+
+              </Grid>
+
+              {
+                order.type === TypeOrder.IN_PLACE && (
+                  <>
                     <Grid item xs={4}>
-                      <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
-                    </Grid>
-
-                    <Grid item xs={8}>
-                      <Typography variant="body1" >
-                        {format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}
-                      </Typography>
-
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
-
-
-
-                    </Grid>
-
-                    <Grid item xs={8}>
-
-                      <Typography variant="h6" >
-                        {order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
-
-                      </Typography>
-
-                    </Grid>
-
-                    {
-                      order.type === TypeOrder.IN_PLACE && (
-                        <>
-                          <Grid item xs={4}>
-                            <Typography variant='body2' color='secondary'>Mesa</Typography>
-
-                          </Grid>
-
-                          <Grid item xs={8}>
-
-                            <Typography variant="h6" >
-                              Mesa {order.table?.name || 'No seleccionada'}
-
-                            </Typography>
-
-                          </Grid>
-                        </>
-
-                      )
-                    }
-                    <Grid item xs={4}>
-                      <Typography variant='body2' color='secondary'>Personas</Typography>
+                      <Typography variant='body2' color='secondary'>Mesa</Typography>
 
                     </Grid>
 
                     <Grid item xs={8}>
 
                       <Typography variant="h6" >
-                        {order.people}
+                        Mesa {order.table?.name || 'No seleccionada'}
 
                       </Typography>
 
                     </Grid>
-                    <Grid item xs={4}>
-                      <Typography variant='body2' color='secondary'>Total</Typography>
+                  </>
 
-                    </Grid>
+                )
+              }
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Personas</Typography>
 
-                    <Grid item xs={8}>
+              </Grid>
 
-                      <Typography variant="h4">
-                        $ {order.total}
+              <Grid item xs={8}>
 
-                      </Typography>
+                <Typography variant="h6" >
+                  {order.people}
 
-                    </Grid>
-                  </Grid>
+                </Typography>
+
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Estado de preparación</Typography>
+
+              </Grid>
+
+              <Grid item xs={8}>
+
+                <LabelStatusOrder status={
+                 order.status
+
+                } />
+              </Grid>
+
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Estado de pago</Typography>
+
+              </Grid>
+
+              <Grid item xs={8}>
+
+                <Chip
+                  label={order.isPaid ? 'Pagado' : 'Pendiente'}
+                  color={order.isPaid ? 'primary' : 'warning'}
+                  clickable={false}
+                  size='small'
+                />
+              </Grid>
+
+             
+
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Total</Typography>
+
+              </Grid>
+
+              <Grid item xs={8}>
+
+                <Typography variant="h4">
+                  $ {order.total}
+
+                </Typography>
+
+              </Grid>
+            </Grid>
 
 
             {/* <Divider sx={{ mb: 1 }} /> */}
@@ -411,12 +429,12 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
 
 
-      {
-        order.invoices.length > 0 && (
+        {
+          order.invoices.length > 0 && (
 
-          <InvoicesList invoices={order.invoices} />
-        )
-      }
+            <InvoicesList invoices={order.invoices} />
+          )
+        }
 
 
       </Stack>

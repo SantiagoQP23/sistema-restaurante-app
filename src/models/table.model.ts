@@ -1,3 +1,4 @@
+import { IOrder } from "./orders.model";
 
 
 
@@ -7,6 +8,7 @@ export interface ITable {
   description: string;
   chairs: number;
   isAvailable: boolean;
+  orders: IOrder[];
 
 }
 

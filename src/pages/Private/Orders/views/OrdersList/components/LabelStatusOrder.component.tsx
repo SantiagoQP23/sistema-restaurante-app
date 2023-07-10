@@ -9,10 +9,10 @@ import { Chip } from '@mui/material';
 const colorStatusOrderMap: {
   [key: string]: "primary" | "secondary" | "error" | "warning" | "success" | "info" | undefined
 } = {
-  'PENDING': 'success',
+  'PENDING': 'warning',
   'IN_PROGRESS': 'info',
   'unpaid': 'warning',
-  'DELIVERED': 'info',
+  'DELIVERED': 'success',
   'CANCELLED': 'error',
 };
 
@@ -20,7 +20,7 @@ const textStatusOrderMap: { [key: string]: string } = {
   'PENDING': 'Pendiente',
   'IN_PROGRESS': 'En preparación',
   'unpaid': 'Por pagar',
-  'DELIVERED': 'Pagado',
+  'DELIVERED': 'Entregado',
   'CANCELLED': 'Cancelado',
   
 };

@@ -31,11 +31,12 @@ export const LoginPage = () => {
     defaultValues: initialForm
   });
 
-  const { error, status } = useAppSelector(selectAuth);
+  const { error, status,  } = useAppSelector(selectAuth);
 
   const handleLogin = (form: IFormLogin) => {
 
     dispatch(startLogin(form));
+
     if (status === 'authenticated')
       navigate('/', { replace: true })
 
