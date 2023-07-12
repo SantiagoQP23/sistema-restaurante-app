@@ -6,7 +6,7 @@ import { TextField } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useCreateCashIncome } from '../../../hooks/useCashIncome';
 import { LoadingButton } from '@mui/lab';
-import { CreateCashIncomeDto } from '../../../dto/create-cash-transaction.dto';
+// import { CreateCashIncomeDto } from '../../../dto/create-cash-transaction.dto';
 
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 export const FormCashIncome: FC<Props> = ({ handleClose, cashRegisterId }) => {
 
 
-  const { mutateAsync, isLoading } = useCreateCashIncome();
+  // const { mutateAsync, isLoading } = useCreateCashIncome();
 
   const [amount, setAmount] = useState<number>(0);
 
@@ -31,14 +31,14 @@ export const FormCashIncome: FC<Props> = ({ handleClose, cashRegisterId }) => {
 
   const handleSubmit = () => {
 
-    const data: CreateCashIncomeDto = {
-      cashRegisterId,
-      amount
-    }
+    // const data: CreateCashIncomeDto = {
+    //   cashRegisterId,
+    //   amount
+    // }
 
-    console.log(data)
+    // console.log(data)
 
-    mutateAsync(data)
+    // mutateAsync(data)
 
   }
 

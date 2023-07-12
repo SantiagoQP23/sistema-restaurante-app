@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
-import { createCashIncome, updateCashIncome } from "../services/cash-income.service"
-import { CashIncome } from "../models/cash-transaction.model"
-import { CreateCashIncomeDto } from "../dto/create-cash-transaction.dto"
+// import { createCashIncome, updateCashIncome } from "../services/cash-income.service"
 import { enqueueSnackbar, useSnackbar } from 'notistack';
-import { UpdateCashIncomeDto } from "../dto/update-cash-transaction.dto";
+// import { CreateCashIncomeDto } from "../dto/create-cash-transaction.dto"
+// import { CashIncome } from "../models/cash-transaction.model"
+// import { UpdateCashIncomeDto } from "../dto/update-cash-transaction.dto";
 
 
 
@@ -25,19 +25,19 @@ export const useCreateCashIncome = () => {
   const {enqueueSnackbar} = useSnackbar();
 
   
-  return useMutation<CashIncome, unknown, CreateCashIncomeDto>(createCashIncome, {
-    onSuccess: () => {
-      enqueueSnackbar('Ingreso creado correctamente', {variant: 'success'})
+  // return useMutation<CashIncome, unknown, CreateCashIncomeDto>(createCashIncome, {
+  //   onSuccess: () => {
+  //     enqueueSnackbar('Ingreso creado correctamente', {variant: 'success'})
       
       
-    },
-    onError: (error) => {
-      console.log(error);
-      enqueueSnackbar('Error al create el ingreso', {variant: 'error'})
-    }
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //     enqueueSnackbar('Error al create el ingreso', {variant: 'error'})
+  //   }
   
   
-  })
+  // })
 
   
 }
@@ -48,16 +48,16 @@ export const useUpdateCashIncome = () => {
   const {enqueueSnackbar} = useSnackbar();
 
 
-  return useMutation<CashIncome, unknown, UpdateCashIncomeDto>(updateCashIncome, {
+  // return useMutation<CashIncome, unknown, UpdateCashIncomeDto>(updateCashIncome, {
 
-    onSuccess: () => {
-      enqueueSnackbar('Ingreso actualizado correctamente', {variant: 'success'})
-    },
-    onError: (error) => {
-      console.log(error);
-      enqueueSnackbar('Error al actualizar el ingreso', {variant: 'error'})
-    }
+  //   onSuccess: () => {
+  //     enqueueSnackbar('Ingreso actualizado correctamente', {variant: 'success'})
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //     enqueueSnackbar('Error al actualizar el ingreso', {variant: 'error'})
+  //   }
 
-  })
+  // })
 
 }

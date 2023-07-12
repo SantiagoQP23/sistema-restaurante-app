@@ -161,6 +161,7 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
         orderDetailId: detail.orderDetail.id,
         quantity: detail.quantity,
       })),
+      cashRegisterId: '',
     };
   }
 }));
