@@ -63,7 +63,9 @@ export const ModalDeleteOrder: FC = () => {
 
   return (
 
-    <Dialog open={open} onClose={closeModal}>
+    <Dialog open={open} onClose={closeModal}
+      
+    >
       <DialogTitle>
         <Typography variant='h4' my={1} >¿Está seguro de eliminar la orden?</Typography>
 

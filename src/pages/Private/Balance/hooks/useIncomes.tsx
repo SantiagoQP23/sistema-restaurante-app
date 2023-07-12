@@ -30,6 +30,7 @@ export const useCreateIncome = () => {
     onSuccess: () => {
       enqueueSnackbar('Ingreso creado correctamente', { variant: 'success' })
       queryClient.invalidateQueries(['incomes']);
+      queryClient.invalidateQueries(['cashRegisterActive']);
 
     },
     onError: () => {
@@ -53,6 +54,8 @@ export const useUpdateIncome = () => {
       enqueueSnackbar('Ingreso actualizado correctamente', { variant: 'success' })
 
       queryClient.invalidateQueries(['incomes']);
+
+      queryClient.invalidateQueries(['cashRegisterActive']);
 
     },
     onError: () => {

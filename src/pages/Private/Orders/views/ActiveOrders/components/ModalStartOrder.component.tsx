@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { statusModalStartOrder } from "../../../services/orders.service"
-import { IOrder } from "../../../../../../models";
+import { IOrder, OrderStatus } from "../../../../../../models";
 import { useModal } from "../../../../../../hooks";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { Button } from '@mui/material/';
+import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { UpdateOrderDto } from "../../../dto";
+import { LoadingButton } from "@mui/lab";
 
 
 
@@ -15,6 +18,24 @@ export const ModalStartOrder = () => {
   const { isOpen, handleClose, handleOpen, setOpen } = useModal();
 
   const suspcription$ = statusModalStartOrder.getSubject();
+
+
+  const {updateOrder, loading} = useUpdateOrder();
+
+
+  const handleStartOrder = () => {
+
+    const data: UpdateOrderDto = {
+      id: order!.id,
+      status: OrderStatus.IN_PROGRESS
+    }
+
+    updateOrder(data);
+
+    handleClose();
+
+
+  }
 
 
 
@@ -76,11 +97,13 @@ export const ModalStartOrder = () => {
           Cancelar
         </Button>
 
-        <Button
+        <LoadingButton
           variant="contained"
           color="secondary"
+          onClick={handleStartOrder}
+          loading={loading}
 
-        >Iniciar pedido</Button>
+        >Iniciar pedido</LoadingButton>
       </DialogActions>
     </Dialog>
   )

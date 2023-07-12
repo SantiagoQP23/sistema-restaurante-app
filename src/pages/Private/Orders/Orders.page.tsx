@@ -44,7 +44,7 @@ export const Orders = () => {
 
   const { tables } = useSelector(selectTables);
 
-  const { activeOrder } = useSelector(selectOrders);
+  const { activeOrder, orders } = useSelector(selectOrders);
 
   const { socket } = useContext(SocketContext);
 
@@ -61,7 +61,7 @@ export const Orders = () => {
 
       dispatch(addOrder(order))
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
-      sortOrdersByDeliveryTime();
+      sortOrdersByDeliveryTime(orders);
 
       // tables.forEach(table => {
 
@@ -80,7 +80,6 @@ export const Orders = () => {
       // });
 
 
-      // TODO update table order
 
       //dispatch(pedidoAddNew(pedido))
 
@@ -106,9 +105,8 @@ export const Orders = () => {
       }
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
-      // TODO update table order
 
-      sortOrdersByDeliveryTime();
+      sortOrdersByDeliveryTime(orders);
 
 
       // let table = tables.find(t => t.id === order?.table?.id) ?? null;
@@ -156,7 +154,6 @@ export const Orders = () => {
       dispatch(deleteOrder(order!.id));
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
-      // TODO update table order
 
     });
 

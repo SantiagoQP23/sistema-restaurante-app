@@ -167,7 +167,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
     if (firstOrder.id === order.id) {
       // Si el pedido es el primero en la lista de pedidos pendientes
       // se puede iniciar
-
+      changeStatusOrder(OrderStatus.IN_PROGRESS);
       
       console.log('es el primero')
     } else {

@@ -1,5 +1,5 @@
 import { IUser } from "../../../../models";
-import { CashIncome } from "./cash-income.model";
+// import { CashIncome } from "./cash-transaction.model";
 
 
 export interface CashRegister {
@@ -18,7 +18,7 @@ export interface CashRegister {
     updatedAt: Date;
     user: IUser;
 
-    cashIncomes: CashIncome[];
+    // cashIncomes: CashIncome[];
 
 
 

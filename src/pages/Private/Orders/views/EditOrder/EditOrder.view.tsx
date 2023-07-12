@@ -23,6 +23,7 @@ import { statusModalDeleteOrder, statusModalPayOrder } from '../../services/orde
 import { useModal } from '../../../../../hooks';
 import { ModalEditOrder } from './components/ModalEditOrder.component';
 import { OrderStatus } from '../../../../../models';
+import { ModalDeleteInvoice } from '../../components/modals/ModalDeleteInvoice.component';
 
 
 export const EditOrder = () => {
@@ -122,6 +123,7 @@ export const EditOrder = () => {
     <>
 
       <DrawerInvoice open={openDrawer} handleClose={handleCloseDrawer} />
+      <ModalDeleteInvoice />
 
       <Container maxWidth='xl'>
 

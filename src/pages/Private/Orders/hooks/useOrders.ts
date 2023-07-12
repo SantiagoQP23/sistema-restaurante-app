@@ -159,7 +159,7 @@ export const useOrderHelper = () => {
   const dispatch = useDispatch();
 
 
-  const sortOrdersByDeliveryTime = () => {
+  const sortOrdersByDeliveryTime = (orders: IOrder[]) => {
 
     const ordersSorted = orders.sort((a, b) => {
         
@@ -170,6 +170,8 @@ export const useOrderHelper = () => {
   
       }
     )
+
+    console.log(ordersSorted);
 
     dispatch(loadOrders(ordersSorted));
    

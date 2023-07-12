@@ -6,7 +6,7 @@ import { TextField } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useCreateCashIncome } from '../../../hooks/useCashIncome';
 import { LoadingButton } from '@mui/lab';
-import { CreateCashIncomeDto } from '../../../dto/create-cash-income.dto';
+import { CreateCashIncomeDto } from '../../../dto/create-cash-transaction.dto';
 
 
 interface Props {

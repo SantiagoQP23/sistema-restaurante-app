@@ -15,21 +15,31 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
-import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, TableRestaurant, ViewKanban } from '@mui/icons-material';
+import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, Receipt, TableRestaurant, ViewKanban } from '@mui/icons-material';
 
 
 
-interface NavItem {
+export interface NavItem {
   title: string;
   icon: JSX.Element;
   to: string;
 }
 
 export const navItemsAdmin: NavItem[] = [
+  // {
+  //   title: 'Dashboard',
+  //   icon: <DashboardOutlinedIcon />,
+  //   to: '/dashboard'
+  // },
   {
     title: 'Dashboard',
     icon: <DashboardOutlinedIcon />,
-    to: '/dashboard'
+    to: '/reports'
+  },
+  {
+    title: 'Balance',
+    icon: <MonetizationOn />,
+    to: '/balance'
   },
 
 ]
@@ -49,6 +59,12 @@ export const navItemsOrders: NavItem[] = [
     title: 'Lista de pedidos',
     icon: <ListAlt />,
     to: '/orders/list',
+
+  },
+  {
+    title: 'Comprobantes',
+    icon: <Receipt />,
+    to: '/invoices',
 
   },
 
@@ -81,19 +97,10 @@ export const navItemsManagement: NavItem[] = [
 
 export const navItemsAdmin2: NavItem[] = [
   {
-    title: 'Usuarios',
+    title: 'Empleados',
     icon: <PeopleOutlineIcon />,
     to: '/users'
   },
-  {
-    title: 'Balance',
-    icon: <MonetizationOn />,
-    to: '/balance'
-  },
-  {
-    title: 'Reportes',
-    icon: <StorefrontOutlinedIcon />,
-    to: '/reports'
-  },
+  
 ]
 

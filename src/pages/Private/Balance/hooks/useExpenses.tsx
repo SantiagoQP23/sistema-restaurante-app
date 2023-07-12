@@ -34,6 +34,9 @@ export const useCreateExpense = () => {
       enqueueSnackbar('Gasto creado correctamente', { variant: 'success' });
       queryClient.invalidateQueries(['expenses']);
 
+      queryClient.invalidateQueries(['cashRegisterActive']);
+
+
     },
     onError: () => {
       console.log('onError')
@@ -58,6 +61,9 @@ export const useUpdateExpense = () => {
     onSuccess: () => {
       enqueueSnackbar('Gasto actualizado correctamente', { variant: 'success' })
       queryClient.invalidateQueries(['expenses']);
+
+      queryClient.invalidateQueries(['cashRegisterActive']);
+
 
     },
     onError: () => {

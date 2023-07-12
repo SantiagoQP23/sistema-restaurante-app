@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query"
 import { createCashIncome, updateCashIncome } from "../services/cash-income.service"
-import { CashIncome } from "../models/cash-income.model"
-import { CreateCashIncomeDto } from "../dto/create-cash-income.dto"
+import { CashIncome } from "../models/cash-transaction.model"
+import { CreateCashIncomeDto } from "../dto/create-cash-transaction.dto"
 import { enqueueSnackbar, useSnackbar } from 'notistack';
-import { UpdateCashIncomeDto } from "../dto/update-cash-income.dto";
+import { UpdateCashIncomeDto } from "../dto/update-cash-transaction.dto";
 
 
 

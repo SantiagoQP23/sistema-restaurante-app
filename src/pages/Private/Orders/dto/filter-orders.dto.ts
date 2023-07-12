@@ -8,8 +8,6 @@ export interface FilterOrdersDto extends DateFiltePaginationDto {
 
   userId?: string;
 
-  clientId?: string;
-
   status?: OrderStatus;
 
   isPaid?: boolean;

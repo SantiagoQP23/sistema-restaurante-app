@@ -1,4 +1,4 @@
-import { IOrderDetail } from "../../../../models";
+import { IOrderDetail, IProduct } from "../../../../models";
 
 
 export interface InvoiceDetail {
@@ -8,6 +8,10 @@ export interface InvoiceDetail {
   quantity: number;
 
   orderDetail: IOrderDetail;
+
+  product: IProduct;
+
+  price: number;
 
   amount: number;
 

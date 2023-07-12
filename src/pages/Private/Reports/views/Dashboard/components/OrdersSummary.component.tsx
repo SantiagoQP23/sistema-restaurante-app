@@ -1,10 +1,10 @@
 import { Card, CardHeader, CardContent, Button, Typography, Box, CardActions } from '@mui/material';
 import { useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
-import { DateOrders } from '../models/date-orders.interface';
-import { useFetchAndLoad } from '../../../../hooks/useFetchAndLoad';
-import { getOrdersEachDate } from '../services/dashboard.service';
-import { useAsync } from '../../../../hooks/useAsync';
+import { DateOrders } from '../../../models/date-orders.interface';
+import { useFetchAndLoad } from '../../../../../../hooks/useFetchAndLoad';
+import { getOrdersEachDate } from '../../../services/dashboard.service';
+import { useAsync } from '../../../../../../hooks/useAsync';
 import { Paid, Assignment } from '@mui/icons-material';
 
 
@@ -25,9 +25,21 @@ export const OrdersSummary = () => {
       <Card>
 
         <CardHeader
-          avatar={<Assignment color='info' sx={{ fontSize: 40 }} />}
+          avatar={<Assignment color='info' sx={{ fontSize: 30 }} />}
           title={
             <Typography variant="h4" >Pedidos</Typography>
+          }
+          action={
+            <Button
+              disableRipple
+              to="/orders/list"
+              component={RouterLink}
+              variant="text"
+
+            >
+              Ver más
+            </Button>
+
           }
         />
 
@@ -40,22 +52,12 @@ export const OrdersSummary = () => {
 
         </CardContent>
 
-        <CardActions
+        {/* <CardActions
           sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 
         >
-          <Button
-            disableRipple
-            to="orders"
-            component={RouterLink}
-            variant="text"
 
-
-          >
-            Ver más
-          </Button>
-
-        </CardActions>
+        </CardActions> */}
 
 
 

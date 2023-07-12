@@ -5,6 +5,8 @@ import {
   Box,
   List,
   ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
   Menu,
   MenuItem
@@ -17,6 +19,8 @@ import { ListItemButton, IconButton } from '@mui/material';
 import { SidebarContext } from '../../../../Common/contexts/SidebarContext';
 
 import MenuIcon from '@mui/icons-material/Menu';
+import { PointOfSale } from '@mui/icons-material';
+import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 
 
 const ListWrapper = styled(Box)(
@@ -75,6 +79,8 @@ function HeaderMenu() {
 
   const { open, handleDrawerOpen } = useContext(SidebarContext);
 
+  const {activeCashRegister} = useCashRegisterStore(state => state);
+
 
   return (
     <>
@@ -91,7 +97,7 @@ function HeaderMenu() {
           display: {
             xs: 'none',
             md: 'flex',
-          },            color: 'inherit',
+          }, color: 'inherit',
           gap: 1
 
         }
@@ -125,9 +131,45 @@ function HeaderMenu() {
           // classes={{ root: 'MuiListItem-indicators' }}
 
           component={NavLink}
-          to="/orders"
+          to="/balance"
           sx={{
             ml: 2,
+            color: 'text.primary',
+            '&.active': {
+              color: 'text.primary',
+              bgcolor: 'action.selected',
+              fontWeight: 'fontWeightBold',
+            },
+          }}
+        >
+          <ListItemIcon>
+            <PointOfSale
+          color={activeCashRegister ? 'success' : 'error'}
+
+            />
+          </ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
+            primary="Caja"
+            secondary={activeCashRegister ? 'Abierta' : 'Cerrada'}
+          />
+          {/* <ListItemSecondaryAction 
+            sx={{
+             
+            }}
+          >
+            <PointOfSale
+            
+            />
+          </ListItemSecondaryAction> */}
+        </ListItemButton>
+        <ListItemButton
+          // classes={{ root: 'MuiListItem-indicators' }}
+
+          component={NavLink}
+          to="/orders"
+          sx={{
+            // ml: 2,
             color: 'text.primary',
             '&.active': {
               color: 'text.primary',

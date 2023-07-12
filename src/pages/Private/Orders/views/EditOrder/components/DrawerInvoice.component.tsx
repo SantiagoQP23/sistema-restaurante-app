@@ -8,6 +8,10 @@ import { format } from 'date-fns';
 import { CardHeader, Divider } from '@mui/material/';
 import { CloseOutlined, Delete, DeleteOutline, Print } from '@mui/icons-material';
 import { PaymentMethod } from '../../../models/Invoice.model';
+import { ModalDeleteInvoice } from '../../../components/modals/ModalDeleteInvoice.component';
+import { Label } from '../../../../../../components/ui';
+import { useSelector } from 'react-redux';
+import { selectOrders } from '../../../../../../redux';
 
 
 
@@ -22,10 +26,23 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
 
   const theme = useTheme();
 
-  const { activeInvoice, handleCloseDrawer } = useDrawerInvoiceStore(state => state);
+  const { activeOrder } = useSelector(selectOrders);
+
+  const { activeInvoice, handleCloseDrawer, handleOpenModal } = useDrawerInvoiceStore(state => state);
+
+
+  const handleOpenModalDelete = () => {
+
+    handleOpenModal();
+
+  }
 
   return (
     <>
+
+
+
+
       <div>
 
         <Drawer
@@ -34,7 +51,7 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
           onClose={handleClose}
           sx={{
             width: 'auto',
-            zIndex: 10000,
+            zIndex: 2000,
 
             // minWidth: {xs: '100vw', sm: '100%', md: '100%', lg: '100%', xl: '100%'},
 
@@ -42,7 +59,6 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
 
 
         >
-
 
 
           <Box
@@ -80,19 +96,37 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
                         >
                           <CloseOutlined />
                         </IconButton>
+
+
                         <Stack direction='row' spacing={1} >
+                          {
+                            !activeInvoice.isActive 
+                              ? (
+                                <>
+                                  <Label
+                                    color='error'
 
-                          <IconButton
-                            color='inherit'
-                          >
-                            <Print />
-                          </IconButton>
+                                  >Anulada </Label>
 
-                          <IconButton
-                            color='error'
-                          >
-                            <DeleteOutline />
-                          </IconButton>
+                                </>
+                              ) : !activeOrder?.isClosed && 
+                              (
+                                <>
+                                  <IconButton
+                                    color='inherit'
+                                  >
+                                    <Print />
+                                  </IconButton>
+
+                                  <IconButton
+                                    color='error'
+                                    onClick={handleOpenModalDelete}
+                                  >
+                                    <DeleteOutline />
+                                  </IconButton>
+                                </>
+                              )
+                          }
 
                         </Stack>
 
@@ -102,15 +136,15 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
 
                       <Box px={2}>
 
-                      <Typography variant="h4"  >
+                        <Typography variant="h4"  >
 
-                        Restaurante Doña Yoli
-                      </Typography>
+                          Restaurante Doña Yoli
+                        </Typography>
 
-                      <Typography variant="h4" textAlign='right' mt={2} >
+                        <Typography variant="h4" textAlign='right' mt={2} >
 
-                        Comprobante N° {activeInvoice.transactionNumber}
-                      </Typography>
+                          Comprobante N° {activeInvoice.transactionNumber}
+                        </Typography>
 
                       </Box>
 
@@ -178,8 +212,8 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
                           <Typography>
                             {
                               activeInvoice.paymentMethod === PaymentMethod.CASH
-                              ? 'Efectivo'
-                              : 'Transferencia'
+                                ? 'Efectivo'
+                                : 'Transferencia'
                             }
 
                           </Typography>
@@ -236,11 +270,11 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
                               }
 
                               <TableRow>
-                                <TableCell colSpan={3} align='right' 
-                                      sx={{
-                                        border: 'none'
-                                      }}
-    
+                                <TableCell colSpan={3} align='right'
+                                  sx={{
+                                    border: 'none'
+                                  }}
+
                                 >
                                   <Typography variant='subtitle1' color='textSecondary'>Subtotal</Typography>
                                 </TableCell>
@@ -277,7 +311,7 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
                                 >
                                   <Typography variant='h5' color='error' > - ${activeInvoice.discount}</Typography>
                                 </TableCell>
-                               
+
 
                               </TableRow>
                               <TableRow>

@@ -10,16 +10,21 @@ import { IClient } from "../../../../../../models";
 import { ModalSelectClient } from '../../../../Clients/components/ModalSelectClient.component';
 import { useCreateIncome } from '../../../hooks/useIncomes';
 import { LoadingButton } from '@mui/lab';
+import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 
 const incomeInitialForm: CreateIncomeDto = {
   description: '',
   amount: 0,
-  paymentMethod: PaymentMethod.CASH
+  paymentMethod: PaymentMethod.CASH,
+  responsible: '',
+  cashRegisterId: '',
 }
 
 export const AddIncome = () => {
 
   const { handleClose, handleOpen, isOpen } = useModal();
+
+  const {activeCashRegister}= useCashRegisterStore(state => state)
 
   const [client, setClient] = useState<IClient | null>(null);
 
@@ -37,14 +42,20 @@ export const AddIncome = () => {
 
   const onSubmit = (form: CreateIncomeDto) => {
 
-    if (client) {
-      form.clientId = client.id;
+    // if (client) {
+    //   form.clientId = client.id;
+    // }
+
+    if(activeCashRegister){
+
+      form.cashRegisterId=activeCashRegister.id;
+
+      mutateAsync(form);
+
+    }else {
+      // TODO modal crear caja
     }
 
-    mutateAsync(form);
-
-
-    console.log(form)
 
   }
 
@@ -68,7 +79,7 @@ export const AddIncome = () => {
               <Grid item xs={12} >
                 {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
-                  label="Nombre"
+                  label="Descripción"
                   type="text"
                   // placeholder="Nombre del gasto"
                   fullWidth
@@ -80,6 +91,28 @@ export const AddIncome = () => {
                   }
                   rows={2}
                   helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
+
+                />
+
+
+              </Grid>
+
+              <Grid item xs={12} >
+                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
+                <TextField
+                  label="Responsable"
+                  type="text"
+                  // placeholder="Nombre del gasto"
+                  fullWidth
+                  {
+                  ...register('responsible', {
+                    required: 'Este campo es requerido',
+                    minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                  })
+                  }
+                  rows={2}
+                  helperText={<Typography color="red">{errors.responsible?.message} </ Typography>}
 
 
                 />
@@ -108,7 +141,7 @@ export const AddIncome = () => {
               </Grid>
 
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
                   <Typography variant="subtitle2">
                     Cliente
@@ -132,7 +165,7 @@ export const AddIncome = () => {
                 </Typography>
 
 
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} >
 
                 <Controller

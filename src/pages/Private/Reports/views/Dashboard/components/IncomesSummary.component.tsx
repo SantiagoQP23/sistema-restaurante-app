@@ -5,13 +5,15 @@ import { NavLink as RouterLink } from 'react-router-dom';
 
 import { useState } from 'react';
 import { Paid } from '@mui/icons-material';
-import { getIncomes } from '../services/dashboard.service';
-import { useFetchAndLoad, useAsync } from '../../../../hooks';
-import { DateIncome } from '../models/date-orders.interface';
+import { getIncomes } from '../../../services/dashboard.service';
+import { useFetchAndLoad, useAsync } from '../../../../../../hooks';
+import { DateIncome } from '../../../models/date-orders.interface';
+import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 
 
 export const IncomesSummary = () => {
 
+  const {activeCashRegister} = useCashRegisterStore();
 
   const [datesIncome, setDatesIncome] = useState<DateIncome[]>([]);
 
@@ -36,26 +38,15 @@ export const IncomesSummary = () => {
       <Card>
 
         <CardHeader
-          avatar={<Paid color='success' sx={{ fontSize: 40 }} />}
+          avatar={<Paid color='success' sx={{ fontSize: 30 }} />}
           title={
             <Typography variant="h4" >Ingresos del día</Typography>
           }
-        />
-
-        <CardContent>
-         
-          <Typography variant="h3" component="div" textAlign='center'>
-            $ {datesIncome.reduce((acc, dateIncome) => acc + dateIncome.total, 0)}
-          </Typography>
-
-
-        </CardContent>
-        <CardActions 
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
+        
+          action={
           <Button
             disableRipple
-            to="incomes"
+            to="/balance"
             component={RouterLink}
             variant="text"
 
@@ -63,7 +54,18 @@ export const IncomesSummary = () => {
             Ver más
           </Button>
 
-        </CardActions>
+          }
+        />
+
+        <CardContent>
+         
+          <Typography variant="h3" component="div" textAlign='center'>
+            $ {activeCashRegister? activeCashRegister.totalIncomesCash + activeCashRegister.totalIncomesTransfer : 0}
+          </Typography>
+
+
+        </CardContent>
+       
 
 
 

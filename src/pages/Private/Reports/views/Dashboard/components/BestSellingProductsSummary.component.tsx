@@ -2,8 +2,8 @@ import { Card, CardHeader, CardContent, Button, Stack, IconButton, ListItem, Lis
 import { CardActions } from '@mui/material/';
 import { useNavigate } from 'react-router-dom';
 import { NavLink as RouterLink } from 'react-router-dom';
-import { ResultBestSellingProducts, getBestSellingProducts } from '../services/dashboard.service';
-import { Period } from '../../../../models/period.model';
+import { ResultBestSellingProducts, getBestSellingProducts } from '../../../services/dashboard.service';
+import { Period } from '../../../../../../models/period.model';
 import { useQuery } from '@tanstack/react-query';
 import { EditOutlined } from '@mui/icons-material';
 

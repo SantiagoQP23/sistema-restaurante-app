@@ -179,6 +179,16 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
               </Grid>
               <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Creado</Typography>
+              </Grid>
+
+              <Grid item xs={8}>
+                <Typography variant="body1" >
+                  {format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}
+                </Typography>
+
+              </Grid>
+              <Grid item xs={4}>
                 <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
 
               </Grid>

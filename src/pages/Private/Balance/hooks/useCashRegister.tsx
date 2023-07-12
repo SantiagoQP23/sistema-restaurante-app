@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { createCashRegister, getAllCashRegisters, getCashRegister } from "../services/cash-register.service"
-import {  useSnackbar } from 'notistack';
+import { ActiveCashRegister, createCashRegister, getAllCashRegisters, getCashRegister, getCashRegisterActive } from "../services/cash-register.service"
+import { useSnackbar } from 'notistack';
 import { CashRegister } from "../models/cash-register.model";
 import { CreateCashRegisterDto } from "../dto/create-cash-register.dto";
 import { useSearch } from "../../../../hooks/useSearch";
+import { useCashRegisterStore } from "../../Common/store/cashRegisterStore";
 
 
 export const useAllCashRegister = () => {
@@ -34,21 +35,46 @@ export const useCashRegister = (term: string) => {
     cashRegisterQuery
   }
 
-    
+
 }
 
+export const useCashRegisterActive = () => {
 
-export const useCreateCashRegister = () => {
+  const { enqueueSnackbar } = useSnackbar();
 
-  const {enqueueSnackbar} = useSnackbar()
+  const {setActiveCashRegister} = useCashRegisterStore(state => state)
 
-  return useMutation<CashRegister, unknown, CreateCashRegisterDto>(createCashRegister, {
-    onSuccess: () => {
-      enqueueSnackbar('Caja creada correctamente', {variant: 'success'})
+  const cashRegisterQuery = useQuery<ActiveCashRegister>(['cashRegisterActive'], getCashRegisterActive, {
+
+    onSuccess: (data) => {
+      console.log(data)
+      enqueueSnackbar('Caja activa', { variant: 'success' })
+      setActiveCashRegister(data)
     },
-    onError: () => {
-      enqueueSnackbar('Ocurrió un error al crear la caja', {variant: 'error'})
+    onError: (error) => {
+      console.log(error)
+
     }
   })
 
+  return {
+    cashRegisterQuery
+  }
+
 }
+
+
+  export const useCreateCashRegister = () => {
+
+    const { enqueueSnackbar } = useSnackbar()
+
+    return useMutation<CashRegister, unknown, CreateCashRegisterDto>(createCashRegister, {
+      onSuccess: () => {
+        enqueueSnackbar('Caja creada correctamente', { variant: 'success' })
+      },
+      onError: () => {
+        enqueueSnackbar('Ocurrió un error al crear la caja', { variant: 'error' })
+      }
+    })
+
+  }

@@ -9,6 +9,7 @@ import { BtnFinalConsumer } from './BtnFinalConsumer.component';
 import { statusModalClientOrder } from '../../../services/sharing-information.service';
 import { PaymentMethod } from '../../../models/Invoice.model';
 import { useCreateInvoice } from '../../../hooks/useInvoices';
+import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
 export const PayOrder: FC<Props> = ({ order }) => {
 
   const { changeStep } = useContext(OrderContext);
+
+  const { activeCashRegister } = useCashRegisterStore(state => state);
 
   const { client, setClient, discount, paymentMethod, amountPaid, setAmountPaid, setPaymentMethod, getInvoice,
     amount,
@@ -61,9 +64,21 @@ export const PayOrder: FC<Props> = ({ order }) => {
     }
     const invoice = getInvoice();
 
-    createInvoiceMutation.mutateAsync(invoice).then(() => {
-      reset();
-    });
+    if (activeCashRegister) {
+
+      invoice.cashRegisterId = activeCashRegister.id;
+
+
+      createInvoiceMutation.mutateAsync(invoice).then(() => {
+        reset();
+      });
+
+
+    } else {
+      // TODO modal crear caja
+    }
+
+
 
     console.log(invoice)
 

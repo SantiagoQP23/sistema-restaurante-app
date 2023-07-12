@@ -90,7 +90,7 @@ export const DrawerOrder: FC<Props> = ({
                 <CloseOutlined />
               </IconButton>
               <Stack direction='row' spacing={1} >
-                <IconButton
+                {/* <IconButton
                   color='inherit'
                 >
                   <Print />
@@ -100,7 +100,7 @@ export const DrawerOrder: FC<Props> = ({
                   color='error'
                 >
                   <DeleteOutline />
-                </IconButton>
+                </IconButton> */}
 
                 <Button
                   variant='contained'

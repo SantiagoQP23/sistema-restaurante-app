@@ -8,9 +8,11 @@ export const PublicRoutes = {
 }
 
 export const PrivateRoutes = {
+
   MENU: 'orders/add/menu',
   MENU_EDIT: 'menu/edit/',
   ORDERS: 'orders',
+  INVOICES: 'invoices',
   ACTIVE_ORDERS: 'active-orders',
   DASHBOARD: 'dashboard',
   CLIENTS: 'clients',

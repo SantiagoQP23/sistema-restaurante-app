@@ -9,17 +9,21 @@ import { Supplier } from "../../../../Suppliers/models/supplier.model";
 import { Close, Paid } from "@mui/icons-material";
 import { useCreateExpense } from "../../../hooks/useExpenses";
 import { LoadingButton } from "@mui/lab";
+import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
 
 const expenseInitialForm: CreateExpenseDto = {
   description: '',
   amount: 0,
-  paymentMethod: PaymentMethod.CASH
+  paymentMethod: PaymentMethod.CASH,
+  responsible: '',
+  cashRegisterId: '',
 }
 
 export const AddExpense = () => {
 
   const { handleClose, isOpen, handleOpen } = useModal();
 
+  const {activeCashRegister}= useCashRegisterStore(state => state)
 
   const { register, handleSubmit, formState: { errors }, control } = useForm<CreateExpenseDto>({
     defaultValues: expenseInitialForm
@@ -36,7 +40,17 @@ export const AddExpense = () => {
       form.supplierId = supplier.id;
     }
 
-    mutateAsync(form);
+    if(activeCashRegister){
+
+      form.cashRegisterId=activeCashRegister.id;
+
+      mutateAsync(form);
+
+    }else {
+      // TODO modal crear caja
+    }
+
+
 
   }
 
@@ -69,7 +83,7 @@ export const AddExpense = () => {
               <Grid item xs={12} >
                 {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
-                  label="Nombre"
+                  label="Descripción"
                   type="text"
                   // placeholder="Nombre del gasto"
                   fullWidth
@@ -81,6 +95,28 @@ export const AddExpense = () => {
                   }
                   rows={2}
                   helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
+
+                />
+
+
+              </Grid>
+
+              <Grid item xs={12} >
+                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
+                <TextField
+                  label="Responsable"
+                  type="text"
+                  // placeholder="Nombre del gasto"
+                  fullWidth
+                  {
+                  ...register('responsible', {
+                    required: 'Este campo es requerido',
+                    minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                  })
+                  }
+                  rows={2}
+                  helperText={<Typography color="red">{errors.responsible?.message} </ Typography>}
 
 
                 />

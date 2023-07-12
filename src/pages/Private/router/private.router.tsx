@@ -13,6 +13,7 @@ import { UsersRouter } from '../Users/router/Users.router';
 import { ReportsRouter } from '../Reports/router/Reports.router';
 import { BalanceRouter } from '../Balance/router/Balance.router';
 import { SuppliersRouter } from '../Suppliers/router/Suppliers.router';
+import { InvoiceRouter } from '../Invoices/router/Invoice.router';
 
 export enum ValidRoles {
   admin = 'admin',
@@ -29,6 +30,7 @@ export const PrivateRouter: RouteObject[] = [
     children: [
       // MenuRouter,
       OrderRouter,
+      InvoiceRouter,
       MenuEditRouter,
       ClientsRouter,
       TablesRouter,

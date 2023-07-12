@@ -30,6 +30,8 @@ import { useRestaurant } from "./Reports/hooks/useRestaurant"
 import { index } from '../Status/Maintenance/index';
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import { useCashRegisterActive } from "./Balance/hooks/useCashRegister"
+import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component"
 
 
 export const Private = () => {
@@ -45,6 +47,8 @@ export const Private = () => {
 
   const { socket } = useContext(SocketContext);
 
+
+
   const getMenuCall = async () => await callEndpoint(getMenu());
 
   const loadMenuState = (sections: ISection[]) => { dispatch(loadMenu(sections)); }
@@ -54,6 +58,8 @@ export const Private = () => {
   const loadTablesState = (data: ITable[]) => {
     dispatch(loadTables(data));
   }
+
+  useCashRegisterActive();
 
   useAsync(getTablesCall, loadTablesState, () => { }, []);
 
@@ -80,7 +86,7 @@ export const Private = () => {
 
   }, [socket]);
 
-  const {isLoading} = useRestaurant();
+  const { isLoading } = useRestaurant();
 
   if (loading && isLoading)
     return <CircularProgress />
@@ -96,29 +102,33 @@ export const Private = () => {
         <IconButton color="inherit" onClick={() => { closeSnackbar(key) }}>
           <CloseTwoToneIcon />
         </IconButton>
-      )}   
+      )}
       dense
 
       style={{
         zIndex: 105500
       }}
-     
+
 
     >
-         <LocalizationProvider dateAdapter={AdapterDateFns}>
-
-      <OrderProvider>
-
-        <SidebarProvider>
-
-          <>
-            {content}
-          </>
 
 
-        </ SidebarProvider>
-      </OrderProvider>
-         </LocalizationProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+        <OrderProvider>
+
+          <SidebarProvider>
+
+            <>
+              {content}
+            </>
+
+
+          </ SidebarProvider>
+        </OrderProvider>
+
+        <ModalCreateCashRegister />
+      </LocalizationProvider>
     </SnackbarProvider>
 
   )

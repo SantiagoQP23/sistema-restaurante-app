@@ -10,17 +10,20 @@ import { LoadingButton } from "@mui/lab";
 import { CreateCashRegisterDto } from "../../../dto/create-cash-register.dto";
 import AddIcon from '@mui/icons-material/Add';
 import { CashRegisterInfo } from "./CashRegisterInfo.component";
+import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
 
 
 export const CashRegisterSummary = () => {
 
   const [date, setDate] = useState<Date | null>(new Date());
 
-  const {cashRegisterQuery} = useCashRegister(format(date!, 'yyyy-MM-dd'));
+  // const {cashRegisterQuery} = useCashRegister(format(date!, 'yyyy-MM-dd'));
 
   const [initialAmount, setInitialAmount] = useState<number>(0);
 
-  const [cashRegister, setCashRegister] = useState<CashRegister | null>(null);
+  const {activeCashRegister} = useCashRegisterStore(state => state)
+
+  // const [cashRegister, setCashRegister] = useState<CashRegister | null>(null);
 
   const { mutateAsync, isLoading } = useCreateCashRegister();
 
@@ -36,15 +39,15 @@ export const CashRegisterSummary = () => {
 
   }
 
-  const handleChangeDate = async (date: Date | null) => {
-    setDate(date)
+  // const handleChangeDate = async (date: Date | null) => {
+  //   setDate(date)
 
-    await cashRegisterQuery.refetch().then((resp) => {
-      console.log(resp.data)
-      setCashRegister(resp.data || null)
-    }
-    )
-  }
+  //   await cashRegisterQuery.refetch().then((resp) => {
+  //     console.log(resp.data)
+  //     setCashRegister(resp.data || null)
+  //   }
+  //   )
+  // }
 
   const onSubmitCreate = async () => {
 
@@ -57,7 +60,7 @@ export const CashRegisterSummary = () => {
     await mutateAsync(data)
       .then((data) => {
 
-        setCashRegister(data);
+        // setCashRegister(data);
         
       })
 
@@ -71,28 +74,28 @@ export const CashRegisterSummary = () => {
       <CardHeader title='Caja'
         action={
           <>
-            <DesktopDatePicker
+            {/* <DesktopDatePicker
               label="Fecha"
               value={date}
               onChange={handleChangeDate}
               renderInput={(params) => <TextField size="small" {...params} />}
               maxDate={new Date()}
-            />
+            /> */}
           </>
         }
       />
       <CardContent>
 
-        {
+        {/* {
           cashRegisterQuery.isFetching ? (
             <Typography variant='h4' >Cargando...</Typography>
           ) : null
-        }
+        } */}
 
         {
-          cashRegister ? (
+          activeCashRegister ? (
             <>
-             <CashRegisterInfo cashRegister={cashRegister} />
+             <CashRegisterInfo cashRegister={activeCashRegister} />
             </>
 
           )

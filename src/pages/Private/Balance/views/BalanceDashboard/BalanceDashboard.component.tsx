@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { AddIncome } from '../Incomes/components/AddIncome.component';
 import { CashRegisterSummary } from '../CashRegister/components/CashRegisterSummary.view';
+import { useCashRegisterStore } from '../../../Common/store/cashRegisterStore';
 
 
 
@@ -15,6 +16,8 @@ export const BalanceDashboard = () => {
 
 
   const navigate = useNavigate();
+
+  const {activeCashRegister} = useCashRegisterStore(state => state);
 
 
   const navigateTo = (path: string) => {
@@ -30,6 +33,16 @@ export const BalanceDashboard = () => {
       <TitlePage title='Balance' />
 
 
+      {
+        activeCashRegister === null 
+        ? 
+        (
+          <>
+            Crear caja
+          </>
+        ):(
+
+
       <Grid container spacing={2}>
 
 
@@ -42,7 +55,16 @@ export const BalanceDashboard = () => {
 
           >
 
-            <CardHeader title='Balance' />
+            <CardHeader title='Balance' 
+            action={
+              <Button
+                onClick={() => navigateTo('balance')}
+                color='info'
+              >
+                Ver todos
+              </Button>
+            }
+            />
 
             <CardContent
               sx={{
@@ -52,9 +74,9 @@ export const BalanceDashboard = () => {
                 alignItems: 'center'
               }}
             >
-              <Typography variant='h3' >$ 500.00</Typography>
+              <Typography variant='h3' >$ {activeCashRegister.balance || 0}</Typography>
               {
-                true
+                activeCashRegister.balance > 0
                   ? <CallReceived color='success' />
                   : <ArrowOutward color='error' />
               }
@@ -98,7 +120,7 @@ export const BalanceDashboard = () => {
                 alignItems: 'center'
               }}
             >
-              <Typography variant='h3' >$ 823.00</Typography>
+              <Typography variant='h3' >$ {activeCashRegister.totalIncomes + activeCashRegister.totalInvoices}</Typography>
               <CallReceived color='success' />
             </CardContent>
 
@@ -135,7 +157,7 @@ export const BalanceDashboard = () => {
                 alignItems: 'center'
               }}
             >
-              <Typography variant='h3' >$ 300.00</Typography>
+              <Typography variant='h3' >$ {activeCashRegister.totalExpenses}</Typography>
               <ArrowOutward color='error' />
             </CardContent>
 
@@ -183,6 +205,12 @@ export const BalanceDashboard = () => {
 
         </Grid> */}
       </Grid>
+        )
+
+      }
+
+      
+
 
 
 

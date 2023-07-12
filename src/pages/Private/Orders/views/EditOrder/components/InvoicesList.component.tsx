@@ -41,8 +41,10 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
                   >
 
                     <ListItemAvatar>
-                      <Avatar>
-                        <Receipt />
+                      <Avatar
+                        
+                      >
+                        <Receipt color={invoice.isActive ? 'inherit' : 'error'} />
                       </Avatar>
                     </ListItemAvatar>
 
