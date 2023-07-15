@@ -18,6 +18,10 @@ export interface Invoice {
 
   amount: number;
 
+  amountPaid: number;
+
+  difference: number;
+
   discount: number;
 
   total: number;

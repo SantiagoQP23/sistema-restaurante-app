@@ -9,7 +9,8 @@ import { AddIncome } from '../Incomes/components/AddIncome.component';
 import { CashRegisterSummary } from '../CashRegister/components/CashRegisterSummary.view';
 import { useCashRegisterStore } from '../../../Common/store/cashRegisterStore';
 import { CardAddCashRegister } from './components/CardAddCashRegister.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useCashRegisterActive } from '../../hooks/useCashRegister';
 
 
 export enum AddTransactionTabs {
@@ -37,6 +38,9 @@ export const BalanceDashboard = () => {
   const [tabViewTransaction, setTabViewTransaction] = useState<ViewTransactionTabs>(ViewTransactionTabs.INCOMES);
 
 
+  const { cashRegisterQuery } = useCashRegisterActive();
+
+
   const handleChangeTabAddTransaction = (value: 'income' | 'expense') => {
 
     setTabAddTransaction(value)
@@ -47,6 +51,9 @@ export const BalanceDashboard = () => {
   }
 
 
+  useEffect(() => {
+    cashRegisterQuery.refetch()
+  }, [])
 
 
 
@@ -231,7 +238,7 @@ export const BalanceDashboard = () => {
                 <Tabs
                   value={tabAddTransaction}
                   onChange={(e, value) => handleChangeTabAddTransaction(value)}
-                  >
+                >
                   <Tab label='Ingresos' value={'income'} />
                   <Tab label='Gastos' value={'expense'} />
 
@@ -239,8 +246,8 @@ export const BalanceDashboard = () => {
 
                 {
                   tabAddTransaction === 'income'
-                  ? <AddIncome />
-                  : <AddExpense />
+                    ? <AddIncome />
+                    : <AddExpense />
                 }
 
 
@@ -248,7 +255,7 @@ export const BalanceDashboard = () => {
               </Grid>
 
 
-                {/* 
+              {/* 
 
               <Grid item xs={12} md={6} lg={8} >
 

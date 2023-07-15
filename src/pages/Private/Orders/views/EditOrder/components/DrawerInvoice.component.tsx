@@ -218,6 +218,36 @@ export const DrawerInvoice: FC<Props> = ({ open, handleClose }) => {
 
                           </Typography>
                         </Grid>
+                        <Grid item xs={4}>
+
+                          <Typography variant='subtitle2' fontSize={12} fontWeight='bold'>Cantidad pagada</Typography>
+
+                        </Grid>
+
+                        <Grid item xs={8}>
+
+                          <Typography>
+                            ${
+                              activeInvoice.amountPaid
+                            }
+
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+
+                          <Typography variant='subtitle2' fontSize={12} fontWeight='bold'>Cambio</Typography>
+
+                        </Grid>
+
+                        <Grid item xs={8}>
+
+                          <Typography>
+                            ${
+                              activeInvoice.difference
+                            }
+
+                          </Typography>
+                        </Grid>
 
 
 

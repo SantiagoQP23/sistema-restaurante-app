@@ -3,11 +3,11 @@ import { FC, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  Card, CardHeader, Grid, CardContent, Box,  Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
-  Button, CardActions, IconButton, Tooltip, useTheme,  Tab, Tabs, Chip, Divider, Stack
+  Card, CardHeader, Grid, CardContent, Box, Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
+  Button, CardActions, IconButton, Tooltip, useTheme, Tab, Tabs, Chip, Divider, Stack
 } from '@mui/material';
 
-import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward, Undo, PlayCircleOutline } from '@mui/icons-material';
+import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward, Undo, PlayCircleOutline, People, TakeoutDining, Timer, TimerOutlined, Notes } from '@mui/icons-material';
 
 import { format, formatDistance, subHours } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -167,7 +167,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
       // Si el pedido es el primero en la lista de pedidos pendientes
       // se puede iniciar
       changeStatusOrder(OrderStatus.IN_PROGRESS);
-      
+
       console.log('es el primero')
     } else {
       // Si el pedido no es el primero en la lista de pedidos pendientes
@@ -218,7 +218,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
           // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
           // border: (theme) => `2px solid ${theme.palette[color].main}`,
           borderTop: (theme) => `5px solid ${theme.palette[color].main}`,
-          backgroundColor: (theme) => `${theme.colors.alpha.black}`,
+          // backgroundColor: (theme) => `${theme.colors.alpha.black}`,
+          // backgroundColor: 'transparent'
         }}
         variant='elevation'
 
@@ -231,7 +232,7 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               <Typography variant='h3'>{`N° ${order.num}`}</Typography>
 
             </Stack>
-            
+
 
           }
 
@@ -266,9 +267,9 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
           }
 
-          // avatar={
-          //   <Divider orientation='vertical'  sx={{ width: 5, backgroundColor: color + '.main', fontSize: 20 }}/>
-          // }
+        // avatar={
+        //   <Divider orientation='vertical'  sx={{ width: 5, backgroundColor: color + '.main', fontSize: 20 }}/>
+        // }
 
 
 
@@ -279,7 +280,43 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
         <Grid container spacing={1} alignItems='center' px={1}>
 
-          <Grid item xs={4}>
+          <Grid item xs={12}>
+
+            <Card>
+              <CardHeader
+
+                sx={{
+                  px: 1,
+                  py: 0.5
+                }}
+
+                avatar={<TimerOutlined />}
+                title='Hora de entrega'
+                titleTypographyProps={{
+                  variant: 'subtitle2'
+
+                }}
+
+                subheaderTypographyProps={{
+                  variant: 'h5',
+                  color: 'inherith'
+                }}
+                subheader={`${formatDistance(new Date(order.deliveryTime), new Date(), {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es
+                })}`}
+              />
+
+
+            </Card>
+            {/* <Typography variant='body2' color='secondary'>Personas</Typography> */}
+
+
+
+          </Grid>
+
+          {/* <Grid item xs={4}>
             <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
           </Grid>
 
@@ -293,22 +330,74 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
                 })}
             </Typography>
 
-          </Grid>
-          <Grid item xs={4}>
+          </Grid> */}
+          {/* <Grid item xs={4}>
             <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
 
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={8}>
+          <Grid item xs={6}>
+            <Card>
+              <CardHeader
+                sx={{
+                  px: 1,
+                  py: 0.5
+                }}
 
-            <Typography variant="h6" >
+                avatar={order.type === TypeOrder.IN_PLACE ? <Restaurant /> : <TakeoutDining />}
+                title='Orden'
+                titleTypographyProps={{
+                  variant: 'subtitle2'
+
+                }}
+
+                subheaderTypographyProps={{
+                  variant: 'h5',
+                  color: 'inherith'
+                }}
+                subheader={order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
+              />
+
+
+            </Card>
+
+            {/* <Typography variant="h6" >
               {order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
 
-            </Typography>
+            </Typography> */}
 
           </Grid>
 
-          {
+          <Grid item xs={6}>
+            <Card>
+              <CardHeader
+                sx={{
+                  px: 1,
+                  py: 0.5
+                }}
+
+
+                avatar={<People />}
+                title='Personas'
+                titleTypographyProps={{
+                  variant: 'subtitle2'
+
+                }}
+
+                subheaderTypographyProps={{
+                  variant: 'h5',
+                  color: 'inherith'
+                }}
+                subheader={`${order.people}`}
+              />
+
+
+            </Card>
+            {/* <Typography variant='body2' color='secondary'>Personas</Typography> */}
+
+          </Grid>
+
+          {/* {
             order.type === TypeOrder.IN_PLACE && (
               <>
                 <Grid item xs={4}>
@@ -327,25 +416,86 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               </>
 
             )
+          } */}
+          {
+            order.type === TypeOrder.IN_PLACE && (
+              <>
+                <Grid item xs={12}>
+
+                  <Card>
+                    <CardHeader
+                      sx={{
+                        px: 1,
+                        py: 0.5
+                      }}
+
+
+                      avatar={<TableRestaurant />}
+                      title='Mesa'
+                      titleTypographyProps={{
+                        variant: 'subtitle2'
+
+                      }}
+
+                      subheaderTypographyProps={{
+                        variant: 'h5',
+                        color: 'inherith'
+                      }}
+                      subheader={`Mesa ${order.table?.name}` || 'No seleccionada'}
+                    />
+
+
+                  </Card>
+
+
+
+                </Grid>
+
+
+              </>
+
+            )
           }
-          <Grid item xs={4}>
-            <Typography variant='body2' color='secondary'>Personas</Typography>
 
-          </Grid>
 
-          <Grid item xs={8}>
+          {/* <Grid item xs={8}>
 
             <Typography variant="h6" >
               {order.people}
 
             </Typography>
 
+          </Grid> */}
+
+
+          <Grid item xs={12}>
+            <Card>
+              <CardHeader
+                sx={{
+                  px: 1,
+                  py: 0.5
+                }}
+
+
+                avatar={<Person />}
+                title='Mesero'
+                titleTypographyProps={{
+                  variant: 'subtitle2'
+
+                }}
+
+                subheaderTypographyProps={{
+                  variant: 'h5',
+                  color: 'inherith'
+                }}
+                subheader={`${order.user.person.firstName} ${order.user.person.lastName}`}
+              />
+
+
+            </Card>
           </Grid>
 
-
-
-
-          <Grid item xs={4}>
+          {/* <Grid item xs={4}>
             <Typography variant='body2' color='secondary'>Mesero</Typography>
           </Grid>
 
@@ -358,22 +508,39 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
               </Typography>
             </Stack>
 
-          </Grid>
+          </Grid> */}
 
           {
             order.notes
             && (
               <>
-                <Grid item xs={4}>
-                  <Typography variant='body2' color='secondary'>Notas</Typography>
+                <Grid item xs={12}>
+                <Card>
+                    <CardHeader
 
-                </Grid>
+sx={{
+  px: 1,
+  py: 0.5
+}}
 
-                <Grid item xs={8}>
-                  <Typography variant='body1' fontWeight='bold' >
-                    {order.notes}
-                    {/* {order.client?.person.firstName} {order.client?.person.lastName} */}
-                  </Typography>
+
+                      avatar={<Notes />}
+                      title='Notas'
+                      titleTypographyProps={{
+                        variant: 'subtitle2'
+
+                      }}
+
+                      subheaderTypographyProps={{
+                        variant: 'h5',
+                        color: 'inherith'
+                      }}
+                      subheader={order.notes}
+                    />
+
+
+                  </Card>
+                 
 
                 </Grid>
               </>
