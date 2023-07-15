@@ -28,7 +28,7 @@ export const ListActiveOrders = () => {
 
 
 
-  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus | null>(OrderStatus.PENDING);
+  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus>(OrderStatus.PENDING);
 
   const [alignment, setAlignment] = useState<string>('horizontal');
 
@@ -50,17 +50,6 @@ export const ListActiveOrders = () => {
     <>
 
       <ModalStartOrder />
-
-      {/* <Card
-      >
-        <CardHeader 
-        title='Pedidos activos'
-            /> */}
-
-
-      {/* <BarActiveOrders /> */}
-      {/* <Divider sx={{ mb: 1 }} /> */}
-
 
       <Box
 
@@ -118,7 +107,7 @@ export const ListActiveOrders = () => {
 
           }}
         >
-          <Tab
+          {/* <Tab
             label={
               <>
                 <Typography variant='h5' component='span' >Todos</Typography>
@@ -135,7 +124,7 @@ export const ListActiveOrders = () => {
             iconPosition='start'
 
 
-          />
+          /> */}
 
           <Tab
             label={
@@ -195,45 +184,8 @@ export const ListActiveOrders = () => {
 
       </Box>
 
-        {/* <Step>
-          <StepButton>Step 1</StepButton>
-        </Step>
-        <Step>
-          <StepButton>Step 2</StepButton>
-        </Step>
-        <Step>
-          <StepButton>Step 3</StepButton>
-        </Step>
 
-         */}
-
-      {/* <Divider />
-          </Card> */}
-      {/* <Box py={1} px={0.5} minHeight={400} >
-
-          {
-            ordersFiltered.length === 0
-              ? <Typography variant='body1' align="center" mt={5}>No hay pedidos</Typography>
-              : <Stack direction='row' spacing={2} sx={{ pb: 1 , overflowX: 'auto' }}>
-                {
-                  ordersFiltered.map(order => (
-
-                    <>
-                      <Box key={order.id} sx={{ minWidth: 325, }} >
-                        
-
-                        <ActiveOrder key={order.id} order={order}
-                          color={order.status === OrderStatus.PENDING ? 'success' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'warning'}
-                        />
-                      </Box>
-                    </>
-                  ))}
-              </Stack>
-          }
-        </Box> */}
       <Box py={1} px={0.5} minHeight={400} >
-      {/* <Stepper> */}
-
 
         {
           ordersFiltered.length === 0
@@ -244,76 +196,24 @@ export const ListActiveOrders = () => {
 
                   <>
                     <Grid item key={order.id} xs={12} sm={6} md={4}>
-                    
+
 
                       <ActiveOrder key={order.id} order={order}
                         color={order.status === OrderStatus.PENDING ? 'warning' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'success'}
-                        />
-                       
+                      />
+
                     </Grid>
                   </>
                 ))}
             </Grid>
         }
 
-      {/* </Stepper> */}
+
 
       </Box>
 
 
-      {/*
-
-
-      <Divider /> */}
-
-      {/* <Stack
-        direction={'row'}
-        width={alignment === 'vertical' ? 'auto' : '100%'}
-
-        sx={{
-          display: 'flex',
-          overflowX: 'auto',
-          overflowY: 'auto',
-        }}
-        spacing={1}
-
-      >
-        <Box>
-
-
-
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.PENDING)}
-            title='PENDIENTES'
-            color='success'
-            alignment={'vertical'}
-
-          />
-
-        </Box>
-
-        <Box>
-
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.IN_PROGRESS)}
-            title='EN PREPARACIÓN'
-            color='primary'
-            alignment={'vertical'}
-          />
-
-        </Box>
-
-        <Box>
-
-          <CardActiveOrder
-            orders={orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid)}
-            title='ENTREGADOS'
-            color='warning'
-            alignment={'vertical'}
-          />
-        </Box>
-
-      </Stack>  */}
+      
 
       <Paper sx={{
         position: 'fixed', bottom: 0, left: 0, right: 0,
@@ -327,7 +227,7 @@ export const ListActiveOrders = () => {
 
       }} elevation={5}>
 
-       
+
 
         <BottomNavigation
           showLabels
@@ -338,7 +238,7 @@ export const ListActiveOrders = () => {
 
         >
 
-          <BottomNavigationAction sx={{
+          {/* <BottomNavigationAction sx={{
             '& .Mui-selected': {
               color: (theme) => theme.palette.primary.main,
               // borderColor: (theme) => theme.palette.primary.main,
@@ -352,7 +252,7 @@ export const ListActiveOrders = () => {
               size='small'
             />
           } />
-          
+ */}
 
 
           <BottomNavigationAction sx={{
@@ -404,9 +304,7 @@ export const ListActiveOrders = () => {
 
 
             } />
-          {/* <BottomNavigationAction label="Recents" icon={<Restore />} />
-          <BottomNavigationAction label="Favorites" icon={<Favorite />} />
-          <BottomNavigationAction label="Nearby" icon={<LocationOn />} /> */}
+          
         </BottomNavigation>
 
       </Paper>

@@ -19,11 +19,11 @@ export const IncomesSummary = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
-  const getDatesIncomeCall = async () => await callEndpoint(getIncomes())
+  // const getDatesIncomeCall = async () => await callEndpoint(getIncomes())
 
   const loadDatesIncomeState = (data: DateIncome[]) => { setDatesIncome(data); }
-
-  useAsync(getDatesIncomeCall, loadDatesIncomeState, () => { }, []);
+// 
+  // useAsync(getDatesIncomeCall, loadDatesIncomeState, () => { }, []);
 
 
   /* const getClientsCall = async () => await callEndpoint(getClients())

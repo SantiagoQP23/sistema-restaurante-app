@@ -3,7 +3,7 @@ import { IOrder, TypeOrder } from "../../../../models";
 import { Box, Drawer, Stack, useTheme, Typography, IconButton, Card, CardHeader, CardContent, Grid, List, ListItem, Chip, ListItemIcon, ListItemText, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectTables } from '../../../../redux';
-import { CloseOutlined, Print, DeleteOutline, Edit, Add } from '@mui/icons-material';
+import { CloseOutlined, Print, DeleteOutline, Edit, Add, Done, DoneRounded, CheckCircle, Pending } from '@mui/icons-material';
 import { Divider } from '@mui/material/';
 import { ActiveOrder } from '../views';
 import { OrderDetails } from './EditOrder';
@@ -213,10 +213,12 @@ export const DrawerOrder: FC<Props> = ({
                             <Grid item xs={8}>
 
                               <Chip
-                                label={order.isPaid ? 'Pagado' : 'Pendiente'}
-                                color={order.isPaid ? 'primary' : 'warning'}
+                                label={order.isPaid ? 'Pagado' : 'Por pagar'}
+                                color={order.isPaid ? 'success' : 'warning'}
+                                icon={order.isPaid ? <CheckCircle /> : <Pending />}
                                 clickable={false}
-                                size='small'
+                                variant='outlined'
+                                
                               />
                             </Grid>
 

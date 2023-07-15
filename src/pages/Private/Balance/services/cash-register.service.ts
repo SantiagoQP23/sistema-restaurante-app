@@ -4,6 +4,7 @@ import { CashRegister } from "../models/cash-register.model";
 import { Income } from '../models/income.model';
 import { Expense } from '../models/expense.model';
 import { Invoice } from '../../Orders/models/Invoice.model';
+import { UpdateCashRegisterDto } from "../dto/update-cash-register.dto";
 
 export interface ActiveCashRegister extends CashRegister {
   totalIncomes: number;
@@ -27,9 +28,9 @@ export const getAllCashRegisters = async (): Promise<CashRegister[]> => {
 
 
 
-export const getCashRegister = async (term: string): Promise<CashRegister> => {
+export const getCashRegister = async (term: string): Promise<ActiveCashRegister> => {
 
-  const { data } = await restauranteApi.get(`/cash-register/${term}`);
+  const { data } = await restauranteApi.get<ActiveCashRegister>(`/cash-register/${term}`);
 
   return data;
 
@@ -43,10 +44,19 @@ export const getCashRegisterActive = async (): Promise<ActiveCashRegister> => {
 
 }
 
+export const createCashRegister = async (data: CreateCashRegisterDto): Promise<ActiveCashRegister> => {
 
-export const createCashRegister = async (data: CreateCashRegisterDto): Promise<CashRegister> => {
+  const response = await restauranteApi.post<ActiveCashRegister>(`/cash-register`, data);
 
-  const response = await restauranteApi.post<CashRegister>(`/cash-register`, data);
+  return response.data;
+
+}
+
+export const updateCashRegister = async (updateCash: UpdateCashRegisterDto): Promise<CashRegister> => {
+
+  const {id, ...data} = updateCash;
+
+  const response = await restauranteApi.patch<CashRegister>(`/cash-register/${id}`, data);
 
   return response.data;
 

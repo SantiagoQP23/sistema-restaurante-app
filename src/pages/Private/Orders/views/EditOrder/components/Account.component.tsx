@@ -31,6 +31,9 @@ export const Account: FC<Props> = ({ order }) => {
 
     const value = Number(e.target.value);
 
+    if (isNaN(value))
+      setDiscount(0);
+      
     if (value < 0) {
       setDiscount(0);
       return;
@@ -40,8 +43,6 @@ export const Account: FC<Props> = ({ order }) => {
       return;
     }
 
-    if (isNaN(value))
-      setDiscount(0);
 
     setDiscount(value);
   }

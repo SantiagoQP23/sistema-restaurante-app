@@ -74,7 +74,7 @@ export const DrawerIncome: FC<Props> = ({
   return (
     <>
 
-      <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} />
+      {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}
 
       <Drawer
         anchor='right'
@@ -152,8 +152,9 @@ export const DrawerIncome: FC<Props> = ({
                     })
                     }
                     rows={2}
-                    helperText={<Typography color="red">{errors.description?.message} </ Typography>}
 
+                    error={!!errors.description}
+                    helperText={errors.description?.message}
 
                   />
 
@@ -175,14 +176,15 @@ export const DrawerIncome: FC<Props> = ({
                     })
                     }
 
-                    helperText={<Typography color="red">{errors.amount?.message} </ Typography>}
+                    error={!!errors.amount}
+                    helperText={errors.amount?.message}
 
                   />
                 </Grid>
 
 
                 <Grid item xs={12}>
-                  <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
+                  {/* <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
                     <Typography variant="subtitle2">
                       Cliente
                     </Typography>
@@ -199,10 +201,10 @@ export const DrawerIncome: FC<Props> = ({
                       }
                     </Box>
 
-                  </Stack>
-                  <Typography variant="h6">
+                  </Stack> */}
+                  {/* <Typography variant="h6">
                     {client ? `${client.person.firstName} ${client.person.lastName} ` : 'No seleccionado'}
-                  </Typography>
+                  </Typography> */}
 
 
                 </Grid>
@@ -234,7 +236,7 @@ export const DrawerIncome: FC<Props> = ({
                   />
                 </Grid>
 
-                <Grid item direction='row' xs={12}>
+                <Grid item  xs={12}>
                   <LoadingButton
                     variant="contained"
                     color="primary"

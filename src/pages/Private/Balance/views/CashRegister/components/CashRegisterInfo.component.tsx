@@ -7,6 +7,8 @@ import { FormCashIncome } from './FormCashIncome.component';
 import { useModal } from '../../../../../../hooks';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 import { ActiveCashRegister } from '../../../services/cash-register.service';
+import { UpdateCashRegisterDto } from '../../../dto/update-cash-register.dto';
+import { useUpdateCashRegister } from '../../../hooks/useCashRegister';
 
 
 
@@ -17,14 +19,16 @@ interface Props {
 export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
 
 
-  const { isOpen, handleClose, handleOpen, toggleModal} = useModal();
+  const { isOpen, handleClose, handleOpen, toggleModal } = useModal();
 
   const [finalAmount, setFinalAmount] = useState<number>(0);
 
-  const [closingNotes, setClosingNotes] = useState<string>('')
+  const [closingNote, setClosingNote] = useState<string>('')
 
-  const { openCreate } = useCashRegisterStore(state => state)
+  const { openCreate } = useCashRegisterStore(state => state);
 
+  const updateCashMutation = useUpdateCashRegister();
+  
   const handleChangeFinalAmount = (e: ChangeEvent<HTMLInputElement>) => {
 
     let value = Number(e.target.value);
@@ -35,13 +39,28 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
 
   }
 
-  const handleChangeClosingNotes = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeClosingNote = (e: ChangeEvent<HTMLInputElement>) => {
 
     const value = e.target.value
 
-    setClosingNotes(value)
+    setClosingNote(value)
 
   }
+
+
+  const handleSubmit = () => {
+
+    const data: UpdateCashRegisterDto = {
+      id: cashRegister.id,
+      finalAmount,
+      closingNote
+    }
+
+    updateCashMutation.mutate(data)
+
+
+  }
+
 
   const discrepancyAmount = cashRegister.balance - finalAmount
 
@@ -211,9 +230,9 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
                     <TextField
 
 
-                      value={closingNotes}
+                      value={closingNote}
 
-                      onChange={handleChangeClosingNotes}
+                      onChange={handleChangeClosingNote}
                       multiline
 
                       label='Notas de cierre'
@@ -228,6 +247,7 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
 
               <Button
                 variant='contained'
+                onClick={handleSubmit}
               >
                 Cerrar caja
               </Button>

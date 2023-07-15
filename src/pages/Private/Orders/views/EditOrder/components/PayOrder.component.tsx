@@ -1,7 +1,7 @@
 import { FC, useState, useContext } from 'react';
 import { IOrder, TypeOrder } from "../../../../../../models"
-import { Stack, Typography, Divider, RadioGroup, FormControlLabel, Radio, TextField, Button, Card, InputAdornment, Tabs, Tab, Stepper, Step, StepLabel, StepContent, Checkbox, Box, List, ListItem, ListItemSecondaryAction, ListItemText, CardContent, TableContainer, Table, TableBody, TableHead, TableCell, TableRow, Grid, CardHeader, InputLabel } from '@mui/material';
-import { AddOutlined, ArrowBackIos, ArrowRight, AttachMoney, DetailsOutlined, Print, Receipt } from "@mui/icons-material";
+import { Stack, Typography, Divider, RadioGroup, FormControlLabel, Radio, TextField, Button, Card, InputAdornment, Tabs, Tab, Stepper, Step, StepLabel, StepContent, Checkbox, Box, List, ListItem, ListItemSecondaryAction, ListItemText, CardContent, TableContainer, Table, TableBody, TableHead, TableCell, TableRow, Grid, CardHeader, InputLabel, Container } from '@mui/material';
+import { AddOutlined, ArrowBackIos, ArrowRight, AttachMoney, CardGiftcard, Close, CreditCard, DetailsOutlined, MonetizationOnOutlined, Money, Payment, Print, Receipt } from "@mui/icons-material";
 import { ComboBoxClient, CounterInput } from '../../../components';
 import { OrderContext } from '../../../context/Order.context';
 import { useInvoiceStore } from '../../../store/invoiceStore';
@@ -89,81 +89,118 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
   return (
     <>
-      <Stack spacing={1} direction='column'>
-        <Card>
-          <CardHeader
-            title='Cliente'
+      <Stack spacing={1} direction='column' mb={3}>
+        <CardHeader
+          title='1. Cliente'
 
-            action={
-              <Box display='flex' flexDirection='row-reverse' mt={1}>
+          action={
+            <Box display='flex' flexDirection='row-reverse' mt={1}>
+              {
+                client && (
+              <Button
+                onClick={() => setClient(null)}
+                startIcon={<Close />}
+                size='small'
+                color='error'
+              >
+                Cambiar
+              </Button>)
+              }
 
-                <Button
-                  size="small"
-                  onClick={createClient}
-                  startIcon={<AddOutlined />}
-                >
-                  Nuevo cliente
-                </Button>
+              <Button
+                size="small"
+                onClick={createClient}
+                startIcon={<AddOutlined />}
+              >
+                Nuevo cliente
+              </Button>
 
-              </Box>
+            </Box>
+          }
+        />
+        {/* <Card> */}
+        <CardContent>
+
+
+          <Grid
+            spacing={1}
+            container
+
+          >
+
+            {
+
+
+              !client && (
+                <>
+                  <Grid item xs={12} md={6}>
+
+                    <Card
+                      sx={{
+                        p: 1
+                      }}
+                    >
+                      <BtnFinalConsumer />
+
+                    </Card>
+
+
+                  </Grid>
+
+                  <Grid item xs={12} md={6}>
+
+                    <Card
+                      sx={{
+                        p: 1
+                      }}
+                    >
+                      <ComboBoxClient handleChangeClient={setClient} client={null} />
+
+                    </Card>
+                  </Grid>
+                </>
+              )
+
             }
-          />
-          <CardContent>
-            {              // TODO: Consumidor final
-            }
 
-            <Grid
-              spacing={1}
-              container
+            <Grid item xs={12} md={12}>
+              {
+                client && (
+                  <>
 
-            >
-              <Grid item xs={12} md={6}>
 
-                <BtnFinalConsumer />
 
-              </Grid>
+                    <Card
+                      sx={{
+                        border: '1px solid',
+                        borderColor: 'primary.main',
+                        borderRadius: 1,
+                        p: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 0.6
+                      }}
+                    >
 
-              <Grid item xs={12} md={6}>
+                      <Typography variant='h5'>
+                        {client.person.lastName} {client.person.firstName}
+                      </Typography>
+                      <Typography variant='subtitle1'>
+                        {client.person.email}
+                      </Typography>
+                      <Typography variant='subtitle2'>
+                        {client.person.numPhone}
+                      </Typography>
+                    </Card>
 
-                <ComboBoxClient handleChangeClient={setClient} client={null} />
-              </Grid>
+                  </>
+                )
 
-              <Grid item xs={12} md={12}>
-                {
-                  client && (
-                    <>
+              }
 
-                      <Box
-                        sx={{
-                          border: '1px solid',
-                          borderColor: 'primary.main',
-                          borderRadius: 1,
-                          p: 1,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 0.6
-                        }}
-                      >
-
-                        <Typography variant='h5'>
-                          {client.person.lastName} {client.person.firstName}
-                        </Typography>
-                        <Typography variant='subtitle1'>
-                          {client.person.email}
-                        </Typography>
-                        <Typography variant='subtitle2'>
-                          {client.person.numPhone}
-                        </Typography>
-                      </Box>
-
-                    </>
-                  )
-
-                }
-
-              </Grid>
             </Grid>
-            {/* <Stack
+          </Grid>
+          {/* <Stack
                 direction='row'
                 spacing={1}
                 justifyContent='space-between'
@@ -173,143 +210,79 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
               </Stack> */}
 
-          </CardContent>
+        </CardContent>
 
-        </Card>
+        {/* </Card> */}
 
-        <Card>
-          <CardHeader
-            title='Finalizar pago'
-          />
-
-          <CardContent>
-            <Stack spacing={3} direction='column'>
-
-              <Box>
+        {/* <Container maxWidth='sm'> */}
 
 
-                <InputLabel id="demo-simple-select-label">Total</InputLabel>
-                <Typography variant='h4'>
-                  {`$ ${amount}`}
-                </Typography>
-              </Box>
+        {
+
+          client &&
+          <>
+            <CardHeader
+              title='2. Finalizar pago'
+            />
+            {/* <Card> */}
+
+            <CardContent>
+              <Stack spacing={2} direction='column'>
 
 
 
-              <RadioGroup name="use-radio-group" value={paymentMethod} onChange={handleChangePaymentMethod}>
+
                 <InputLabel id="demo-simple-select-label">Forma de pago</InputLabel>
-                <Stack direction='row' spacing={2}>
-                  <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
-                  <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
-                </Stack>
-              </RadioGroup>
 
-              <TextField
-                label='Cantidad pagada'
-                variant='outlined'
-                type='number'
-                value={amountPaid}
-                onChange={handleChangeAmountPaid}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AttachMoney />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  width: 200
-                }}
+                <RadioGroup name="use-radio-group" value={paymentMethod} onChange={handleChangePaymentMethod}>
+                  <Grid container spacing={2}>
 
+                    <Grid item xs={12} md={6} >
+                      <Card
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          p: 1
+                        }}
+                      >
 
+                        <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
+                        <MonetizationOnOutlined color='success' />
 
-              />
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Card
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          p: 1
+                        }}
 
-
-
-
-
-
-
-              {
-                difference > 0 && (
-                  <Typography variant='h4'>
-
-                    {`Cambio: $${difference}`}
-
-                  </Typography>
-                )
-              }
-              <Stack direction='row'>
-                <Button
-
-                  variant='contained'
-                  onClick={submitPayment}
-                >
-                  Registrar pago
-                </Button>
-
-              </Stack>
-
-
-              {/* <Button
-              color='inherit'
-              startIcon={<Print />}
-            // onClick={() => { navigate('receipt') }}
-            >
-              Comprobante de pago
-            </Button> */}
-
-            </Stack>
-
-          </CardContent>
-        </Card>
-      </Stack>
+                      >
+                        <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
+                        <CreditCard color='warning' />
 
 
 
-      {/* <Typography variant='h3'  >
-
-{`Total de la orden: $${order?.total}`}
-
-</Typography> */}
-      {/* 
-<Card sx={{ p: 2 }}>
-        <Stepper activeStep={paymentStep} orientation='vertical'
-          sx={{
-            backgroundColor: 'transparent'
-          }}
-        >
-
-          <Step>
-            <StepLabel><Typography variant={paymentStep === 3 ? 'h4' : 'body1'} >Cliente</Typography></StepLabel>
 
 
-
-            <StepContent>
-
-
-            </StepContent>
-
-          </Step>
-
-
-
-          <Step>
-            <StepLabel> <Typography variant={paymentStep === 4 ? 'h4' : 'body1'} >Forma de pago</Typography></StepLabel>
-
-            <StepContent>
-
-              <Stack spacing={3} direction='column'>
-
-
-
-                <RadioGroup name="use-radio-group" defaultValue="first" >
-                  <Stack direction='row' spacing={2}>
-                    <FormControlLabel value="first" label="Efectivo" control={<Radio />} />
-                    <FormControlLabel value="second" label="Transferencia" control={<Radio />} />
-                  </Stack>
+                      </Card>
+                    </Grid>
+                  </Grid>
                 </RadioGroup>
+
+                <Box display='flex' flexDirection='column' alignContent='center' alignItems='center' gap={1}>
+
+                  <Typography variant='subtitle2'> Total a pagar</Typography>
+                  <Typography variant='h2'>
+                    {`$ ${amount}`}
+                  </Typography>
+                </Box>
+
+                <Divider />
 
                 <TextField
                   label='Cantidad pagada'
@@ -339,7 +312,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
 
                 {
-                  difference > 0 && (
+                  difference >= 0 && (
                     <Typography variant='h4'>
 
                       {`Cambio: $${difference}`}
@@ -347,112 +320,32 @@ export const PayOrder: FC<Props> = ({ order }) => {
                     </Typography>
                   )
                 }
+                <Stack direction='row'>
+                  <Button
 
-                <Button
-
-                  variant='contained'
-                >
-                  Registrar pago
-                </Button>
-
-
-                <Button
-                  color='inherit'
-                  startIcon={<Print />}
-                // onClick={() => { navigate('receipt') }}
-                >
-                  Comprobante de pago
-                </Button>
-
-
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='space-between'
-                >
-                  <BtnBack />
-                  <BtnNext />
+                    variant='contained'
+                    onClick={submitPayment}
+                    startIcon={paymentMethod === PaymentMethod.CASH ? <MonetizationOnOutlined /> : <CreditCard />}
+                  >
+                    Registrar pago
+                  </Button>
 
                 </Stack>
 
 
               </Stack>
 
-            </StepContent>
-          </Step>
+            </CardContent>
+            {/* </Card> */}
+          </>
+        }
 
 
-          <Step>
+        {/* </Container> */}
 
-            <StepLabel><Typography variant={paymentStep === 5 ? 'h4' : 'body1'} >Nota de venta</Typography></StepLabel>
-
-            <StepContent>
-
-              <Stack spacing={2}>
-                <TextField
-                  label='Nota de venta'
-                  variant='outlined'
-                  type='number'
-                  fullWidth
-                  sx={{
-                    width: 200
-                  }}
-
-                />
-
-                <Button
-                  color="primary"
-                  variant='contained'
-                >
-                  Validar
-                </Button>
-
-                <Button
-                  startIcon={<Receipt />}
-                  color="primary"
-                  variant='contained'
-                >
-                  Imprimir nota de venta
-                </Button>
+      </Stack>
 
 
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='flex-start'
-                >
-                  <BtnBack />
-
-
-
-                </Stack>
-              </Stack>
-
-
-
-
-            </StepContent>
-
-          </Step>
-
-
-
-
-        </Stepper>
-
-
-      </Card > */}
-
-      {/* <Button
-        startIcon={<ArrowBackIos fontSize='small' />}
-        color="inherit"
-        onClick={() => changeStep(0)}
-        sx={{
-          my: 3
-        }}
-      >
-        Productos
-      </Button> */}
 
 
 

@@ -3,11 +3,31 @@ import { useEffect } from 'react';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { CreateInvoiceDto } from '../dto/invoices/create-invoice-dto';
-import { InvoicesResponse, createInvoice, getInvoices, removeInvoice } from "../services/invoices.service";
+import { InvoicesResponse, createInvoice, getInvoice, getInvoices, removeInvoice } from "../services/invoices.service";
 import { IOrder } from "../../../../models";
 import { useDispatch } from "react-redux";
 import { setActiveOrder } from "../../../../redux";
 import { useFilterInvoices } from "./useFilterInvoices.dto";
+import { Invoice } from '../models/Invoice.model';
+
+
+export const useInvoice = (term: string) => {
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const invoiceQuery = useQuery<Invoice>(['invoice', term], () => getInvoice( term ), {
+    retry: false,
+    onError: (error) => {
+      enqueueSnackbar('Error al obtener el pago', {
+        variant: 'error'
+      });
+    }
+  });
+
+
+  return { invoiceQuery }
+
+}
 
 
 export const useInvoices = () => {
@@ -25,6 +45,8 @@ export const useInvoices = () => {
       paymentMethod: filter.paymentMethod || undefined,
       transactionNumber: filter.transactionNumber || undefined,
       notaDeVenta: filter.notaDeVenta || undefined,
+      cashRegisterId: filter.cashRegister ? filter.cashRegister.id : undefined,
+
 
     }), {
 

@@ -24,11 +24,11 @@ export const OrdersReports = () => {
   const [datesOrders, setDatesOrders] = useState<DateOrders[]>([]);
 
 
-  const getDatesOrdersCall = async () => await callEndpoint(getOrdersEachDate())
+  // const getDatesOrdersCall = async () => await callEndpoint(getOrdersEachDate())
 
   const loadDatesOrdersState = (data: DateOrders[]) => { setDatesOrders(data); }
 
-  useAsync(getDatesOrdersCall, loadDatesOrdersState, () => { }, []);
+  // useAsync(getDatesOrdersCall, loadDatesOrdersState, () => { }, []);
 
 
   const data = {

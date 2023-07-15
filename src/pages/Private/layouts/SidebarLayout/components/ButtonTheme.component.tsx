@@ -20,7 +20,9 @@ export const ButtonTheme = () => {
         setNameTheme(curThemeName === 'PureLightTheme' ? 'NebulaFighterTheme' : 'PureLightTheme')
       }}
       size='small'
-      color="primary"
+      color={
+        curThemeName === 'PureLightTheme' ? 'secondary' : 'inherit'
+      }
       
 
      

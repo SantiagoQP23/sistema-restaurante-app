@@ -3,8 +3,8 @@ import { FC, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  Card, CardHeader, Grid, CardContent, Box, Divider, Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
-  Button, CardActions, IconButton, Tooltip, useTheme, Accordion, AccordionSummary, AccordionDetails, AccordionActions, Avatar, Tab, Tabs, Chip
+  Card, CardHeader, Grid, CardContent, Box,  Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
+  Button, CardActions, IconButton, Tooltip, useTheme,  Tab, Tabs, Chip, Divider, Stack
 } from '@mui/material';
 
 import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward, Undo, PlayCircleOutline } from '@mui/icons-material';
@@ -27,7 +27,6 @@ import { selectMenu, setActiveOrder } from '../../../../../../redux';
 
 import { IOrder } from '../../../../../../models';
 import { statusModalEditOrderDetail, statusModalStartOrder } from '../../../services/orders.service';
-import { Stack, ListItemButton, ListItemText, FormControlLabel } from '@mui/material';
 import { BtnAddProduct } from './BtnAddProduct.component';
 import { queryClient } from '../../../../../../main';
 import { useQueryClient } from '@tanstack/react-query';
@@ -231,25 +230,8 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
 
               <Typography variant='h3'>{`N° ${order.num}`}</Typography>
 
-
-              {/* <Chip
-                icon={<TableRestaurant />}
-                label={
-                  <Typography variant='h5'> {
-                    order.type === TypeOrder.IN_PLACE
-
-                      ?
-                      `Mesa ${order.table?.name || ''}`
-                      : 'Para llevar'
-
-                  }</Typography>
-                }
-
-                variant={order.type === TypeOrder.IN_PLACE ? 'filled' : 'outlined'}
-
-              /> */}
-
             </Stack>
+            
 
           }
 
@@ -283,6 +265,11 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             </Stack>
 
           }
+
+          // avatar={
+          //   <Divider orientation='vertical'  sx={{ width: 5, backgroundColor: color + '.main', fontSize: 20 }}/>
+          // }
+
 
 
         />

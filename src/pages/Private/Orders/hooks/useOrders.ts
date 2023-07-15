@@ -37,6 +37,8 @@ export const useOrders = () => {
 
     {
       onSuccess: (data) => {
+
+
       }
 
 
@@ -51,13 +53,13 @@ export const useOrders = () => {
     filter.startDate,
     filter.endDate,
     filter.period,
-    filter.status,
-    filter.client,
     filter.table,
+    filter.rowsPerPage,
     filter.user,
     filter.isPaid,
-
-    filter.rowsPerPage
+    filter.status,
+    filter.client,
+    
   ])
 
   useEffect(() => {

@@ -1,6 +1,8 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import { PrivateRoutes } from '../../../../models';
+import { InvoicesList } from '../views/InvoicesList/InvoicesList.view';
+import { Invoice } from '../views/Invoice/Invoice.view';
 
 
 
@@ -12,4 +14,14 @@ export const InvoiceRouter: RouteObject =
 {
   path: PrivateRoutes.INVOICES,
   element: <Invoices />,
+  children: [
+    {
+      path: ':invoiceId',
+      element: <Invoice />,
+    },
+    {
+      path: '',
+      element: <InvoicesList />,
+    },
+    ]
 }

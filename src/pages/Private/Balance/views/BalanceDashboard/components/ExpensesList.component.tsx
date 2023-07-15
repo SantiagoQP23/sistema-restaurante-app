@@ -72,7 +72,7 @@ export const ExpensesList = () => {
             <TableBody>
 
               {
-                expensesQuery.data?.map((expense) => (
+                expensesQuery.data?.expenses.map((expense) => (
                   <TableRow key={expense.id}>
                     <TableCell>
                       <Typography variant='h5'>

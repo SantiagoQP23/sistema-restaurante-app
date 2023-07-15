@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createIncome, getIncomes, updateIncome } from "../services/incomes.service";
 import { useSnackbar } from "notistack";
@@ -5,16 +7,48 @@ import { CreateIncomeDto } from "../dto/create-income.dto";
 import { Income } from "../models/income.model";
 import { UpdateIncomeDto } from "../dto/update-income.dto";
 import { queryClient } from "../../../../main";
+import { useFilterIncomes } from "./useFilterIncomes";
 
 
 
 
 export const useIncomes = () => { 
 
-  const incomesQuery = useQuery(["incomes"], getIncomes);
+  const filter = useFilterIncomes();
+
+  const incomesQuery = useQuery(["incomes"], () =>  getIncomes({
+
+    offset: filter.page,
+    limit: filter.rowsPerPage,
+    startDate: filter.startDate,
+    endDate: filter.endDate,
+    period: filter.period,
+    cashRegisterId: filter.cashRegister ? filter.cashRegister.id : undefined,
+    userId: filter.user ? filter.user.id : undefined,
+  }));
+
+
+  useEffect(() => {
+    incomesQuery.refetch();
+    filter.resetPage();
+
+  }, [filter.startDate, filter.endDate, filter.period, filter.cashRegister, filter.user, filter.rowsPerPage]);
+
+
+  useEffect(() => {
+
+    incomesQuery.refetch();
+
+  }, [filter.page])
+
+
+
+
+
 
   return {
-    incomesQuery
+    incomesQuery,
+    ...filter
   }
 
 

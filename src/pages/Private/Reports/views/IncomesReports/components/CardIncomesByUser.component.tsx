@@ -2,7 +2,7 @@ import { Card, CardActions, CardHeader, Checkbox, CircularProgress, Divider, For
 import { usePaginationAsync } from "../../../../../../hooks/usePaginationAsync";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { useQuery } from "@tanstack/react-query";
-import { IncomeByUser, getIncomesByUser } from "../../../services/dashboard.service";
+import { IncomeByUser,  } from "../../../services/dashboard.service";
 import { EditOutlined } from "@mui/icons-material";
 import { useEffect } from "react";
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
@@ -12,38 +12,38 @@ import { Period } from "../../../../../../models/period.model";
 export const CardIncomesByUser = () => {
 
 
-  const {
-    period,
-    startDate,
-    endDate,
-    endDateChecked,
-    handleChangeEndDate,
-    handleChangeEndDateChecked,
-    handleChangePeriod,
-    handleChangeStartDate,
+  // const {
+  //   period,
+  //   startDate,
+  //   endDate,
+  //   endDateChecked,
+  //   handleChangeEndDate,
+  //   handleChangeEndDateChecked,
+  //   handleChangePeriod,
+  //   handleChangeStartDate,
     
 
-  } = useDateFilter(Period.TODAY);
+  // } = useDateFilter(Period.TODAY);
 
-  const {
-   page, nextPage, prevPage, rowsPerPage,
+  // const {
+  //  page, nextPage, prevPage, rowsPerPage,
    
-    handleChangePage,
-    handleChangeRowsPerPage,
+  //   handleChangePage,
+  //   handleChangeRowsPerPage,
   
 
-     } = usePaginationAsync();
+  //    } = usePaginationAsync();
 
 
-  const { data, refetch, isLoading, isFetching } = useQuery<IncomeByUser[]>(['best-selling-products', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
-    return getIncomesByUser({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
-  })
+  // const { data, refetch, isLoading, isFetching } = useQuery<IncomeByUser[]>(['best-selling-products', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
+  //   return getIncomesByUser({  startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
+  // })
 
 
   
-  useEffect(() => {
-    refetch();
-  }, [ endDateChecked])
+  // useEffect(() => {
+  //   refetch();
+  // }, [ endDateChecked])
 
 
 
@@ -51,7 +51,7 @@ export const CardIncomesByUser = () => {
 
   return (
     <Card>
-
+{/* 
       <CardHeader
         title='Ingresos por usuario'
        />
@@ -153,12 +153,7 @@ export const CardIncomesByUser = () => {
           :
           data?.map((data, index) => (
             <ListItem>
-              {/* <ListItemAvatar
-
-              >
-                <Typography variant='h4'>{index + 1 + (rowsPerPage * page)}</Typography>
-
-              </ListItemAvatar> */}
+              
               <ListItemText
                 primary={data.user.person.firstName + ' ' + data.user.person.lastName}
 
@@ -196,7 +191,7 @@ export const CardIncomesByUser = () => {
           </Typography>
       </CardActions>
 
-
+ */}
 
 
 

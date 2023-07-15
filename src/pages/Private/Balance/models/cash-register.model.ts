@@ -13,6 +13,8 @@ export interface CashRegister {
 
     closingDate: Date;
 
+    balance: number;
+
 
     createdAt: Date;
     updatedAt: Date;

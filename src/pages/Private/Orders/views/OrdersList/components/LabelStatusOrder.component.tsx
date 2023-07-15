@@ -4,6 +4,7 @@ import { FC } from "react";
 import { Label } from "../../../../../../components/ui";
 import { OrderStatus } from "../../../../../../models";
 import { Chip } from '@mui/material';
+import { LocalDining, Pending, SoupKitchen } from "@mui/icons-material";
 
 
 const colorStatusOrderMap: {
@@ -22,7 +23,7 @@ const textStatusOrderMap: { [key: string]: string } = {
   'unpaid': 'Por pagar',
   'DELIVERED': 'Entregado',
   'CANCELLED': 'Cancelado',
-  
+
 };
 
 
@@ -37,14 +38,19 @@ export const LabelStatusOrder: FC<Props> = (
 
 ) => {
 
-  
+
 
   return (
     <Chip
       color={colorStatusOrderMap[status]}
       label={textStatusOrderMap[status]}
-      size="small"
-     
+      icon={status === OrderStatus.PENDING
+        ? <Pending />
+        : status === OrderStatus.IN_PROGRESS
+          ? <SoupKitchen />
+          : <LocalDining />
+      }
+
     />
 
   )

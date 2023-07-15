@@ -51,15 +51,15 @@ export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange, f
       <Stack
         direction='row'
         alignItems='center'
-        width={fullWidth ? '100%': 130}
+        width={fullWidth ? '100%': 110}
         justifyContent='center'
         // divider={<Divider orientation="vertical" flexItem />}
-        sx={{
-          borderRadius: '8px',
-          border: '1px solid #777',
-          // borderColor: 'inherit',
+        // sx={{
+        //   borderRadius: '8px',
+        //   border: '1px solid #777',
+        //   // borderColor: 'inherit',
 
-        }}
+        // }}
         
       >
 
@@ -100,6 +100,7 @@ export const CounterInput: FC<Props> = ({ value, min = 1, max, step, onChange, f
           inputProps={{
             min: 0.5,
             step: step || 0.5,
+            
 
           }}
 

@@ -14,11 +14,11 @@ export const OrdersSummary = () => {
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
-  const getDatesOrdersCall = async () => await callEndpoint(getOrdersEachDate())
+  // const getDatesOrdersCall = async () => await callEndpoint(getOrdersEachDate())
 
   const loadDatesOrdersState = (data: DateOrders[]) => { setDatesOrders(data); }
 
-  useAsync(getDatesOrdersCall, loadDatesOrdersState, () => { }, []);
+  // useAsync(getDatesOrdersCall, loadDatesOrdersState, () => { }, []);
 
   return (
     <>

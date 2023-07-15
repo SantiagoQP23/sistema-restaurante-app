@@ -1,18 +1,21 @@
 import { format } from 'date-fns';
-import { useInvoices } from '../../Orders/hooks/useInvoices';
+import { useInvoices } from '../../../../Orders/hooks/useInvoices';
 import { Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, TablePagination, IconButton, Box, TextField, MenuItem } from '@mui/material';
 import { Description, Search, ShowChart, Visibility } from '@mui/icons-material';
-import { Label } from '../../../../components/ui';
+import { Label } from '../../../../../../components/ui';
 import { Grid, Select } from '@mui/material/';
-import { ComboBoxClient } from '../../Orders/components';
+import { ComboBoxClient } from '../../../../Orders/components';
 import { ChangeEvent } from 'react';
-import { PaymentMethod } from '../../Orders/models/Invoice.model';
+import { PaymentMethod } from '../../../../Orders/models/Invoice.model';
+import { useNavigate } from 'react-router-dom';
 
 
 export const TableInvoices = () => {
 
 
   const { invoicesQuery, ...filters } = useInvoices();
+
+  const navigate = useNavigate();
 
 
   const handleChangeNum = (e: ChangeEvent<HTMLInputElement>) => {
@@ -170,7 +173,10 @@ export const TableInvoices = () => {
                       }
                     </TableCell>
                     <TableCell>
-                      <IconButton>
+                      <IconButton
+                      
+                        onClick={() => navigate(`${invoice.id}`)}
+                      >
                         <Visibility />
                       </IconButton>
                     </TableCell>

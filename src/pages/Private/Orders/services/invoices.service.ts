@@ -10,6 +10,18 @@ export interface InvoicesResponse {
 }
 
 
+export const getInvoice = async (term: string): Promise<Invoice> => {
+
+
+  const { data } = await restauranteApi.get<Invoice>(`invoices/${term}`);
+
+  return data;
+
+
+}
+
+
+
 export const getInvoices = async (filterDto: FilterInvoicesDto) => {
 
   const { limit = 10, offset = 0, ...restFilter } = filterDto;

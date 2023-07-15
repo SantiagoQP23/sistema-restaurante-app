@@ -1,13 +1,25 @@
 import { restauranteApi } from "../../../../api";
 import { CreateExpenseDto } from "../dto/create-expense.dto";
+import { FilterExpensesDto } from "../dto/filters/filter-expenses.dto";
 import { UpdateExpenseDto } from "../dto/update-expense.dto";
 import { Expense } from "../models/expense.model";
 
+export interface ExpensesResponse {
+  expenses: Expense[];
+  count: number;
+}
 
+export const getExpenses = async (filterDto: FilterExpensesDto): Promise<ExpensesResponse> => {
 
-export const getExpenses = async (): Promise<Expense[]> => {
+  const { limit=10, offset = 0, ...restFilter } = filterDto;
 
-  const { data } = await restauranteApi.get<Expense[]>("/expenses");
+  const { data } = await restauranteApi.get<ExpensesResponse>("/expenses", {
+    params: {
+      ...restFilter,
+      offset: limit * offset,
+      limit
+    }
+  });
 
   return data;
 }

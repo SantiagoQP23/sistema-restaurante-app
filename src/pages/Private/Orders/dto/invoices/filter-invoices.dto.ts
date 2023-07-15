@@ -17,5 +17,7 @@ export interface FilterInvoicesDto extends DateFiltePaginationDto {
 
   notaDeVenta?: string;
 
+  cashRegisterId?: string;
+
 
 }

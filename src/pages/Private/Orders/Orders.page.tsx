@@ -20,7 +20,7 @@ import { useSnackbar } from "notistack";
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../../context";
-import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders, selectTables, updateTable } from "../../../redux";
+import { selectOrders, loadOrders, addOrder, updateOrder, setActiveOrder, deleteOrder, setLastUpdatedOrders, selectTables, updateTable, sortOrdersByDeliveryTime } from "../../../redux";
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 import { Cached, Replay } from "@mui/icons-material";
@@ -37,7 +37,7 @@ export const Orders = () => {
 
   const { activeOrdersQuery } = useActiveOrders();
 
-  const {sortOrdersByDeliveryTime} = useOrderHelper();
+  // const {sortOrdersByDeliveryTime} = useOrderHelper();
 
 
   const { loading, callEndpoint } = useFetchAndLoad();
@@ -61,7 +61,9 @@ export const Orders = () => {
 
       dispatch(addOrder(order))
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
-      sortOrdersByDeliveryTime(orders);
+
+      dispatch(sortOrdersByDeliveryTime())
+      
 
       // tables.forEach(table => {
 
@@ -106,7 +108,7 @@ export const Orders = () => {
 
       dispatch(setLastUpdatedOrders(new Date().toISOString()))
 
-      sortOrdersByDeliveryTime(orders);
+      dispatch(sortOrdersByDeliveryTime())
 
 
       // let table = tables.find(t => t.id === order?.table?.id) ?? null;

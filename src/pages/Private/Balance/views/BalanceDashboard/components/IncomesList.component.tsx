@@ -71,7 +71,7 @@ export const IncomesList = () => {
             <TableBody>
 
               {
-                incomesQuery.data?.map(income => (
+                incomesQuery.data?.incomes.map(income => (
                   <>
 
                     <TableRow key={income.id}>

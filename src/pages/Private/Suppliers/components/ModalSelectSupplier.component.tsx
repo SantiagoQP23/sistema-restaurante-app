@@ -71,7 +71,7 @@ export const ModalSelectSupplier: FC<Props> = ({ open, onClose, onChange }) => {
         {
           suppliersQuery.data?.map((supplier) => (
 
-            <ListItem>
+            <ListItem key={supplier.id}>
 
               <ListItemText
                 primary={supplier.person.firstName + ' ' + supplier.person.lastName}

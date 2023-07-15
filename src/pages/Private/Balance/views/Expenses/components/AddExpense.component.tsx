@@ -25,7 +25,7 @@ export const AddExpense = () => {
 
   const {activeCashRegister}= useCashRegisterStore(state => state)
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<CreateExpenseDto>({
+  const { register, handleSubmit, formState: { errors }, control, reset} = useForm<CreateExpenseDto>({
     defaultValues: expenseInitialForm
   });
 
@@ -44,7 +44,9 @@ export const AddExpense = () => {
 
       form.cashRegisterId=activeCashRegister.id;
 
-      mutateAsync(form);
+      mutateAsync(form).then(() => {
+        reset();
+      });
 
     }else {
       // TODO modal crear caja
@@ -94,9 +96,10 @@ export const AddExpense = () => {
                   })
                   }
                   rows={2}
-                  helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+                  error={!!errors.description}
+                  helperText={errors.description?.message}
 
-
+                  
                 />
 
 
@@ -115,8 +118,9 @@ export const AddExpense = () => {
                     minLength: { value: 2, message: 'Minimo 2 caracteres' },
                   })
                   }
-                  rows={2}
-                  helperText={<Typography color="red">{errors.responsible?.message} </ Typography>}
+                    rows={2}
+                  error={!!errors.responsible}
+                  helperText={errors.responsible?.message}
 
 
                 />
@@ -142,7 +146,8 @@ export const AddExpense = () => {
                   })
                   }
 
-                  helperText={<Typography color="red">{errors.amount?.message} </ Typography>}
+                  error={!!errors.amount}
+                  helperText={errors.amount?.message}
 
                 />
               </Grid>
@@ -189,9 +194,9 @@ export const AddExpense = () => {
                     ({ field: { onChange, onBlur, value } }) => (
                       <FormControl fullWidth>
                         <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
-                          <Typography variant="subtitle2">
+                          {/* <Typography variant="subtitle2">
                             Metodo de pago
-                          </Typography>
+                          </Typography> */}
                           <Stack direction='row' spacing={2}>
                             <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
                             <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
@@ -206,7 +211,7 @@ export const AddExpense = () => {
                 />
               </Grid>
 
-              <Grid item direction='row' xs={12}>
+              <Grid item xs={12}>
                 <LoadingButton
                   variant="contained"
                   color="warning"

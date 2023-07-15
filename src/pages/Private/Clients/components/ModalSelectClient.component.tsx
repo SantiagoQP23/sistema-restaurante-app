@@ -112,7 +112,7 @@ export const ModalSelectClient: FC<Props> = ({
         >
           {
             clientsQuery.data?.clients.map((client) => (
-              <Box display='flex' justifyContent='space-between' alignItems='center'>
+              <Box key={client.id} display='flex' justifyContent='space-between' alignItems='center'>
                 <ListItemText
                   primary={client.person.firstName + ' ' + client.person.lastName}
                   secondary={client.person.email}

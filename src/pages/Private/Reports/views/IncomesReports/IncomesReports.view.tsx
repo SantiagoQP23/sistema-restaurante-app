@@ -49,52 +49,52 @@ export const IncomesReports = () => {
 
      } = usePaginationAsync();
 
-  const { data, isFetching, refetch, isLoading } = useQuery<DateIncome[]>(['incomes', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
-    return getIncomesDate({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
-  })
+  // const { data, isFetching, refetch, isLoading } = useQuery<DateIncome[]>(['incomes', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
+  //   return getIncomesDate({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
+  // })
 
   const navigate = useNavigate();
 
 
-  const dataChart = {
-    labels: data?.map(date => format(new Date(date.date), 'dd/MM/yyyy')),
-    datasets: [
-      {
-        data: data?.map(date => date.total),
-        label: "Ingreso ($)",
-        borderColor: "#3e95cd",
-        fill: false,
-        backgroundColor: "#3e95cd",
+  // const dataChart = {
+  //   labels: data?.map(date => format(new Date(date.date), 'dd/MM/yyyy')),
+  //   datasets: [
+  //     {
+  //       data: data?.map(date => date.total),
+  //       label: "Ingreso ($)",
+  //       borderColor: "#3e95cd",
+  //       fill: false,
+  //       backgroundColor: "#3e95cd",
 
-      },
+  //     },
 
-    ]
-  }
+  //   ]
+  // }
 
-  const options = {
-    plugins: {
+  // const options = {
+  //   plugins: {
 
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Pedidos por día'
-      }
-    }
-  };
+  //     legend: {
+  //       position: 'top' as const,
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: 'Pedidos por día'
+  //     }
+  //   }
+  // };
 
 
-  useEffect(() => {
-    refetch()
-  }, [period, startDate, endDate, endDateChecked, page, rowsPerPage])
+  // useEffect(() => {
+  //   refetch()
+  // }, [period, startDate, endDate, endDateChecked, page, rowsPerPage])
 
 
 
   return (
     <>
 
-      <TitlePage
+      {/* <TitlePage
 
         title="Ingresos"
         action={
@@ -110,11 +110,11 @@ export const IncomesReports = () => {
 
         }
       />
-      
+       */}
 
       <Grid container spacing={1}>
 
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
 
           <CardIncomesByUser />
         </Grid>
@@ -266,7 +266,7 @@ export const IncomesReports = () => {
 
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   )

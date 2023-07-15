@@ -24,8 +24,6 @@ export const ActiveOrders = () => {
   const {activeOrdersQuery} = useActiveOrders();
 
 
-
-
   return (
     <>
 

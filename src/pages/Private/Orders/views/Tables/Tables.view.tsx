@@ -1,8 +1,8 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TitlePage } from '../../../components/TitlePage.component';
-import { Container, Grid, Card, Button, Chip, CardActionArea, IconButton, Stack } from '@mui/material';
+import { Container, Grid, Card, Button, Chip, CardActionArea, IconButton, Stack, Box } from '@mui/material';
 import { selectTables, setActiveTable } from '../../../../../redux';
 import { CardContent, Typography, CardHeader } from '@mui/material/';
 import { Add, Edit, Person, PersonOutline, Settings } from '@mui/icons-material';
@@ -27,7 +27,7 @@ export const Tables = () => {
 
   const [order, setOrder] = useState<IOrder | null>(null);
 
-  const {isOpen, handleClose, handleOpen} = useModal();
+  const { isOpen, handleClose, handleOpen } = useModal();
 
 
 
@@ -54,11 +54,11 @@ export const Tables = () => {
       handleOpenDrawer(table);
 
     }
-    
+
   }
-  
+
   const handleOpenDrawer = (table: ITable) => {
-    
+
     dispatchRedux(setActiveTable(table));
 
     handleOpen();
@@ -85,10 +85,10 @@ export const Tables = () => {
   return (
     <>
 
-    <DrawerOrder 
-      open={isOpen}
-      onClose={handleCloseDrawer}
-    />
+      <DrawerOrder
+        open={isOpen}
+        onClose={handleCloseDrawer}
+      />
 
       <Container maxWidth='lg' >
 
@@ -129,15 +129,56 @@ export const Tables = () => {
 
           {
             tables.map(table => (
-              <Grid key={table.id} item xs={12} md={4} lg={3}>
+              <Grid key={table.id} item xs={6} md={3} lg={2}>
 
                 <Card>
                   <CardActionArea onClick={() => handleClickTable(table)}>
 
-                    <CardHeader
+
+                    <Box
+
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+
+                    >
+
+                      <Typography variant='h4'>
+                        Mesa {table.name}
+                      </Typography>
+
+                      <Chip
+                        size='small'
+                        label={
+                          <Typography fontSize={12} display='flex' alignItems='center'>
+
+                            {
+                              table.isAvailable
+
+                                ? 'Disponible'
+                                : <>
+                                  <PersonOutline
+                                    fontSize={'small'}
+                                  />
+                                  {table.orders!.reduce((acc, order) => acc + order.people, 0)} - Ocupada
+
+                                </>
+                            }
+                          </Typography>
+                        }
+                        color={table.isAvailable ? 'success' : 'default'}
+                      />
+                    </Box>
+
+                    {/* <CardHeader
                       title={`Mesa ${table.name}`}
-                      subheader={`Capacidad: ${table.chairs}`}
-                      action={
+                      // subheader={`Capacidad: ${table.chairs}`}
+                      subheader={
                         <Chip
                           size='small'
                           label={
@@ -161,7 +202,7 @@ export const Tables = () => {
                         />
 
                       }
-                    />
+                    /> */}
                   </CardActionArea>
 
                 </Card>

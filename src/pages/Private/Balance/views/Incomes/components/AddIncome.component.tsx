@@ -28,7 +28,7 @@ export const AddIncome = () => {
 
   const [client, setClient] = useState<IClient | null>(null);
 
-  const { register, handleSubmit, formState: { errors }, control } = useForm<CreateIncomeDto>({
+  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<CreateIncomeDto>({
     defaultValues: incomeInitialForm
   });
 
@@ -50,19 +50,18 @@ export const AddIncome = () => {
 
       form.cashRegisterId=activeCashRegister.id;
 
-      mutateAsync(form);
+      mutateAsync(form).then(() => {
+        reset();
+      });
 
-    }else {
-      // TODO modal crear caja
     }
-
 
   }
 
   return (
     <>
 
-      <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} />
+      {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}
 
       <Card  >
 
@@ -90,7 +89,11 @@ export const AddIncome = () => {
                   })
                   }
                   rows={2}
-                  helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
+                  error={!!errors.description}
+                  helperText={errors.description?.message}
+                  // helperText={<Typography color="red">{errors.description?.message} </ Typography>}
+
 
 
                 />
@@ -112,7 +115,11 @@ export const AddIncome = () => {
                   })
                   }
                   rows={2}
-                  helperText={<Typography color="red">{errors.responsible?.message} </ Typography>}
+
+                  error={!!errors.responsible}
+                  helperText={errors.responsible?.message}
+                  // helperText={<Typography color="red">{rors.responsible?.message} </ Typography>}
+
 
 
                 />
@@ -135,7 +142,8 @@ export const AddIncome = () => {
                   })
                   }
 
-                  helperText={<Typography color="red">{errors.amount?.message} </ Typography>}
+                  error={!!errors.amount}
+                  helperText={errors.amount?.message}
 
                 />
               </Grid>
@@ -177,9 +185,9 @@ export const AddIncome = () => {
                     ({ field: { onChange, onBlur, value } }) => (
                       <FormControl fullWidth>
                         <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
-                          <Typography variant="subtitle2">
+                          {/* <Typography variant="subtitle2">
                             Metodo de pago
-                          </Typography>
+                          </Typography> */}
                           <Stack direction='row' spacing={2}>
                             <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
                             <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
@@ -194,7 +202,7 @@ export const AddIncome = () => {
                 />
               </Grid>
 
-              <Grid item direction='row' xs={12}>
+              <Grid item xs={12}>
                 <LoadingButton
                   variant="contained"
                   color="success"

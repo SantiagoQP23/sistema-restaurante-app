@@ -5,6 +5,7 @@ import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 import { IClient, IUser } from "../../../../models";
 import { Period } from "../../../../models/period.model";
 import { PaymentMethod } from '../models/Invoice.model';
+import { CashRegister } from '../../Balance/models/cash-register.model';
 
 
 export const useFilterInvoices = () => {
@@ -23,10 +24,16 @@ export const useFilterInvoices = () => {
 
   const [client, setClient] = useState<null | IClient>(null);
 
+  const [cashRegister, setCashRegister] = useState<null | CashRegister>(null);
+
 
 
 
   const pagination = usePaginationAsync();
+
+  const handleChangeCashRegister = (cashRegister: CashRegister | null) => {
+    setCashRegister(cashRegister);
+  }
 
   const handleChangeUser = (user: IUser | null) => {
     setUser(user);
@@ -71,6 +78,7 @@ export const useFilterInvoices = () => {
     transactionNumber,
     notaDeVenta,
     client,
+    cashRegister,
 
     handleChangeUser,
     handleChangeIsActive,
@@ -78,6 +86,7 @@ export const useFilterInvoices = () => {
     handleChangeTransactionNumber,
     handleChangeNotaDeVenta,
     handleChangeClient,
+    handleChangeCashRegister,
 
 
 

@@ -1,8 +1,8 @@
 
 export enum Period {
-  TODAY = 'today',
-  WEEK = 'week',
-  MONTH = 'month',
-  YEAR = 'year',
+  TODAY = 'daily',
+  WEEK = 'weekly',
+  MONTH = 'monthly',
+  YEAR = 'yearly',
   CUSTOM = 'custom'
 }

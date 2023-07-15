@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createExpense, getExpenses, updateExpense } from "../services/expenses.service";
 import { useSnackbar } from "notistack";
@@ -5,21 +7,51 @@ import { CreateExpenseDto } from "../dto/create-expense.dto";
 import { Expense } from "../models/expense.model";
 import { UpdateExpenseDto } from "../dto/update-expense.dto";
 import { queryClient } from "../../../../main";
+import { useFilterExpenses } from "./useFilterExpenses";
 
 
 
 
 export const useExpenses = () => {
 
+  const filter = useFilterExpenses();
 
-  const expensesQuery = useQuery(["expenses"], getExpenses, {
+  const expensesQuery = useQuery(["expenses"], () => getExpenses ({
+
+    offset: filter.page,
+    limit: filter.rowsPerPage,
+    startDate: filter.startDate,
+    endDate: filter.endDate,
+    period: filter.period,
+    cashRegisterId: filter.cashRegister ? filter.cashRegister.id : undefined,
+    userId: filter.user ? filter.user.id : undefined,
+
+  }), {
     onSuccess: (data) => {
       console.log(data);
     }
   });
 
+
+  useEffect(() => {
+    expensesQuery.refetch();
+    filter.resetPage();
+
+  }, [filter.startDate, filter.endDate, filter.period, filter.cashRegister, filter.user, filter.rowsPerPage]);
+
+
+  useEffect(() => {
+
+    expensesQuery.refetch();
+
+  }, [filter.page])
+
+
+
+
   return {
-    expensesQuery
+    expensesQuery, 
+    ...filter
   }
 
 }

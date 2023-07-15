@@ -59,7 +59,7 @@ export const Private = () => {
     dispatch(loadTables(data));
   }
 
-  useCashRegisterActive();
+  const {cashRegisterQuery} = useCashRegisterActive();
 
   useAsync(getTablesCall, loadTablesState, () => { }, []);
 
@@ -85,6 +85,11 @@ export const Private = () => {
 
 
   }, [socket]);
+
+  useEffect(() => {
+    cashRegisterQuery.refetch();
+  }, [])
+
 
   const { isLoading } = useRestaurant();
 

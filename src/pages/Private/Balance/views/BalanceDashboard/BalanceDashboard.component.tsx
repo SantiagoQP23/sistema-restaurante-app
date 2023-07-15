@@ -1,6 +1,6 @@
-import { ArrowOutward, CallReceived } from '@mui/icons-material';
+import { ArrowOutward, CallReceived, Lock, Visibility } from '@mui/icons-material';
 import { TitlePage } from '../../../components/TitlePage.component';
-import { Grid, Card, CardHeader, CardContent, Typography, Button, Box, TableContainer, Stack, InputLabel, Input } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Typography, Button, Box, TableContainer, Stack, InputLabel, Input, Tabs, Tab } from '@mui/material';
 import { ExpensesList, IncomesList } from './components';
 import { AddExpense } from '../Expenses/components/AddExpense.component';
 import { format } from 'date-fns';
@@ -8,7 +8,20 @@ import { useNavigate } from 'react-router-dom';
 import { AddIncome } from '../Incomes/components/AddIncome.component';
 import { CashRegisterSummary } from '../CashRegister/components/CashRegisterSummary.view';
 import { useCashRegisterStore } from '../../../Common/store/cashRegisterStore';
+import { CardAddCashRegister } from './components/CardAddCashRegister.component';
+import { useState } from 'react';
 
+
+export enum AddTransactionTabs {
+  INCOMES = 'incomes',
+  EXPENSES = 'expenses',
+}
+
+export enum ViewTransactionTabs {
+  INCOMES = 'incomes',
+  EXPENSES = 'expenses',
+  INVOICES = 'invoices'
+}
 
 
 
@@ -17,8 +30,17 @@ export const BalanceDashboard = () => {
 
   const navigate = useNavigate();
 
-  const {activeCashRegister} = useCashRegisterStore(state => state);
+  const { activeCashRegister } = useCashRegisterStore(state => state);
 
+  const [tabAddTransaction, setTabAddTransaction] = useState<'income' | 'expense'>('income');
+
+  const [tabViewTransaction, setTabViewTransaction] = useState<ViewTransactionTabs>(ViewTransactionTabs.INCOMES);
+
+
+  const handleChangeTabAddTransaction = (value: 'income' | 'expense') => {
+
+    setTabAddTransaction(value)
+  }
 
   const navigateTo = (path: string) => {
     navigate(path)
@@ -30,186 +52,249 @@ export const BalanceDashboard = () => {
 
   return (
     <>
-      <TitlePage title='Balance' />
+      <TitlePage
+
+        title='Balance'
+
+        action={
+          <Stack direction='row' spacing={1}>
+
+            <Button
+              variant='contained'
+              startIcon={<Lock />}
+            >
+              Cerrar caja
+            </Button>
+
+            <Button
+              variant='outlined'
+              startIcon={<Visibility />}
+              onClick={() => navigateTo('cash-register')}
+
+            >
+              Cierres de caja
+
+            </Button>
+
+          </Stack>
+        }
+
+
+      />
 
 
       {
-        activeCashRegister === null 
-        ? 
-        (
-          <>
-            Crear caja
-          </>
-        ):(
+        activeCashRegister === null
+          ?
+          (
+            <>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={4}>
+                  <CardAddCashRegister />
+
+                </Grid>
+
+                <Grid item xs={12} md={8}>
+
+                </Grid>
+
+              </Grid>
+            </>
+          ) : (
 
 
-      <Grid container spacing={2}>
+            <Grid container spacing={2}>
 
 
-        <Grid item xs={12} md={6} lg={4}>
-          <Card
-            sx={{
-              // backgroundColor: '#f44336',
-              // color: '#fff'
-            }}
+              <Grid item xs={12} md={6} lg={4}>
+                <Card
+                  sx={{
+                    // backgroundColor: '#f44336',
+                    // color: '#fff'
+                  }}
 
-          >
-
-            <CardHeader title='Balance' 
-            action={
-              <Button
-                onClick={() => navigateTo('balance')}
-                color='info'
-              >
-                Ver todos
-              </Button>
-            }
-            />
-
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
-
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {activeCashRegister.balance || 0}</Typography>
-              {
-                activeCashRegister.balance > 0
-                  ? <CallReceived color='success' />
-                  : <ArrowOutward color='error' />
-              }
-
-
-
-            </CardContent>
-
-          </Card>
-
-
-        </Grid>
-
-
-        <Grid item xs={12} md={6} lg={4}>
-
-          <Card
-            sx={{
-              // backgroundColor: '#4caf50',
-            }}
-
-          >
-
-            <CardHeader
-              title='Ingresos'
-              action={
-                <Button
-                  onClick={() => navigateTo('incomes')}
-                  color='success'
                 >
-                  Ver todos
-                </Button>
-              }
-            />
 
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
+                  <CardHeader title='Balance'
+                    action={
+                      <Button
+                        onClick={() => navigateTo('balance')}
+                        color='info'
+                      >
+                        Ver todos
+                      </Button>
+                    }
+                  />
 
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {activeCashRegister.totalIncomes + activeCashRegister.totalInvoices}</Typography>
-              <CallReceived color='success' />
-            </CardContent>
+                  <CardContent
+                    sx={{
+                      display: 'flex',
+                      gap: 1,
+
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography variant='h3' >$ {activeCashRegister.balance || 0}</Typography>
+                    {
+                      activeCashRegister.balance > 0
+                        ? <ArrowOutward color='error' />
+                        : <CallReceived color='success' />
+                    }
 
 
-          </Card>
 
-        </Grid>
+                  </CardContent>
 
-        <Grid item xs={12} md={6} lg={4}>
-          <Card
-            sx={{
-              // backgroundColor: '#f44336',
-              // color: '#fsff'
-            }}
+                </Card>
 
-          >
 
-            <CardHeader title='Gastos'
-              action={
-                <Button
-                  onClick={() => navigateTo('expenses')}
-                  color='warning'
+              </Grid>
+
+
+              <Grid item xs={12} md={6} lg={4}>
+
+                <Card
+                  sx={{
+                    // backgroundColor: '#4caf50',
+                  }}
+
                 >
-                  Ver todos
-                </Button>
-              }
-            />
 
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
+                  <CardHeader
+                    title='Ingresos'
+                    action={
+                      <Button
+                        onClick={() => navigateTo('incomes')}
+                        color='success'
+                      >
+                        Ver todos
+                      </Button>
+                    }
+                  />
 
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {activeCashRegister.totalExpenses}</Typography>
-              <ArrowOutward color='error' />
-            </CardContent>
+                  <CardContent
+                    sx={{
+                      display: 'flex',
+                      gap: 1,
 
-          </Card>
-
-
-        </Grid>
-
-
-
-        <Grid item xs={12} md={6} lg={4} >
-         <CashRegisterSummary />
-        </Grid>
-        <Grid item xs={12} md={6} lg={4} >
-
-          <AddIncome />
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography variant='h3' >$ {activeCashRegister.totalIncomes + activeCashRegister.totalInvoices}</Typography>
+                    <CallReceived color='success' />
+                  </CardContent>
 
 
+                </Card>
 
-        </Grid>
+              </Grid>
 
-        <Grid item xs={12} md={6} lg={4} >
+              <Grid item xs={12} md={6} lg={4}>
+                <Card
+                  sx={{
+                    // backgroundColor: '#f44336',
+                    // color: '#fsff'
+                  }}
 
-          <AddExpense />
+                >
+
+                  <CardHeader title='Gastos'
+                    action={
+                      <Button
+                        onClick={() => navigateTo('expenses')}
+                        color='warning'
+                      >
+                        Ver todos
+                      </Button>
+                    }
+                  />
+
+                  <CardContent
+                    sx={{
+                      display: 'flex',
+                      gap: 1,
+
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Typography variant='h3' >$ {activeCashRegister.totalExpenses}</Typography>
+                    <ArrowOutward color='error' />
+                  </CardContent>
+
+                </Card>
 
 
-        </Grid>
+              </Grid>
 
 
-        {/* 
-        <Grid item xs={12} md={6}  >
+              <Grid item xs={12} md={6} lg={4} >
+                <Tabs
+                  value={tabAddTransaction}
+                  onChange={(e, value) => handleChangeTabAddTransaction(value)}
+                  >
+                  <Tab label='Ingresos' value={'income'} />
+                  <Tab label='Gastos' value={'expense'} />
+
+                </Tabs>
+
+                {
+                  tabAddTransaction === 'income'
+                  ? <AddIncome />
+                  : <AddExpense />
+                }
 
 
-          <IncomesList />
+
+              </Grid>
+
+
+                {/* 
+
+              <Grid item xs={12} md={6} lg={8} >
+
+                <Card>
+                  <CardHeader
+                    title='Transacciones'
+                  />
+                  <CardContent>
+
+                    <Tabs
+                      value={tabViewTransaction}
+                      onChange={(e, value) => setTabViewTransaction(value)}
+                    >
+                      <Tab label='Ingresos' value={ViewTransactionTabs.INCOMES} />
+                      <Tab label='Gastos' value={ViewTransactionTabs.EXPENSES} />
+
+                    </Tabs>
+
+                    {
+                      tabViewTransaction === ViewTransactionTabs.INCOMES
+                        ? <IncomesList />
+                        : <ExpensesList />
+                    }
+
+                  </CardContent>
+                </Card>
+
+              </Grid>
+             
+
+            */}
+              <Grid item xs={12} md={6} lg={4} >
+                <CashRegisterSummary />
 
 
 
-
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <ExpensesList />
+              </Grid>
 
 
 
-        </Grid> */}
-      </Grid>
-        )
+            </Grid>
+          )
 
       }
 
-      
+
 
 
 

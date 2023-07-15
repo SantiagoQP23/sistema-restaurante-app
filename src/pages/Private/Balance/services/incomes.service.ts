@@ -1,13 +1,26 @@
 import { restauranteApi } from "../../../../api";
 import { CreateIncomeDto } from "../dto/create-income.dto";
+import { FilterIncomesDto } from "../dto/filters/filter-incomes.dto";
 import { UpdateIncomeDto } from "../dto/update-income.dto";
 import { Income } from "../models/income.model";
 
+export interface IncomesResponse {
+  incomes: Income[];
+  count: number;
+}
+
+export const getIncomes = async (filterDto: FilterIncomesDto): Promise<IncomesResponse> => {
+
+  const { limit=10, offset = 0, ...restFilter } = filterDto;
 
 
-export const getIncomes = async (): Promise<Income[]> => {
-
-  const { data } = await restauranteApi.get<Income[]>("/incomes");
+  const { data } = await restauranteApi.get<IncomesResponse>("/incomes", {
+    params: {
+      ...restFilter,
+      offset: limit * offset,
+      limit
+    }
+  });
 
   return data;
 }

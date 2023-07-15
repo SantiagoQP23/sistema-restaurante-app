@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useContext } from 'react';
 
-import { AddOutlined, DeleteOutline, Edit, EditOutlined, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
+import { AddOutlined, CheckCircle, DeleteOutline, Edit, EditOutlined, Pending, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip, Grid, TextField, ListItem, ListItemText, List, ListItemSecondaryAction, ListItemAvatar, Avatar, ListItemButton, Chip } from '@mui/material';
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -159,13 +159,13 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             }
 
             subheader={
-              <Typography variant='h5' color={order.isClosed ? 'secondary': 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado': 'Abierto'}</Typography>
+              <Typography variant='h5' color={order.isClosed ? 'secondary' : 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado' : 'Abierto'}</Typography>
             }
           />
 
           <CardContent>
 
-            
+
             <Grid container spacing={2} alignItems='center'>
 
               <Grid item xs={4}>
@@ -243,7 +243,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <Grid item xs={8}>
 
                 <LabelStatusOrder status={
-                 order.status
+                  order.status
 
                 } />
               </Grid>
@@ -256,14 +256,16 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <Grid item xs={8}>
 
                 <Chip
-                  label={order.isPaid ? 'Pagado' : 'Pendiente'}
-                  color={order.isPaid ? 'primary' : 'warning'}
+                  label={order.isPaid ? 'Pagado' : 'Por pagar'}
+                  color={order.isPaid ? 'success' : 'warning'}
+                  icon={order.isPaid ? <CheckCircle /> : <Pending />}
                   clickable={false}
-                  size='small'
+                  variant='outlined'
+
                 />
               </Grid>
 
-             
+
 
               <Grid item xs={4}>
                 <Typography variant='body2' color='secondary'>Total</Typography>
