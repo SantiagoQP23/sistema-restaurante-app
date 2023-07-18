@@ -27,6 +27,7 @@
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "events": "^3.3.0",
+    "html2canvas": "^1.4.1",
     "notistack": "^3.0.1",
     "nprogress": "^0.2.0",
     "pdfmake": "^0.1.72",

@@ -48,7 +48,10 @@ export const IncomesSummary = () => {
             disableRipple
             to="/balance"
             component={RouterLink}
-            variant="text"
+            variant="outlined"
+            color='success'
+            size='small'
+
 
           >
             Ver más
@@ -59,7 +62,7 @@ export const IncomesSummary = () => {
 
         <CardContent>
          
-          <Typography variant="h3" component="div" textAlign='center'>
+          <Typography variant="h3" component="div" >
             $ {activeCashRegister? activeCashRegister.totalIncomesCash + activeCashRegister.totalIncomesTransfer : 0}
           </Typography>
 

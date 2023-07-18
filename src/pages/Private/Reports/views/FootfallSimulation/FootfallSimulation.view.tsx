@@ -209,7 +209,7 @@ export const FootFallSimulation = () => {
         action={
           <Button
             variant="outlined"
-            onClick={() => navigate('/reports/simulator')}>
+            onClick={() => navigate('simulator')}>
             Reglas de simulación
           </Button>
         }
@@ -246,7 +246,7 @@ export const FootFallSimulation = () => {
     </>
       }
 
-{
+{/* {
   footfalls?.length === 0 ?
     <>
       <Typography variant='h6' align='center' mt={2}>
@@ -261,7 +261,7 @@ export const FootFallSimulation = () => {
       </>
     )
 
-}
+} */}
 
 
 

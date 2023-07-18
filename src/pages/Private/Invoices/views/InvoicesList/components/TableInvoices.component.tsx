@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { useInvoices } from '../../../../Orders/hooks/useInvoices';
-import { Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, TablePagination, IconButton, Box, TextField, MenuItem } from '@mui/material';
+import { Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, TablePagination, IconButton, Box, TextField, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Description, Search, ShowChart, Visibility } from '@mui/icons-material';
 import { Label } from '../../../../../../components/ui';
 import { Grid, Select } from '@mui/material/';
@@ -25,9 +25,6 @@ export const TableInvoices = () => {
   }
 
 
-
-
-
   return (
     <>
       <Card>
@@ -44,7 +41,7 @@ export const TableInvoices = () => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={2} display='flex'>
+            {/* <Grid item xs={12} sm={2} display='flex'>
 
               <TextField
                 type='text'
@@ -74,19 +71,30 @@ export const TableInvoices = () => {
               </IconButton>
 
 
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12} sm={2}>
 
-              <Select
-                value={filters.paymentMethod || ''}
-                onChange={(e) => filters.handleChangePaymentMethod(e.target.value as PaymentMethod)}
-              >
-                <MenuItem value={''}>Todos</MenuItem>
-                <MenuItem value={PaymentMethod.CASH}>Efectivo</MenuItem>
-                <MenuItem value={PaymentMethod.TRANSFER}>Transferencia</MenuItem>
+              <FormControl
+                fullWidth
+                >
 
-              </Select>
+
+                <InputLabel id="demo-simple-select-label">Forma de pago</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Forma de pago"
+                  value={filters.paymentMethod || ''}
+                  onChange={(e) => filters.handleChangePaymentMethod(e.target.value as PaymentMethod)}
+                  fullWidth
+                >
+                  <MenuItem value={''}>Todos</MenuItem>
+                  <MenuItem value={PaymentMethod.CASH}>Efectivo</MenuItem>
+                  <MenuItem value={PaymentMethod.TRANSFER}>Transferencia</MenuItem>
+
+                </Select>
+              </FormControl>
 
             </Grid>
 
@@ -129,8 +137,8 @@ export const TableInvoices = () => {
                 <>
                   <TableRow>
                     <TableCell>
-                      <Description />
-                      {invoice.transactionNumber}
+                      {/* <Description /> */}
+                      N° {invoice.transactionNumber}
                     </TableCell>
                     <TableCell>
                       {format(new Date(invoice.createdAt), 'dd/MM/yyyy HH:mm')}
@@ -144,9 +152,9 @@ export const TableInvoices = () => {
                     </TableCell>
                     <TableCell>
                       {
-                        invoice.paymentMethod === PaymentMethod.CASH 
-                        ? 'Efectivo'
-                        : 'Transferencia'
+                        invoice.paymentMethod === PaymentMethod.CASH
+                          ? 'Efectivo'
+                          : 'Transferencia'
                       }
                     </TableCell>
                     <TableCell>
@@ -174,7 +182,7 @@ export const TableInvoices = () => {
                     </TableCell>
                     <TableCell>
                       <IconButton
-                      
+
                         onClick={() => navigate(`${invoice.id}`)}
                       >
                         <Visibility />

@@ -515,13 +515,13 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color }) => {
             && (
               <>
                 <Grid item xs={12}>
-                <Card>
+                  <Card>
                     <CardHeader
 
-sx={{
-  px: 1,
-  py: 0.5
-}}
+                      sx={{
+                        px: 1,
+                        py: 0.5
+                      }}
 
 
                       avatar={<Notes />}
@@ -540,7 +540,7 @@ sx={{
 
 
                   </Card>
-                 
+
 
                 </Grid>
               </>
@@ -567,7 +567,7 @@ sx={{
         >
 
 
-          <Tabs
+          {order.status !== OrderStatus.DELIVERED && <Tabs
             value={expanded ? 1 : 0}
             onChange={handleExpanded}
             indicatorColor='primary'
@@ -621,24 +621,28 @@ sx={{
             }}
 
           >
-            <Tab
-              disabled={order.status === OrderStatus.DELIVERED}
-              label='Por entregar'
-              icon={
-                <Label color={color}>
-                  {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
-                </Label>
-              }
 
-              iconPosition='end'
-
-              sx={{
-                '&.Mui-selected, &.Mui-selected:hover': {
-                  color: (theme) => theme.colors.alpha.black[100]
+            {
+              
+              <Tab
+                // disabled={order.status === OrderStatus.DELIVERED}
+                label='Por entregar'
+                icon={
+                  <Label color={color}>
+                    {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+                  </Label>
                 }
-              }}
 
-            />
+                iconPosition='end'
+
+                sx={{
+                  '&.Mui-selected, &.Mui-selected:hover': {
+                    color: (theme) => theme.colors.alpha.black[100]
+                  }
+                }}
+
+              />
+            }
             <Tab
               label={
                 'Entregado'
@@ -657,7 +661,7 @@ sx={{
               }}
             />
           </Tabs>
-
+          }
 
           {
             !expanded

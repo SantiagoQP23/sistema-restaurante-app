@@ -6,3 +6,11 @@ export enum Period {
   YEAR = 'yearly',
   CUSTOM = 'custom'
 }
+
+
+export enum GroupBy {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
+}

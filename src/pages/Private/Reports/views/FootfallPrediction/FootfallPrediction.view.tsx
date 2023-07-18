@@ -1,13 +1,13 @@
 import { useState, useRef, RefObject, FC, ReactElement, useContext } from 'react';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { IDay,  Footfall } from '../../models/day.interface';
+import { IDay, Footfall } from '../../models/day.interface';
 import { useAsync } from '../../../../../hooks/useAsync';
 import { Typography, Grid, Card, CardContent, CardHeader, tabsClasses, Button, Divider, Box, Stack } from '@mui/material';
 import { Tabs, Tab } from '@mui/material/';
 import { Line } from "react-chartjs-2";
 import { addDays, format, isFuture, subDays } from "date-fns";
 import { es } from 'date-fns/locale';
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Settings, Update } from "@mui/icons-material";
 import { Day } from "../../components/Day.component";
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
@@ -32,9 +32,9 @@ export const FootfallPrediction = () => {
   //Obtener los datos de la API
 
 
-  const {data, isLoading, isFetching} = useQuery<Footfall[]>(['footfall', 'prediction'], () => getPredictionFootfall(), {
+  // const { data, isLoading, isFetching } = useQuery<Footfall[]>(['footfall', 'prediction'], () => getPredictionFootfall(), {
 
-  });
+  // });
 
   const { loading, callEndpoint } = useFetchAndLoad();
   const { loading: loadingGet, callEndpoint: callEndpointGet } = useFetchAndLoad();
@@ -48,26 +48,26 @@ export const FootfallPrediction = () => {
 
   const { loadHolidays } = useContext(SimulationContext);
 
-  const currentDate =  new Date();
+  const currentDate = new Date();
 
 
-  const dataPrediction = {
-    // Mostrar solo días siguientes a la fecha actual
+  // const dataPrediction = {
+  //   // Mostrar solo días siguientes a la fecha actual
 
-    labels: data?.map(footfall => `${footfall.date}`),
-    datasets: [
-      {
-        data: data?.map(footfall => footfall.quantity),      
-        label: 'Asistencia',
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.5,
+  //   labels: data?.map(footfall => `${footfall.date}`),
+  //   datasets: [
+  //     {
+  //       data: data?.map(footfall => footfall.quantity),
+  //       label: 'Asistencia',
+  //       fill: false,
+  //       borderColor: 'rgb(75, 192, 192)',
+  //       tension: 0.5,
 
-      },
+  //     },
 
-    ],
+  //   ],
 
-  }
+  // }
 
   // const data = {
   //   labels: days.map(day => `${day.nameDay} ${day.date}`),
@@ -136,26 +136,47 @@ export const FootfallPrediction = () => {
   }
 
   const submitUpdatePrediction = async () => {
-  //   console.log("Actualizar predicción");
+    //   console.log("Actualizar predicción");
 
-  //   await callEndpointPrediction(updatePredictionAffluence())
-  //     .then(async (resp) => {
+    //   await callEndpointPrediction(updatePredictionAffluence())
+    //     .then(async (resp) => {
 
-  //       setDays(resp.data)
-  //       enqueueSnackbar('Predicción actualizada', { variant: 'success' });
+    //       setDays(resp.data)
+    //       enqueueSnackbar('Predicción actualizada', { variant: 'success' });
 
 
-  //     })
+    //     })
 
-  //     .catch((err) => {
-  //       console.log(err);
-  //       enqueueSnackbar('Error al actualizar la predicción', { variant: 'error' });
-  //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       enqueueSnackbar('Error al actualizar la predicción', { variant: 'error' });
+    //     })
 
-  //   console.log('Actualizar predicción de afluencia')
+    //   console.log('Actualizar predicción de afluencia')
 
-   
+
   }
+
+  const data = {
+    labels: ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7', 'Día 8', 'Día 9', 'Día 10', 'Día 11', 'Día 12', 'Día 13', 'Día 14', 'Día 15'],
+    datasets: [
+      {
+        label: 'Afluencia',
+        data: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
 
 
@@ -164,18 +185,28 @@ export const FootfallPrediction = () => {
   return (
     <>
 
-    <TitlePage title="Predicción de afluencia" 
-      action={
+      <TitlePage title="Predicción de afluencia"
+        action={
           <Stack direction="row" spacing={2}>
 
-            <LoadingButton loading={loading} variant="contained" onClick={submitUpdateWeather}>
-              Actualizar Pronóstico del cliima
+            <LoadingButton
+              loading={loading}
+              variant="outlined"
+              startIcon={<Settings />}
+              onClick={() => navigate('simulation')}
+            >
+              Simulación
             </LoadingButton>
-            <LoadingButton variant="contained" loading={loadingPrediction} onClick={submitUpdatePrediction}>
+            <LoadingButton 
+            variant="contained" 
+            loading={loadingPrediction} 
+            onClick={submitUpdatePrediction}
+              startIcon={<Update />}
+            >
               Actualizar Predicción
             </LoadingButton>
 
-            {
+            {/* {
               days.length > 0 &&
               <PDFDownloadLink
                 document={<PdfFootfallPrediction days={days.filter((day) => isFuture(addDays(new Date(day.date), 2)))} />}
@@ -188,12 +219,12 @@ export const FootfallPrediction = () => {
                   Exportar a PDF
                 </Button>
 
-              </PDFDownloadLink>}
+              </PDFDownloadLink>} */}
 
           </Stack>
-      }
+        }
 
-    />
+      />
 
 
 
@@ -208,8 +239,8 @@ export const FootfallPrediction = () => {
           <Card>
             <CardHeader title="Predicción de afluencia"></CardHeader>
             <CardContent>
-
-              <Line data={dataPrediction} ></Line>
+              <Line data={data} options={options}  />
+              {/* <Line data={dataPrediction} ></Line> */}
 
 
             </CardContent>
@@ -237,7 +268,7 @@ export const FootfallPrediction = () => {
 
       <Grid container spacing={2} mt={2}>
 
-        
+
 
 
 

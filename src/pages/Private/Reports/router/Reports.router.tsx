@@ -11,6 +11,7 @@ import { DashboardReports } from '../components';
 import { FootFallSimulation } from '../views/FootfallSimulation/FootfallSimulation.view';
 import { SimulatorForms } from '../views/SimulatorForms/SimulatorForms.view';
 import { FootfallPrediction } from '../views/FootfallPrediction/FootfallPrediction.view';
+import { Finances } from '../views/Finances/Finances.view';
 
 
 const Reports = lazy(() => import('../Reports.page'));
@@ -28,12 +29,12 @@ export const ReportsRouter: RouteObject = {
       element: <DashboardReports />
     },
     {
-      path: 'simulation',
+      path: 'prediction/simulation/',
       element: <FootFallSimulation />
 
     },
     {
-      path: 'simulator',
+      path: 'prediction/simulation/simulator',
       element: <SimulatorForms />
 
     },
@@ -60,6 +61,10 @@ export const ReportsRouter: RouteObject = {
     {
       path: 'products',
       element: <ProductsReports />
+    },
+    {
+      path: 'finances',
+      element: <Finances />
     }
   ]
 }

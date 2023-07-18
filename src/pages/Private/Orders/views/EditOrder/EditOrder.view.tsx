@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 // Material UI
-import { Grid, Container, CircularProgress, Stepper, Step, StepLabel, Card, CardContent, Button, Stack, Tooltip } from '@mui/material';
+import { Grid, Container, CircularProgress, Stepper, Step, StepLabel, Card, CardContent, Button, Stack, Tooltip, IconButton } from '@mui/material';
 
 import { selectOrders, setActiveOrder } from '../../../../../redux';
 
@@ -16,7 +16,7 @@ import { useOrder } from '../../hooks';
 import { PayOrder } from './components/PayOrder.component';
 import { useInvoiceStore } from '../../store/invoiceStore';
 import { Account } from './components/Account.component';
-import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline, RemoveCircle } from '@mui/icons-material';
+import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline, RemoveCircle, DownloadOutlined } from '@mui/icons-material';
 import { DrawerInvoice } from './components/DrawerInvoice.component';
 import { useDrawerInvoiceStore } from '../../store/drawerInvoiceStore';
 import { statusModalDeleteOrder, statusModalPayOrder } from '../../services/orders.service';
@@ -24,6 +24,8 @@ import { useModal } from '../../../../../hooks';
 import { ModalEditOrder } from './components/ModalEditOrder.component';
 import { OrderStatus } from '../../../../../models';
 import { ModalDeleteInvoice } from '../../components/modals/ModalDeleteInvoice.component';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PdfReceiptOrder } from '../OrderReceipt/pdf/PdfReceiptOrder.component';
 
 
 export const EditOrder = () => {
@@ -157,6 +159,19 @@ export const EditOrder = () => {
                     </Tooltip>
                   )
                 }
+{/* 
+                <PDFDownloadLink
+                  document={<PdfReceiptOrder order={activeOrder!} />}
+                  fileName={'pedido-' + activeOrder!.id}
+                >
+                  <IconButton>
+                    <DownloadOutlined />
+                  </IconButton>
+
+
+
+
+                </PDFDownloadLink> */}
 
                 <Button
                   startIcon={<Print />}

@@ -8,17 +8,19 @@ import { useState, useEffect } from 'react';
 import { SelectChangeEvent } from '@mui/material/';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { useQuery } from '@tanstack/react-query';
-import { FilterDto, ResultBestSellingProducts, getBestSellingProducts } from '../../services/dashboard.service';
-import { EditOutlined } from '@mui/icons-material';
+import { BestSellingCategoriesResponse, FilterDto, ResultBestSellingProducts, getBestSellingCategories, getBestSellingProducts } from '../../services/dashboard.service';
+import { EditOutlined, Print } from '@mui/icons-material';
 import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
 import { useSelector } from 'react-redux';
 import { selectMenu } from '../../../../../redux';
 import { getProducts } from '../../../../../helpers/menu.helper';
-import { FormControlLabel, ListItemButton, ListItemSecondaryAction } from '@mui/material';
+import { FormControlLabel, ListItemButton, ListItemSecondaryAction, Chip } from '@mui/material';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { useDateFilter } from '../../../../../hooks/useDateFilter';
 import { CustomGroupBy, GroupBy, Period, useFilterSoldProducts } from '../../hooks/useFilterSoldProducts';
 import { format, parse, startOfMonth } from 'date-fns';
+import { CategoriesBestSelling } from '../IncomesReports/components/CategoriesBestSelling.component';
+import { NavLink as RouterLink } from 'react-router-dom';
 
 
 
@@ -37,6 +39,8 @@ export const ProductsReports = () => {
 
 
   // } = useDateFilter(Period.TODAY);
+
+  const { sections } = useSelector(selectMenu);
 
   const {
     period,
@@ -72,6 +76,16 @@ export const ProductsReports = () => {
     }
   })
 
+  const categoriesQuery = useQuery<BestSellingCategoriesResponse>(['best-selling-categories', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
+    return getBestSellingCategories({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage, groupBy, customGroupBy })
+  }, {
+    onSuccess: (data) => {
+      console.log(data)
+    }
+  })
+
+
+
 
 
   const handleSubmit = () => {
@@ -80,305 +94,305 @@ export const ProductsReports = () => {
   }
 
 
-  const getDate = (date: string): string => {
+  const counterSections = sections.length;
+  const counterCategories = sections.reduce((acc, section) => section.categories.reduce((acc, category) => category.products.length + acc, 0) + acc, 0);
+  const counterProducts = sections.reduce((acc, section) => section.categories.reduce((acc, category) => category.products.length + acc, 0) + acc, 0);
 
-    let dateParsed;
-    if (groupBy === GroupBy.MONTH) {
-
-      // const dateSplited = date.split('/');
-      // const month = dateSplited[0];
-      // const year = dateSplited[1];
-      const dates = startOfMonth(parse(date, 'MM/yyyy', new Date()));
-
-      console.log(dates)
-
-      dateParsed = format(new Date(dates), 'MMMM yyyy')
-
-      // dateParsed = new Date(`${month}/01/${year}`)
-
-      // console.log(`${month}/01/${year}`)
-      // console.log(format(dateParsed, 'MMMM yyyy'))
-    }
-
-
-    return date;
-
-
-  }
 
   useEffect(() => {
     refetch();
+    categoriesQuery.refetch();
   }, [page, rowsPerPage, period, endDateChecked, startDate, endDate, groupBy, customGroupBy])
+
+
 
 
   return (
     <>
 
+
+
+
+
       <TitlePage
         title='Productos'
+
+        action={
+          <Button
+            variant='contained'
+            startIcon={<Print />}
+          >
+            Imprimir
+          </Button>
+        }
 
 
       />
 
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={1}
+      <Grid container spacing={2} my={1}>
 
-        my={2}
+
+        <Grid item xs={12} md={4}>
+          <Card>
+            <CardHeader
+              title='Secciones'
+              // subheader='Secciones registradas'
+              action={
+                <Button
+                  variant='outlined'
+                  component={RouterLink}
+                  to="/menu"
+                  size='small'
+                >
+                  Administrar
+                </Button>
+              }
+            />
+
+            <CardContent sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center'
+
+            }}>
+
+              <Typography variant='h3'>{counterSections}</Typography>
+
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Card>
+            <CardHeader
+              title='Categorías'
+              // subheader='Categorías registradas'
+              action={
+                <Button
+                  variant='outlined'
+                  component={RouterLink}
+                  to="/menu"
+                  size='small'
+                >
+                  Administrar
+                </Button>
+              }
+            />
+
+            <CardContent sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center'
+
+            }}>
+
+              <Typography variant='h3'>{counterCategories}</Typography>
+
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card>
+            <CardHeader
+              title='Productos'
+              // subheader='Productos registrados'
+              action={
+                <Button
+                  variant='outlined'
+                  component={RouterLink}
+                  to="/menu"
+                  size='small'
+                >
+                  Administrar
+                </Button>
+              }
+            />
+
+            <CardContent sx={{
+              display: 'flex',
+              gap: 1,
+              alignItems: 'center'
+
+            }}>
+
+              <Typography variant='h3'>{
+                counterProducts
+              }</Typography>
+
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} mt={1}>
+
+        <Grid item xs={12} md={2}>
+          <FormControl fullWidth>
+            <InputLabel id="select-period-label">Periodo</InputLabel>
+            <Select
+              labelId="select-period-label"
+
+              value={period}
+              onChange={handleChangePeriod}
+              fullWidth
+
+              label="Periodo"
+              size='medium'
+            >
+              <MenuItem value={Period.DAILY}>Diario</MenuItem>
+              <MenuItem value={Period.MONTHLY}>Mensual</MenuItem>
+              <MenuItem value={Period.YEARLY}>Anual</MenuItem>
+              {
+                GroupBy.DAY !== groupBy && (
+                  <>
+                  </>
+                )
+              }
+
+              {
+                GroupBy.DAY === groupBy &&
+                <MenuItem value={Period.CUSTOM}>Personalizado</MenuItem>
+              }
+
+
+
+            </Select>
+          </FormControl>
+
+        </Grid>
+
+
+        <Grid item xs={12} md={2} >
+          <DesktopDatePicker
+            label="Fecha de inicio"
+            inputFormat={
+              period === Period.MONTHLY ? 'yyyy MMMM' :
+                period === Period.YEARLY ? 'yyyy' : 'yyyy-MM-dd'
+            }
+            value={startDate}
+            onChange={handleChangeStartDate}
+            renderInput={(params) => <TextField {...params} />}
+            disableFuture
+            maxDate={endDate ? endDate : undefined}
+            views={
+              period === Period.MONTHLY ? ['year', 'month'] :
+                period === Period.YEARLY ? ['year'] : ['day']
+
+            }
+
+          />
+
+        </Grid>
+
+        {
+
+          startDate && period === Period.CUSTOM &&
+
+          <Grid item xs={12} md={2}>
+
+
+            <DesktopDatePicker
+              label="Fecha de fin"
+              inputFormat="yyyy-MM-dd"
+              value={endDate}
+              onChange={handleChangeEndDate}
+              renderInput={(params) => <TextField {...params} />}
+              minDate={startDate}
+              disableFuture
+
+            />
+          </Grid>
+        }
+
+      </Grid>
+
+
+      <Grid
+        container
+
+        spacing={2}
+
+        my={1}
 
       >
 
-        {/* {
+        <Grid item xs={12} md={6}>
 
-          period === 'custom' && <>
-            <Stack direction='column'>
+          <Card>
 
+            <CardHeader
+              title='Productos más vendidos'
+            // action={
+            //   <Button
+            //     size='small'
+            //     variant='contained'
+            //     startIcon={<Print />}
+            //   >
+            //     Imprimir
+            //   </Button>
+            // }
 
+            />
 
-            </Stack>
-            {
+            <List>
+              {
+                data && data.products?.map((product, index) => (
+                  <ListItem>
+                    <ListItemText
+                      primary={product.productName}
+                      primaryTypographyProps={{ variant: 'h5' }}
+                      secondary={
+                        <Chip
+                          sx={{ mt: 0.5 }}
+                          label={'Ceviches'}
+                          size='small'
+                        />
+                      }
+                    />
+                    <ListItemSecondaryAction
 
-              startDate && endDateChecked &&
+                    >
+                      <Typography variant='h6'>{product.totalSold}</Typography>
+                      <Typography variant='h5' color='success'>$ {2 * product.totalSold}</Typography>
 
-              <DesktopDatePicker
-                label="Fecha de fin"
-                inputFormat="yyyy-MM-dd"
-                value={endDate}
-                onChange={handleChangeEndDate}
-                renderInput={(params) => <TextField {...params} />}
-                minDate={startDate}
-                disableFuture
-
-              />
-            }
-          </>
-
-        } */}
-
-      </Stack>
-
-      <Card>
-
-        <CardHeader
-          title='Productos más vendidos'
-          action={
-            // isFetching && <CircularProgress sx={{ fontSize: '2px' }} />
-            <FormControl fullWidth>
-              <InputLabel id="select-period-label">Mostrar por</InputLabel>
-              <Select
-                labelId="select-period-label"
-
-                value={customGroupBy}
-                onChange={(e) => handleChangeCustomGroupBy(e.target.value as any)}
-                fullWidth
-
-                label="Periodo"
-              >
-                <MenuItem value={CustomGroupBy.FECHA}>Fecha</MenuItem>
-                <MenuItem value={CustomGroupBy.PRODUCT}>Producto</MenuItem>
+                    </ListItemSecondaryAction>
 
 
+                  </ListItem>
+                ))
+              }
 
-              </Select>
-            </FormControl>
-          }
-
-          
-        />
-
-        <Box
-          p={2}
-        >
-
-          <Grid container spacing={2}>
+            </List>
 
 
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth>
-                <InputLabel id="select-period-label">Periodo</InputLabel>
-                <Select
-                  labelId="select-period-label"
-
-                  value={period}
-                  onChange={handleChangePeriod}
-                  fullWidth
-
-                  label="Periodo"
-                >
-                  <MenuItem value={Period.DAILY}>Diario</MenuItem>
-                  <MenuItem value={Period.MONTHLY}>Mensual</MenuItem>
-                  <MenuItem value={Period.YEARLY}>Anual</MenuItem>
-                  {
-                    GroupBy.DAY !== groupBy && (
-                      <>
-                      </>
-                    )
-                  }
-
-                  {
-                    GroupBy.DAY === groupBy &&
-                    <MenuItem value={Period.CUSTOM}>Personalizado</MenuItem>
-                  }
-
-
-
-                </Select>
-              </FormControl>
-
-            </Grid>
-
-
-            {
-              customGroupBy !== CustomGroupBy.PRODUCT && Period.DAILY !== period &&
-              (<Grid item xs={6} md={3}>
-                <FormControl fullWidth>
-                  <InputLabel id="select-period-label">Agrupar por</InputLabel>
-                  <Select
-                    labelId="select-period-label"
-
-                    value={groupBy}
-                    onChange={(e) => handleChangeGroupBy(e.target.value as any)}
-                    fullWidth
-
-                    label="Periodo"
-                  >
-                    <MenuItem value={GroupBy.DAY}>Día</MenuItem>
-                    <MenuItem value={GroupBy.MONTH}>Mes</MenuItem>
-                    <MenuItem value={GroupBy.YEAR}>Año</MenuItem>
-
-
-                  </Select>
-                </FormControl>
-
-              </Grid>)
-            }
-
-
-
-
-
-            {/* <Grid item xs={6} md={3}>
-              <FormControl fullWidth>
-                <InputLabel id="select-period-label">Agrupar por</InputLabel>
-                <Select
-                  labelId="select-period-label"
-
-                  value={customGroupBy}
-                  onChange={(e) => handleChangeCustomGroupBy(e.target.value as any)}
-                  fullWidth
-
-                  label="Periodo"
-                >
-                  <MenuItem value={''}>Fecha</MenuItem>
-                  <MenuItem value={CustomGroupBy.PRODUCT}>Producto</MenuItem>
-
-
-
-                </Select>
-              </FormControl>
-
-            </Grid> */}
-
-            <Grid item xs={12} md={3}>
-              <DesktopDatePicker
-                label="Fecha de inicio"
-                inputFormat={
-                  period === Period.MONTHLY ? 'yyyy MMMM' :
-                    period === Period.YEARLY ? 'yyyy' : 'yyyy-MM-dd'
-                }
-                value={startDate}
-                onChange={handleChangeStartDate}
-                renderInput={(params) => <TextField {...params} />}
-                disableFuture
-                maxDate={endDate ? endDate : undefined}
-                views={
-                  period === Period.MONTHLY ? ['year', 'month'] :
-                    period === Period.YEARLY ? ['year'] : ['day']
-
-                }
+            <CardActions >
+              <TablePagination
+                page={page}
+                count={100}
+                rowsPerPage={rowsPerPage}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPageOptions={[10, 25, 50, 100]}
 
               />
-              {/* <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={endDateChecked}
-                    onChange={handleChangeEndDateChecked}
-                  />
-
-                }
-                label='Fecha de fin'
-              /> */}
-            </Grid>
-
-            {
-
-              startDate && period === Period.CUSTOM &&
-
-              <Grid item xs={12} md={3}>
+            </CardActions>
 
 
-                <DesktopDatePicker
-                  label="Fecha de fin"
-                  inputFormat="yyyy-MM-dd"
-                  value={endDate}
-                  onChange={handleChangeEndDate}
-                  renderInput={(params) => <TextField {...params} />}
-                  minDate={startDate}
-                  disableFuture
-
-                />
-              </Grid>
-            }
-
-          </Grid>
-
-        </Box>
+          </Card>
 
 
-        <List>
-          {
-            data && data.products?.map((product, index) => (
-              <ListItemButton>
 
-                <ListItemAvatar>
-                  <Typography variant='h4'>{index + (page * rowsPerPage) + 1}</Typography>
-                </ListItemAvatar>
-
-                <ListItemText primary={
-                  product.name || product.date
-
-                }
-
-                />
-                <ListItemSecondaryAction
-
-                >
-                  <Typography variant='h4'>{product.totalSold}</Typography>
-
-                </ListItemSecondaryAction>
+        </Grid>
 
 
-              </ListItemButton>
-            ))
-          }
+        <Grid item xs={12} md={6}>
 
-        </List>
+          <CategoriesBestSelling categoriesQuery={categoriesQuery} />
 
+        </Grid>
 
-        <CardActions >
-          <TablePagination
-            page={page}
-            count={100}
-            rowsPerPage={rowsPerPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[10, 25, 50, 100]}
+      </Grid>
 
-          />
-        </CardActions>
-
-
-      </Card>
 
     </>
   )

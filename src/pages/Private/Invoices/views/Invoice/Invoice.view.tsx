@@ -4,10 +4,62 @@ import { useParams } from "react-router-dom";
 import { useInvoice } from "../../../Orders/hooks/useInvoices";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { PdfMakeWrapper } from "pdfmake-wrapper";
+
+import html2canvas from "html2canvas";
+
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Legend,
+  Tooltip,
+} from 'chart.js';
+
+import { PdfMakeWrapper, Txt, Table as TablePdf, Img, } from "pdfmake-wrapper";
+
+import { Chart } from 'react-chartjs-2';
+
+
+
 import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
+import { Bar } from "react-chartjs-2";
+import { useEffect, useRef } from "react";
 
+function triggerTooltip(chart: ChartJS | null) {
+  const tooltip = chart?.tooltip;
 
+  if (!tooltip) {
+    return;
+  }
+
+  if (tooltip.getActiveElements().length > 0) {
+    tooltip.setActiveElements([], { x: 0, y: 0 });
+  } else {
+    const { chartArea } = chart;
+
+    tooltip.setActiveElements(
+      [
+        {
+          datasetIndex: 0,
+          index: 2,
+        },
+        {
+          datasetIndex: 1,
+          index: 2,
+        },
+      ],
+      {
+        x: (chartArea.left + chartArea.right) / 2,
+        y: (chartArea.top + chartArea.bottom) / 2,
+      }
+    );
+  }
+
+  chart.update();
+}
 
 export const Invoice = () => {
 
@@ -17,12 +69,32 @@ export const Invoice = () => {
 
   const { invoiceQuery } = useInvoice(invoiceId);
 
+  const chartRef = useRef<ChartJS>(null);
+
+  const chartData = {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+    datasets: [
+      {
+        label: 'Ventas',
+        data: [12, 19, 8, 15, 10, 7],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
 
   const { data, isLoading } = invoiceQuery;
 
-  if (isLoading) return <div>Loading...</div>
-
-  if (!data) return <div>Not found</div>
 
 
   const generatePDF = async () => {
@@ -34,7 +106,40 @@ export const Invoice = () => {
     // Definir el contenido del documento
     pdf.add('¡Hola, este es mi documento PDF generado con pdfmake-wrapper!');
 
-    pdf.create().download();
+    // Total de la factura
+
+
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+
+      const chartWidth = 400; // Ajusta el ancho del gráfico en el PDF
+      const chartHeight = 300; // Ajusta la altura del gráfico en el PDF
+
+      const imgData = canvas.toDataURL('image/png');
+
+      console.log("Añadiendo imagen")
+
+      pdf.add(
+        new Txt('Gráfica de ventas')
+
+          .bold()
+          .fontSize(14)
+          .margin([0, 20, 0, 0])
+          .end
+      );
+
+      pdf.add(await new Img(imgData).width(chartWidth).height(chartHeight).build());
+
+
+
+
+    }
+
+
+
+    pdf.create().open();
 
 
 
@@ -48,6 +153,18 @@ export const Invoice = () => {
     // downloadLink.click();
   };
 
+  useEffect(() => {
+    const chart = chartRef.current;
+
+    triggerTooltip(chart);
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>
+
+  if (!data) return <div>Not found</div>
+
+
+ 
   return (
     <>
       <Stack spacing={1}
@@ -91,8 +208,17 @@ export const Invoice = () => {
         </Stack>
       </Stack>
 
+      {/* <Chart ref={chartRef} type='bar' data={chartData} options={chartOptions} /> */}
+
+      {/* <div>
+        <Bar data={chartData} options={chartOptions} />
+
+      </div> */}
 
       <Card>
+
+
+
 
         <CardHeader
           title={

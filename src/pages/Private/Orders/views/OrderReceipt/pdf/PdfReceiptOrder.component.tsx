@@ -3,6 +3,22 @@ import { FC } from 'react';
 
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import { IOrder } from '../../../../../../models/orders.model';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Filler,
+  Legend,
+  Tooltip,
+  BarElement,
+  
+} from "chart.js"
+
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler, Tooltip, Legend, BarElement)
+
 
 // Estilos para el PDF
 const styles = StyleSheet.create({
@@ -33,6 +49,29 @@ interface Props {
 
 // Componente para crear el PDF del comprobante
 export const PdfReceiptOrder: FC<Props> = ({ order }) => {
+
+  const chartData = {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+    datasets: [
+      {
+        label: 'Ventas',
+        data: [12, 19, 8, 15, 10, 7],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+  
+  const chartOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+
   return (
     <Document>
       <Page size='A5' style={styles.page}>
@@ -50,7 +89,10 @@ export const PdfReceiptOrder: FC<Props> = ({ order }) => {
             Dirección: {order.client?.address}
           </Text>
           <Text style={styles.text}>Email: {order.client?.person.email}</Text> */}
+        <Bar data={chartData} options={chartOptions} />
         </View>
+
+
 
         <View style={styles.section}>
           <Text style={styles.subtitle}>Productos</Text>

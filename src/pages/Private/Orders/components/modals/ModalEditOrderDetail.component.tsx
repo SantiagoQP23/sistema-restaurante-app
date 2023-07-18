@@ -6,7 +6,7 @@ import { IOrderDetail } from "../../../../../models";
 import { statusModalDeleteOrderDetail, statusModalEditOrderDetail } from "../../services/orders.service";
 import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid, Stack, InputLabel } from '@mui/material';
 import { useCounter, useOrders } from '../../hooks';
-import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline, CloseFullscreen, Close, DoneAllOutlined, Delete } from '@mui/icons-material';
+import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline, CloseFullscreen, Close, DoneAllOutlined, Delete, Edit } from '@mui/icons-material';
 import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 import { LoadingButton } from '@mui/lab';
 import { DeleteOrderDetailDto } from '../../dto/delete-order-detail.dto';
@@ -190,13 +190,13 @@ export const ModalEditOrderDetail = () => {
 
           <Grid item xs={4}>
             <InputLabel htmlFor="qty">Precio</InputLabel>
-            </Grid>
+          </Grid>
 
           <Grid item xs={8}>
 
             <TextField
               id="descripcion-pedido"
-            
+
               margin="dense"
               type='number'
               defaultValue={detail?.price}
@@ -211,7 +211,7 @@ export const ModalEditOrderDetail = () => {
 
               inputProps={{
                 min: 0,
-               
+
                 step: 0.25
               }}
 
@@ -220,10 +220,10 @@ export const ModalEditOrderDetail = () => {
             />
 
 
-          {/* <Divider sx={{ my: 1 }} /> */}
+            {/* <Divider sx={{ my: 1 }} /> */}
 
-        
-            </Grid>
+
+          </Grid>
 
           <Grid item xs={4}>
             <InputLabel htmlFor="qty">Cantidad</InputLabel>
@@ -234,8 +234,8 @@ export const ModalEditOrderDetail = () => {
               value={quantity}
               onChange={handleChangeQuantity}
               min={detail?.qtyDelivered}
-              
-              />
+
+            />
 
           </ Grid>
 
@@ -266,12 +266,6 @@ export const ModalEditOrderDetail = () => {
 
           <Grid item xs={12} display='flex' justifyContent='right' mt={1}>
 
-            <LoadingButton
-              variant='contained'
-              onClick={updateDetail}
-              loading={loading}
-              color='info'
-            >Actualizar</LoadingButton>
 
           </Grid>
 
@@ -284,7 +278,7 @@ export const ModalEditOrderDetail = () => {
       </DialogContent>
       <DialogActions
         sx={{
-          justifyContent: detail?.qtyDelivered! > 1 ? 'right' : 'space-between',
+          justifyContent: detail?.qtyDelivered! >= 1 ? 'right' : 'space-between',
           gap: 1,
           px: 2
         }}
@@ -306,6 +300,17 @@ export const ModalEditOrderDetail = () => {
           )
         }
 
+        <LoadingButton
+          variant='contained'
+          onClick={updateDetail}
+          loading={loading}
+          color='info'
+          startIcon={<Edit />}
+
+        >
+          Actualizar
+        </LoadingButton>
+
 
 
 
@@ -322,7 +327,7 @@ export const ModalEditOrderDetail = () => {
               >
                 <DoneAllOutlined />
               </LoadingButton> */}
-
+        {/* 
         <Button
           color='inherit'
           variant='outlined'
@@ -331,7 +336,7 @@ export const ModalEditOrderDetail = () => {
           onClick={deliverDetail}
         >
           Entregado
-        </Button>
+        </Button> */}
 
 
 

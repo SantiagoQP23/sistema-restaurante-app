@@ -38,10 +38,13 @@ export const OrderDetails: FC<Props> = ({ order }) => {
               color="primary"
               onClick={() => navigate('products')}
               size='small'
+              variant='contained'
+              startIcon={
+                <AddShoppingCartOutlined />
+              }
 
             >
-              <AddShoppingCartOutlined />
-
+              Agregar
             </Button>
 
           }

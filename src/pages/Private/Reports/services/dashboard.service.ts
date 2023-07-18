@@ -6,6 +6,7 @@ import { IUser } from "../../../../models";
 import { DateIncome, DateOrders } from '../models/date-orders.interface';
 import { CustomGroupBy, GroupBy, Period } from '../hooks/useFilterSoldProducts';
 import { filter } from "rxjs";
+import { DateFiltePaginationDto, DateFilterDto } from "../../Common/dto";
 
 
 
@@ -24,8 +25,9 @@ export interface FilterDto {
 
 interface Product {
   id: string;
-  name?: string;
-  date?: string;
+  productName: string;
+  productPrice: number;
+  categoryName: string;
   totalSold: number;
 }
 
@@ -34,9 +36,26 @@ export interface ResultBestSellingProducts {
   count: number;
 }
 
-export interface IncomeByUser{
-  user: IUser;
-  total: number;
+export interface BestSellingCategoriesResponse {
+  categories: {
+    categoryId: string;
+    categoryName: string;
+    totalSold: string;
+  }[];
+  count: number;
+}
+
+export interface ResponseIncomesByUser{
+ 
+    userId: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    roleName: string;
+    total: string;
+    orderCount: string;
+
+ 
 }
 
 export const getBestSellingProducts = async (filterDto: FilterDto): Promise<ResultBestSellingProducts> => {
@@ -62,32 +81,52 @@ export const getBestSellingProducts = async (filterDto: FilterDto): Promise<Resu
 
   return resp.data;
 }
+export const getBestSellingCategories = async (filterDto: FilterDto): Promise<BestSellingCategoriesResponse> => {
+
+  console.log(filterDto)
+
+  const { period, startDate, endDate, offset = 0, limit = 10 } = filterDto;
+
+  const resp = await restauranteApi.get<BestSellingCategoriesResponse>(`/orders/best-selling-categories/`, {
+    params: {
+      period,
+      startDate,
+      endDate,
+      offset: limit * offset,
+      limit,
+
+    }
+  });
+
+  // console.log(resp.data);
+
+  return resp.data;
+}
 
 
 
 
 
 
-// export const getIncomesByUser = async (filterDto: FilterDto): Promise<IncomeByUser[]> => {
+export const getIncomesByUser = async (filterDto: DateFilterDto): Promise<ResponseIncomesByUser[]> => {
 
-//   console.log(filterDto)
+  console.log(filterDto)
 
-//   const { period, startDate, endDate, offset = 0, limit = 10 } = filterDto;
+  const { period, startDate, endDate,  } = filterDto;
 
-//   const resp = await restauranteApi.get<IncomeByUser[]>(`/orders/incomes-by-user/`, {
-//     params: {
-//       period,
-//       startDate,
-//       endDate,
-//       offset: limit * offset,
-//       limit
-//     }
-//   });
+  const resp = await restauranteApi.get<ResponseIncomesByUser[]>(`/orders/incomes-by-user/`, {
+    params: {
+      period,
+      startDate,
+      endDate,
+     
+    }
+  });
 
-//   // console.log(resp.data);
+  // console.log(resp.data);
 
-//   return resp.data;
-// }
+  return resp.data;
+}
 
 
 

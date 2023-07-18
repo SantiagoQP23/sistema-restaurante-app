@@ -6,11 +6,16 @@ import { useFetchAndLoad } from '../../../../../../hooks/useFetchAndLoad';
 import { getOrdersEachDate } from '../../../services/dashboard.service';
 import { useAsync } from '../../../../../../hooks/useAsync';
 import { Paid, Assignment } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { selectOrders } from '../../../../../../redux';
 
 
 export const OrdersSummary = () => {
 
   const [datesOrders, setDatesOrders] = useState<DateOrders[]>([]);
+
+
+  const {orders} =useSelector(selectOrders);
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -25,7 +30,6 @@ export const OrdersSummary = () => {
       <Card>
 
         <CardHeader
-          avatar={<Assignment color='info' sx={{ fontSize: 30 }} />}
           title={
             <Typography variant="h4" >Pedidos</Typography>
           }
@@ -34,8 +38,9 @@ export const OrdersSummary = () => {
               disableRipple
               to="/orders/list"
               component={RouterLink}
-              variant="text"
+              variant="outlined"
 
+              size='small'
             >
               Ver más
             </Button>
@@ -43,10 +48,20 @@ export const OrdersSummary = () => {
           }
         />
 
-        <CardContent>
+        <CardContent
 
+          sx={{
+            display: 'flex',
+            gap: 1,
+            alignItems: 'center'
+
+          }}
+
+        >
+
+          <Assignment color='info' fontSize='large' />
           <Typography variant="h3" component="div" textAlign='center'>
-            {datesOrders.reduce((acc, dateOrders) => acc + dateOrders.count, 0)}
+            {orders.length}
           </Typography>
 
 
