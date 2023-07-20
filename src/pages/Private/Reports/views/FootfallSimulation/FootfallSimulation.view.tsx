@@ -13,7 +13,7 @@ import {
   Tooltip,
   BarElement,
 } from "chart.js"
-import { Card, Grid, MenuItem, Select, CardHeader, CardContent, Button, Box, Stack, CircularProgress, CardActions } from '@mui/material';
+import { Card, Grid, MenuItem, Select, CardHeader, CardContent, Button, Box, Stack, CircularProgress, CardActions, Tab, Tabs } from '@mui/material';
 import { Typography, SelectChangeEvent } from '@mui/material/';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ import { es } from "date-fns/locale";
 import { AffluenceMonth } from "./components/AffluenceMonth.component";
 import { useEffect } from 'react';
 import { Day } from "../../components/Day.component";
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack, DisplaySettings, Update } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
@@ -39,6 +39,9 @@ import { useSeed } from "../../hooks/useSeed";
 import { useSimulation } from "../../hooks/useSimulation";
 import { useFootfall } from "../../hooks/useFootfall";
 import { ChartSimulatedFootfall } from "./components";
+import { RestaurantInformation } from "../SimulatorForms/components";
+import { MonthlyFootfall } from "./components/MonthlyFootfall.component";
+import { DailyFootfall } from "./components/DailyFootfall.component";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Filler, Tooltip, Legend, BarElement)
 
@@ -94,28 +97,21 @@ export const years = [{
 //TODO Voy a asumir que la aplicación ya ejecutó el seed
 
 
+enum TabPanel {
+  RESUMEN_ANUAL = 0,
+  RESUMEN_MENSUAL = 1,
+}
+
+
 export const FootFallSimulation = () => {
 
-  const { restaurant } = useSelector(selectAuth);
+  const [tab, setTab] = useState(TabPanel.RESUMEN_ANUAL);
+
+  const handleChangeTab = (event: React.SyntheticEvent, newValue: TabPanel) => {
+    setTab(newValue);
+  }
 
   const simulationQuery = useSimulation();
-
-  const { data: footfalls, isLoading, isFetching } = useFootfall();
-
-
-
-
-
-
-  const [days, setDays] = useState<IDay[]>([]);
-
-  const [daysFiltered, setDaysFiltered] = useState<IDay[]>([]);
-
-  const [daysMonth, setDaysMonth] = useState<IDay[]>([])
-
-  const [month, setmonth] = useState(0)
-
-  const [year, setYear] = useState(2022)
 
   const navigate = useNavigate();
 
@@ -128,77 +124,11 @@ export const FootFallSimulation = () => {
     simulationQuery.refetch();
   }
 
-
-
-
-  // const dataMonth = {
-  //   labels: daysFiltered.filter(day => new Date(day.date).getMonth() === month).map(day => `${day.nameDay} ${day.date}`),
-  //   datasets: [
-  //     {
-  //       label: 'Asistencia',
-  //       data: daysFiltered.filter(day => new Date(day.date).getMonth() === month).map(day => day.affluences[0].affluence),
-  //       fill: true,
-  //       backgroundColor: "rgba(75,192,192,0.2)",
-  //       borderColor: "rgba(75,192,192,1)"
-  //     }]
-  // }
-
-  /* const options = {
-    responsive:true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      
-      title: {
-        display: true,
-        text: 'Afluencia del mes '
-      },
-      
-    },
-    chart:{
-      tooltip: {
-        mode: 'index' as const,
-      }
-    }
-    
-   
-  } */
-
-  const onChangeMonth = (event: SelectChangeEvent<number>) => {
-    setmonth(event.target.value as number);
-  };
-
-  const onChangeYear = (event: SelectChangeEvent<number>) => {
-    setYear(event.target.value as number);
-  };
-
-  const filterByYear = (year: number) => {
-    setDaysFiltered(days.filter(day => new Date(day.date).getFullYear() === year))
-  }
-
-  const submitUpdateSimulation = async () => {
-    // await callEndpoint(updateSimulationAffluence())
-    //   .then(async () => {
-    //     enqueueSnackbar('Simulación actualizada', { variant: 'success' });
-    //     await callEndpoint(getAffluence())
-    //       .then((resp) => {
-    //         setDays(resp.data);
-    //       })
-
-    //   })
-    //   .catch(() => {
-
-    //   })
-
+  const executeSeed = () => {
   }
 
 
-  // useEffect(() => {
-  //   filterByYear(year)
-  // }, [days, year])
 
-  // useAsync(getAffluenceCall, loadAffluenceState, () => { }, []);
 
   return (
     <>
@@ -207,46 +137,112 @@ export const FootFallSimulation = () => {
       <TitlePage
         title='Simulación de afluencia'
         action={
-          <Button
-            variant="outlined"
-            onClick={() => navigate('simulator')}>
-            Reglas de simulación
-          </Button>
+          <>
+            <Stack direction='row' spacing={1}>
+
+              <Button
+                variant="outlined"
+                onClick={() => navigate('simulator')}
+                startIcon={<DisplaySettings />}
+              >
+                Reglas de simulación
+              </Button>
+              <LoadingButton
+                variant="contained"
+                startIcon={<Update />}
+                onClick={() => executeSimulation()}
+                loading={simulationQuery.isFetching}
+              >
+                Actualizar
+              </LoadingButton>
+            </Stack>
+          </>
         }
       />
 
+      
 
 
-      {
-        !(restaurant?.lastSimulationUpdate) &&
-        <>
-          <Card>
-            <CardContent
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column'
-              }}
-            >
+      <Grid container spacing={2}>
 
-              <Typography variant='h4' align='center' my={5}>
-                No se ha realizado ninguna simulación
-              </Typography>
+        <Grid item xs={12} md={6} lg={3}>
+          <RestaurantInformation />
+        </Grid>
+        <Grid item xs={12} md={9}>
+
+          {
+            // !(restaurant?.lastSimulationUpdate)
+            false
+              ?
+              (<>
+                <Card>
+                  <CardContent
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'column'
+                    }}
+                  >
+
+                    <Typography variant='h4' align='center' my={5}>
+                      No se ha realizado ninguna simulación
+                    </Typography>
 
 
-                <Button
-                  variant="contained"
-                  onClick={() => executeSimulation()}
-                >
-                  Iniciar simulación
-                </Button>
-            </CardContent>
-          </Card>
-    </>
-      }
+                    <Button
+                      variant="contained"
+                      onClick={() => executeSeed()}
+                    >
+                      Iniciar simulación
+                    </Button>
+                  </CardContent>
+                </Card>
+              </>)
+              : (
+                <>
+                  <Tabs
+                    value={tab}
+                    onChange={handleChangeTab}
+                    sx={{
+                      mb: 2
+                    }}
+                  >
+                    <Tab
+                      label='Resumen anual'
+                      value={TabPanel.RESUMEN_ANUAL}
+                    />
+                    <Tab
+                      label='Resumen mensual'
+                      value={TabPanel.RESUMEN_MENSUAL}
+                    />
+                  </Tabs>
 
-{/* {
+                  {
+                    tab === TabPanel.RESUMEN_ANUAL
+                      ? (
+                        <MonthlyFootfall />
+                      )
+                      : (
+                        <DailyFootfall />
+                      )
+                  }
+
+
+                </>
+              )
+          }
+        </Grid>
+
+
+
+
+      </Grid>
+
+
+
+
+      {/* {
   footfalls?.length === 0 ?
     <>
       <Typography variant='h6' align='center' mt={2}>
@@ -267,22 +263,20 @@ export const FootFallSimulation = () => {
 
 
 
-{
-  // days.length > 0 &&
+      {
+        // days.length > 0 &&
 
-  // <PDFDownloadLink
-  //   document={<PdfFootfallSimulation days={days} />}
-  //   fileName="simulacion-afluencia-completa.pdf"
-  // >
-  //   <Button variant='outlined' >
+        // <PDFDownloadLink
+        //   document={<PdfFootfallSimulation days={days} />}
+        //   fileName="simulacion-afluencia-completa.pdf"
+        // >
+        //   <Button variant='outlined' >
 
-  //     Exportar a PDF
-  //   </Button>
+        //     Exportar a PDF
+        //   </Button>
 
-  // </PDFDownloadLink>
-}
-
-
+        // </PDFDownloadLink>
+      }
 
 
 
@@ -290,7 +284,9 @@ export const FootFallSimulation = () => {
 
 
 
-{/* <Card>
+
+
+      {/* <Card>
 
         <CardHeader
           title='Filtros'
@@ -341,16 +337,16 @@ export const FootFallSimulation = () => {
         </CardActions>
       </Card> */}
 
-<Grid container spacing={2} mt={2}>
+      <Grid container spacing={2} mt={2}>
 
 
-  {/* <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
   <Day />
 
 </Grid> */}
 
 
-  {/* <Grid container item xs={12} md={12} spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
+        {/* <Grid container item xs={12} md={12} spacing={1} sx={{ display: 'flex', alignContent: 'start' }}>
 
 
           <Grid container spacing={2}>
@@ -398,7 +394,7 @@ export const FootFallSimulation = () => {
           </Grid>
         </Grid> */}
 
-  {/* <Grid container item xs={12} spacing={1}
+        {/* <Grid container item xs={12} spacing={1}
           sx={{
             display: 'flex',
             alignContent: 'start',
@@ -429,11 +425,11 @@ export const FootFallSimulation = () => {
             }
             )}
         </Grid> */}
-  <Grid item xs={12}>
+        <Grid item xs={12}>
 
 
-  </Grid>
-</Grid>
+        </Grid>
+      </Grid>
 
 
 

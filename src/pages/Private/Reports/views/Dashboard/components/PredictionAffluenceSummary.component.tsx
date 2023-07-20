@@ -1,23 +1,26 @@
 import { Timeline } from '@mui/icons-material';
-import { Card, CardHeader, CardContent, Button, Box, Typography, CardActions, List, ListItem, ListItemText, Grid } from '@mui/material';
+import { Card, CardHeader, CardContent, Button, Box, Typography, CardActions, List, ListItem, ListItemText, Grid, Divider } from '@mui/material';
 import { Line } from 'react-chartjs-2';
 
 import { NavLink as RouterLink } from 'react-router-dom';
+import { useForecastFootfall } from '../../../hooks/useFootfall';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 
 export const PredictionAffluenceSummary = () => {
 
+  const {isLoading, data} = useForecastFootfall();
 
-  const data = {
-    labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+  const dataChart = {
+    labels: data?.slice(0, 7).map((day) => format(new Date(day.date), 'eeee', { locale: es })),
     datasets: [
       {
         label: 'Afluencia',
-        data: [100, 150, 200, 180, 220, 250, 210],
+        data: data?.slice(0, 7).map((day) => Number(day.quantity)),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
-        fill: false
       },
     ],
   };
@@ -64,41 +67,24 @@ export const PredictionAffluenceSummary = () => {
       />
 
       <CardContent>
-        <Line data={data} options={options} />
+        <Line data={dataChart} options={options} />
 
       </CardContent>
 
+      <Divider sx={{mb: 2}}/>
+
       <Grid container spacing={1}>
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>100</Typography>
-          <Typography variant='h6' align='center'>Lunes</Typography>
 
-        </Grid>
+        {
+          data?.slice(0, 7).map((day) => (
+            <Grid item xs={3}>
+              <Typography variant='h4' align='center'>{day.quantity}</Typography>
+              <Typography variant='h6' align='center'>{format(new Date(day.date), 'EEEE', { locale: es })}</Typography>
 
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>150</Typography>
-          <Typography variant='h6' align='center'>Martes</Typography>
-        </Grid>
-
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>250</Typography>
-          <Typography variant='h6' align='center'>Domingo</Typography>
-        </Grid>
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>100</Typography>
-          <Typography variant='h6' align='center'>Lunes</Typography>
-
-        </Grid>
-
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>150</Typography>
-          <Typography variant='h6' align='center'>Martes</Typography>
-        </Grid>
-
-        <Grid item xs={3}>
-          <Typography variant='h4' align='center'>250</Typography>
-          <Typography variant='h6' align='center'>Domingo</Typography>
-        </Grid>
+            </Grid>
+          ))
+        }
+        
 
 
       </Grid>

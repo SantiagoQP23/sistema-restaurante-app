@@ -4,11 +4,12 @@ import { Card, CardHeader, CardContent, Button, Typography, Box, CardActions } f
 import { NavLink as RouterLink } from 'react-router-dom';
 
 import { useState } from 'react';
-import { Paid } from '@mui/icons-material';
+import { MonetizationOn, Paid } from '@mui/icons-material';
 import { getIncomes } from '../../../services/dashboard.service';
 import { useFetchAndLoad, useAsync } from '../../../../../../hooks';
 import { DateIncome } from '../../../models/date-orders.interface';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
+import { Label } from '../../../../../../components/ui';
 
 
 export const IncomesSummary = () => {
@@ -38,9 +39,9 @@ export const IncomesSummary = () => {
       <Card>
 
         <CardHeader
-          avatar={<Paid color='success' sx={{ fontSize: 30 }} />}
+          avatar={<MonetizationOn color='success' sx={{ fontSize: 30 }} />}
           title={
-            <Typography variant="h4" >Ingresos del día</Typography>
+            <Typography variant="h4" >Caja</Typography>
           }
         
           action={
@@ -62,9 +63,31 @@ export const IncomesSummary = () => {
 
         <CardContent>
          
+         {
+          activeCashRegister && (
           <Typography variant="h3" component="div" >
-            $ {activeCashRegister? activeCashRegister.totalIncomesCash + activeCashRegister.totalIncomesTransfer : 0}
+            $ {activeCashRegister && activeCashRegister.balance }
+            <Label
+              sx={{ ml: 1 }}
+              
+              color='success'
+            >
+              + ${activeCashRegister.totalIncomes + activeCashRegister.totalInvoices}
+            </Label>
+
+            <Label
+              sx={{ ml: 1 }}
+              
+              color='error'
+            >
+              - ${activeCashRegister.totalExpenses}
+            </Label>
+
+
           </Typography>
+
+          )
+         }
 
 
         </CardContent>

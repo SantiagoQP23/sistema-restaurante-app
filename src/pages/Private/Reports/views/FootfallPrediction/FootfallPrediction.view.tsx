@@ -2,12 +2,12 @@ import { useState, useRef, RefObject, FC, ReactElement, useContext } from 'react
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 import { IDay, Footfall } from '../../models/day.interface';
 import { useAsync } from '../../../../../hooks/useAsync';
-import { Typography, Grid, Card, CardContent, CardHeader, tabsClasses, Button, Divider, Box, Stack } from '@mui/material';
+import { Typography, Grid, Card, CardContent, CardHeader, tabsClasses, Button, Divider, Box, Stack, List, ListItem, ListItemSecondaryAction, ListItemText } from '@mui/material';
 import { Tabs, Tab } from '@mui/material/';
 import { Line } from "react-chartjs-2";
 import { addDays, format, isFuture, subDays } from "date-fns";
 import { es } from 'date-fns/locale';
-import { ArrowBack, Settings, Update } from "@mui/icons-material";
+import { ArrowBack, Settings, Update, Print } from '@mui/icons-material';
 import { Day } from "../../components/Day.component";
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
@@ -21,6 +21,8 @@ import { SimulationContext } from '../../context/SimulationContext';
 import { TitlePage } from '../../../components/TitlePage.component';
 import { useQuery } from '@tanstack/react-query';
 import { getPredictionFootfall } from '../../services/footfall.service';
+import { ComparisonFootfall } from './components/ComparisonFootfall.component';
+import { useForecastFootfall } from '../../hooks/useFootfall';
 
 // interface PdfAffluencePredictionType {
 //   print: () => void;
@@ -29,140 +31,20 @@ import { getPredictionFootfall } from '../../services/footfall.service';
 
 export const FootfallPrediction = () => {
 
-  //Obtener los datos de la API
+  const {isLoading, data} = useForecastFootfall();
 
 
-  // const { data, isLoading, isFetching } = useQuery<Footfall[]>(['footfall', 'prediction'], () => getPredictionFootfall(), {
-
-  // });
-
-  const { loading, callEndpoint } = useFetchAndLoad();
-  const { loading: loadingGet, callEndpoint: callEndpointGet } = useFetchAndLoad();
-  const { loading: loadingPrediction, callEndpoint: callEndpointPrediction } = useFetchAndLoad();
-
-  const [days, setDays] = useState<IDay[]>([]);
 
   const navigate = useNavigate();
 
-  const { enqueueSnackbar } = useSnackbar();
+ 
 
-  const { loadHolidays } = useContext(SimulationContext);
-
-  const currentDate = new Date();
-
-
-  // const dataPrediction = {
-  //   // Mostrar solo días siguientes a la fecha actual
-
-  //   labels: data?.map(footfall => `${footfall.date}`),
-  //   datasets: [
-  //     {
-  //       data: data?.map(footfall => footfall.quantity),
-  //       label: 'Asistencia',
-  //       fill: false,
-  //       borderColor: 'rgb(75, 192, 192)',
-  //       tension: 0.5,
-
-  //     },
-
-  //   ],
-
-  // }
-
-  // const data = {
-  //   labels: days.map(day => `${day.nameDay} ${day.date}`),
-  //   datasets: [
-  //     {
-  //       data: days.map(day => {
-
-  //         if (day.affluences?.length === 0)
-  //           return 0;
-
-  //         const affluence = day.affluences.find(affluence => affluence.type === TypeAffluence["PREDICTED"]);
-
-  //         if (!affluence)
-
-  //           return 0;
-
-  //         return affluence.affluence;
-  //       }),
-  //       label: 'Asistencia',
-  //       fill: false,
-  //       borderColor: 'rgb(75, 192, 192)',
-  //       tension: 0.5,
-
-  //     },
-  //     {
-
-  //       data: days.map(day => {
-
-  //         if (day.affluences?.length == 0)
-  //           return 0;
-
-  //         const affluence = day.affluences.find(affluence => affluence.type === TypeAffluence["REAL"]);
-
-  //         if (!affluence)
-  //           return 0;
-
-  //         return affluence.affluence;
-  //       }),
-  //       label: 'Asistencia Real',
-  //       fill: false,
-  //       borderColor: 'rgb(255, 99, 132)',
-  //       tension: 0.5,
-
-  //     }
-
-
-  //   ],
-
-  // }
-
-  const submitUpdateWeather = async () => {
-    // console.log("Actualizar pronóstico del clima");
-
-    // await callEndpoint(updateWeatherForecast())
-    //   .then(async (resp) => {
-    //     setDays(resp.data)
-    //     enqueueSnackbar('Pronóstico del clima actualizado', { variant: 'success' });
-
-
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     enqueueSnackbar('Error al actualizar el pronóstico del clima', { variant: 'error' });
-    //   })
-
-  }
-
-  const submitUpdatePrediction = async () => {
-    //   console.log("Actualizar predicción");
-
-    //   await callEndpointPrediction(updatePredictionAffluence())
-    //     .then(async (resp) => {
-
-    //       setDays(resp.data)
-    //       enqueueSnackbar('Predicción actualizada', { variant: 'success' });
-
-
-    //     })
-
-    //     .catch((err) => {
-    //       console.log(err);
-    //       enqueueSnackbar('Error al actualizar la predicción', { variant: 'error' });
-    //     })
-
-    //   console.log('Actualizar predicción de afluencia')
-
-
-  }
-
-  const data = {
-    labels: ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7', 'Día 8', 'Día 9', 'Día 10', 'Día 11', 'Día 12', 'Día 13', 'Día 14', 'Día 15'],
+  const dataChart = {
+    labels: data?.map((day) => format(new Date(day.date), 'dd/MM/yyyy', { locale: es })),
     datasets: [
       {
         label: 'Afluencia',
-        data: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190],
+        data: data?.map((day) => Number(day.quantity)),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -190,21 +72,27 @@ export const FootfallPrediction = () => {
           <Stack direction="row" spacing={2}>
 
             <LoadingButton
-              loading={loading}
+              // loading={loading}
               variant="outlined"
               startIcon={<Settings />}
               onClick={() => navigate('simulation')}
             >
               Simulación
             </LoadingButton>
-            <LoadingButton 
-            variant="contained" 
-            loading={loadingPrediction} 
-            onClick={submitUpdatePrediction}
+            <LoadingButton
+              variant="contained"
+              // loading={loadingPrediction}
+              // onClick={submitUpdatePrediction}
               startIcon={<Update />}
             >
-              Actualizar Predicción
+              Actualizar
             </LoadingButton>
+            <Button
+              variant='outlined'
+              startIcon={<Print />}
+            >
+              Imprimir
+            </Button>
 
             {/* {
               days.length > 0 &&
@@ -231,22 +119,67 @@ export const FootfallPrediction = () => {
 
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <Day />
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12} md={8}>
           <Card>
             <CardHeader title="Predicción de afluencia"></CardHeader>
             <CardContent>
-              <Line data={data} options={options}  />
+
+              {
+                data && <Line data={dataChart} options={options} />
+
+              }
               {/* <Line data={dataPrediction} ></Line> */}
 
 
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={4}>
+          <Card
+
+          >
+
+            <CardHeader
+              title="Predicción de afluencia"
+            />
+          
+          <List
+            sx={{ maxHeight: 420, overflowX: 'auto', bgcolor: 'background.paper' }}
+          >
+
+
+              {
+                data?.map((day) => (
+                  <>
+                  <ListItem>
+                    <ListItemText primary={format(new Date(day.date), 'eeee dd/MM/yyyy', { locale: es })} />
+
+                    <ListItemSecondaryAction>
+                      <Typography variant="h6">
+                        {day.quantity}
+                      </Typography>
+                    </ListItemSecondaryAction>
+
+                  </ListItem>
+                  
+                  
+                  </>
+
+
+                ))
+              }
+                  </List>
+
+           
+
+
+          </Card>
+
+
           {/* <Card>
             <CardHeader title={days.length > 0 && `Comparación de Afluencia de ${days[0].date} hasta ${days[days.length - 1].date} `}></CardHeader>
             <CardContent>
@@ -266,52 +199,11 @@ export const FootfallPrediction = () => {
 
       </Grid>
 
-      <Grid container spacing={2} mt={2}>
-
-
-
-
+      <Grid container spacing={2} >
 
         <Grid item xs={12} md={12}>
 
-
-          <Card sx={{ mb: 2 }}>
-
-            <CardHeader title="Asistencia de la semana" />
-            <CardContent>
-
-
-              {/* <Grid container spacing={2}>
-                {
-                  days.slice(days.length - 16, ).map(day => {
-
-                    return (
-
-                      <Grid key={day.id} item xs={12} md={2}>
-
-                        <Card >
-                          <CardContent>
-                            <Typography variant='body2' align="center">{day.nameDay}</Typography>
-                            <Typography variant='body2' align="center">{day.date}</Typography>
-                            <Divider sx={{ my: 1 }} />
-                            <Typography variant='subtitle1' align="center">{day.tempMax} °C</Typography>
-                            <Typography variant='h5' align="center"> {day.temp} °C</Typography>
-                            <Typography variant='subtitle1' align="center">{day.tempMin} °C</Typography>
-                            <Divider sx={{ my: 1 }} />
-                            <Typography variant='body1' align="center">Asistencia</Typography>
-                            <Typography variant='h6' align="center">{ day.affluences[0] && day.affluences[0].affluence}</Typography>
-
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    )
-                  })
-                }
-
-              </Grid> */}
-            </CardContent>
-
-          </Card>
+          <ComparisonFootfall />
 
         </Grid>
       </Grid>

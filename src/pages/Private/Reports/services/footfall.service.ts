@@ -2,7 +2,27 @@ import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 import { Footfall, IDay } from '../models/day.interface';
 import { UpdateDayDto } from '../dto/update-day.dto';
+import { DateFilterDto } from "../../Common/dto";
 
+
+export interface FootfallResponse {
+  footfall: Footfall[];
+  min: number;
+  max: number;
+  average: number;
+
+}
+
+export interface ComparisonFootfallResponse {
+  footfall: {
+    forecast: string,
+    real: string,
+    difference: number
+    date: string
+  }[],
+  mae: number,
+  mape: number,
+}
 
 export const executeSeed = async () => {
 
@@ -25,13 +45,62 @@ export const getOneFootfall = async (date: string): Promise<Footfall> => {
 }
 
 
+export const getSimulatedFootfall = async (filterDto: DateFilterDto): Promise<FootfallResponse> => {
+
+  const {data} = await restauranteApi.get<FootfallResponse>(`footfall/simulated-by-date`, {
+    params: filterDto
+  });
+
+  return data
+
+}
+
+export const getRealFootfall = async (filterDto: DateFilterDto): Promise<FootfallResponse> => {
+
+  const {data} = await restauranteApi.get<FootfallResponse>(`footfall/real-by-date`, {
+    params: filterDto
+  });
+
+  return data
+
+}
+
+export const getForecastByDate = async (filterDto: DateFilterDto): Promise<FootfallResponse> => {
+ 
+  const {data} = await restauranteApi.get<FootfallResponse>(`footfall/forecast-by-date`, {
+    params: filterDto
+  });
+
+  return data
+
+}
+
+
+export const getComparisonFootfall = async (filterDto: DateFilterDto): Promise<ComparisonFootfallResponse> => {
+
+  const {data} = await restauranteApi.get<ComparisonFootfallResponse>(`footfall/comparison-by-date`, {
+    params: filterDto
+  });
+
+  return data
+
+}
+
+
+
+
+
+
 
 export const getPredictionFootfall = async (): Promise<Footfall[]> => {
 
-  const resp = await restauranteApi.get<Footfall[]>(`footfall/prediction`);
+  const resp = await restauranteApi.get<Footfall[]>(`footfall/forecast`);
 
   return resp.data;
 }
+
+
+
 
 export const getDay = async (date: string): Promise<IDay> => {
 

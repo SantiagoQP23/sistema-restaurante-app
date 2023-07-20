@@ -7,6 +7,7 @@ export interface Transaction {
     amount: number;
     description: string;
     paymentMethod: PaymentMethod;
+    responsible: string;
 
     user: IUser;
 

@@ -11,6 +11,8 @@ import {
 import { People } from '@mui/icons-material';
 import { IncomesAndExpensesSummary } from './components/IncomesAndExpensesSummary.component';
 import { UsersSummary } from '../../../Balance/views/BalanceDashboard/components/UsersSummary.component';
+import { FootfallSummary } from './components/FootfallSummary.component';
+import { ClientsSummary } from './components/ClientsSummary.component';
 
 
 export const DashboardReports = () => {
@@ -29,71 +31,11 @@ export const DashboardReports = () => {
         </Grid> */}
 
         <Grid item xs={12} md={3}>
-          <Card>
-            <CardHeader
-              title='Clientes'
-              subheader='Cliente registrados'
-              action={
-                <Button
-                  variant='outlined'
-                  component={RouterLink}
-                  to="/clients"
-                  size='small'
-                >
-                  Ver todo
-                </Button>
-              }
-            />
-
-            <CardContent sx={{
-              display: 'flex',
-              gap: 1,
-              alignItems: 'center'
-
-            }}>
-
-              <People />
-              <Typography variant='h3'>0</Typography>
-
-            </CardContent>
-          </Card>
+          <ClientsSummary />
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Card>
-            <CardHeader
-              title='Afluencia de clientes'
-              action={
-                <Button
-                  variant='outlined'
-                  component={RouterLink}
-                  to="/clients"
-                  size='small'
-                >
-                  Ver todo
-                </Button>
-              }
-            />
-
-            <CardContent sx={{
-              display: 'flex',
-              gap: 1,
-              alignItems: 'center'
-
-            }}>
-
-              <People />
-              <Box 
-              display='flex'
-              alignItems='flex-end'
-              >
-              <Typography variant='h3'>50</Typography>
-              <Typography variant='h6'>/159</Typography>
-
-              </Box>
-
-            </CardContent>
-          </Card>
+         <FootfallSummary />
         </Grid>
 
         <Grid item xs={12} md={3}>

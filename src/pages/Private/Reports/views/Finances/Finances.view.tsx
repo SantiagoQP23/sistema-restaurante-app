@@ -52,16 +52,16 @@ export const Finances = () => {
 
       </Tabs>
 
-{
-  tab === TabPanel.RESUMEN_ANUAL 
-  ? (
-      <MonthlyFinances  />
-  )
-  : (
-    <DailyFinances />
-  )
+      {
+        tab === TabPanel.RESUMEN_ANUAL
+          ? (
+            <MonthlyFinances />
+          )
+          : (
+            <DailyFinances />
+          )
 
-}
+      }
 
 
 

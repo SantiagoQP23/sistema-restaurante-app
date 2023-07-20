@@ -78,6 +78,9 @@ export const IncomesList = () => {
                       <TableCell>
                         <Typography variant='h5'>
                           {income.transaction.description}
+                          {
+                            income.transaction.responsible
+                          }
                         </Typography>
 
                         {

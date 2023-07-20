@@ -8,6 +8,8 @@ import { useAsync } from '../../../../../../hooks/useAsync';
 import { Paid, Assignment } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../../redux';
+import { useOrders } from '../../../../Orders/hooks/useOrders';
+import { Label } from '../../../../../../components/ui';
 
 
 export const OrdersSummary = () => {
@@ -15,7 +17,9 @@ export const OrdersSummary = () => {
   const [datesOrders, setDatesOrders] = useState<DateOrders[]>([]);
 
 
-  const {orders} =useSelector(selectOrders);
+  const { orders } = useSelector(selectOrders);
+
+  const { ordersQuery } = useOrders();
 
   const { loading, callEndpoint } = useFetchAndLoad();
 
@@ -61,8 +65,15 @@ export const OrdersSummary = () => {
 
           <Assignment color='info' fontSize='large' />
           <Typography variant="h3" component="div" textAlign='center'>
-            {orders.length}
+
+            {ordersQuery.data?.count}
           </Typography>
+          <Label
+            color='info'
+          >
+            {orders.length} activos
+
+          </Label>
 
 
         </CardContent>

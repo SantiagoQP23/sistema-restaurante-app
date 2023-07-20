@@ -7,7 +7,8 @@ import { UpdateRestaurantDto } from '../views/FootfallSimulation/dto/update-rest
 import { UpdateRuleDayDto } from '../views/FootfallSimulation/dto/update-rule-day.dto';
 import { UpdateRuleWeatherDto } from '../views/FootfallSimulation/dto/update-rule-weather';
 import { UpdateRuleWeekDto } from '../views/FootfallSimulation/dto/update-rule-week.dto';
-import { Restaurant } from '../models/restaurant.model';
+import { Restaurant } from '../../Common/models/restaurant.model';
+// import { Restaurant } from '../models/restaurant.model';
 
 
 export const getRulesWeek = () => {

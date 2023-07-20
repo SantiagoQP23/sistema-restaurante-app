@@ -23,9 +23,9 @@ export const AddExpense = () => {
 
   const { handleClose, isOpen, handleOpen } = useModal();
 
-  const {activeCashRegister}= useCashRegisterStore(state => state)
+  const { activeCashRegister } = useCashRegisterStore(state => state)
 
-  const { register, handleSubmit, formState: { errors }, control, reset} = useForm<CreateExpenseDto>({
+  const { register, handleSubmit, formState: { errors }, control, reset } = useForm<CreateExpenseDto>({
     defaultValues: expenseInitialForm
   });
 
@@ -40,15 +40,15 @@ export const AddExpense = () => {
       form.supplierId = supplier.id;
     }
 
-    if(activeCashRegister){
+    if (activeCashRegister) {
 
-      form.cashRegisterId=activeCashRegister.id;
+      form.cashRegisterId = activeCashRegister.id;
 
       mutateAsync(form).then(() => {
         reset();
       });
 
-    }else {
+    } else {
       // TODO modal crear caja
     }
 
@@ -99,36 +99,11 @@ export const AddExpense = () => {
                   error={!!errors.description}
                   helperText={errors.description?.message}
 
-                  
-                />
-
-
-              </Grid>
-
-              <Grid item xs={12} >
-                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
-                <TextField
-                  label="Responsable"
-                  type="text"
-                  // placeholder="Nombre del gasto"
-                  fullWidth
-                  {
-                  ...register('responsible', {
-                    required: 'Este campo es requerido',
-                    minLength: { value: 2, message: 'Minimo 2 caracteres' },
-                  })
-                  }
-                    rows={2}
-                  error={!!errors.responsible}
-                  helperText={errors.responsible?.message}
-
 
                 />
 
 
               </Grid>
-
-
 
               <Grid item xs={12} >
 
@@ -151,6 +126,33 @@ export const AddExpense = () => {
 
                 />
               </Grid>
+
+              <Grid item xs={12} >
+                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
+                <TextField
+                  label="Responsable"
+                  type="text"
+                  // placeholder="Nombre del gasto"
+                  fullWidth
+                  {
+                  ...register('responsible', {
+                    required: 'Este campo es requerido',
+                    minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                  })
+                  }
+                  rows={2}
+                  error={!!errors.responsible}
+                  helperText={errors.responsible?.message}
+
+
+                />
+
+
+              </Grid>
+
+
+
+
 
               <Grid item xs={12}>
                 <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>

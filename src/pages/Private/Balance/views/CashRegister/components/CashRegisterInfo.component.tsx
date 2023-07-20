@@ -1,5 +1,5 @@
 import { FC, ChangeEvent, useState } from 'react';
-import { Stack, Box, InputLabel, Typography, Button, Stepper, Step, StepLabel, Divider, TextField } from '@mui/material';
+import { Stack, Box, InputLabel, Typography, Button, Stepper, Step, StepLabel, Divider, TextField, Card, CardHeader, CardContent } from '@mui/material';
 import { format } from "date-fns"
 import { CashRegister } from "../../../models/cash-register.model"
 import { Add, Close, ExpandLess, PointOfSale, Remove, RemoveCircle } from '@mui/icons-material';
@@ -28,73 +28,48 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
   const { openCreate } = useCashRegisterStore(state => state);
 
   const updateCashMutation = useUpdateCashRegister();
-  
-  const handleChangeFinalAmount = (e: ChangeEvent<HTMLInputElement>) => {
-
-    let value = Number(e.target.value);
-
-    if (Number.isNaN(value)) value = 0;
-
-    setFinalAmount(value)
-
-  }
-
-  const handleChangeClosingNote = (e: ChangeEvent<HTMLInputElement>) => {
-
-    const value = e.target.value
-
-    setClosingNote(value)
-
-  }
-
-
-  const handleSubmit = () => {
-
-    const data: UpdateCashRegisterDto = {
-      id: cashRegister.id,
-      finalAmount,
-      closingNote
-    }
-
-    updateCashMutation.mutate(data)
-
-
-  }
-
-
-  const discrepancyAmount = cashRegister.balance - finalAmount
 
 
 
   return (
     <>
 
-      <Stack direction='column' spacing={2} justifyContent='flex-end'>
-        {/* <Box>
+      <Card>
+
+        <CardHeader
+          title='Resumen de caja'
+
+        />
+        <CardContent >
+
+
+
+          <Stack direction='column' spacing={2} justifyContent='flex-end'>
+            {/* <Box>
 
             <InputLabel id="date">Fecha</InputLabel>
             <Typography variant='h6' >{format(new Date(), 'yyyy-MM-dd')}</Typography>
           </Box> */}
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Creado por</InputLabel>
-          <Typography variant='h5'  >{cashRegister.user.person.firstName} {cashRegister.user.person.lastName}</Typography>
+              <InputLabel id="date">Creado por</InputLabel>
+              <Typography variant='h5'  >{cashRegister.user.person.firstName} {cashRegister.user.person.lastName}</Typography>
 
-        </Box>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            </Box>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Fecha</InputLabel>
-          <Typography variant='h5'  >{format(new Date(cashRegister.createdAt), 'yyyy-MM-dd HH:mm')}</Typography>
+              <InputLabel id="date">Fecha</InputLabel>
+              <Typography variant='h5'  >{format(new Date(cashRegister.createdAt), 'yyyy-MM-dd HH:mm')}</Typography>
 
-        </Box>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            </Box>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Monto inicial</InputLabel>
-          <Typography variant='h5'  >$ {cashRegister.initialAmount}</Typography>
+              <InputLabel id="date">Monto inicial</InputLabel>
+              <Typography variant='h5'  >$ {cashRegister.initialAmount}</Typography>
 
-        </Box>
-        {/* {
+            </Box>
+            {/* {
             cashRegister.cashIncomes.length > 0 && cashRegister.cashIncomes.map((cashIncome) => (
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <InputLabel id="date">Hora: {format(new Date(cashIncome.createdAt), 'HH:mm')}</InputLabel>
@@ -103,7 +78,7 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
             ))
           } */}
 
-        {/* <Box display='flex' justifyContent='space-between' alignItems='center'>
+            {/* <Box display='flex' justifyContent='space-between' alignItems='center'>
             <InputLabel id="date">11:35</InputLabel>
 
 
@@ -114,7 +89,7 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
             </Typography>
 
           </Box> */}
-        {/* <Box display='flex' justifyContent='right' alignItems='center'>
+            {/* <Box display='flex' justifyContent='right' alignItems='center'>
 
           {
             !isOpen ? (
@@ -162,31 +137,31 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
           }
         </Box> */}
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Ventas</InputLabel>
-          <Typography variant='h4' color='success.main' >$ {cashRegister.totalInvoicesCash}</Typography>
-        </Box>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+              <InputLabel id="date">Ventas</InputLabel>
+              <Typography variant='h4' color='success.main' >$ {cashRegister.totalInvoicesCash}</Typography>
+            </Box>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Ingresos</InputLabel>
-          <Typography variant='h4' color='success.main'>$ {cashRegister.totalIncomesCash}</Typography>
+              <InputLabel id="date">Ingresos</InputLabel>
+              <Typography variant='h4' color='success.main'>$ {cashRegister.totalIncomesCash}</Typography>
 
-        </Box>
+            </Box>
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Gastos</InputLabel>
-          <Typography variant='h4' color='error.main'>$ {cashRegister.totalExpensesCash}</Typography>
+              <InputLabel id="date">Gastos</InputLabel>
+              <Typography variant='h4' color='error.main'>$ {cashRegister.totalExpensesCash}</Typography>
 
-        </Box>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            </Box>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Monto final</InputLabel>
-          <Typography variant='h3' >$ {cashRegister.balance}</Typography>
-        </Box>
+              <InputLabel id="date">Monto final</InputLabel>
+              <Typography variant='h3' >$ {cashRegister.balance}</Typography>
+            </Box>
 
-        <Box display='flex' justifyContent='right' alignItems='center'>
+            {/* <Box display='flex' justifyContent='right' alignItems='center'>
 
           <Button
             variant='text'
@@ -203,88 +178,59 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
           isOpen && (
             <>
 
-              <InputLabel id="amount">¿Cuánto dinero tiene en efectivo?</InputLabel>
-              <TextField
-
-                value={finalAmount}
-
-                onChange={handleChangeFinalAmount}
-              />
-
-              {
-                finalAmount > 0 && discrepancyAmount !== 0 && (
-                  <>
-                    <Box
-                      sx={{
-                        backgroundColor: discrepancyAmount === 0 ? 'success.main' : 'warning.main',
-                        padding: '1rem',
-                        borderRadius: '1rem',
-                        color: 'black'
-
-
-                      }}
-                    >
-                      <Typography variant='body1'>Tienes un descuadre. {discrepancyAmount < 0 ? 'Te sobran ' : 'Te faltan'} $ {Math.abs(discrepancyAmount)}</Typography>
-
-                    </Box>
-                    <TextField
-
-
-                      value={closingNote}
-
-                      onChange={handleChangeClosingNote}
-                      multiline
-
-                      label='Notas de cierre'
-
-                      rows={3}
-
-                    />
-                  </>
-
-                )
-              }
-
-              <Button
-                variant='contained'
-                onClick={handleSubmit}
-              >
-                Cerrar caja
-              </Button>
-
-
+              
 
             </>
           )
         }
 
-        <Divider />
+        <Divider /> */}
 
-        <Typography variant='h6' >Transferencias</Typography>
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+          </Stack>
 
-          <InputLabel id="date">Ventas</InputLabel>
-          <Typography variant='h4' color='success.main' >$ {cashRegister.totalInvoicesTransfer}</Typography>
-        </Box>
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+        </CardContent>
 
-          <InputLabel id="date">Ingresos</InputLabel>
+      </Card>
+      <Card sx={{mt: 2}}>
+        <CardHeader
 
-          <Typography variant='h4' color='success.main'>$ {cashRegister.totalIncomesTransfer}</Typography>
+          title='Resumen de transferencias'
+        />
 
-        </Box>
+        <CardContent>
+          <Stack direction='column' spacing={2} justifyContent='flex-end'>
 
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-          <InputLabel id="date">Gastos</InputLabel>
+              <InputLabel id="date">Ventas</InputLabel>
+              <Typography variant='h4' color='success.main' >$ {cashRegister.totalInvoicesTransfer}</Typography>
+            </Box>
 
-          <Typography variant='h4' color='error.main'>$ {cashRegister.totalExpensesTransfer}</Typography>
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-        </Box>
+              <InputLabel id="date">Ingresos</InputLabel>
 
-      </Stack>
+              <Typography variant='h4' color='success.main'>$ {cashRegister.totalIncomesTransfer}</Typography>
+
+            </Box>
+
+            <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+              <InputLabel id="date">Gastos</InputLabel>
+
+              <Typography variant='h4' color='error.main'>$ {cashRegister.totalExpensesTransfer}</Typography>
+
+            </Box>
+
+
+          </Stack>
+
+
+        </CardContent>
+
+      </Card>
 
 
     </>

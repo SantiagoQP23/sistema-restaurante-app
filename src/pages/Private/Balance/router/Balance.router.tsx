@@ -6,6 +6,7 @@ import { Expenses } from "../views/Expenses/Expenses.view";
 import { Incomes } from "../views/Incomes/Incomes.view";
 import { CashRegisterList } from "../views/CashResgiterList/CashRegisterList.view";
 import { CashRegister } from "../views/CashRegister/CashRegister.view";
+import { CloseCashRegister } from "../views/CloseCashRegister/CloseCashRegister.view";
 
 
 
@@ -29,6 +30,10 @@ export const BalanceRouter: RouteObject = {
     {
       path: PrivateRoutes.EXPENSES,
       element: <Expenses />
+    },
+    {
+      path: 'close',
+      element: <CloseCashRegister />
     },
     {
       path: 'cash-register',

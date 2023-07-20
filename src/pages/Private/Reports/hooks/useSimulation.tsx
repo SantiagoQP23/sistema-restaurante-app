@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query"
 import { executeSimulation } from "../services/footfall.service"
 import { useSnackbar } from "notistack";
+import { queryClient } from "../../../../main";
 
 
 
 // TODO clima para hacer la simulación
+
+
 
 export const useSimulation = () => {
 
@@ -16,6 +19,7 @@ export const useSimulation = () => {
 
     onSuccess: () => {
       enqueueSnackbar('Simulación ejecutada', { variant: 'success' });
+      queryClient.invalidateQueries(['simulatedFootfall'])
     },
     onError: () => {
       enqueueSnackbar('Error al iniciar la simulación', { variant: 'error' });

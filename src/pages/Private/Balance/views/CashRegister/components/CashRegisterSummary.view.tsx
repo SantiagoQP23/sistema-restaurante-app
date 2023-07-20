@@ -70,28 +70,7 @@ export const CashRegisterSummary = () => {
 
 
   return (
-    <Card>
-      <CardHeader title='Caja'
-        action={
-          <>
-            {/* <DesktopDatePicker
-              label="Fecha"
-              value={date}
-              onChange={handleChangeDate}
-              renderInput={(params) => <TextField size="small" {...params} />}
-              maxDate={new Date()}
-            /> */}
-          </>
-        }
-      />
-      <CardContent>
-
-        {/* {
-          cashRegisterQuery.isFetching ? (
-            <Typography variant='h4' >Cargando...</Typography>
-          ) : null
-        } */}
-
+      <>
         {
           activeCashRegister ? (
             <>
@@ -145,11 +124,9 @@ export const CashRegisterSummary = () => {
             )
         }
 
-      </CardContent>
 
+    </>
 
-
-    </Card>
 
   )
 }

@@ -101,6 +101,29 @@ export const AddIncome = () => {
 
               </Grid>
 
+             
+              <Grid item xs={12} >
+
+                <TextField
+                  label="Monto"
+                  type="number"
+                  fullWidth
+                  inputProps={{ step: 0.05, min: 0.05 }}
+
+                  {
+                  ...register('amount', {
+                    required: 'Este campo es requerido',
+                    min: { value: 0.05, message: 'Debe ser mayor a 5 centavos' },
+                    valueAsNumber: true
+                  })
+                  }
+
+                  error={!!errors.amount}
+                  helperText={errors.amount?.message}
+
+                />
+              </Grid>
+
               <Grid item xs={12} >
                 {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
@@ -125,27 +148,6 @@ export const AddIncome = () => {
                 />
 
 
-              </Grid>
-              <Grid item xs={12} >
-
-                <TextField
-                  label="Monto"
-                  type="number"
-                  fullWidth
-                  inputProps={{ step: 0.05, min: 0.05 }}
-
-                  {
-                  ...register('amount', {
-                    required: 'Este campo es requerido',
-                    min: { value: 0.05, message: 'Debe ser mayor a 5 centavos' },
-                    valueAsNumber: true
-                  })
-                  }
-
-                  error={!!errors.amount}
-                  helperText={errors.amount?.message}
-
-                />
               </Grid>
 
 

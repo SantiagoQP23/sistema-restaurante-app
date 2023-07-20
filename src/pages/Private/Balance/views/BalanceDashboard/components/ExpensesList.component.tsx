@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
-import { Edit } from '@mui/icons-material';
-import { Card, CardHeader, Button, CardContent, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, TablePagination } from '@mui/material';
+import { ArrowDownward, Edit } from '@mui/icons-material';
+import { Card, CardHeader, Button, CardContent, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, TablePagination, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { useExpenses } from '../../../hooks/useExpenses';
 import { format } from 'date-fns';
 import { PaymentMethod } from '../../../../Orders/models/Invoice.model';
@@ -18,7 +18,7 @@ export const ExpensesList = () => {
 
   const [activeExpense, setActiveExpense] = useState<Expense | null>(null);
 
-  const {isOpen, handleClose, handleOpen} = useModal();
+  const { isOpen, handleClose, handleOpen } = useModal();
 
   const handleOpenDrawer = (activeExpense: Expense) => {
 
@@ -34,16 +34,16 @@ export const ExpensesList = () => {
   return (
     <>
 
-    {
-      activeExpense && (
-        <DrawerExpense
-          open={isOpen}
-          onClose={handleClose}
-          expense={activeExpense}
+      {
+        activeExpense && (
+          <DrawerExpense
+            open={isOpen}
+            onClose={handleClose}
+            expense={activeExpense}
 
-        />
-      )
-    }
+          />
+        )
+      }
       <Card>
 
         <CardHeader title='Lista de gastos'
@@ -74,18 +74,44 @@ export const ExpensesList = () => {
               {
                 expensesQuery.data?.expenses.map((expense) => (
                   <TableRow key={expense.id}>
-                    <TableCell>
+                    <TableCell
+
+                    >
+
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar
+                            sx={{ bgcolor: 'error.light' }}
+                          >
+                            <ArrowDownward />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={expense.transaction.description}
+                          secondary={expense.transaction.responsible}
+                        />
+                      </ListItem>
+{/* 
+
+                      <Avatar>
+                        <ArrowDownward />
+                      </Avatar>
+
                       <Typography variant='h5'>
                         {expense.transaction.description}
                       </Typography>
 
-                      {
-                        expense.supplier && (
-                          <Typography variant='body2'>
+                      <Typography variant='body2'>
+                        {expense.transaction.responsible}
+                      </Typography> */}
+
+                      {/* <Typography variant='body2'>
                             {expense.supplier.person.firstName} {expense.supplier.person.lastName}
-                          </Typography>
+                          </Typography> */}
+                      {/* {
+                        expense.supplier && (
                         )
-                      }
+                      } */}
                     </TableCell>
                     <TableCell>
                       <Typography>
@@ -101,12 +127,21 @@ export const ExpensesList = () => {
                     <TableCell>$ {expense.transaction.amount}</TableCell>
                     <TableCell>{expense.transaction.paymentMethod === PaymentMethod.CASH ? 'Efectivo' : 'Transferencia'}</TableCell>
                     <TableCell>
-                      <IconButton
+                      {/* <IconButton
                         color='primary'
                         onClick={() => handleOpenDrawer(expense)}
                       >
                         <Edit />
-                      </IconButton>
+                      </IconButton> */}
+
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        onClick={() => handleOpenDrawer(expense)}
+                      >
+                        Editar
+                      </Button>
+
                     </TableCell>
 
                   </TableRow>

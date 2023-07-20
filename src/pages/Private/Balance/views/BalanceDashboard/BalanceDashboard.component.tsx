@@ -11,6 +11,7 @@ import { useCashRegisterStore } from '../../../Common/store/cashRegisterStore';
 import { CardAddCashRegister } from './components/CardAddCashRegister.component';
 import { useEffect, useState } from 'react';
 import { useCashRegisterActive } from '../../hooks/useCashRegister';
+// import { CloseCashRegister } from '../CashRegister/components/FormCloseCashRegister.component';
 
 
 export enum AddTransactionTabs {
@@ -69,6 +70,7 @@ export const BalanceDashboard = () => {
             <Button
               variant='contained'
               startIcon={<Lock />}
+              onClick={() => navigateTo('close')}
             >
               Cerrar caja
             </Button>
@@ -235,11 +237,17 @@ export const BalanceDashboard = () => {
 
 
               <Grid item xs={12} md={6} lg={4} >
+                <CardHeader
+                  title='Añadir transacción'
+                />
                 <Tabs
                   value={tabAddTransaction}
                   onChange={(e, value) => handleChangeTabAddTransaction(value)}
+                  sx={{
+                    mb: 1
+                  }}
                 >
-                  <Tab label='Ingresos' value={'income'} />
+                  <Tab label='Ingreso' value={'income'} />
                   <Tab label='Gastos' value={'expense'} />
 
                 </Tabs>
@@ -255,44 +263,52 @@ export const BalanceDashboard = () => {
               </Grid>
 
 
-              {/* 
+
 
               <Grid item xs={12} md={6} lg={8} >
+                <CardHeader
+                  title='Transacciones'
+                />
+                <Tabs
+                  value={tabViewTransaction}
+                  onChange={(e, value) => setTabViewTransaction(value)}
+                  sx={{
+                    mb: 1
+                  }}
+                >
+                  <Tab label='Ingresos' value={ViewTransactionTabs.INCOMES} />
+                  <Tab label='Gastos' value={ViewTransactionTabs.EXPENSES} />
 
-                <Card>
-                  <CardHeader
-                    title='Transacciones'
-                  />
+                </Tabs>
+
+                {
+                  tabViewTransaction === ViewTransactionTabs.INCOMES
+                    ? <IncomesList />
+                    : <ExpensesList />
+                }
+
+                {/* <Card>
                   <CardContent>
 
-                    <Tabs
-                      value={tabViewTransaction}
-                      onChange={(e, value) => setTabViewTransaction(value)}
-                    >
-                      <Tab label='Ingresos' value={ViewTransactionTabs.INCOMES} />
-                      <Tab label='Gastos' value={ViewTransactionTabs.EXPENSES} />
-
-                    </Tabs>
-
-                    {
-                      tabViewTransaction === ViewTransactionTabs.INCOMES
-                        ? <IncomesList />
-                        : <ExpensesList />
-                    }
 
                   </CardContent>
-                </Card>
+                </Card> */}
 
               </Grid>
-             
 
-            */}
-              <Grid item xs={12} md={6} lg={4} >
+
+
+              {/* <Grid item xs={12} md={6} lg={4} >
                 <CashRegisterSummary />
 
 
 
-              </Grid>
+              </Grid> */}
+
+              {/* <Grid item xs={12} md={4}>
+                <CloseCashRegister cashRegister={activeCashRegister}/>
+              </Grid> */}
+
 
 
 
