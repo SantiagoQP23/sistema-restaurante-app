@@ -24,6 +24,8 @@ export const FormAddCashRegister = () => {
 
   }
 
+
+
   // const handleChangeDate = async (date: Date | null) => {
   //   setDate(date)
 
@@ -57,7 +59,7 @@ export const FormAddCashRegister = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} display='flex' justifyContent='space-between' >
           <InputLabel >Hora de apertura</InputLabel>
-          <Typography variant='h6' >{format(new Date(), 'dd/MM/yyyy hh:mm')}</Typography>
+          <Typography variant='h6' >{format(new Date(), 'dd/MM/yyyy HH:mm')}</Typography>
         </Grid>
 
 

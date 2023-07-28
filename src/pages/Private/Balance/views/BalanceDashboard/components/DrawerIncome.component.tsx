@@ -10,9 +10,10 @@ import { UpdateIncomeDto } from '../../../dto/update-income.dto';
 import { LoadingButton } from '@mui/lab';
 import { PaymentMethod } from '../../../../Orders/models/Invoice.model';
 import { useModal } from '../../../../../../hooks';
-import { IClient } from '../../../../../../models';
+import { IClient, IUser } from '../../../../../../models';
 import { useUpdateIncome } from '../../../hooks/useIncomes';
 import { ModalSelectClient } from '../../../../Clients/components/ModalSelectClient.component';
+import { ModalSelectUser } from '../../../../Users/components/ModalSelectUser.component';
 
 
 interface Props {
@@ -35,7 +36,17 @@ export const DrawerIncome: FC<Props> = ({
     }
   });
 
+  const [responsibleUser, setResponsibleUser] = useState<IUser|null>(income.transaction.responsible);
+
+
   const { handleClose, isOpen, handleOpen } = useModal();
+
+
+  const handleChangeResponsible = (user: IUser | null) => {
+
+    setResponsibleUser(user);
+
+  }
 
 
   const theme = useTheme();
@@ -51,8 +62,12 @@ export const DrawerIncome: FC<Props> = ({
 
   const onSubmit = (form: UpdateIncomeDto) => {
 
-    if (client) {
-      form.clientId = client.id;
+    // if (client) {
+    //   form.clientId = client.id;
+    // }
+
+    if (responsibleUser) {
+      form.responsibleId = responsibleUser.id;
     }
 
     mutateAsync({ ...form, id: income.id });
@@ -61,6 +76,7 @@ export const DrawerIncome: FC<Props> = ({
 
   useEffect(() => {
     setClient(income.client || null);
+    setResponsibleUser(income.transaction.responsible || null);
     setValue('description', income.transaction.description);
     setValue('amount', income.transaction.amount);
     setValue('paymentMethod', income.transaction.paymentMethod);
@@ -73,6 +89,12 @@ export const DrawerIncome: FC<Props> = ({
 
   return (
     <>
+
+<ModalSelectUser 
+      open={isOpen}
+      onClose={handleClose}
+      onChange={handleChangeResponsible}
+      />
 
       {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}
 
@@ -184,27 +206,28 @@ export const DrawerIncome: FC<Props> = ({
 
 
                 <Grid item xs={12}>
-                  {/* <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
-                    <Typography variant="subtitle2">
-                      Cliente
-                    </Typography>
-                    <Box>
+                <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
+                  <Typography variant="subtitle2">
+                    Responsable
+                  </Typography>
+                  <Box>
 
-                      <Button
-                        onClick={handleOpen}
-                      >{client ? 'Cambiar' : 'Seleccionar'}</Button>
-                      {
-                        client && (
-                          <IconButton color="error" onClick={() => handleChangeClient(null)}>
-                            <Close />
-                          </IconButton>)
-                      }
-                    </Box>
 
-                  </Stack> */}
-                  {/* <Typography variant="h6">
-                    {client ? `${client.person.firstName} ${client.person.lastName} ` : 'No seleccionado'}
-                  </Typography> */}
+                    <Button
+                      onClick={handleOpen}
+                    >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
+                    {
+                      responsibleUser && (
+                        <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
+                          <Close />
+                        </IconButton>)
+                    }
+                  </Box>
+
+                </Stack>
+                <Typography variant="h6">
+                  {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
+                </Typography>
 
 
                 </Grid>

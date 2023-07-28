@@ -10,6 +10,8 @@ import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 import { Box } from "@mui/system";
 import { Label } from '../../../../components/ui/Label';
 import { statusModalDeleteTable } from '../services/tables.service';
+import { useUpdateTable } from "../hooks/useTables";
+import { UpdateTableDto } from "../dto/table.dto";
 
 const IconButtonError = styled(IconButton)(
   ({ theme }) => `
@@ -37,15 +39,29 @@ export const CardTable: FC<Props> = ({ table }) => {
 
   const navigate = useNavigate();
 
+  const updateTableMutation = useUpdateTable();
+
   const editTable = () => {
     dispatch(setActiveTable(table))
     navigate('edit');
   }
 
 
-  const deleteTable = () =>{
+  const deleteTable = () => {
     statusModalDeleteTable.setSubject(true, table);
     console.log('deleteTable')
+
+  }
+
+  const enableTable = () => {
+
+    const data: UpdateTableDto = {
+      isActive: true,
+      id: table.id
+    }
+
+    updateTableMutation.mutate(data);
+
 
   }
 
@@ -53,7 +69,7 @@ export const CardTable: FC<Props> = ({ table }) => {
     <>
       <Card >
 
-        <CardHeader 
+        <CardHeader
           title={`Mesa ${table.name}`}
           avatar={
 
@@ -65,23 +81,39 @@ export const CardTable: FC<Props> = ({ table }) => {
           }}
 
           action={
+
+
             <Box display='flex' alignItems='center'>
-          <IconButton
-            onClick={editTable}
-            color="primary"
-          >
-            <EditOutlined fontSize="medium" />
-          </IconButton>
+              {
+                table.isActive
+                  ? (<>
+                    <IconButton
+                      onClick={editTable}
+                      color="primary"
+                    >
+                      <EditOutlined fontSize="medium" />
+                    </IconButton>
 
-          <IconButtonError onClick={deleteTable}>
-            <DeleteTwoToneIcon fontSize="medium" />
-          </IconButtonError>
+                    <IconButtonError onClick={deleteTable}>
+                      <DeleteTwoToneIcon fontSize="medium" />
+                    </IconButtonError>
 
-              </Box>
+                  </>)
+                  : (<Button
+                    variant="outlined"
+                    size="small"
+                    onClick={enableTable}
+
+                  >
+                    Habilitar
+                  </Button>)
+              }
+
+            </Box>
           }
         />
-       
-       
+
+
       </Card>
     </>
   )

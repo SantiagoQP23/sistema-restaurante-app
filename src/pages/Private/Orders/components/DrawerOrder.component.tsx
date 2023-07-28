@@ -122,12 +122,12 @@ export const DrawerOrder: FC<Props> = ({
 
             <Box px={2}>
 
-              <Typography variant="h4"  >
+              {/* <Typography variant="h4"  >
 
                 Restaurante Doña Yoli
-              </Typography>
+              </Typography> */}
 
-              <Typography variant="h4" textAlign='right' mt={2} >
+              <Typography variant="h3" textAlign='center' mt={2} >
                 Mesa {activeTable?.name}
                 {/* Pedido N° {order.num} */}
               </Typography>

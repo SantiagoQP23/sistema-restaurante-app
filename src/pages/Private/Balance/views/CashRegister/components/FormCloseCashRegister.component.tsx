@@ -3,6 +3,8 @@ import { ChangeEvent, FC, useState } from "react";
 import { UpdateCashRegisterDto } from "../../../dto/update-cash-register.dto";
 import { useUpdateCashRegister } from "../../../hooks/useCashRegister";
 import { ActiveCashRegister } from "../../../services/cash-register.service";
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -21,6 +23,7 @@ export const FormCloseCashRegister: FC<Props> = ({ cashRegister }) => {
 
 
 
+  const navigate = useNavigate();
 
   const handleChangeFinalAmount = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -49,7 +52,12 @@ export const FormCloseCashRegister: FC<Props> = ({ cashRegister }) => {
       closingNote
     }
 
-    // updateCashMutation.mutate(data)
+    updateCashMutation.mutateAsync(data)
+    .then(() => {
+      navigate('/balance')
+  
+      }
+    )
 
 
   }
@@ -73,9 +81,16 @@ export const FormCloseCashRegister: FC<Props> = ({ cashRegister }) => {
             <InputLabel id="amount">¿Cuánto dinero tiene en efectivo?</InputLabel>
             <TextField
 
+              type="number"
+
               value={finalAmount}
 
               onChange={handleChangeFinalAmount}
+
+              inputProps={{
+                lang: 'en', 
+
+              }}
             />
 
             {
@@ -91,7 +106,9 @@ export const FormCloseCashRegister: FC<Props> = ({ cashRegister }) => {
 
                     }}
                   >
-                    <Typography variant='body1'>Tienes un descuadre. {discrepancyAmount < 0 ? 'Te sobran ' : 'Te faltan'} $ {Math.abs(discrepancyAmount)}</Typography>
+                    <Typography variant='body1'>
+                      Tienes un descuadre. {discrepancyAmount < 0 ? 'Te sobran ' : 'Te faltan'} {formatMoney(Math.abs(discrepancyAmount))}
+                      </Typography>
 
                   </Box>
                   <TextField

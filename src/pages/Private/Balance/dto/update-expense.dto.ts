@@ -1,11 +1,8 @@
+import { CreateExpenseDto } from "./create-expense.dto";
 
 
-export interface UpdateExpenseDto {
+export interface UpdateExpenseDto extends Partial<CreateExpenseDto> {
 
   id: number;
-  description?: string;
-  amount?: number;
-  paymentMethod?: string;
-  supplierId?: string;
 
 }

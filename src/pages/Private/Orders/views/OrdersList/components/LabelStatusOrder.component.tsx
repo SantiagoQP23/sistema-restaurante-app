@@ -51,6 +51,7 @@ export const LabelStatusOrder: FC<Props> = (
           : <LocalDining />
       }
 
+      size="small"
     />
 
   )

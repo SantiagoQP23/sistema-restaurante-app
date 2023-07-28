@@ -6,8 +6,8 @@ export interface CreateTableDto {
   chairs: number;
 }
 
-export interface UpdateTableDto {
-  name?: string;
-  description?: string;
-  chairs?: number;
+export interface UpdateTableDto extends Partial<CreateTableDto> {
+  id: string;
+  isActive?: boolean;
+  isAvailable?: boolean;
 }

@@ -35,7 +35,7 @@ export const DashboardReports = () => {
         </Grid>
 
         <Grid item xs={12} md={3}>
-         <FootfallSummary />
+          <FootfallSummary />
         </Grid>
 
         <Grid item xs={12} md={3}>
@@ -44,27 +44,28 @@ export const DashboardReports = () => {
 
 
         <Grid item xs={12} md={3}>
-            <OrdersSummary />
-          </Grid>
+          <OrdersSummary />
+        </Grid>
 
 
 
-        <Grid container item xs={12} spacing={2}>
-          <Grid item xs={12} md={6} >
+        <Grid item xs={12} >
+          <Grid container spacing={2}>
+
+            <Grid item xs={12} md={6} >
 
             <IncomesAndExpensesSummary />
-            {/* <SimulatorAffluenceSummary /> */}
 
           </Grid>
-          <Grid item xs={12} md={6}>
+
+
+
+
+            <Grid item xs={12} md={6}>
             <PredictionAffluenceSummary />
           </Grid>
 
-          {/* 
-          <Grid item xs={12} md={4}>
-            <StaffPlanningSummary />
-          </Grid> */}
-
+       
           <Grid item xs={12} md={6}>
             <BestSellingProductsSummary />
           </Grid>
@@ -72,13 +73,13 @@ export const DashboardReports = () => {
           <Grid item xs={12} md={6}>
             <UsersSummary />
 
-            </Grid>
+          </Grid>
 
 
-
-
+          </Grid>
 
         </Grid>
+
       </Grid>
 
 

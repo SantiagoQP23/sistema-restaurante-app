@@ -27,6 +27,7 @@ import { Chart } from 'react-chartjs-2';
 import * as pdfFonts from "pdfmake/build/vfs_fonts"; // fonts provided for pdfmake
 import { Bar } from "react-chartjs-2";
 import { useEffect, useRef } from "react";
+import { PaymentMethod } from "../../../Orders/models/Invoice.model";
 
 function triggerTooltip(chart: ChartJS | null) {
   const tooltip = chart?.tooltip;
@@ -153,6 +154,113 @@ export const Invoice = () => {
     // downloadLink.click();
   };
 
+
+  const generateInvoicePdf = async () => {
+
+    const invoice = invoiceQuery.data!;
+
+    PdfMakeWrapper.setFonts(pdfFonts);
+
+    const pdf = new PdfMakeWrapper();
+
+    pdf.pageSize('A5');
+    pdf.defaultStyle({
+      fontSize: 10,
+    })
+
+    // margin: left top right bottom
+    pdf.add(
+      new Txt('Restaurante Doña Yoli').bold().fontSize(14).margin([0, 20, 0, 20]).end
+    );
+
+    pdf.add(
+      new Txt(`Comprobante N° ${invoice.transactionNumber}`).bold().fontSize(14).margin([0, 0, 0, 20]).end
+    );
+
+    pdf.add(
+      new Txt('Cliente').bold().fontSize(14).end
+    );
+
+    pdf.add(
+      new Txt(`${invoice.client?.person.lastName} ${invoice.client?.person.firstName} `).fontSize(12).end
+    );
+
+    pdf.add(
+      new Txt(`Dirección: ${invoice.client?.address}`).fontSize(12).end
+    );
+
+    pdf.add(
+      new Txt(`Email: ${invoice.client?.person.email}`).fontSize(12).end
+    );
+
+    pdf.add(
+      new Txt(`Teléfono: ${invoice.client?.person.numPhone}`).fontSize(12).margin([0, 0, 0, 20]).end
+    );
+
+
+    pdf.add(`Forma de pago: ${invoice.paymentMethod === PaymentMethod.CASH ? 'Efectivo' : 'Transferencia'}`);
+    pdf.add(
+      new Txt(`Fecha: ${format(new Date(invoice.createdAt), 'dd MMMM yyyy HH:mm', { locale: es })}`).margin([0, 0, 0, 20]).end
+      
+      );
+
+
+
+    pdf.add(
+      new Txt('Productos').bold().fontSize(14).end
+    );
+
+   
+
+    const productHeaders = ['Producto', 'Cantidad', 'Precio', 'Total'];
+    const productData = invoice.details.map((detail) => [detail.product.name, detail.quantity, detail.price, detail.amount]);
+    const amount = ['', '', 'Subtotal', invoice.amount];
+
+    const discount = ['', '', 'Descuento', invoice.discount];
+
+    const total = ['', '', 'Total', invoice.total];
+    pdf.add(
+      new TablePdf([productHeaders, ...productData, amount, discount, total]).layout('lightHorizontalLines').widths('*').end
+      );
+
+
+
+
+
+    pdf.add(
+      new Txt('¡Gracias por su compra!').margin([0, 20, 0, 0]).end
+
+    );
+
+    pdf.add(
+      new Txt('Restaurante Doña Yoli').bold().margin([0,10, 0, 0]).end
+    );
+
+    pdf.add(
+      new Txt('Teléfono: 0992629516').end
+    );
+
+    pdf.add(
+      new Txt('Email: restaurantedeyoli@gmail.com').end
+    );
+
+    pdf.add(
+      new Txt('San Pablo - Santa Elena').end
+    );
+
+
+
+
+
+
+
+
+
+    pdf.create().open();
+
+
+  }
+
   useEffect(() => {
     const chart = chartRef.current;
 
@@ -164,7 +272,7 @@ export const Invoice = () => {
   if (!data) return <div>Not found</div>
 
 
- 
+
   return (
     <>
       <Stack spacing={1}
@@ -201,7 +309,7 @@ export const Invoice = () => {
           <Button
             variant='contained'
             startIcon={<Print />}
-            onClick={generatePDF}
+            onClick={generateInvoicePdf}
           >
             Imprimir
           </Button>
@@ -307,7 +415,6 @@ export const Invoice = () => {
                           }}>{detail.product.name}</TableCell>
                           <TableCell align="right">${detail.product.price}</TableCell>
                           <TableCell align="right">${detail.amount}</TableCell>
-
 
                         </TableRow>
 

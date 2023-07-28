@@ -59,7 +59,7 @@ export const BestSellingProductsSummary = () => {
                     secondary={
                       <Chip
                         sx={{ mt: 0.5 }}
-                        label={'Ceviches'}
+                        label={product.categoryName}
                         size='small'
                       />
                     }

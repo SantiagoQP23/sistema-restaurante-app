@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Card, CardContent, Button, CardHeader, Typography, ListItem, ListItemSecondaryAction, ListItemText, List, ListItemIcon, Chip, Stack, Box, ListItemAvatar, Avatar, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useUsers } from '../../../../Users/hooks/useUsers';
 import { NavLink as RouterLink } from 'react-router-dom';
 import { Person } from '@mui/icons-material';
-import { Pie } from 'react-chartjs-2';
+import { Chart, Pie } from 'react-chartjs-2';
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
@@ -17,6 +17,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Roles, ValidRoles } from '../../../../../../models';
 import { generateRandomColor } from '../../../../Common/helpers/randomColor.helpert';
 import { eachMonthOfInterval } from 'date-fns';
+import { generateWaiterReportPdf, triggerTooltip } from '../../../../Reports/helpers/pdf-reports.helper';
+import html2canvas from 'html2canvas';
 
 
 
@@ -24,6 +26,8 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 export const UsersSummary = () => {
+
+  const chartRef = useRef<ChartJS>(null);
 
   const {
     period,
@@ -53,6 +57,7 @@ export const UsersSummary = () => {
     labels: data?.map(user => user.firstName + ' ' + user.lastName),
     datasets: [
       {
+        type: 'pie' as const,
         data: data?.map(user => Number(user.total)),
         backgroundColor: data?.map(user => generateRandomColor()),
         borderColor: 'rgba(255, 255, 255, 1)',
@@ -75,6 +80,28 @@ export const UsersSummary = () => {
 
   };
 
+  const openPdf = async () => {
+
+    if (!data) return;
+
+    let urlImage;
+
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    console.log('image', urlImage)
+
+
+    const pdf = await generateWaiterReportPdf(data, {period, startDate, endDate}, urlImage);
+
+    pdf.open();
+
+  }
+
 
   useEffect(() => {
     refetch();
@@ -82,7 +109,11 @@ export const UsersSummary = () => {
   }, [period, endDateChecked, startDate, endDate, groupBy])
 
 
+  // useEffect(() => {
+  //   const chart = chartRef.current;
 
+  //   triggerTooltip(chart);
+  // }, []);
 
 
   return (
@@ -90,14 +121,14 @@ export const UsersSummary = () => {
       <Card>
 
         <CardHeader
-          title='Usuarios'
-          subheader='Ingresos de usuarios en el día'
+          title='Meseros'
+          subheader='Desempeño de meseros'
           action={
             <Button
               variant='outlined'
 
               size='small'
-              onClick={() => window.print()}
+              onClick={openPdf}
 
             >
               Imprimir
@@ -184,7 +215,8 @@ export const UsersSummary = () => {
 
           {
             data && (
-              <Pie data={dataChart} options={options} />
+              // <Chart ref={chartRef} type='pie' data={dataChart} options={options} />
+              <Pie data={dataChart} options={options} ref={chartRef} />
 
             )
           }

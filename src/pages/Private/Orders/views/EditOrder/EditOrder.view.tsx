@@ -26,6 +26,7 @@ import { OrderStatus } from '../../../../../models';
 import { ModalDeleteInvoice } from '../../components/modals/ModalDeleteInvoice.component';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PdfReceiptOrder } from '../OrderReceipt/pdf/PdfReceiptOrder.component';
+import { generateOrderPdf } from '../../helpers/pdf-orders';
 
 
 export const EditOrder = () => {
@@ -59,6 +60,12 @@ export const EditOrder = () => {
       statusModalPayOrder.setSubject(true, activeOrder);
   }
 
+  const openPDF = () => {
+    if(activeOrder){
+      const pdf = generateOrderPdf(activeOrder);
+      pdf.open();
+    }
+  }
 
   const BtnNext = () => (
     <Button
@@ -177,6 +184,7 @@ export const EditOrder = () => {
                   startIcon={<Print />}
                   variant='outlined'
                   size='small'
+                  onClick={openPDF}
                 >
                   Imprimir
                 </Button>

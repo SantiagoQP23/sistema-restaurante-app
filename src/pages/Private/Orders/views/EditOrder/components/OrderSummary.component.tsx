@@ -22,6 +22,7 @@ import { useInvoiceStore } from '../../../store/invoiceStore';
 import { InvoicesList } from './InvoicesList.component';
 import { useModal } from '../../../../../../hooks';
 import { ModalEditOrder } from './ModalEditOrder.component';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 interface PropsOrder {
   order: IOrder,
@@ -275,7 +276,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <Grid item xs={8}>
 
                 <Typography variant="h4">
-                  $ {order.total}
+                  {formatMoney(order.total)}
 
                 </Typography>
 

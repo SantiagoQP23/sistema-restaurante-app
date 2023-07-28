@@ -4,5 +4,5 @@ import { CreateTransactionDto } from "./create-transaction.dto";
 
 export interface CreateExpenseDto extends CreateTransactionDto {
  
-  supplierId?: string;
+
 }

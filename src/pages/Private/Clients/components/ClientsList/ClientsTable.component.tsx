@@ -82,11 +82,11 @@ const TableRowClient: FC<{ client: IClient }> = ({ client }) => {
 
 
     < TableRow >
-      <TableCell padding='checkbox'>
-        {/* <Switch checked={client.isActive} onClick={() => submitChangeStatus(client)} color={client.isActive ? 'success' : 'warning'} /> */}
+      {/* <TableCell padding='checkbox'>
+        <Switch checked={client.isActive} onClick={() => submitChangeStatus(client)} color={client.isActive ? 'success' : 'warning'} />
 
 
-      </TableCell>
+      </TableCell> */}
       <TableCell>
         <Typography
           variant="body1"
@@ -238,10 +238,10 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
             <TableHead>
 
               <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                   <Checkbox  />
                  
-                </TableCell>
+                </TableCell> */}
                 <TableCell>Nombres</TableCell>
                 <TableCell>Tipo de identificación</TableCell>
                 <TableCell>Número de identificación</TableCell>
@@ -266,7 +266,7 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
 
           </Table>
         </TableContainer>
-        <Box p={2}>
+      
           <TablePagination
             component="div"
             count={clientsQuery.data?.length || 0}
@@ -276,7 +276,6 @@ export const ClientsTable: FC<Props> = ({ clientFound }) => {
             rowsPerPage={rowsPerPage}
             rowsPerPageOptions={[5, 10, 25, 30]}
           />
-        </Box>
       </Card>
 
 

@@ -21,6 +21,8 @@ import { CustomGroupBy, GroupBy, Period, useFilterSoldProducts } from '../../hoo
 import { format, parse, startOfMonth } from 'date-fns';
 import { CategoriesBestSelling } from '../IncomesReports/components/CategoriesBestSelling.component';
 import { NavLink as RouterLink } from 'react-router-dom';
+import { formatMoney } from '../../../Common/helpers/format-money.helper';
+import { generateProductsReport } from '../../helpers/pdf-products-reports';
 
 
 
@@ -42,6 +44,9 @@ export const ProductsReports = () => {
 
   const { sections } = useSelector(selectMenu);
 
+  const filters = useFilterSoldProducts(Period.DAILY);
+
+
   const {
     period,
     startDate,
@@ -57,7 +62,8 @@ export const ProductsReports = () => {
     handleChangeCustomGroupBy,
 
 
-  } = useFilterSoldProducts(Period.DAILY);
+  } = filters;
+
 
   const {
     page, nextPage, prevPage, rowsPerPage,
@@ -84,6 +90,16 @@ export const ProductsReports = () => {
     }
   })
 
+  const handlePrint = () => {
+
+    if(data && categoriesQuery.data){
+
+      const pdf = generateProductsReport(filters, categoriesQuery.data, data);
+      pdf.open();
+    }
+
+
+  }
 
 
 
@@ -121,6 +137,7 @@ export const ProductsReports = () => {
           <Button
             variant='contained'
             startIcon={<Print />}
+            onClick={handlePrint}
           >
             Imprimir
           </Button>
@@ -344,7 +361,7 @@ export const ProductsReports = () => {
                       secondary={
                         <Chip
                           sx={{ mt: 0.5 }}
-                          label={'Ceviches'}
+                          label={product.categoryName}
                           size='small'
                         />
                       }
@@ -353,7 +370,7 @@ export const ProductsReports = () => {
 
                     >
                       <Typography variant='h6'>{product.totalSold}</Typography>
-                      <Typography variant='h5' color='success'>$ {2 * product.totalSold}</Typography>
+                      <Typography variant='h5' color='success'>{formatMoney(product.productPrice * product.totalSold)}</Typography>
 
                     </ListItemSecondaryAction>
 

@@ -2,16 +2,19 @@ import { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { TitlePage } from '../../../components/TitlePage.component';
-import { Container, Grid, Card, Button, Chip, CardActionArea, IconButton, Stack, Box } from '@mui/material';
-import { selectTables, setActiveTable } from '../../../../../redux';
+import { Container, Grid, Card, Button, Chip, CardActionArea, IconButton, Stack, Box, Tooltip } from '@mui/material';
+import { selectOrders, selectTables, setActiveTable } from '../../../../../redux';
 import { CardContent, Typography, CardHeader } from '@mui/material/';
-import { Add, Edit, Person, PersonOutline, Settings } from '@mui/icons-material';
+import { Add, Edit, HelpOutline, LockClock, Paid, Person, PersonOutline, QuestionAnswer, Settings, TimerOutlined } from '@mui/icons-material';
 import { useContext } from 'react';
 import { OrderContext, OrderActionType } from '../../context/Order.context';
 import { IOrder, ITable, TypeOrder } from '../../../../../models';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '../../../../../hooks';
 import { DrawerOrder } from '../../components/DrawerOrder.component';
+import { format } from 'date-fns';
+import { LabelStatusOrder } from '../OrdersList/components/LabelStatusOrder.component';
+import { index } from '../../../../Status/Maintenance/index';
 
 
 
@@ -28,6 +31,10 @@ export const Tables = () => {
   const [order, setOrder] = useState<IOrder | null>(null);
 
   const { isOpen, handleClose, handleOpen } = useModal();
+
+  const { orders } = useSelector(selectOrders);
+
+  const ordersTakeAway = orders.filter(order => order.type === TypeOrder.TAKE_AWAY && !order.isClosed);
 
 
 
@@ -93,18 +100,11 @@ export const Tables = () => {
       <Container maxWidth='lg' >
 
         <TitlePage
-          title='Mesas'
+          title='Pedidos'
 
           action={
             <Stack direction='row' spacing={1}>
-              <Button
-                variant='outlined'
-                startIcon={<Edit />}
-                onClick={() => navigate('/tables')}
-                size='small'
-              >
-                Editar
-              </Button>
+
 
               <Button
                 variant='contained'
@@ -120,9 +120,142 @@ export const Tables = () => {
 
         />
 
-        <Stack direction='row' justifyContent='right' my={2}>
 
+        {
+          ordersTakeAway.length >= 1 && (
+            <>
+              <Typography variant='h4'>
+                Pedidos para llevar
+              </Typography>
+
+
+              <Grid container direction='row' my={2} spacing={1}>
+
+
+                {
+                  ordersTakeAway.map(order => (
+                    <Grid item xs={12} md={6} lg={4} direction='row'>
+                      <Card>
+                        <CardActionArea
+                          onClick={() => {
+                            navigate(`/orders/list/edit/${order.id}`);
+                          }}
+                        >
+
+                          <CardHeader
+                            title={`Pedido #${order.num}`}
+                            subheader={`Mesero: ${order.user.username}`}
+                            action={
+                              <LabelStatusOrder status={order.status} />
+
+                            }
+                          />
+                          <Stack spacing={1} px={1} mb={1}>
+
+                            <Stack direction='row' spacing={1} alignItems='center'
+                              sx={{
+                                maxWidth: 'auto', // Establecer el ancho máximo aquí
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+
+                            >
+                              {
+                                order.details.map((detail, index) => (
+                                  <Typography variant='body1' key={index}>
+                                    {detail.quantity} {detail.product.name}
+                                    {index < order.details.length - 1 ? ',' : '.'}
+                                  </Typography>
+                                ))
+                              }
+
+                            </Stack>
+
+                            <Grid container spacing={1} alignItems='center'>
+
+                              <Grid item xs={12}>
+                                <Chip
+                                  label={`${format(new Date(order.deliveryTime), 'dd/MM/yyyy HH:mm')}`}
+                                  size='small'
+                                  icon={<TimerOutlined />}
+                                />
+
+                              </Grid>
+
+                              <Grid item xs={6}>
+                                <Chip
+                                  label={`Personas: ${order.people}`}
+                                  size='small'
+                                  icon={<Person />}
+                                />
+                              </Grid>
+
+                              <Grid item xs={6}>
+                                <Chip
+                                  label={`Total: $${order.total}`}
+                                  size='small'
+                                  icon={<Paid />}
+
+                                />
+
+
+
+                              </Grid>
+                            </Grid>
+
+
+
+
+                          </Stack>
+
+
+                        </CardActionArea>
+
+
+                      </Card>
+                    </Grid>
+                  ))
+                }
+
+              </Grid>
+            </>
+          )
+        }
+
+
+        <Stack direction='row' justifyContent='space-between' alignItems='center' mb={2}>
+
+
+          <Typography variant='h4'>
+            Mesas
+          </Typography>
+
+          <Stack direction='row' justifyContent='space-between' alignItems='center' spacing={1}>
+            <Button
+              variant='outlined'
+              startIcon={<Edit />}
+              onClick={() => navigate('/tables')}
+              size='small'
+            >
+              Editar
+            </Button>
+
+            <Tooltip
+              title='Seleccione una mesa para ver su orden o crear un nuevo pedido'
+            >
+              <IconButton>
+
+                <HelpOutline />
+              </IconButton>
+
+            </Tooltip>
+
+
+
+          </Stack>
         </Stack>
+
 
 
         <Grid container spacing={2}>

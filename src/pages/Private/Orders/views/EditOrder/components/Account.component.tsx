@@ -33,7 +33,7 @@ export const Account: FC<Props> = ({ order }) => {
 
     if (isNaN(value))
       setDiscount(0);
-      
+
     if (value < 0) {
       setDiscount(0);
       return;
@@ -164,7 +164,7 @@ export const Account: FC<Props> = ({ order }) => {
                         <>
                           <Typography>
                             {detail.quantity - detail.qtyPaid + ' - ' + detail.product.name}
-                           
+
                           </Typography>
                         </>
                       }
@@ -196,7 +196,9 @@ export const Account: FC<Props> = ({ order }) => {
           />
 
           <TableContainer>
-            <Table>
+            <Table
+              padding='checkbox'
+            >
               <TableHead>
                 <TableRow>
                   <TableCell padding='checkbox' align='center'>

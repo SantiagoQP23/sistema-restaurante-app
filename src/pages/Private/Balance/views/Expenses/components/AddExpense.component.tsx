@@ -10,12 +10,14 @@ import { Close, Paid } from "@mui/icons-material";
 import { useCreateExpense } from "../../../hooks/useExpenses";
 import { LoadingButton } from "@mui/lab";
 import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { ModalSelectUser } from "../../../../Users/components/ModalSelectUser.component";
+import { IUser } from "../../../../../../models";
 
 const expenseInitialForm: CreateExpenseDto = {
   description: '',
   amount: 0,
   paymentMethod: PaymentMethod.CASH,
-  responsible: '',
+  responsibleId: '',
   cashRegisterId: '',
 }
 
@@ -23,7 +25,9 @@ export const AddExpense = () => {
 
   const { handleClose, isOpen, handleOpen } = useModal();
 
-  const { activeCashRegister } = useCashRegisterStore(state => state)
+  const { activeCashRegister } = useCashRegisterStore(state => state);
+
+  const [responsibleUser, setResponsibleUser] = useState<IUser | null>(null);
 
   const { register, handleSubmit, formState: { errors }, control, reset } = useForm<CreateExpenseDto>({
     defaultValues: expenseInitialForm
@@ -33,16 +37,23 @@ export const AddExpense = () => {
 
   const { mutate, isLoading, mutateAsync } = useCreateExpense();
 
+  const handleChangeResponsible = (user: IUser | null) => {
+
+    setResponsibleUser(user);
+
+  }
+
+
   const onSubmit = (form: CreateExpenseDto) => {
-
-
-    if (supplier) {
-      form.supplierId = supplier.id;
-    }
 
     if (activeCashRegister) {
 
       form.cashRegisterId = activeCashRegister.id;
+
+      if (responsibleUser) {
+        form.responsibleId = responsibleUser.id;
+      }
+      
 
       mutateAsync(form).then(() => {
         reset();
@@ -56,16 +67,17 @@ export const AddExpense = () => {
 
   }
 
-  const handleChangeSupplier = (supplier: Supplier | null) => {
-
-    setSupplier(supplier);
-
-  }
 
 
 
   return (
     <>
+    <ModalSelectUser 
+      open={isOpen}
+      onClose={handleClose}
+      onChange={handleChangeResponsible}
+      />
+
 
       <Card  >
 
@@ -76,18 +88,13 @@ export const AddExpense = () => {
         <CardContent>
 
 
-
-
-
           <FormControl fullWidth component='form' onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
 
               <Grid item xs={12} >
-                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
                   label="Descripción"
                   type="text"
-                  // placeholder="Nombre del gasto"
                   fullWidth
                   {
                   ...register('description', {
@@ -126,13 +133,11 @@ export const AddExpense = () => {
 
                 />
               </Grid>
-
+{/* 
               <Grid item xs={12} >
-                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
                   label="Responsable"
                   type="text"
-                  // placeholder="Nombre del gasto"
                   fullWidth
                   {
                   ...register('responsible', {
@@ -148,25 +153,22 @@ export const AddExpense = () => {
                 />
 
 
-              </Grid>
-
-
-
-
+              </Grid> */}
 
               <Grid item xs={12}>
                 <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
                   <Typography variant="subtitle2">
-                    Proveedor
+                    Responsable
                   </Typography>
                   <Box>
 
+
                     <Button
                       onClick={handleOpen}
-                    >{supplier ? 'Cambiar' : 'Seleccionar'}</Button>
+                    >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
                     {
-                      supplier && (
-                        <IconButton color="error" onClick={() => handleChangeSupplier(null)}>
+                      responsibleUser && (
+                        <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
                           <Close />
                         </IconButton>)
                     }
@@ -174,17 +176,12 @@ export const AddExpense = () => {
 
                 </Stack>
                 <Typography variant="h6">
-                  {supplier ? `${supplier.person.firstName} ${supplier.person.lastName} ` : 'No seleccionado'}
+                  {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
                 </Typography>
 
 
               </Grid>
 
-
-
-              {/* <Grid item xs={12} md={4}>
-
-          </Grid> */}
               <Grid item xs={12} md={8}>
 
                 <Controller
@@ -196,9 +193,6 @@ export const AddExpense = () => {
                     ({ field: { onChange, onBlur, value } }) => (
                       <FormControl fullWidth>
                         <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
-                          {/* <Typography variant="subtitle2">
-                            Metodo de pago
-                          </Typography> */}
                           <Stack direction='row' spacing={2}>
                             <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
                             <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
@@ -238,7 +232,6 @@ export const AddExpense = () => {
 
 
 
-      <ModalSelectSupplier open={isOpen} onClose={handleClose} onChange={handleChangeSupplier} />
 
 
 

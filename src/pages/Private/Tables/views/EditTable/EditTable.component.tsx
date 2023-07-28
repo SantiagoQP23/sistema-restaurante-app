@@ -1,17 +1,20 @@
-import { ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Grid, Button, Typography, TextField, Container, Card, CardContent } from '@mui/material';
+import { Grid, Button, Typography, TextField, Container, Card, CardContent, Stack } from '@mui/material';
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 
-import { useFetchAndLoad } from "../../../../hooks";
-import { ICreateTable } from "../../../../models";
-import { addTable, selectTables, updateTable } from "../../../../redux/slices/tables";
-import { createTable, updateTable as updateTableS } from '../services/tables.service';
+import { useFetchAndLoad } from "../../../../../hooks";
+import { ICreateTable } from "../../../../../models";
+import { addTable, selectTables, setActiveTable, updateTable } from "../../../../../redux/slices/tables";
+import { createTable, updateTable as updateTableS } from '../../services/tables.service';
 
 import { useForm } from "react-hook-form";
+import { TitlePage } from "../../../components/TitlePage.component";
+import { useUpdateTable } from "../../hooks/useTables";
+import { UpdateTableDto } from "../../dto/table.dto";
 
 const initialTable: ICreateTable = {
   name: '',
@@ -29,6 +32,8 @@ export const EditTable = () => {
   const dispatch = useDispatch();
 
   const { loading, callEndpoint, cancelEndpoint } = useFetchAndLoad();
+
+  const updateTableMutation = useUpdateTable();
 
 
   const { activeTable } = useSelector(selectTables);
@@ -50,30 +55,29 @@ export const EditTable = () => {
 
   const onSubmit = async (form: ICreateTable) => {
 
-    
+
 
 
     if (activeTable) {
-      await callEndpoint(updateTableS({ id: activeTable.id, data: form }))
-        .then((resp) => {
-          const { data } = resp;
-          console.log(data)
-          dispatch(updateTable(data.table));
-          enqueueSnackbar('Mesa actualizada', { variant: 'success' })
 
-        })
-        .catch((err) => {
-          console.log(err)
-          enqueueSnackbar('Error al actualizar', { variant: 'error' })
+      const data: UpdateTableDto = {
+        id: activeTable.id,
+        isAvailable: activeTable.isAvailable,
+        name: form.name,
+        description: form.description,
+        chairs: form.chairs
+      }
 
-        })
+      updateTableMutation.mutate(data)
+
+    
     } else {
 
       await callEndpoint(createTable(form))
         .then((resp) => {
           const { data } = resp;
           console.log(data)
-          dispatch(addTable(data.table));
+          dispatch(addTable(data));
           enqueueSnackbar('Mesa añadida', { variant: 'success' })
 
         })
@@ -86,15 +90,25 @@ export const EditTable = () => {
 
   }
 
+  const handleCancel = () => {
+    dispatch(setActiveTable(null));
+    navigate(-1);
+  }
+
 
   return (
     <>
+
+      <TitlePage
+        title={`${activeTable ? "Editar" : "Crear"} mesa`}
+
+      />
 
       <Container maxWidth='xs'>
 
         <Grid container display='flex' justifyContent='space-between'>
           <Grid item display='flex' justifyContent='left' alignItems='center'>
-            <Button onClick={() => navigate(-1)}>
+            <Button onClick={handleCancel}>
               <ArrowBack />
             </Button>
             <Typography variant='h5'>{activeTable ? `Mesa ${activeTable.name}` : "Añadir mesa"} </Typography>

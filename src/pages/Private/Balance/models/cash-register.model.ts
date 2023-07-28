@@ -19,6 +19,11 @@ export interface CashRegister {
     createdAt: Date;
     updatedAt: Date;
     user: IUser;
+    closingUser: IUser;
+
+    discrepancy: number;
+
+    
 
     // cashIncomes: CashIncome[];
 

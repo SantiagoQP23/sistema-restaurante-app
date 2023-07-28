@@ -10,6 +10,7 @@ import { useFetchAndLoad, useAsync } from '../../../../../../hooks';
 import { DateIncome } from '../../../models/date-orders.interface';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 import { Label } from '../../../../../../components/ui';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 export const IncomesSummary = () => {
@@ -18,21 +19,6 @@ export const IncomesSummary = () => {
 
   const [datesIncome, setDatesIncome] = useState<DateIncome[]>([]);
 
-  const { loading, callEndpoint } = useFetchAndLoad();
-
-  // const getDatesIncomeCall = async () => await callEndpoint(getIncomes())
-
-  const loadDatesIncomeState = (data: DateIncome[]) => { setDatesIncome(data); }
-// 
-  // useAsync(getDatesIncomeCall, loadDatesIncomeState, () => { }, []);
-
-
-  /* const getClientsCall = async () => await callEndpoint(getClients())
-
-  const loadClientsState = (data: IClient[]) => { dispatch(loadClients(data)); }
-
-  useAsync(getClientsCall, loadClientsState, () => { }, []);
- */
 
   return (
     <>
@@ -42,6 +28,9 @@ export const IncomesSummary = () => {
           avatar={<MonetizationOn color='success' sx={{ fontSize: 30 }} />}
           title={
             <Typography variant="h4" >Caja</Typography>
+          }
+          subheader={
+            <Typography variant="subtitle1" >Balance</Typography>
           }
         
           action={
@@ -66,13 +55,13 @@ export const IncomesSummary = () => {
          {
           activeCashRegister && (
           <Typography variant="h3" component="div" >
-            $ {activeCashRegister && activeCashRegister.balance }
+            {activeCashRegister && formatMoney(activeCashRegister.balance) }
             <Label
               sx={{ ml: 1 }}
               
               color='success'
             >
-              + ${activeCashRegister.totalIncomes + activeCashRegister.totalInvoices}
+              + {formatMoney(activeCashRegister.totalIncomes + activeCashRegister.totalInvoices + activeCashRegister.initialAmount)}
             </Label>
 
             <Label
@@ -80,7 +69,7 @@ export const IncomesSummary = () => {
               
               color='error'
             >
-              - ${activeCashRegister.totalExpenses}
+              - {formatMoney(activeCashRegister.totalExpenses)}
             </Label>
 
 

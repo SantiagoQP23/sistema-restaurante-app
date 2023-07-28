@@ -36,7 +36,7 @@ export const AddUser = () => {
 
   // const { loading, callEndpoint } = useFetchAndLoad();
 
-  const {isLoading, mutateAsync } = useCreateUser();
+  const { isLoading, mutateAsync } = useCreateUser();
 
   const dispatch = useDispatch();
 
@@ -58,8 +58,11 @@ export const AddUser = () => {
       typeIdentification: identification.type,
       numberIdentification: identification.num,
       rol: form.role.name,
+      email: form.email!,
 
     }
+
+    mutateAsync(newUser)
 
     // await callEndpoint(createUser(newUser))
     //   .then((res) => {
@@ -81,9 +84,11 @@ export const AddUser = () => {
 
   return (
     <>
-      <TitlePage 
+      <TitlePage
         title="Agregar usuario"
       />
+
+      <Container maxWidth='md'>
 
 
         <Card>
@@ -93,13 +98,14 @@ export const AddUser = () => {
 
               user={user}
               onSubmit={onSubmit}
-               loading={isLoading}
+              loading={isLoading}
               isNew={true}
             />
 
           </CardContent>
         </Card>
-     
+
+      </Container>
 
     </>
 

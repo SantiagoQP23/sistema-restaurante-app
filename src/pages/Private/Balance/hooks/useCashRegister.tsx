@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { ActiveCashRegister, createCashRegister, getAllCashRegisters, getCashRegister, getCashRegisterActive, updateCashRegister } from "../services/cash-register.service"
 import { useSnackbar, enqueueSnackbar } from 'notistack';
@@ -6,18 +8,48 @@ import { CreateCashRegisterDto } from "../dto/create-cash-register.dto";
 import { useSearch } from "../../../../hooks/useSearch";
 import { useCashRegisterStore } from "../../Common/store/cashRegisterStore";
 import { UpdateCashRegisterDto } from "../dto/update-cash-register.dto";
+import { useDateFilter } from "../../../../hooks/useDateFilter";
+import { Period } from "../../../../models/period.model";
+import { usePagination } from "../../../../hooks/usePagination";
+import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 
 
 export const useAllCashRegister = () => {
 
-  const cashRegisterQuery = useQuery(['cashRegister'], getAllCashRegisters, {
+  const dateFilter = useDateFilter(Period.MONTH);
+  const pagination = usePaginationAsync();
+
+
+
+  const cashRegisterQuery = useQuery(['cashRegister'], () => getAllCashRegisters({
+    ...dateFilter,
+    ...pagination
+  }), {
     onSuccess: (data) => {
       console.log(data)
     },
   })
 
+  useEffect(() => {
+
+    cashRegisterQuery.refetch();
+    pagination.resetPage();
+
+
+
+  }, [ pagination.rowsPerPage, dateFilter.startDate, dateFilter.endDate, dateFilter.period])
+
+  useEffect(() => {
+
+    cashRegisterQuery.refetch();
+
+  }, [pagination.page])
+  
+
   return {
-    cashRegisterQuery
+    cashRegisterQuery,
+    ...dateFilter,
+    ...pagination
   }
 }
 

@@ -30,7 +30,7 @@ export const EditUser = () => {
 
   const updateUserMutation = useUpdateUser();
 
-  const { id, person, role, ...restUser } = activeUser!;
+  const { id, person, role, isActive, ...restUser } = activeUser!;
 
   const { id: idI, ...identification } = person.identification;
 
@@ -61,11 +61,11 @@ export const EditUser = () => {
       .then((data) => {
         dispatch(updateUser(data));
 
-        enqueueSnackbar('Usuario actualizado', { variant: 'success' });
+        // enqueueSnackbar('Usuario actualizado', { variant: 'success' });
       })
       .catch((err) => {
-        console.log(err);
-        enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
+        // console.log(err);
+        // enqueueSnackbar('Error al actualizar usuario', { variant: 'error' });
       })
 
 

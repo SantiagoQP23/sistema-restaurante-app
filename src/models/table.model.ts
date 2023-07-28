@@ -9,6 +9,7 @@ export interface ITable {
   chairs: number;
   isAvailable: boolean;
   orders: IOrder[];
+  isActive: boolean;
 
 }
 

@@ -14,22 +14,7 @@ const Table = () => {
     <>
 
       <Container maxWidth='lg'>
-        <TitlePage
-          title='Mesas'
-          action={
-            <Stack>
-              <Button
-                variant='contained'
-                startIcon={<Add />}
-                onClick={() => navigate('edit')}
-              >
-                Agregar
-              </Button>
-
-            </Stack>
-          }
-
-        />
+        
 
         <Outlet />
 

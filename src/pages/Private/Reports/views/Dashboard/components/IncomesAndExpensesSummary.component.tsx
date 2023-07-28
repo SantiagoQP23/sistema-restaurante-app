@@ -7,6 +7,7 @@ import { useDateFilter } from '../../../../../../hooks/useDateFilter';
 import { GroupBy, Period } from '../../../../../../models/period.model';
 import { format, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 
@@ -15,18 +16,18 @@ export const IncomesAndExpensesSummary = () => {
 
   const { } = useDateFilter(Period.CUSTOM);
 
-  const { data, isLoading } = useQuery<FinanceResponse[]>(['financials'], 
-  () => {
+  const { data, isLoading } = useQuery<FinanceResponse[]>(['financials'],
+    () => {
 
-    return getFinances({ 
-      period: Period.CUSTOM, 
-      startDate: startOfWeek(new Date()), 
-      endDate: new Date(), 
-      groupBy: GroupBy.DAY,
-      
-     })
+      return getFinances({
+        period: Period.CUSTOM,
+        startDate: startOfWeek(new Date()),
+        endDate: new Date(),
+        groupBy: GroupBy.DAY,
 
-  },{
+      })
+
+    }, {
     onSuccess: (data) => {
       console.log(data)
     }
@@ -63,6 +64,11 @@ export const IncomesAndExpensesSummary = () => {
     },
   };
 
+  const totalIncomes = data?.reduce((acc, day) => Number(day.income.total) + acc, 0) || 0;
+
+  const totalExpenses = data?.reduce((acc, day) => Number(day.expense.total) + acc, 0) || 0;
+
+  const balance = totalIncomes - totalExpenses;
 
 
   return (
@@ -70,7 +76,9 @@ export const IncomesAndExpensesSummary = () => {
     <Card>
       <CardHeader
         title='Finanzas'
-        subheader='Ingresos y gastos de la semana'
+        subheader='Balance de la semana'
+
+
 
         action={
           <Button
@@ -96,8 +104,35 @@ export const IncomesAndExpensesSummary = () => {
           }
         </Box>
 
+        <Stack
+          mt={2}
+          spacing={5}
+          // divider={<Divider orientation='vertical'/>} 
+          direction='row'
+          justifyContent='center'
+          textAlign='center'
+        >
 
-        <Grid container spacing={1} mt={2}>
+
+          <Box>
+            <Typography variant='caption' >Ventas</Typography>
+            <Typography variant='h4' color='success.main' >{formatMoney(totalIncomes)}</Typography>
+          </Box>
+
+          <Box>
+            <Typography variant='caption' >Gastos</Typography>
+            <Typography variant='h4' color='error.main' >{formatMoney(totalExpenses)}</Typography>
+          </Box>
+          <Box>
+            <Typography variant='caption' >Balance</Typography>
+            <Typography variant='h4' color={ balance >= 0 ?  'success.main' : 'error.main'} >{formatMoney(balance)}</Typography>
+          </Box>
+
+        </Stack>
+
+
+
+        {/* <Grid container spacing={1} mt={2}>
           <Grid item xs={6} >
 
 
@@ -119,14 +154,14 @@ export const IncomesAndExpensesSummary = () => {
 
           <Grid item xs={12} >
 
-            {/* <Typography variant='subtitle1' textAlign='center'>Balance</Typography> */}
+            <Typography variant='subtitle1' textAlign='center'>Balance</Typography>
 
-            <Typography variant='h3' textAlign='center' color={true ? 'success.main' : 'error.main'}>$ {data?.reduce((acc, day) => day.balance + acc, 0)}</Typography>
+            <Typography variant='h3' textAlign='center' color={true ? 'success.main' : 'error.main'}> {formatMoney(data?.reduce((acc, day) => day.balance + acc, 0) || 0)}</Typography>
 
 
 
           </Grid>
-        </Grid>
+        </Grid> */}
 
       </CardContent>
     </Card>

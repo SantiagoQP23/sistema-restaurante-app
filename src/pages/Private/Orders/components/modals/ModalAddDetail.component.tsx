@@ -24,6 +24,8 @@ import { RemoveCircleOutline, AddCircleOutline, Remove, Add } from '@mui/icons-m
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { InputBase } from '@mui/material';
 import { CounterInput } from '../CounterInput.component';
+import { ProductStatus } from '../../../../../models';
+import { Label } from '../../../../../components/ui';
 
 
 
@@ -124,7 +126,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
           setOpen(false)
           setDescription('');
         }}
-        
+
 
       >
         {/* <DialogTitle>Añadir Producto</DialogTitle> */}
@@ -133,7 +135,7 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
           sx={{
             width: 300,
           }}
-          >
+        >
 
           <Stack spacing={2}>
             <Box>
@@ -155,53 +157,64 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
 
             {/* <Divider /> */}
 
-         
 
-            <Stack
-              direction='row' alignItems='center' justifyContent='flex-end'
-              my={2}
-            >
-              {/* <Typography variant="h5" >Cantidad</Typography> */}
+            {
+              detail?.product.status !== ProductStatus.AVAILABLE
 
-              <CounterInput
-                value={detail?.quantity || 1}
-                onChange={handleQuantityChange}
+                ? <>
+                  <Label color='warning'>Producto no disponible</Label>
 
 
-              />
-              {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
+                </>
+                : <>
+
+                  <Stack
+                    direction='row' alignItems='center' justifyContent='flex-end'
+                    my={2}
+                  >
+                    {/* <Typography variant="h5" >Cantidad</Typography> */}
+
+                    <CounterInput
+                      value={detail?.quantity || 1}
+                      onChange={handleQuantityChange}
+
+
+                    />
+                    {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
 
 
 
-            </Stack>
+                  </Stack>
 
-            <FormControl fullWidth>
-              <TextField
-                id="descripcion-pedido"
-                label="Notas"
-                margin="dense"
-                multiline
-                rows={3}
-                defaultValue={description}
+                  <FormControl fullWidth>
+                    <TextField
+                      id="descripcion-pedido"
+                      label="Notas"
+                      margin="dense"
+                      multiline
+                      rows={3}
+                      defaultValue={description}
 
-                onBlur={(e) => {
-                  console.log(e.target.value);
-                  setDescription(e.target.value);
+                      onBlur={(e) => {
+                        console.log(e.target.value);
+                        setDescription(e.target.value);
 
-                }
-                }
-
-
-              />
+                      }
+                      }
 
 
-            </FormControl>
+                    />
+
+
+                  </FormControl>
+
+
+                </>
+            }
+
+
 
           </Stack>
-
-
-
-
 
 
 
@@ -221,13 +234,18 @@ export const ModalAddDetail: FC<Props> = ({ }) => {
             }}
 
           >Cancelar</Button>
+
+          {
+
+            detail?.product.status === ProductStatus.AVAILABLE &&
+
           <LoadingButton
             onClick={crearDetalle}
             variant="contained"
             loading={loading}
             startIcon={<ShoppingCartIcon />}
 
-          >Añadir</LoadingButton>
+          >Añadir</LoadingButton>}
         </DialogActions>
       </Dialog>
     </>

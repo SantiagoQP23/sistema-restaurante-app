@@ -5,6 +5,7 @@ import { Income } from '../models/income.model';
 import { Expense } from '../models/expense.model';
 import { Invoice } from '../../Orders/models/Invoice.model';
 import { UpdateCashRegisterDto } from "../dto/update-cash-register.dto";
+import { DateFiltePaginationDto } from "../../Common/dto";
 
 export interface ActiveCashRegister extends CashRegister {
   totalIncomes: number;
@@ -17,11 +18,28 @@ export interface ActiveCashRegister extends CashRegister {
   totalExpensesTransfer: number;
   totalInvoicesTransfer: number;
   balance: number;
+  
 }
 
-export const getAllCashRegisters = async (): Promise<CashRegister[]> => {
+export interface CashRegistersResponse {
+  cashRegisters: CashRegister[];
+  count: number
+}
 
-  const { data } = await restauranteApi.get<CashRegister[]>(`/cash-register`);
+export const getAllCashRegisters = async (filterDto: DateFiltePaginationDto): Promise<CashRegistersResponse> => {
+
+  const {offset = 0, limit = 5, startDate, endDate} = filterDto;
+
+  const { data } = await restauranteApi.get<CashRegistersResponse>(`/cash-register`, {
+    params: {
+      startDate: filterDto.startDate,
+      endDate: filterDto.endDate,
+      offset: offset * limit,
+      limit: filterDto.limit,
+      period: filterDto.period
+
+    }
+  });
   return data;
 
 }

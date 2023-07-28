@@ -9,6 +9,7 @@ import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore
 import { ActiveCashRegister } from '../../../services/cash-register.service';
 import { UpdateCashRegisterDto } from '../../../dto/update-cash-register.dto';
 import { useUpdateCashRegister } from '../../../hooks/useCashRegister';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 
@@ -29,6 +30,8 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
 
   const updateCashMutation = useUpdateCashRegister();
 
+
+  const balanceCash = cashRegister ? cashRegister.totalIncomesCash + cashRegister.totalInvoicesCash - cashRegister.totalExpensesCash : 0;
 
 
   return (
@@ -158,7 +161,7 @@ export const CashRegisterInfo: FC<Props> = ({ cashRegister }) => {
             <Box display='flex' justifyContent='space-between' alignItems='center'>
 
               <InputLabel id="date">Monto final</InputLabel>
-              <Typography variant='h3' >$ {cashRegister.balance}</Typography>
+              <Typography variant='h3' >{formatMoney(cashRegister.balance)}</Typography>
             </Box>
 
             {/* <Box display='flex' justifyContent='right' alignItems='center'>

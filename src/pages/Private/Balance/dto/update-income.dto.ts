@@ -1,12 +1,9 @@
+import { CreateIncomeDto } from "./create-income.dto";
 
 
-export interface UpdateIncomeDto {
+export interface UpdateIncomeDto extends Partial<CreateIncomeDto> {
 
   id: number;
-  description?: string;
-  amount?: number;
-  paymentMethod?: string;
 
-  clientId?: string;
 
 }

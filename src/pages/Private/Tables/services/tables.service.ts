@@ -1,6 +1,7 @@
 import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 import { ICreateTable, ITable } from "../../../../models";
+import { UpdateTableDto } from "../dto/table.dto";
 import { SubjectDeleteTable } from '../helpers/subjects-tables.helper';
 
 
@@ -23,30 +24,42 @@ export const getTables = () => {
 }
 
 
+
+
 export const createTable = (data: ICreateTable) => {
-
+  
   const controller = loadAbort();
-
+  
   return {
     call: restauranteApi.post<ITable>('/tables',
     data,
     { signal: controller.signal }),
     controller
   }
-
-
+  
+  
 }
 
-export const updateTable = ({id, data }: {id: string,data: ICreateTable}) => {
+export const updateTable = async  (updateTableDto: UpdateTableDto) : Promise<ITable> => {
 
   const controller = loadAbort();
 
-  return {
-    call: restauranteApi.patch<ITable>(`/tables/${id}`,
+  const { id, ...data } = updateTableDto;
+
+  const resp = await restauranteApi.patch<ITable>(`/tables/${id}`,
+
     data,
-    { signal: controller.signal }),
-    controller
-  }
+
+  );
+
+  return resp.data;
+
+  // return {
+  //   call: restauranteApi.patch<ITable>(`/tables/${id}`,
+  //   data,
+  //   { signal: controller.signal }),
+  //   controller
+  // }
 
 
 }

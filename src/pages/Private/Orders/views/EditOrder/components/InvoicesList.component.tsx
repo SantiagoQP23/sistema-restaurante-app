@@ -6,6 +6,7 @@ import { format } from "date-fns"
 import { Invoice } from "../../../models/Invoice.model";
 import { useDrawerInvoiceStore } from '../../../store/drawerInvoiceStore';
 import { CardHeader, CardActions } from '@mui/material/';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 interface Props {
@@ -27,7 +28,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
       <Card>
 
-        <CardHeader 
+        <CardHeader
           title={'Pagos'}
         />
         <CardContent>
@@ -42,7 +43,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
                     <ListItemAvatar>
                       <Avatar
-                        
+
                       >
                         <Receipt color={invoice.isActive ? 'inherit' : 'error'} />
                       </Avatar>
@@ -66,7 +67,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
                     <ListItemSecondaryAction>
                       <Typography variant='h5'>
-                        $ {invoice.amount}
+                        {formatMoney(invoice.amount)}
                       </Typography>
                     </ListItemSecondaryAction>
 
@@ -81,15 +82,15 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
         </CardContent>
 
         <CardActions
-          sx={{display: 'flex', justifyContent: 'space-between', px: 3}}
+          sx={{ display: 'flex', justifyContent: 'space-between', px: 3 }}
         >
           <Typography>
             Total
           </Typography>
 
           <Typography variant='h5'>
-            $ {
-              invoices.reduce((acc, d) => acc + d.total, 0)
+            {
+              formatMoney(invoices.reduce((acc, d) => acc + d.total, 0) || 0)
             }
           </Typography>
 

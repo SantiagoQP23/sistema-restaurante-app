@@ -30,6 +30,7 @@ export const FootfallSummary = () => {
     <Card>
       <CardHeader
         title='Afluencia de clientes'
+        subheader='Hoy'
         action={
           <Button
             variant='outlined'

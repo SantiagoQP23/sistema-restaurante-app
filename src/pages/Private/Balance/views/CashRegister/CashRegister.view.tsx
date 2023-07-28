@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { useCashRegister } from '../../hooks/useCashRegister';
@@ -10,6 +10,12 @@ import { IncomesList, ExpensesList } from '../BalanceDashboard/components';
 import { format } from 'date-fns';
 import { TableIncomes } from './components/TableIncomes.component';
 import { TableExpenses } from './components/TableExpenses.component';
+import { SummaryCash } from '../BalanceDashboard/components/SummaryCash.component';
+import { SummaryTransfer } from '../BalanceDashboard/components/SummaryTransfer.component';
+import { formatMoney } from '../../../Common/helpers/format-money.helper';
+import { generatePdfCashReport } from '../../helpers/pdf-cash-report';
+import { useIncomes } from '../../hooks/useIncomes';
+import { useExpenses } from '../../hooks/useExpenses';
 
 
 export const CashRegister = () => {
@@ -26,9 +32,25 @@ export const CashRegister = () => {
 
   const { cashRegisterQuery } = useCashRegister(cashRegisterId);
 
+  const {incomesQuery, ...filterIncomes} = useIncomes();
 
+  const {expensesQuery, ...filterExpenses} = useExpenses();
+
+  const handlePrint = () => {
+    if( cashRegisterQuery.data ){
+      const pdf = generatePdfCashReport(cashRegisterQuery.data, incomesQuery.data?.incomes || [], expensesQuery.data?.expenses  || [])
+      pdf.open();
+    }
+  }
 
   const { data, isLoading } = cashRegisterQuery;
+
+  useEffect(() => {
+    if (data) {
+      filterIncomes.handleChangeCashRegister(data);
+      filterExpenses.handleChangeCashRegister(data);
+    }
+  }, [data])
 
 
   if (isLoading) return <div>Loading...</div>
@@ -48,6 +70,7 @@ export const CashRegister = () => {
           <Button
             variant="contained"
             startIcon={<Print />}
+            onClick={handlePrint}
           >
             Descargar reporte
           </Button>
@@ -56,128 +79,16 @@ export const CashRegister = () => {
       <Grid container spacing={2}>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Card
-            sx={{
-              // backgroundColor: '#f44336',
-              // color: '#fff'
-            }}
-
-          >
-
-            <CardHeader title='Balance'
-
-            />
-
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
-
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {data.balance || 0}</Typography>
-              {
-                data.balance > 0
-                  ? <CallReceived color='success' />
-                  : <ArrowOutward color='error' />
-              }
-
-
-
-            </CardContent>
-
-          </Card>
-
-
-        </Grid>
-
-
-        <Grid item xs={12} md={6} lg={4}>
-
-          <Card
-            sx={{
-              // backgroundColor: '#4caf50',
-            }}
-
-          >
-
-            <CardHeader
-              title='Ingresos'
-
-            />
-
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
-
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {data.totalIncomes + data.totalInvoices}</Typography>
-              <CallReceived color='success' />
-            </CardContent>
-
-
-          </Card>
-
+          <SummaryCash cashRegister={data} />
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
-          <Card
-            sx={{
-              // backgroundColor: '#f44336',
-              // color: '#fsff'
-            }}
-
-          >
-
-            <CardHeader title='Gastos'
-
-            />
-
-            <CardContent
-              sx={{
-                display: 'flex',
-                gap: 1,
-
-                alignItems: 'center'
-              }}
-            >
-              <Typography variant='h3' >$ {data.totalExpenses}</Typography>
-              <ArrowOutward color='error' />
-            </CardContent>
-
-          </Card>
-
-
+          <SummaryTransfer cashRegister={data} />
         </Grid>
 
-        <Grid item xs={12} md={8} >
 
-          <Card>
-            <CardHeader title='Transacciones' />
 
-            <Tabs
-              value={tabViewTransaction}
-              onChange={(e, value) => setTabViewTransaction(value)}
-            >
-              <Tab label='Ingresos' value={ViewTransactionTabs.INCOMES} />
-              <Tab label='Gastos' value={ViewTransactionTabs.EXPENSES} />
-              {/* <Tab label='Facturas' value={ViewTransactionTabs.INVOICES} /> */}
 
-            </Tabs>
-            
-            {
-              tabViewTransaction === ViewTransactionTabs.INCOMES
-                ? <TableIncomes cashRegister={data} />
-                : <TableExpenses cashRegister={data} />
-            }
-
-          </Card>
-
-        </Grid>
 
         <Grid item xs={12} md={4}>
 
@@ -204,71 +115,70 @@ export const CashRegister = () => {
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
 
                   <InputLabel id="date">Monto inicial</InputLabel>
-                  <Typography variant='h5'  >$ {data.initialAmount}</Typography>
+                  <Typography variant='h5'  >{formatMoney(data.initialAmount)}</Typography>
 
                 </Box>
 
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                {
+                  data.isClosed && (
+                    <>
 
-                  <InputLabel id="date">Ventas</InputLabel>
-                  <Typography variant='h4' color='success.main' >$ {data.totalInvoicesCash}</Typography>
-                </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                      <Divider />
 
-                  <InputLabel id="date">Ingresos</InputLabel>
-                  <Typography variant='h4' color='success.main'>$ {data.totalIncomesCash}</Typography>
+                      <Typography variant='h5'  >Cierre de caja</Typography>
+                      <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-                </Box>
+                        <InputLabel id="date">Fecha de cierre</InputLabel>
+                        <Typography variant='h5'  >{format(new Date(data.closingDate), 'yyyy-MM-dd HH:mm')}</Typography>
 
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                      </Box>
+                      <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-                  <InputLabel id="date">Gastos</InputLabel>
-                  <Typography variant='h4' color='error.main'>$ {data.totalExpensesCash}</Typography>
+                        <InputLabel id="date">Balance</InputLabel>
+                        <Typography variant='h4'  >{formatMoney(data.balance)}</Typography>
 
-                </Box>
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                      </Box>
+                      <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-                  <InputLabel id="date">Monto final</InputLabel>
-                  <Typography variant='h3' >$ {data.balance}</Typography>
-                </Box>
+                        <InputLabel id="date">Monto final</InputLabel>
+                        <Typography variant='h4'  >{formatMoney(data.finalAmount)}</Typography>
 
-                <Divider />
+                      </Box>
 
-                <Typography variant='h6' >Transferencias</Typography>
+                      <Box display='flex' justifyContent='space-between' alignItems='center'>
 
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                        <InputLabel id="date">Discrepancia</InputLabel>
+                        <Typography variant='h4' color={data.discrepancy ? 'warning.main' : 'inherit'}>{formatMoney(data.discrepancy)}</Typography>
 
-                  <InputLabel id="date">Ventas</InputLabel>
-                  <Typography variant='h4' color='success.main' >$ {data.totalInvoicesTransfer}</Typography>
-                </Box>
+                      </Box>
+                    </>
+                  )
+                }
 
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-                  <InputLabel id="date">Ingresos</InputLabel>
-
-                  <Typography variant='h4' color='success.main'>$ {data.totalIncomesTransfer}</Typography>
-
-                </Box>
-
-                <Box display='flex' justifyContent='space-between' alignItems='center'>
-
-                  <InputLabel id="date">Gastos</InputLabel>
-
-                  <Typography variant='h4' color='error.main'>$ {data.totalExpensesTransfer}</Typography>
-
-                </Box>
 
 
               </Stack>
 
-              {/* <div>{
-                JSON.stringify(data)
-              }</div> */}
+
 
 
             </CardContent>
 
           </Card>
+
+        </Grid>
+
+        <Grid item xs={12} md={6} >
+          {
+            incomesQuery.data && (
+              <IncomesList cashRegister={data} data={incomesQuery.data} filterIncomes={filterIncomes}/>
+            )
+          }
+
+        </Grid>
+        <Grid item xs={12} md={6} >
+          <ExpensesList cashRegister={data} />
+
 
         </Grid>
 

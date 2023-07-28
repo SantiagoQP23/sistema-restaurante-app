@@ -5,6 +5,6 @@ export interface CreateTransactionDto {
   description: string;
   amount: number;
   paymentMethod: PaymentMethod;
-  responsible: string;
+  responsibleId: string;
   cashRegisterId: string;
 }

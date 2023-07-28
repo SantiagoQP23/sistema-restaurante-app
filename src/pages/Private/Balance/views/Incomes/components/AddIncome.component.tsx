@@ -6,17 +6,18 @@ import { PaymentMethod } from "../../../../Orders/models/Invoice.model";
 import { CreateIncomeDto } from "../../../dto/create-income.dto";
 import { Close, Paid } from "@mui/icons-material";
 import { useModal } from "../../../../../../hooks";
-import { IClient } from "../../../../../../models";
+import { IClient, IUser } from "../../../../../../models";
 import { ModalSelectClient } from '../../../../Clients/components/ModalSelectClient.component';
 import { useCreateIncome } from '../../../hooks/useIncomes';
 import { LoadingButton } from '@mui/lab';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
+import { ModalSelectUser } from '../../../../Users/components/ModalSelectUser.component';
 
 const incomeInitialForm: CreateIncomeDto = {
   description: '',
   amount: 0,
   paymentMethod: PaymentMethod.CASH,
-  responsible: '',
+  responsibleId: '',
   cashRegisterId: '',
 }
 
@@ -24,9 +25,13 @@ export const AddIncome = () => {
 
   const { handleClose, handleOpen, isOpen } = useModal();
 
-  const {activeCashRegister}= useCashRegisterStore(state => state)
+  const { activeCashRegister } = useCashRegisterStore(state => state)
 
   const [client, setClient] = useState<IClient | null>(null);
+
+
+
+  const [responsibleUser, setResponsibleUser] = useState<IUser|null>(null);
 
   const { register, handleSubmit, formState: { errors }, control, reset } = useForm<CreateIncomeDto>({
     defaultValues: incomeInitialForm
@@ -39,6 +44,12 @@ export const AddIncome = () => {
     setClient(client);
   }
 
+  const handleChangeResponsible = (user: IUser | null) => {
+
+    setResponsibleUser(user);
+
+  }
+
 
   const onSubmit = (form: CreateIncomeDto) => {
 
@@ -46,9 +57,13 @@ export const AddIncome = () => {
     //   form.clientId = client.id;
     // }
 
-    if(activeCashRegister){
+    if (activeCashRegister) {
 
-      form.cashRegisterId=activeCashRegister.id;
+      form.cashRegisterId = activeCashRegister.id;
+
+      if (responsibleUser) {
+        form.responsibleId = responsibleUser.id;
+      }
 
       mutateAsync(form).then(() => {
         reset();
@@ -62,12 +77,17 @@ export const AddIncome = () => {
     <>
 
       {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}
+      <ModalSelectUser 
+      open={isOpen}
+      onClose={handleClose}
+      onChange={handleChangeResponsible}
+      />
 
       <Card  >
 
         <CardHeader
           avatar={<Paid color='success' sx={{ fontSize: 40 }} />}
-          title='Añadir ingreso' />
+          title='Añadir ' />
 
         <CardContent>
 
@@ -76,11 +96,9 @@ export const AddIncome = () => {
             <Grid container spacing={2}>
 
               <Grid item xs={12} >
-                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
                 <TextField
                   label="Descripción"
                   type="text"
-                  // placeholder="Nombre del gasto"
                   fullWidth
                   {
                   ...register('description', {
@@ -92,7 +110,6 @@ export const AddIncome = () => {
 
                   error={!!errors.description}
                   helperText={errors.description?.message}
-                  // helperText={<Typography color="red">{errors.description?.message} </ Typography>}
 
 
 
@@ -101,7 +118,7 @@ export const AddIncome = () => {
 
               </Grid>
 
-             
+
               <Grid item xs={12} >
 
                 <TextField
@@ -118,18 +135,15 @@ export const AddIncome = () => {
                   })
                   }
 
-                  error={!!errors.amount}
                   helperText={errors.amount?.message}
 
                 />
               </Grid>
 
-              <Grid item xs={12} >
-                {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
+              {/* <Grid item xs={12} >
                 <TextField
                   label="Responsable"
                   type="text"
-                  // placeholder="Nombre del gasto"
                   fullWidth
                   {
                   ...register('responsible', {
@@ -138,32 +152,31 @@ export const AddIncome = () => {
                   })
                   }
                   rows={2}
-
                   error={!!errors.responsible}
                   helperText={errors.responsible?.message}
-                  // helperText={<Typography color="red">{rors.responsible?.message} </ Typography>}
 
 
 
                 />
 
 
-              </Grid>
+              </Grid> */}
 
 
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
                   <Typography variant="subtitle2">
-                    Cliente
+                    Responsable
                   </Typography>
                   <Box>
 
+
                     <Button
                       onClick={handleOpen}
-                    >{client ? 'Cambiar' : 'Seleccionar'}</Button>
+                    >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
                     {
-                      client && (
-                        <IconButton color="error" onClick={() => handleChangeClient(null)}>
+                      responsibleUser && (
+                        <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
                           <Close />
                         </IconButton>)
                     }
@@ -171,61 +184,71 @@ export const AddIncome = () => {
 
                 </Stack>
                 <Typography variant="h6">
-                  {client ? `${client.person.firstName} ${client.person.lastName} ` : 'No seleccionado'}
+                  {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
                 </Typography>
 
 
-              </Grid> */}
-              <Grid item xs={12} >
-
-                <Controller
-
-                  name='paymentMethod'
-                  control={control}
-
-                  render={
-                    ({ field: { onChange, onBlur, value } }) => (
-                      <FormControl fullWidth>
-                        <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
-                          {/* <Typography variant="subtitle2">
-                            Metodo de pago
-                          </Typography> */}
-                          <Stack direction='row' spacing={2}>
-                            <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
-                            <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
-                          </Stack>
-                        </RadioGroup>
-                      </FormControl>
-
-                    )
-                  }
-
-
-                />
               </Grid>
 
-              <Grid item xs={12}>
-                <LoadingButton
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                  loading={isLoading}
-                  fullWidth
+              {/* <Button
+                onClick={handleOpen}
+              >{client ? 'Cambiar' : 'Seleccionar'}</Button>
+              {
+                client && (
+                  <IconButton color="error" onClick={() => handleChangeClient(null)}>
+                    <Close />
+                  </IconButton>)
+              }
+            
+
+        </Grid> */}
+        <Grid item xs={12} >
+
+          <Controller
+
+            name='paymentMethod'
+            control={control}
+
+            render={
+              ({ field: { onChange, onBlur, value } }) => (
+                <FormControl fullWidth>
+                  <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
+                    <Stack direction='row' spacing={2}>
+                      <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
+                      <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
+                    </Stack>
+                  </RadioGroup>
+                </FormControl>
+
+              )
+            }
 
 
-                >
-                  Guardar
-                </LoadingButton>
+          />
+        </Grid>
 
-              </Grid>
+        <Grid item xs={12}>
+          <LoadingButton
+            variant="contained"
+            color="success"
+            type="submit"
+            loading={isLoading}
+            fullWidth
 
-            </Grid>
 
-          </FormControl>
-        </CardContent>
+          >
+            Guardar
+          </LoadingButton>
+
+        </Grid>
+
+      </Grid>
+
+    </FormControl >
+        </CardContent >
 
 
-      </Card>
+      </Card >
 
 
 

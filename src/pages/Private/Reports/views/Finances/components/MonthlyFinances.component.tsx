@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Print } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Grid, List, ListItem, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Stack, Button, Typography } from '@mui/material';
@@ -9,16 +9,26 @@ import { Bar } from "react-chartjs-2";
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
 import { FinanceResponse, getFinances } from '../../../services/finances.service';
 import { Period, GroupBy } from '../../../../../../models/period.model';
+import { Chart as ChartJS } from 'chart.js';
+import html2canvas from 'html2canvas';
+import { generateFinancialsReportPdf } from '../../../helpers/pdf-financials-report';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
+import { Label } from '../../../../../../components/ui';
 
 
 export const MonthlyFinances = () => {
 
 
+  const chartRef = useRef<ChartJS>(null);
+
+
+  const filters = useDateFilter(Period.CUSTOM);
+
   const {
     startDate,
     handleChangeStartDate
 
-  } = useDateFilter(Period.CUSTOM);
+  } = filters;
 
   const { data, isLoading, refetch } = useQuery<FinanceResponse[]>(['financials'],
     () => {
@@ -61,25 +71,29 @@ export const MonthlyFinances = () => {
     },
   };
 
-  const resumen = [
-    { label: 'Total Gastos', value: '$6,800' },
-    { label: 'Total Ingresos', value: '$12,500' },
-    { label: 'Balance', value: '$5,700' },
-  ];
 
-  const resumenPorMes = [
-    { mes: 'Enero', gastos: 1000, ingresos: 2000 },
-    { mes: 'Febrero', gastos: 1500, ingresos: 2500 },
-    { mes: 'Marzo', gastos: 1200, ingresos: 2200 },
-    { mes: 'Abril', gastos: 900, ingresos: 1800 },
-    { mes: 'Mayo', gastos: 1100, ingresos: 1900 },
-    { mes: 'Junio', gastos: 1300, ingresos: 2300 },
-    { mes: 'Julio', gastos: 1000, ingresos: 2000 },
-    { mes: 'Agosto', gastos: 1500, ingresos: 2500 },
-    { mes: 'Septiembre', gastos: 1200, ingresos: 2200 },
-    { mes: 'Octubre', gastos: 900, ingresos: 1800 },
+  const handlePrint = async () => {
 
-  ];
+    if (!data) return;
+
+    let urlImage = '';
+
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    const pdf = await generateFinancialsReportPdf(data, { ...filters, period: Period.YEAR, }, urlImage);
+
+    pdf.open();
+
+
+
+
+  }
+
 
   const balanceYear = data?.reduce((acc, month) => acc + month.balance, 0)
 
@@ -110,6 +124,7 @@ export const MonthlyFinances = () => {
         <Button
           variant='contained'
           startIcon={<Print />}
+          onClick={handlePrint}
         >
 
           Imprimir
@@ -127,7 +142,7 @@ export const MonthlyFinances = () => {
 
                 {
                   data && (
-                    <Bar data={dataChart} options={options} />
+                    <Bar data={dataChart} options={options} ref={chartRef} />
 
                   )
                 }
@@ -144,19 +159,33 @@ export const MonthlyFinances = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Mes</TableCell>
-                      <TableCell>Gastos</TableCell>
                       <TableCell>Ingresos</TableCell>
+                      <TableCell>Gastos</TableCell>
                       <TableCell>Balance</TableCell>
                     </TableRow>
 
                   </TableHead>
                   <TableBody>
                     {data?.map((month) => (
-                      <TableRow>
+                      <TableRow key={month.date}>
                         <TableCell>{month.date}</TableCell>
-                        <TableCell>$ {month.expense.total}</TableCell>
-                        <TableCell>$ {month.income.total}</TableCell>
-                        <TableCell>$ {month.balance}</TableCell>
+                        <TableCell>
+                          <Label color='success'>
+
+                            +{formatMoney(Number(month.income.total))}
+                          </Label>
+                        </TableCell>
+                        <TableCell>
+                          <Label color='error'>
+
+                            -{formatMoney(Number(month.expense.total))}
+                          </Label>
+                        </TableCell>
+                        <TableCell>
+                          <Label color={month.balance > 0 ? 'success' : 'error'}>
+                            {formatMoney(month.balance)}
+                          </Label>
+                        </TableCell>
 
                       </TableRow>
                     ))}
@@ -188,7 +217,7 @@ export const MonthlyFinances = () => {
                   alignItems: 'center'
                 }}
               >
-                <Typography variant='h3' color={balanceYear && balanceYear > 0 ? 'success.main' : 'error.main'}>$ {balanceYear}</Typography>
+                <Typography variant='h3' color={balanceYear && balanceYear > 0 ? 'success.main' : 'error.main'}>{formatMoney(balanceYear || 0)}</Typography>
 
 
 
@@ -209,7 +238,7 @@ export const MonthlyFinances = () => {
                   alignItems: 'center'
                 }}
               >
-                <Typography variant='h3' color='success.main'>$ {totalIncomes}</Typography>
+                <Typography variant='h3' color='success.main'>{formatMoney(Number(totalIncomes))}</Typography>
 
 
               </CardContent>
@@ -228,7 +257,7 @@ export const MonthlyFinances = () => {
                   alignItems: 'center'
                 }}
               >
-                <Typography variant='h3' color='error.main'  >$ {totalExpenses}</Typography>
+                <Typography variant='h3' color='error.main'  >{formatMoney(Number(totalExpenses))}</Typography>
 
 
               </CardContent>

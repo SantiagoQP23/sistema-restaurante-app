@@ -6,7 +6,7 @@ import { useNavigate, } from 'react-router-dom';
 import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addClient, selectClients, updateClient } from '../../../../../redux/slices/clients/clients.slice';
+import { addClient, selectClients, setActiveClient, updateClient } from '../../../../../redux/slices/clients/clients.slice';
 import { ArrowBack } from '@mui/icons-material';
 import { ICreateClient } from '../../../../../models/client.model';
 import { createClient, updateClient as updateClientS } from '../../services/clients.service';
@@ -47,7 +47,7 @@ export const EditClient = () => {
 
 
   // Remove id from objects
-  const { id, person, ...restClient } = activeClient!;
+  const { id, person, isActive, ...restClient } = activeClient!;
 
 
   let identification = {
@@ -78,11 +78,13 @@ export const EditClient = () => {
 
     if (form.numPhone === "") delete dataClient.numPhone;
 
-    if (form.email === "") delete dataClient.email;
+    if (form.email === "") delete dataClient.email; 
+
 
     let clientUpdated: UpdateClientDto = {
       ...dataClient,
       id: activeClient!.id,
+
     }
 
     if (identification.type === TypeIdentification.CEDULA && identification.num.length === 10
@@ -114,7 +116,8 @@ export const EditClient = () => {
 
     updateClientMutation.mutateAsync(updateClientDto)
       .then((data) => {
-        dispatch(updateClient(data))
+        dispatch(updateClient(data));
+        dispatch(setActiveClient(data))
       })
 
   }

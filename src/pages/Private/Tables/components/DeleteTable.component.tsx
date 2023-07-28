@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab';
 import { Dialog, DialogTitle, Divider, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { useFetchAndLoad } from '../../../../hooks/useFetchAndLoad';
 import { useSnackbar } from 'notistack';
-import { deleteTable } from '../../../../redux';
+import { deleteTable, updateTable } from '../../../../redux';
 
 
 export const DeleteTable = () => {
@@ -32,7 +32,10 @@ export const DeleteTable = () => {
     await callEndpoint(deleteTableS(table!.id))
     .then(() => {
       enqueueSnackbar('Mesa eliminada', {variant: 'success'})
-      dispatch(deleteTable(table!.id))
+      dispatch(updateTable({
+        ...table!,
+        isActive: false
+      }))
       closeModal();
     })
     .catch(() => {

@@ -37,6 +37,10 @@ export const OrdersSummary = () => {
           title={
             <Typography variant="h4" >Pedidos</Typography>
           }
+
+          subheader={
+            <Typography variant="subtitle1">Pedidos</Typography>
+          }
           action={
             <Button
               disableRipple
@@ -71,6 +75,7 @@ export const OrdersSummary = () => {
           <Label
             color='info'
           >
+            
             {orders.length} activos
 
           </Label>

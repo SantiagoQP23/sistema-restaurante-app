@@ -12,6 +12,8 @@ import { UpdateExpenseDto } from '../../../dto/update-expense.dto';
 import { useModal } from '../../../../../../hooks';
 import { useUpdateExpense } from '../../../hooks/useExpenses';
 import { ModalSelectSupplier } from '../../../../Suppliers/components/ModalSelectSupplier.component';
+import { IUser } from '../../../../../../models';
+import { ModalSelectUser } from '../../../../Users/components/ModalSelectUser.component';
 
 
 interface Props {
@@ -25,28 +27,32 @@ export const DrawerExpense: FC<Props> = ({
   open, onClose, expense
 }) => {
 
-  const [supplier, setSupplier] = useState<Supplier | null>(expense.supplier || null);
+  // const [supplier, setSupplier] = useState<Supplier | null>(expense.supplier || null);
 
   const { handleClose, isOpen, handleOpen } = useModal();
 
   const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<UpdateExpenseDto>({
-    
+
   });
+
+  const [responsibleUser, setResponsibleUser] = useState<IUser | null>(expense.transaction.responsible || null);
+
 
 
   const { mutateAsync, isLoading } = useUpdateExpense();
 
-  const handleChangeSupplier = (supplier: Supplier | null) => {
 
-    setSupplier(supplier);
+
+  const handleChangeResponsible = (user: IUser | null) => {
+
+    setResponsibleUser(user);
 
   }
 
-
   const onSubmit = (form: UpdateExpenseDto) => {
 
-    if (supplier) {
-      form.supplierId = supplier.id;
+    if (responsibleUser) {
+      form.responsibleId = responsibleUser.id;
     }
 
     mutateAsync({ ...form, id: expense.id });
@@ -58,11 +64,12 @@ export const DrawerExpense: FC<Props> = ({
   useEffect(() => {
 
     console.log('expense change')
-    setSupplier(expense.supplier || null);
+    // setSupplier(expense.supplier || null);
 
     setValue('description', expense.transaction.description);
     setValue('amount', expense.transaction.amount);
     setValue('paymentMethod', expense.transaction.paymentMethod);
+    setResponsibleUser(expense.transaction.responsible || null);
   }, [expense])
 
 
@@ -74,7 +81,13 @@ export const DrawerExpense: FC<Props> = ({
 
     <>
 
-      <ModalSelectSupplier open={isOpen} onClose={handleClose} onChange={handleChangeSupplier} />
+      {/* <ModalSelectSupplier open={isOpen} onClose={handleClose} onChange={handleChangeSupplier} /> */}
+
+      <ModalSelectUser
+        open={isOpen}
+        onClose={handleClose}
+        onChange={handleChangeResponsible}
+      />
 
       <Drawer
         anchor='right'
@@ -131,7 +144,7 @@ export const DrawerExpense: FC<Props> = ({
 
               <Typography variant="h4"  >
 
-                Editar ingreso
+                Editar Gasto
               </Typography>
             </Box>
 
@@ -187,7 +200,7 @@ export const DrawerExpense: FC<Props> = ({
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
                     <Typography variant="subtitle2">
                       Proveedor
@@ -211,14 +224,38 @@ export const DrawerExpense: FC<Props> = ({
                   </Typography>
 
 
+                </Grid> */}
+
+
+
+                <Grid item xs={12} >
+
+                  <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
+                    <Typography variant="subtitle2">
+                      Responsable
+                    </Typography>
+                    <Box>
+
+
+                      <Button
+                        onClick={handleOpen}
+                      >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
+                      {
+                        responsibleUser && (
+                          <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
+                            <Close />
+                          </IconButton>)
+                      }
+                    </Box>
+
+                  </Stack>
+                  <Typography variant="h6">
+                    {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
+                  </Typography>
+
                 </Grid>
 
-
-
-                {/* <Grid item xs={12} md={4}>
-
-          </Grid> */}
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} >
 
                   <Controller
 

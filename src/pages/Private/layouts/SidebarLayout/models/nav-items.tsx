@@ -86,11 +86,11 @@ export const navItemsManagement: NavItem[] = [
     icon: <Groups3OutlinedIcon />,
     to: '/clients'
   },
-  {
-    title: 'Proveedores',
-    icon: <LocalShipping />,
-    to: '/suppliers'
-  }
+  // {
+  //   title: 'Proveedores',
+  //   icon: <LocalShipping />,
+  //   to: '/suppliers'
+  // }
 
 ]
 
