@@ -15,7 +15,7 @@ export const Expenses = () => {
 
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} lg={8}>
-          <ExpensesList />
+          {/* <ExpensesList /> */}
         </Grid>
         <Grid item xs={12} sm={6} lg={4}>
           <AddExpense />
