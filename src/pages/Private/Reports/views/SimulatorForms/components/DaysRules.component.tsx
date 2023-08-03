@@ -67,43 +67,56 @@ const Day = ({ dayToUpdate, label }: { dayToUpdate: RuleDay, label: string }) =>
 
   return (
     <>
-      <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>{label}</Typography>
-      <Box
-        display="flex"
 
+      <Card
       >
 
-        <TextField
-
-          type="number"
-          fullWidth
-          required
-          value={value}
-          onChange={(e) => {
-            setValue(Number(e.target.value));
-          }}
-          inputProps={{
-            step: 0.05,
-          }}
-
-          size='small'
-
+        <CardHeader
+          title={label}
         />
-        {
-          value !== day.value &&
-          (
-            <LoadingButton
 
-              loading={loading}
-              onClick={onSubmit}
+        {/* <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>{label}</Typography> */}
+
+        <CardContent>
+
+          <Box
+            display="flex"
+
+          >
+
+            <TextField
+
+              type="number"
+              fullWidth
+              required
+              value={value}
+              onChange={(e) => {
+                setValue(Number(e.target.value));
+              }}
+              inputProps={{
+                step: 0.05,
+              }}
+
+              size='small'
+
+            />
+            {
+              value !== day.value &&
+              (
+                <LoadingButton
+
+                  loading={loading}
+                  onClick={onSubmit}
 
 
-            >
-              <DoneOutlined />
-            </LoadingButton>
-          )
-        }
-      </Box>
+                >
+                  <DoneOutlined />
+                </LoadingButton>
+              )
+            }
+          </Box>
+        </CardContent>
+      </Card>
     </>
   )
 }
@@ -185,56 +198,60 @@ export const DaysRules = () => {
 
   return (
     <>
-      <Card>
+
+      <Typography variant="h4" my={2}>Regla del día</Typography>
+
+
+      {/* <Card>
         <CardHeader title="Reglas del día" />
-        <CardContent>
-          {
-            loading ?
-              (<CircularProgress />)
-              :
-              (
-                <form>
-                  <Grid container spacing={1} >
+        <CardContent> */}
+      {
+        loading ?
+          (<CircularProgress />)
+          :
+          (
+            <form>
+              <Grid container spacing={2} >
 
-                    <Grid item xs={3}>
-                      <Day
-                        label='Lunes'
-                        dayToUpdate={days.find(day => day.day === 'Monday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Martes'
-                        dayToUpdate={days.find(day => day.day === 'Tuesday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Miércoles'
-                        dayToUpdate={days.find(day => day.day === 'Wednesday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Jueves'
-                        dayToUpdate={days.find(day => day.day === 'Thursday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Viernes'
-                        dayToUpdate={days.find(day => day.day === 'Friday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Sábado'
-                        dayToUpdate={days.find(day => day.day === 'Saturday')!} />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Day
-                        label='Domingo'
-                        dayToUpdate={days.find(day => day.day === 'Sunday')!} />
-                    </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Lunes'
+                    dayToUpdate={days.find(day => day.day === 'Monday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Martes'
+                    dayToUpdate={days.find(day => day.day === 'Tuesday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Miércoles'
+                    dayToUpdate={days.find(day => day.day === 'Wednesday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Jueves'
+                    dayToUpdate={days.find(day => day.day === 'Thursday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Viernes'
+                    dayToUpdate={days.find(day => day.day === 'Friday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Sábado'
+                    dayToUpdate={days.find(day => day.day === 'Saturday')!} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Day
+                    label='Domingo'
+                    dayToUpdate={days.find(day => day.day === 'Sunday')!} />
+                </Grid>
 
 
 
-                    {/* {
+                {/* {
                       days.map((day, index) => (
 
 
@@ -269,7 +286,7 @@ export const DaysRules = () => {
 
 
 
-                    {/* 
+                {/* 
                     <Grid item xs={12}>
 
                       <LoadingButton
@@ -282,19 +299,19 @@ export const DaysRules = () => {
                         Guardar
                       </LoadingButton>
                     </Grid> */}
-                  </Grid>
+              </Grid>
 
 
 
-                </form>
+            </form>
 
-              )
-          }
+          )
+      }
 
 
-
+      {/* 
         </CardContent>
-      </Card>
+      </Card> */}
 
     </>
   )

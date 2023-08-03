@@ -25,6 +25,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { useUpdateOrderDetail } from '../../../hooks/useUpdateOrderDetail';
 import { CounterInput } from '../../../components/CounterInput.component';
 import { useDeleteOrderDetail } from '../../../hooks/useDeleteOrderDetail';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 interface Props {
@@ -168,7 +169,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
         <TableCell>
 
-          <Typography variant='body1'>$ {detail.product.price}</Typography>
+          <Typography variant='body1'>{formatMoney(detail.product.price)}</Typography>
 
         </TableCell>
 
@@ -195,7 +196,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
             // detail.discount > 0 &&
             // <Typography variant="subtitle1" >$ {detail.product.price * quantity} - $ {detail.discount}</Typography>
           }
-          <Typography variant="body1" fontWeight='bold'>$ {detail.amount}</Typography>
+          <Typography variant="body1" fontWeight='bold'>{formatMoney(detail.amount)}</Typography>
         </TableCell>
 
         <TableCell

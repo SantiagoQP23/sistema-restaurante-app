@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useContext } from 'react';
 
-import { AddOutlined, CheckCircle, DeleteOutline, Edit, EditOutlined, Pending, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
+import { AddOutlined, CheckCircle, Circle, DeleteOutline, Edit, EditOutlined, Paid, Pending, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip, Grid, TextField, ListItem, ListItemText, List, ListItemSecondaryAction, ListItemAvatar, Avatar, ListItemButton, Chip } from '@mui/material';
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,7 @@ import { InvoicesList } from './InvoicesList.component';
 import { useModal } from '../../../../../../hooks';
 import { ModalEditOrder } from './ModalEditOrder.component';
 import { formatMoney } from '../../../../Common/helpers/format-money.helper';
+import { LabelStatusPaid } from '../../../components/LabelStatusPaid.component';
 
 interface PropsOrder {
   order: IOrder,
@@ -125,7 +126,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
 
       <Stack
-        spacing={1}
+        spacing={2}
       >
 
         <Stack
@@ -148,20 +149,46 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
         <Card>
           <CardHeader
-            title={`Pedido N° ${order.num}`}
-            action={
-              <IconButton
-                // onClick={editClient}
-                onClick={handleOpen}
-                size='small'
-              >
-                <Edit />
-              </IconButton>
+            title={
+              <>
+                <Stack direction='column' spacing={1}>
+
+                  <LabelStatusOrder status={
+                    order.status
+
+                  } />
+                  <Typography variant='h4' fontWeight='bold' >
+
+                    {/* <Circle sx={{ fontSize: 10, mr: 1 }} color={!(order.isClosed) ? 'success' : 'error'} /> */}
+
+                    Pedido N° {order.num}
+
+                    {/* <Label color={order.isPaid ? 'success' : 'warning'}>
+                    {
+                      order.isPaid ? 'Pagado' : 'Por pagar'
+                    }
+                  </Label> */}
+
+                  </Typography>
+                </Stack>
+
+              </>
             }
 
-            subheader={
-              <Typography variant='h5' color={order.isClosed ? 'secondary' : 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado' : 'Abierto'}</Typography>
+
+            action={
+              <Button
+                onClick={handleOpen}
+                size='small'
+                startIcon={<Edit />}
+              >
+                Editar
+              </Button>
             }
+
+          // subheader={
+          //   <Typography variant='h5' color={order.isClosed ? 'secondary' : 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado' : 'Abierto'}</Typography>
+          // }
           />
 
           <CardContent>
@@ -170,16 +197,6 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             <Grid container spacing={2} alignItems='center'>
 
               <Grid item xs={4}>
-                <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
-              </Grid>
-
-              <Grid item xs={8}>
-                <Typography variant="body1" >
-                  {format(new Date(order.deliveryTime), 'dd/MM/yyy HH:mm')}
-                </Typography>
-
-              </Grid>
-              <Grid item xs={4}>
                 <Typography variant='body2' color='secondary'>Creado</Typography>
               </Grid>
 
@@ -187,10 +204,15 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                 <Typography variant="body1" >
                   {format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}
                 </Typography>
+              </Grid>
 
+              <Grid item xs={12}>
+
+
+                <Typography variant='h5' >Información de entrega</Typography>
               </Grid>
               <Grid item xs={4}>
-                <Typography variant='body2' color='secondary'>Tipo de orden</Typography>
+                <Typography variant='subtitle1' >Tipo de orden</Typography>
 
               </Grid>
 
@@ -223,10 +245,23 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
                 )
               }
+
+              <Grid item xs={4}>
+                <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
+              </Grid>
+
+              <Grid item xs={8}>
+                <Typography variant="body1" >
+                  {format(new Date(order.deliveryTime), 'dd/MM/yyy HH:mm')}
+                </Typography>
+
+              </Grid>
+
               <Grid item xs={4}>
                 <Typography variant='body2' color='secondary'>Personas</Typography>
 
               </Grid>
+
 
               <Grid item xs={8}>
 
@@ -236,81 +271,34 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                 </Typography>
 
               </Grid>
-              <Grid item xs={4}>
-                <Typography variant='body2' color='secondary'>Estado de preparación</Typography>
+
+              <Grid item xs={4} display='flex' flexDirection='column' gap={1}>
+                {/* <Typography variant='h4'>Total</Typography> */}
+
+              <LabelStatusPaid isPaid={order.isPaid} />
 
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid
+                item
+                xs={8}
+                display='flex'
+                flexDirection='row'
+                gap={1}
+                alignItems='flex-end'
+              >
 
-                <LabelStatusOrder status={
-                  order.status
-
-                } />
-              </Grid>
-
-              <Grid item xs={4}>
-                <Typography variant='body2' color='secondary'>Estado de pago</Typography>
-
-              </Grid>
-
-              <Grid item xs={8}>
-
-                <Chip
-                  label={order.isPaid ? 'Pagado' : 'Por pagar'}
-                  color={order.isPaid ? 'success' : 'warning'}
-                  icon={order.isPaid ? <CheckCircle /> : <Pending />}
-                  clickable={false}
-                  variant='outlined'
-
-                />
-              </Grid>
-
-
-
-              <Grid item xs={4}>
-                <Typography variant='body2' color='secondary'>Total</Typography>
-
-              </Grid>
-
-              <Grid item xs={8}>
-
-                <Typography variant="h4">
+                <Typography variant="h3">
                   {formatMoney(order.total)}
 
                 </Typography>
+                
 
               </Grid>
             </Grid>
 
 
-            {/* <Divider sx={{ mb: 1 }} /> */}
-
-            {/* <Stack spacing={1}>
-
-              <Box display='flex' justifyContent='space-between' alignItems='center' >
-
-                <Typography variant='h5'>Hora: </Typography>
-                <Typography variant='body1'>{format(new Date(order.createdAt), 'dd/MM/yyy HH:mm')}</Typography>
-
-              </Box>
-
-              <Box display='flex' justifyContent='space-between' alignItems='center' >
-                <Typography variant='body1' fontWeight='bold'>Mesero: </Typography>
-                <Typography>
-                  {order.user.person.firstName} {order.user.person.lastName}
-                </Typography>
-
-
-
-              </Box>
-            </Stack> */}
-
-            {/* <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
-
-              <Typography variant='h4' fontWeight='bold'>Total </Typography>
-              <Typography variant='h4' fontWeight='bold'>${order.total}</Typography>
-            </Box> */}
+           
 
             <Stack
 
@@ -321,20 +309,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               direction='column'
             >
 
-              {/* {
-                activeStep === 0 &&
-                <Button
-                  variant='contained'
-                  onClick={() => { handleNextStep() }}
-
-                  startIcon={<PointOfSaleOutlined />}
-                  color="primary"
-                  fullWidth
-                >
-                  Pago
-                </Button>
-              } */}
-
+             
             </Stack>
 
 
@@ -348,36 +323,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             divider={<Divider />}
           >
 
-            {/* {activeStep === 0 &&
-              <Box>
-                <CardHeader
-                  title='Información del pedido'
-
-                  action={
-                    <IconButton
-                      // onClick={editClient}
-                      size='small'
-                    >
-                      <Edit />
-                    </IconButton>
-                  }
-                />
-
-                <CardContent>
-
-                  
-
-
-
-
-
-
-                 
-
-
-                </CardContent>
-
-              </Box>} */}
+            
 
             {
               activeStep === 0 &&

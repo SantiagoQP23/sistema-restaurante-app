@@ -9,6 +9,8 @@ import { UsersList } from '../pages/UsersList.page';
 import { EditUser } from '../components/EditUser/EditUser.component';
 import { Profile } from '../views/Profile.view';
 import { Account } from '../views/Account/Account.view';
+import { Roles } from '../../../../models';
+import { ValidRoles } from '../../Common/models/valid-roles.model';
 
 const Users = lazy(() => import('../Users.page'))
 
@@ -16,7 +18,7 @@ export const UsersRouter: RouteObject = {
 
 
   path: PrivateRoutes.USERS,
-  element: <Users />,
+  element: <Users allowedRoles={[ValidRoles.admin]} />,
   children: [
     {
       path: '',

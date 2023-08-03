@@ -1,4 +1,3 @@
-import { ValidRoles } from "../../router";
 import { CreatePerson } from '../../../../models/common.model';
 
 

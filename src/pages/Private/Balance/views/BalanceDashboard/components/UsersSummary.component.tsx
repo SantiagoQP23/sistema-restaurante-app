@@ -14,11 +14,12 @@ import { GroupBy } from '../../../../Reports/hooks/useFilterSoldProducts';
 import { DesktopDatePicker, DesktopDateTimePicker } from '@mui/x-date-pickers';
 import { ResponseIncomesByUser, getIncomesByUser } from '../../../../Reports/services/dashboard.service';
 import { useQuery } from '@tanstack/react-query';
-import { Roles, ValidRoles } from '../../../../../../models';
+import { Roles} from '../../../../../../models';
 import { generateRandomColor } from '../../../../Common/helpers/randomColor.helpert';
 import { eachMonthOfInterval } from 'date-fns';
 import { generateWaiterReportPdf, triggerTooltip } from '../../../../Reports/helpers/pdf-reports.helper';
 import html2canvas from 'html2canvas';
+import { ValidRoles } from '../../../../Common/models/valid-roles.model';
 
 
 

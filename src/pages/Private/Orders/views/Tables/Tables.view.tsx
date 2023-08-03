@@ -15,6 +15,7 @@ import { DrawerOrder } from '../../components/DrawerOrder.component';
 import { format } from 'date-fns';
 import { LabelStatusOrder } from '../OrdersList/components/LabelStatusOrder.component';
 import { index } from '../../../../Status/Maintenance/index';
+import { Table } from './components/Table.component';
 
 
 
@@ -39,28 +40,29 @@ export const Tables = () => {
 
 
   const handleClickTable = (table: ITable) => {
+    
+    handleOpenDrawer(table);
+    // if (table.isAvailable) {
+    //   // Seleccionar mesa
 
-    if (table.isAvailable) {
-      // Seleccionar mesa
+    //   dispatch({
+    //     type: OrderActionType.SET_TYPE_ORDER,
+    //     payload: TypeOrder.IN_PLACE
+    //   })
+      
+    //   dispatch({
+    //     type: OrderActionType.SET_TABLE,
+    //     payload: table
+    //   })
+      
+    //   navigate('/orders/add/menu');
+      
+    //   // Redirigir a la página de productos
+    // } else {
+    //   // TODO Mostrar la orden de la mesa
+    //   handleOpenDrawer(table);
 
-      dispatch({
-        type: OrderActionType.SET_TYPE_ORDER,
-        payload: TypeOrder.IN_PLACE
-      })
-
-      dispatch({
-        type: OrderActionType.SET_TABLE,
-        payload: table
-      })
-
-      navigate('/orders/add/menu');
-
-      // Redirigir a la página de productos
-    } else {
-      // TODO Mostrar la orden de la mesa
-      handleOpenDrawer(table);
-
-    }
+    // }
 
   }
 
@@ -224,6 +226,7 @@ export const Tables = () => {
         }
 
 
+
         <Stack direction='row' justifyContent='space-between' alignItems='center' mb={2}>
 
 
@@ -264,81 +267,12 @@ export const Tables = () => {
             tables.map(table => (
               <Grid key={table.id} item xs={6} md={3} lg={2}>
 
-                <Card>
-                  <CardActionArea onClick={() => handleClickTable(table)}>
+                <Table
+                  table={table}
+                  handleClickTable={handleClickTable}
+                />
 
 
-                    <Box
-
-                      sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-
-                    >
-
-                      <Typography variant='h4'>
-                        Mesa {table.name}
-                      </Typography>
-
-                      <Chip
-                        size='small'
-                        label={
-                          <Typography fontSize={12} display='flex' alignItems='center'>
-
-                            {
-                              table.isAvailable
-
-                                ? 'Disponible'
-                                : <>
-                                  <PersonOutline
-                                    fontSize={'small'}
-                                  />
-                                  {table.orders!.reduce((acc, order) => acc + order.people, 0)} - Ocupada
-
-                                </>
-                            }
-                          </Typography>
-                        }
-                        color={table.isAvailable ? 'success' : 'default'}
-                      />
-                    </Box>
-
-                    {/* <CardHeader
-                      title={`Mesa ${table.name}`}
-                      // subheader={`Capacidad: ${table.chairs}`}
-                      subheader={
-                        <Chip
-                          size='small'
-                          label={
-                            <Typography fontSize={12} display='flex' alignItems='center'>
-
-                              {
-                                table.isAvailable
-
-                                  ? 'Disponible'
-                                  : <>
-                                    <PersonOutline
-                                      fontSize={'small'}
-                                    />
-                                    {table.orders!.reduce((acc, order) => acc + order.people, 0)} - Ocupada
-
-                                  </>
-                              }
-                            </Typography>
-                          }
-                          color={table.isAvailable ? 'success' : 'default'}
-                        />
-
-                      }
-                    /> */}
-                  </CardActionArea>
-
-                </Card>
               </Grid>
             ))
           }

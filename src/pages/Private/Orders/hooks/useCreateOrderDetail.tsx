@@ -29,7 +29,9 @@ export const useCreateOrderDetail = () => {
 
       if (ok) {
        
-        dispatch(setActiveOrder(order!))
+        // dispatch(setActiveOrder(order!))
+
+        enqueueSnackbar('Producto añadido', { variant: 'success' });
 
       } else {
         enqueueSnackbar(msg, { variant: 'error' });

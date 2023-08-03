@@ -1,4 +1,3 @@
-import { ValidRoles } from "../../../router"
 import { TypeIdentification } from '../../../../../models/common.model';
 import { CreateUser } from '../../models/create-user.model';
 import { useSnackbar } from "notistack";

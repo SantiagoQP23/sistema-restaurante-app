@@ -90,11 +90,11 @@ export const ProductsReports = () => {
     }
   })
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
 
-    if(data && categoriesQuery.data){
+    if (data && categoriesQuery.data) {
 
-      const pdf = generateProductsReport(filters, categoriesQuery.data, data);
+      const pdf = await generateProductsReport(filters, categoriesQuery.data, data);
       pdf.open();
     }
 
@@ -111,7 +111,7 @@ export const ProductsReports = () => {
 
 
   const counterSections = sections.length;
-  const counterCategories = sections.reduce((acc, section) => section.categories.reduce((acc, category) => category.products.length + acc, 0) + acc, 0);
+  const counterCategories = sections.reduce((acc, section) => section.categories.length + acc, 0);
   const counterProducts = sections.reduce((acc, section) => section.categories.reduce((acc, category) => category.products.length + acc, 0) + acc, 0);
 
 

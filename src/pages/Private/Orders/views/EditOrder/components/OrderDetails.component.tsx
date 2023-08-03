@@ -6,6 +6,7 @@ import { OrderContext } from '../../../context/Order.context';
 import { IOrder, IOrderDetail } from '../../../../../../models';
 import { ModalUpdateDetail } from '../../../components/EditOrder/ModalUpdateDescriptionDetail.component';
 import { AddShoppingCartOutlined } from '@mui/icons-material';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 
@@ -134,7 +135,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
 
                   
                 >
-                  <Typography variant='h6' >${order.total}</Typography>
+                  <Typography variant='h6' >{formatMoney(order.total)}</Typography>
                 </TableCell>
 
               </TableRow>

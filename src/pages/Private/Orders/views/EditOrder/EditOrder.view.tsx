@@ -60,9 +60,9 @@ export const EditOrder = () => {
       statusModalPayOrder.setSubject(true, activeOrder);
   }
 
-  const openPDF = () => {
+  const openPDF = async  () => {
     if(activeOrder){
-      const pdf = generateOrderPdf(activeOrder);
+      const pdf = await generateOrderPdf(activeOrder);
       pdf.open();
     }
   }
@@ -239,7 +239,7 @@ export const EditOrder = () => {
             <>
 
               <Grid
-                spacing={1}
+                spacing={2}
                 container
 
               >

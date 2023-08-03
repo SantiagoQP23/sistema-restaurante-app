@@ -7,16 +7,24 @@ import { useSimulatedFootfall } from "../../../hooks/useFootfall";
 import { Line } from "react-chartjs-2";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useRef } from "react";
+import { Chart as ChartJS } from 'chart.js';
+import html2canvas from "html2canvas";
+import { generateFootfallSimulationReport } from "../../../helpers/pdf-footfall-simulation-report.helper";
 
 
 
 export const DailyFootfall = () => {
 
+  const chartRef = useRef<ChartJS>(null);
+
+  const filters  = useSimulatedFootfall(Period.MONTH, GroupBy.DAY);
+
   const {
     startDate,
     handleChangeStartDate,
     simulatedFootfallQuery
-  } = useSimulatedFootfall(Period.MONTH, GroupBy.DAY);
+  } = filters;
 
 
   const dataChart = {
@@ -40,6 +48,26 @@ export const DailyFootfall = () => {
   };
 
 
+  const handlePrint = async () => {
+
+    let urlImage = '';
+
+    
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    if(!simulatedFootfallQuery.data) return;
+
+    const pdf = await generateFootfallSimulationReport(simulatedFootfallQuery.data, filters, urlImage);
+
+    pdf.open();
+  }
+
+
 
   return (
 
@@ -57,6 +85,7 @@ export const DailyFootfall = () => {
         <Button
           variant='contained'
           startIcon={<Print />}
+          onClick={handlePrint}
         >
 
           Imprimir
@@ -70,7 +99,7 @@ export const DailyFootfall = () => {
           <Card>
             <CardHeader title="Asistencia por día" />
             <CardContent>
-              <Line data={dataChart} options={options} />
+              <Line data={dataChart} options={options} ref={chartRef} />
 
             </CardContent>
 

@@ -94,7 +94,7 @@ export const CardActiveOrder: FC<Props> = ({
             {
               orders.length > 0
               &&
-              orders.map(order => (
+              orders.map((order, index) => (
                 <Box
                   key={order.id}
                   sx={{
@@ -102,7 +102,7 @@ export const CardActiveOrder: FC<Props> = ({
                     minWidth: alignment === 'horizontal' ? '325px' : '100%',
                   }}
                 >
-                  <ActiveOrder key={order.id} order={order} color={color} />
+                  <ActiveOrder key={order.id} order={order} color={color} index={index} />
 
                 </Box>
               ))

@@ -1,4 +1,4 @@
-import { ICreatePDF, PdfMakeWrapper, Table, Txt } from "pdfmake-wrapper";
+import { ICreatePDF, Img, PdfMakeWrapper, Table, Txt } from "pdfmake-wrapper";
 import { Expense } from "../models/expense.model";
 import { Income } from "../models/income.model";
 import { ActiveCashRegister } from "../services/cash-register.service";
@@ -9,7 +9,10 @@ import { getPaymentMethod } from "../../Common/helpers/get-payment-method";
 import { formatMoney } from '../../Common/helpers/format-money.helper';
 
 
-export const generatePdfCashReport = (cash: ActiveCashRegister, incomes: Income[], expenses: Expense[]): ICreatePDF => {
+import logo from '../../../../assets/logo3.png';
+
+
+export const generatePdfCashReport = async (cash: ActiveCashRegister, incomes: Income[], expenses: Expense[]): Promise<ICreatePDF> => {
 
 
 
@@ -24,6 +27,10 @@ export const generatePdfCashReport = (cash: ActiveCashRegister, incomes: Income[
   });
 
   pdf.add(
+    await new Img(logo).width(50).height(50).alignment('center').margin([0, 0, 0, 10]).build()
+  )
+
+  pdf.add(
     new Txt('Restaurant Doña Yoli').alignment('center').bold().end
   );
 
@@ -35,8 +42,6 @@ export const generatePdfCashReport = (cash: ActiveCashRegister, incomes: Income[
   pdf.add(
     new Txt(`Generado en: ${format(new Date(), 'dd MMMM yyyy HH:mm', { locale: es })}`).margin([0, 0, 0, 10]).alignment('center').fontSize(8).end
   );
-
-
 
 
   pdf.add(

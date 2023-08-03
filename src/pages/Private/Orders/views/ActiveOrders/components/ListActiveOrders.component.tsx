@@ -16,6 +16,7 @@ import { Label } from '../../../../../../components/ui';
 import SidebarMenuMobile from '../../../../layouts/SidebarLayout/Sidebar/SidebarMenuMobile/SidebarMenuMobile.component';
 import { BarActiveOrders } from './BarActiveOrders.component';
 import { ModalStartOrder } from './ModalStartOrder.component';
+import { index } from '../../../../../Status/Maintenance/index';
 
 
 export const ListActiveOrders = () => {
@@ -192,13 +193,16 @@ export const ListActiveOrders = () => {
             ? <Typography variant='body1' align="center" mt={5}>No hay pedidos</Typography>
             : <Grid container spacing={2}>
               {
-                ordersFiltered.map(order => (
+                ordersFiltered.map((order, index) => (
 
                   <>
                     <Grid item key={order.id} xs={12} sm={6} md={4}>
 
 
-                      <ActiveOrder key={order.id} order={order}
+                      <ActiveOrder
+                        key={order.id}
+                        order={order}
+                        index={index}
                         color={order.status === OrderStatus.PENDING ? 'warning' : order.status === OrderStatus.IN_PROGRESS ? 'info' : 'success'}
                       />
 
@@ -213,7 +217,7 @@ export const ListActiveOrders = () => {
       </Box>
 
 
-      
+
 
       <Paper sx={{
         position: 'fixed', bottom: 0, left: 0, right: 0,
@@ -304,7 +308,7 @@ export const ListActiveOrders = () => {
 
 
             } />
-          
+
         </BottomNavigation>
 
       </Paper>

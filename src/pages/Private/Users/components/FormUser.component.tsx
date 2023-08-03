@@ -4,7 +4,7 @@ import { useWatch, useForm, Controller } from 'react-hook-form';
 import { TypeIdentification } from '../../../../models/common.model';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Select, MenuItem, TextField, Typography, Button, FormControl, InputLabel } from '@mui/material';
-import { ValidRoles } from '../../router';
+import { ValidRoles } from '../../Common/models/valid-roles.model';
 
 interface Props {
   user: CreateUser;

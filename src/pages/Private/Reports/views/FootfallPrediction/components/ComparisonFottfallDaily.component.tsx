@@ -7,13 +7,21 @@ import { useComparisonFootfall } from '../../../hooks/useFootfall';
 import { format } from 'date-fns';
 import { GroupBy, Period } from '../../../../../../models/period.model';
 import { es } from 'date-fns/locale';
+import { useRef } from 'react';
+import { Chart as ChartJS } from 'chart.js';
+import html2canvas from 'html2canvas';
+import { generateFootfallComparisonReport } from '../../../helpers/pdf-footfall-comparison-report.helper';
 
 
 
 export const ComparisonFottfallDaily = () => {
 
+  const chartRef = useRef<ChartJS>(null);
 
-  const {startDate, handleChangeStartDate, comparisonFootfallQuery} =useComparisonFootfall(Period.MONTH, GroupBy.DAY);
+  const filters = useComparisonFootfall(Period.MONTH, GroupBy.DAY);
+
+  const {startDate, handleChangeStartDate, comparisonFootfallQuery} = filters;
+  
 
   const predictedData = [100, 150, 200, 250]; // Datos de afluencia predecida
   const actualData = [90, 160, 190, 260]; // Datos de afluencia real
@@ -44,6 +52,25 @@ export const ComparisonFottfallDaily = () => {
     },
   };
 
+  const handlePrint = async () => {
+
+    let urlImage = '';
+
+    
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    if(!comparisonFootfallQuery.data) return;
+
+    const pdf = await generateFootfallComparisonReport(comparisonFootfallQuery.data, filters, urlImage);
+
+    pdf.open();
+  }
+
   
 
   return (
@@ -61,6 +88,7 @@ export const ComparisonFottfallDaily = () => {
         <Button
           variant='contained'
           startIcon={<Print />}
+          onClick={handlePrint}
         >
 
           Imprimir
@@ -79,7 +107,7 @@ export const ComparisonFottfallDaily = () => {
 
               {
                 comparisonFootfallQuery.data &&
-                <Line data={data} options={options} />
+                <Line data={data} options={options} ref={chartRef}/>
 
               }
 

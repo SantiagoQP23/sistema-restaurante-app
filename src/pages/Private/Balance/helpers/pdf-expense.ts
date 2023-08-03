@@ -1,4 +1,4 @@
-import { ICreatePDF, PdfMakeWrapper, Txt } from "pdfmake-wrapper";
+import { ICreatePDF, Img, PdfMakeWrapper, Txt } from "pdfmake-wrapper";
 import { Expense } from "../models/expense.model";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { format } from "date-fns";
@@ -7,8 +7,10 @@ import { formatMoney } from "../../Common/helpers/format-money.helper";
 import { es } from "date-fns/locale";
 
 
+import logo from '../../../../assets/logo3.png';
 
-export const generatePdfExpense = (expense: Expense): ICreatePDF => {
+
+export const generatePdfExpense = async (expense: Expense): Promise<ICreatePDF> => {
 
   
   PdfMakeWrapper.setFonts(pdfFonts);
@@ -21,9 +23,13 @@ export const generatePdfExpense = (expense: Expense): ICreatePDF => {
     fontSize: 8,
   });
 
+  pdf.add(
+    await new Img(logo).width(35).height(35).alignment('center').margin([0, 0, 0, 10]).build()
+  )
+
 
   pdf.add(
-    new Txt('Restaurant Doña Yoli').alignment('center').bold().end
+    new Txt('Restaurante Doña Yoli').alignment('center').bold().end
   );
 
   pdf.add(

@@ -35,8 +35,8 @@ import { Roles } from '../../../../../../models/auth.model';
 import { Circle } from '@mui/icons-material';
 import { useSocket } from '../../../../../../hooks/useSocket';
 import { SocketContext } from '../../../../../../context/SocketContext';
-import { ValidRoles } from '../../../../router';
 import { Label } from '../../../../../../components/ui';
+import { ValidRoles } from '../../../../Common/models/valid-roles.model';
 
 
 const UserBoxButton = styled(Button)(

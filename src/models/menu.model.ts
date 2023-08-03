@@ -51,9 +51,9 @@ export enum ProductStatus {
   OUT_OF_SEASON = 'OUT_OF_SEASON',
 }
 export enum ProductStatusSpanish {
-  AVAILABLE = 'DISPONIBLE',
-  OUT_OF_STOCK = 'AGOTADO',
-  OUT_OF_SEASON = 'FUERA DE TEMPORADA',
+  AVAILABLE = 'Disponible',
+  OUT_OF_STOCK = 'Agotado',
+  OUT_OF_SEASON = 'Fuera de temporada',
 }
 
 export interface IProduct {

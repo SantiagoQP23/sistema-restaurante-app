@@ -1,6 +1,6 @@
 import { useState, FC, useContext } from 'react';
 
-import { CardHeader, CardContent, Card, Grid, TextField, List, Box, ListItem, IconButton, Button, alpha, ListItemButton, styled, lighten, CardActionArea, Avatar } from '@mui/material';
+import { CardHeader, CardContent, Card, Grid, TextField, List, Box, ListItem, IconButton, Button, alpha, ListItemButton, styled, lighten, CardActionArea, Avatar, TablePagination, Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
@@ -13,6 +13,7 @@ import { formatDateToPicker } from '../../../../Common/helpers/format-date.helpe
 import { statusModalHoliday, statusModalDeleteHoliday, getHolidays } from '../../../services/holidays.service';
 import { SimulationContext } from '../../../context/SimulationContext';
 import { useTypesHolidays } from '../../../hooks/useTypesHolidays';
+import { usePagination } from '../../../../../../hooks/usePagination';
 
 
 interface HolidayProps {
@@ -81,12 +82,15 @@ const HolidayItem: FC<HolidayProps> = ({ holiday }) => {
     <>
       <ListItem
         secondaryAction={<>
+        <Stack direction='row' spacing={1}>
+
           <IconButton onClick={editHoliday}>
             <EditOutlined />
           </IconButton>
           <IconButtonError onClick={deleteHoliday}>
-            <DeleteOutline/>
+            <DeleteOutline />
           </IconButtonError>
+        </Stack>
         </>
         }
         // Cambia de color cuando pasa el mouse
@@ -131,6 +135,9 @@ export const HolidaysRules = () => {
   const { holidays, loadHolidays } = useContext(SimulationContext);
 
 
+  const pagination = usePagination(data || []);
+  const {  paginatedList } = pagination;
+
 
 
   const openModal = () => {
@@ -146,16 +153,20 @@ export const HolidaysRules = () => {
         <CardHeader
           title='Feriados'
           subheader='Feriados que se aplicarán en la simulación'
-        // action={
+          action={
 
-        //   <Button
-        //     variant='outlined'
-        //     onClick={openModal}
-        //     size='small'
-        //   >
-        //     <Add/>
-        //   </Button>
-        // }
+            <Button
+              variant='outlined'
+              onClick={openModal}
+              size='small'
+              startIcon={
+                <Add />
+              }
+
+            >
+              Añadir
+            </Button>
+          }
         />
 
 
@@ -165,65 +176,28 @@ export const HolidaysRules = () => {
           {data?.length === 0 && <p>No hay feriados</p>
           }
           {
-            data?.map((holiday, index) => {
+            paginatedList?.map((holiday, index) => {
               return (
                 <HolidayItem holiday={holiday} key={holiday.id} />
 
               )
             })}
 
-
-
-
-          <CardAddAction
-            onClick={openModal}
-
-          >
-            <CardActionArea sx={{ px: 1 }}>
-              <CardContent>
-                <AvatarAddWrapper>
-                  <AddTwoTone fontSize="medium" />
-                </AvatarAddWrapper>
-              </CardContent>
-            </CardActionArea>
-          </CardAddAction>
-
-          {/* <Controller
-                  name='name'
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) =>
-                    <>
-                      <InputLabel id='select-seccion'>Nombre del feriado</InputLabel>
-                      <Select
-                        labelId="select-seccion"
-
-                        label="Seccion"
-                        fullWidth
-                        margin='dense'
-                        value={value}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        error={!!errors.name}
-
-                      >
-                        {
-                          Object.values(ValidHolidays).map((holiday) => (
-                            <MenuItem key={holiday} value={holiday}>{holiday}</MenuItem>
-                          ))
-                        }
-
-
-
-
-                      </Select>
-                    </>
-                  }
-
-                /> */}
-
-
-
         </List>
+
+        <TablePagination 
+
+          component="div"
+          count={data?.length || 0}
+          page={pagination.page}
+          onPageChange={pagination.handleChangePage}
+          rowsPerPage={pagination.rowsPerPage}
+          onRowsPerPageChange={pagination.handleChangeRowsPerPage}
+
+
+        
+                
+        />
 
 
 

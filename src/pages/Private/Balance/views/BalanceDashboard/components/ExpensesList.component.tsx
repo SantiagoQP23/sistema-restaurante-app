@@ -35,9 +35,9 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
     handleOpen();
   }
 
-  const handlePrint = (expense: Expense) => {
+  const handlePrint = async (expense: Expense) => {
 
-    const pdf = generatePdfExpense(expense);
+    const pdf = await generatePdfExpense(expense);
 
     pdf.open();
 

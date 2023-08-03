@@ -1,16 +1,21 @@
 import { FC, useContext } from 'react';
 import { IOrder, TypeOrder } from "../../../../models";
-import { Box, Drawer, Stack, useTheme, Typography, IconButton, Card, CardHeader, CardContent, Grid, List, ListItem, Chip, ListItemIcon, ListItemText, Button } from '@mui/material';
+import { Box, Drawer, Stack, useTheme, Typography, IconButton, Card, CardHeader, CardContent, Grid, List, ListItem, Chip, ListItemIcon, ListItemText, Button, ToggleButton, ToggleButtonGroup, Switch } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectTables } from '../../../../redux';
-import { CloseOutlined, Print, DeleteOutline, Edit, Add, Done, DoneRounded, CheckCircle, Pending } from '@mui/icons-material';
+import { selectOrders, selectTables } from '../../../../redux';
+import { CloseOutlined, Print, DeleteOutline, Edit, Add, Done, DoneRounded, CheckCircle, Pending, TimerOutlined, Notes, People, Person, Restaurant, TableRestaurant, TakeoutDining, Circle } from '@mui/icons-material';
 import { Divider } from '@mui/material/';
 import { ActiveOrder } from '../views';
 import { OrderDetails } from './EditOrder';
-import { format } from 'date-fns';
+import { format, formatDistance } from 'date-fns';
 import { LabelStatusOrder } from '../views/OrdersList/components/LabelStatusOrder.component';
 import { useNavigate } from 'react-router-dom';
 import { OrderActionType, OrderContext } from '../context/Order.context';
+import { es } from 'date-fns/locale';
+import { LabelStatusPaid } from './LabelStatusPaid.component';
+import { formatMoney } from '../../Common/helpers/format-money.helper';
+import { Label } from '../../../../components/ui';
+import { useUpdateTable } from '../hooks/useUpdateTable';
 
 
 
@@ -26,18 +31,27 @@ export const DrawerOrder: FC<Props> = ({
 
   const theme = useTheme();
 
-  const {dispatch} = useContext(OrderContext);
+  const { dispatch } = useContext(OrderContext);
+
+  const { orders } = useSelector(selectOrders);
 
   const { activeTable } = useSelector(selectTables);
+
+  const ordersTable = orders.filter(order => order.table?.id === activeTable?.id);
+
+  const { loading, updateTable } = useUpdateTable();
+
+
+
 
   const navigate = useNavigate();
 
 
   const handleAddOrder = () => {
 
-    dispatch({type: OrderActionType.SET_TABLE, payload: activeTable!});
+    dispatch({ type: OrderActionType.SET_TABLE, payload: activeTable! });
 
-    dispatch({type: OrderActionType.SET_TYPE_ORDER, payload: TypeOrder.IN_PLACE});
+    dispatch({ type: OrderActionType.SET_TYPE_ORDER, payload: TypeOrder.IN_PLACE });
 
     navigate('/orders/add/menu');
 
@@ -45,6 +59,19 @@ export const DrawerOrder: FC<Props> = ({
 
     onClose();
   }
+
+  const handleChangeStatusTable = (value: boolean) => {
+
+    if (activeTable) {
+
+      updateTable({ tableId: activeTable.id, isAvailable: value });
+
+    }
+
+
+
+  }
+
 
   return (
     <>
@@ -102,16 +129,21 @@ export const DrawerOrder: FC<Props> = ({
                   <DeleteOutline />
                 </IconButton> */}
 
-                <Button
-                  variant='contained'
-                  color='primary'
-                  size='small'
-                  startIcon={<Add />}
-                  onClick={handleAddOrder}
-                >
-                  Añadir Pedido
-                </Button>
+                {
+                  // !activeTable?.isAvailable && (
 
+                  //   <Button
+                  //     variant='contained'
+                  //     color='primary'
+                  //     size='small'
+                  //     startIcon={<Add />}
+                  //     onClick={handleAddOrder}
+                  //   >
+                  //     Añadir Pedido
+                  //   </Button>
+
+                  // )
+                }
 
               </Stack>
 
@@ -127,7 +159,7 @@ export const DrawerOrder: FC<Props> = ({
                 Restaurante Doña Yoli
               </Typography> */}
 
-              <Typography variant="h3" textAlign='center' mt={2} >
+              <Typography variant="h3" textAlign='center'  >
                 Mesa {activeTable?.name}
                 {/* Pedido N° {order.num} */}
               </Typography>
@@ -137,15 +169,19 @@ export const DrawerOrder: FC<Props> = ({
 
             <Stack spacing={2} direction='column'>
               {
-                activeTable?.orders?.map((order: IOrder) => (
+                ordersTable.map((order: IOrder) => (
                   <>
 
                     <Card>
                       <CardHeader
                         title={`Pedido N° ${order.num}`}
+                        titleTypographyProps={{ variant: 'h4', textAlign: 'center' }}
+
                         subheader={
-                          <Typography variant='h5' color={order.isClosed ? 'secondary' : 'success.main'} textTransform='uppercase'>{order.isClosed ? 'cerrado' : 'Abierto'}</Typography>
+                          <LabelStatusOrder status={order.status} />
                         }
+
+                        subheaderTypographyProps={{ variant: 'h6', textAlign: 'center' }}
                         action={
                           <Stack direction='row' spacing={1}>
 
@@ -166,96 +202,240 @@ export const DrawerOrder: FC<Props> = ({
 
                         <Grid container spacing={1}>
 
-                          <Grid container spacing={2} alignItems='center'>
+                          <Grid container spacing={1} alignItems='center' px={1}>
 
-                            <Grid item xs={4}>
-                              <Typography variant='body2' color='secondary'>Hora de entrega</Typography>
-                            </Grid>
+                            <Grid item xs={12}>
 
-                            <Grid item xs={8}>
-                              <Typography variant="body1" >
-                                {format(new Date(order.deliveryTime), 'dd/MM/yyy HH:mm')}
-                              </Typography>
+                              <CardHeader
 
-                            </Grid>
+                                sx={{
+                                  px: 1,
+                                  py: 0.5
+                                }}
 
-                            <Grid item xs={4}>
-                              <Typography variant='body2' color='secondary'>Personas</Typography>
+                                avatar={<TimerOutlined />}
+                                // title='Hora de entrega'
+                                titleTypographyProps={{
+                                  variant: 'subtitle2'
 
-                            </Grid>
+                                }}
 
-                            <Grid item xs={8}>
-
-                              <Typography variant="h6" >
-                                {order.people}
-
-                              </Typography>
-
-                            </Grid>
-                            <Grid item xs={4}>
-                              <Typography variant='body2' color='secondary'>Estado de preparación</Typography>
-
-                            </Grid>
-
-                            <Grid item xs={8}>
-
-                              <LabelStatusOrder status={
-                                order.status
-
-                              } />
-                            </Grid>
-
-                            <Grid item xs={4}>
-                              <Typography variant='body2' color='secondary'>Estado de pago</Typography>
-
-                            </Grid>
-
-                            <Grid item xs={8}>
-
-                              <Chip
-                                label={order.isPaid ? 'Pagado' : 'Por pagar'}
-                                color={order.isPaid ? 'success' : 'warning'}
-                                icon={order.isPaid ? <CheckCircle /> : <Pending />}
-                                clickable={false}
-                                variant='outlined'
-                                
+                                subheaderTypographyProps={{
+                                  variant: 'h5',
+                                  color: 'inherith'
+                                }}
+                                subheader={`${formatDistance(new Date(order.deliveryTime), new Date(), {
+                                  addSuffix: true,
+                                  includeSeconds: true,
+                                  locale: es
+                                })}`}
                               />
-                            </Grid>
-
-                            
-                          
-
-                            <Grid item xs={4}>
-                              <Typography variant='body2' color='secondary'>Total</Typography>
 
                             </Grid>
 
-                            <Grid item xs={8}>
 
-                              <Typography variant="h4">
-                                $ {order.total}
+
+                            <Grid item xs={6}>
+                              <CardHeader
+                                sx={{
+                                  px: 1,
+                                  py: 0.5
+                                }}
+
+                                avatar={order.type === TypeOrder.IN_PLACE ? <Restaurant /> : <TakeoutDining />}
+                                // title='Orden'
+                                titleTypographyProps={{
+                                  variant: 'subtitle2'
+
+                                }}
+
+                                subheaderTypographyProps={{
+                                  variant: 'h5',
+                                  color: 'inherith'
+                                }}
+                                subheader={order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
+                              />
+
+
+                            </Grid>
+
+                            <Grid item xs={6}>
+                              <CardHeader
+                                sx={{
+                                  px: 1,
+                                  py: 0.5
+                                }}
+
+
+                                avatar={<People />}
+                                // title='Personas'
+                                titleTypographyProps={{
+                                  variant: 'subtitle2'
+
+                                }}
+
+                                subheaderTypographyProps={{
+                                  variant: 'h5',
+                                  color: 'inherith'
+                                }}
+                                subheader={`${order.people}`}
+                              />
+                              <Card>
+
+
+                              </Card>
+
+                            </Grid>
+
+
+                            {
+                              order.type === TypeOrder.IN_PLACE && (
+                                <>
+                                  <Grid item xs={12}>
+                                    <CardHeader
+                                      sx={{
+                                        px: 1,
+                                        py: 0.5
+                                      }}
+
+
+                                      avatar={<TableRestaurant />}
+                                      // title='Mesa'
+                                      titleTypographyProps={{
+                                        variant: 'subtitle2'
+
+                                      }}
+
+                                      subheaderTypographyProps={{
+                                        variant: 'h5',
+                                        color: 'inherith'
+                                      }}
+                                      subheader={`Mesa ${order.table?.name}` || 'No seleccionada'}
+                                    />
+
+                                    <Card>
+
+
+                                    </Card>
+
+
+
+                                  </Grid>
+
+
+                                </>
+
+                              )
+                            }
+
+
+
+
+                            <Grid item xs={12}>
+                              <CardHeader
+                                sx={{
+                                  px: 1,
+                                  py: 0.5
+                                }}
+
+
+                                avatar={
+
+                                  <Person />
+
+                                }
+                                // title='Mesero'
+                                titleTypographyProps={{
+                                  variant: 'subtitle2'
+
+                                }}
+
+                                subheaderTypographyProps={{
+                                  variant: 'h5',
+                                  color: 'inherith'
+                                }}
+                                subheader={`${order.user.person.firstName} ${order.user.person.lastName}`}
+                              />
+                              <Card>
+
+
+                              </Card>
+                            </Grid>
+
+
+
+                            {
+                              order.notes
+                              && (
+                                <>
+                                  <Grid item xs={12}>
+                                    <CardHeader
+
+                                      sx={{
+                                        px: 1,
+                                        py: 0.5
+                                      }}
+
+
+                                      avatar={<Notes />}
+                                      title='Notas'
+                                      titleTypographyProps={{
+                                        variant: 'subtitle2'
+
+                                      }}
+
+                                      subheaderTypographyProps={{
+                                        variant: 'h5',
+                                        color: 'inherith'
+                                      }}
+                                      subheader={order.notes}
+                                    />
+
+
+
+                                  </Grid>
+                                </>
+                              )
+                            }
+
+                            <Grid item xs={4} display='flex' flexDirection='column' gap={1}>
+                              {/* <Typography variant='h4'>Total</Typography> */}
+                              <LabelStatusPaid isPaid={order.isPaid} />
+
+
+                            </Grid>
+
+                            <Grid
+                              item
+                              xs={8}
+                              display='flex'
+                              flexDirection='row'
+                              gap={1}
+                              alignItems='flex-end'
+                            >
+
+                              <Typography variant="h3">
+                                {formatMoney(order.total)}
 
                               </Typography>
 
+
                             </Grid>
+
                           </Grid>
 
-                         
-                         
+
+
+
 
                           <Grid item xs={12}>
 
-                            <Typography variant='h4' color='textSecondary' mt={1}>
+                            <Typography variant='h4' mt={2} textAlign='center'>
                               Productos
                             </Typography>
 
                             <List
-                              sx={{
-                                backgroundColor: 'background.paper',
-                                borderRadius: 1,
-                                boxShadow: 1,
-                                
-                              }}
+
                             >
 
 
@@ -301,19 +481,7 @@ export const DrawerOrder: FC<Props> = ({
                             </List>
                           </Grid>
 
-                          {/* <Grid item xs={4}>
-                            <Typography variant='h6' color='textSecondary' >
-                              Subtotal
-                            </Typography>
 
-
-                          </Grid>
-                          <Grid item xs={8}>
-                            <Typography variant='h4' >
-                              ${order.total}
-                            </Typography>
-
-                          </Grid> */}
 
                         </Grid>
 
@@ -331,14 +499,76 @@ export const DrawerOrder: FC<Props> = ({
               }
             </Stack>
 
+            <Box>
+
+              {
+                ordersTable.length === 0 && (
+                  <>
+                    <Typography variant='h4' color='secondary' textAlign='center' mt={2}>
+                      No hay pedidos
+                    </Typography>
+
+                    <Stack
+                      alignItems='center'
+                      mt={2}
+                      spacing={5}
+                    >
+                      <Box>
+
+                        <Switch
+                          checked={activeTable?.isAvailable}
+                          onChange={(e, value) => handleChangeStatusTable(value)}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                          color={activeTable?.isAvailable ? 'success' : 'error'}
+                        />
+
+                        <Label
+                          color={activeTable?.isAvailable ? 'success' : 'error'}
+                        >
+                          <Circle
+                            sx={{ fontSize: 10, mr: 1 }}
+
+                            color={activeTable?.isAvailable ? 'success' : 'error'}
 
 
+                          />
+
+                          {
+                            activeTable?.isAvailable ? 'Disponible' : 'Ocupada'
+                          }
+                        </Label>
+                      </Box>
+
+
+
+                    </Stack>
+
+
+                  </>
+
+                )
+              }
+
+                    <Box display='flex' justifyContent='center' mt={2}>
+
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        startIcon={<Add />}
+                        onClick={handleAddOrder}
+                      >
+                        Añadir Pedido
+                      </Button>
+                    </Box>
+            </Box>
           </Stack>
+
+
 
         </Box>
 
 
-      </Drawer>
+      </Drawer >
 
     </>
   )

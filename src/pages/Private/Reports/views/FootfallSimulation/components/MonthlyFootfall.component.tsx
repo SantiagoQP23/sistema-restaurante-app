@@ -7,17 +7,25 @@ import { Line } from "react-chartjs-2";
 import { Typography } from '@mui/material/';
 import { useSimulatedFootfall } from "../../../hooks/useFootfall";
 import { parseISO } from "date-fns";
+import { useRef } from 'react';
+import { Chart as ChartJS } from 'chart.js';
+import { generateFootfallSimulationReport } from "../../../helpers/pdf-footfall-simulation-report.helper";
+import html2canvas from "html2canvas";
 
 
 
 export const MonthlyFootfall = () => {
 
+  const chartRef = useRef<ChartJS>(null);
+
+  const filters = useSimulatedFootfall(Period.YEAR, GroupBy.MONTH);
 
   const {
     startDate,
     handleChangeStartDate,
     simulatedFootfallQuery
-  } = useSimulatedFootfall(Period.YEAR, GroupBy.MONTH);
+  } = filters
+  
 
 
   const dataChart = {
@@ -40,7 +48,24 @@ export const MonthlyFootfall = () => {
     },
   };
 
+  const handlePrint = async () => {
 
+    let urlImage = '';
+
+    
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    if(!simulatedFootfallQuery.data) return;
+
+    const pdf = await generateFootfallSimulationReport(simulatedFootfallQuery.data, filters, urlImage);
+
+    pdf.open();
+  }
 
 
   return (
@@ -59,6 +84,7 @@ export const MonthlyFootfall = () => {
         <Button
           variant='contained'
           startIcon={<Print />}
+          onClick={handlePrint}
         >
 
           Imprimir
@@ -75,7 +101,7 @@ export const MonthlyFootfall = () => {
               <Box>
                 {
                   simulatedFootfallQuery.data && (
-                    <Line data={dataChart} options={options} />
+                    <Line data={dataChart} options={options} ref={chartRef}/>
 
                   )
                 }

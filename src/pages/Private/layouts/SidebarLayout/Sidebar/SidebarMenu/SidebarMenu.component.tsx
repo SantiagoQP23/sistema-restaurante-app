@@ -22,8 +22,6 @@ import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../../redux';
-import { ValidRoles } from '../../../../router';
-import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { navItemsAdmin2, navItemsManagement, navItemsOrders, navItemsAdmin, NavItem } from '../../models';
 
@@ -53,7 +51,6 @@ export interface NavItemButtonProps {
   item: NavItem
 
 }
-
 
 export const NavItemButton: FC<NavItemButtonProps> = ({ item }) => {
 
@@ -96,10 +93,6 @@ export const NavItemButton: FC<NavItemButtonProps> = ({ item }) => {
         <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
 
       </ListItemButton>
-
-
-
-
 
     </ListItem>
   )

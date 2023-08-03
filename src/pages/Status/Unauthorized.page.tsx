@@ -26,7 +26,7 @@ export const UnauthorizedPage = () => {
       <Container maxWidth="md">
         <Box textAlign="center">
 
-          <Typography variant="h5" sx={{ my: 2 }}>
+          <Typography variant="h3" sx={{ my: 2 }}>
             No estas autorizado para ver esta página
           </Typography>
           <Typography

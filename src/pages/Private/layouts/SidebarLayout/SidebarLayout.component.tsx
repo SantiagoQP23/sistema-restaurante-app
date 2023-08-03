@@ -5,7 +5,6 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar/Sidebar.component';
 import Header from './Header/Header.component';
 import { BreadcrumbsRouter } from './BreadcrumbsRouter.component';
-import { ValidRoles } from '../../router';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../redux';
 import { UnauthorizedPage } from '../../../Status/Unauthorized.page';

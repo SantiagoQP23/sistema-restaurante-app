@@ -10,6 +10,8 @@ import { statusModalClientOrder } from '../../../services/sharing-information.se
 import { PaymentMethod } from '../../../models/Invoice.model';
 import { useCreateInvoice } from '../../../hooks/useInvoices';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
+import { useCreateInvoiceOrder } from '../../../hooks/useInvocesOrder';
+import { LoadingButton } from '@mui/lab';
 
 
 interface Props {
@@ -28,7 +30,9 @@ export const PayOrder: FC<Props> = ({ order }) => {
     reset
   } = useInvoiceStore((state) => state)
 
-  const createInvoiceMutation = useCreateInvoice();
+  // const createInvoiceMutation = useCreateInvoice();
+
+  const { createInvoiceOrder, loading } = useCreateInvoiceOrder();
 
 
   const handleChangeAmountPaid = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,13 +72,17 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
       invoice.cashRegisterId = activeCashRegister.id;
 
+      createInvoiceOrder(invoice);
 
-      createInvoiceMutation.mutateAsync(invoice).then(() => {
-        reset();
-      });
+
+      // createInvoiceMutation.mutateAsync(invoice).then(() => {
+      //   reset();
+      // });
 
 
     } else {
+
+      alert('No hay caja activa');
       // TODO modal crear caja
     }
 
@@ -97,14 +105,14 @@ export const PayOrder: FC<Props> = ({ order }) => {
             <Box display='flex' flexDirection='row-reverse' mt={1}>
               {
                 client && (
-              <Button
-                onClick={() => setClient(null)}
-                startIcon={<Close />}
-                size='small'
-                color='error'
-              >
-                Cambiar
-              </Button>)
+                  <Button
+                    onClick={() => setClient(null)}
+                    startIcon={<Close />}
+                    size='small'
+                    color='error'
+                  >
+                    Cambiar
+                  </Button>)
               }
 
               <Button
@@ -284,26 +292,30 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
                 <Divider />
 
-                <TextField
-                  label='Cantidad pagada'
-                  variant='outlined'
-                  type='number'
-                  value={amountPaid}
-                  onChange={handleChangeAmountPaid}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AttachMoney />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    width: 200
-                  }}
+                <Stack direction='row' justifyContent='center'>
+
+                  <TextField
+                    label='Cantidad pagada'
+                    variant='outlined'
+                    type='number'
+                    value={amountPaid}
+                    onChange={handleChangeAmountPaid}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AttachMoney />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      width: 200
+                    }}
 
 
 
-                />
+
+                  />
+                </Stack>
 
 
 
@@ -313,22 +325,23 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
                 {
                   difference >= 0 && (
-                    <Typography variant='h4'>
+                    <Typography variant='h4' textAlign='center'>
 
                       {`Cambio: $${difference}`}
 
                     </Typography>
                   )
                 }
-                <Stack direction='row'>
-                  <Button
+                <Stack direction='row' justifyContent='center'>
+                  <LoadingButton
+                    loading={loading}
 
                     variant='contained'
                     onClick={submitPayment}
                     startIcon={paymentMethod === PaymentMethod.CASH ? <MonetizationOnOutlined /> : <CreditCard />}
                   >
                     Registrar pago
-                  </Button>
+                  </LoadingButton>
 
                 </Stack>
 

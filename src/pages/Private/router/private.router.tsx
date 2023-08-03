@@ -15,11 +15,7 @@ import { BalanceRouter } from '../Balance/router/Balance.router';
 import { SuppliersRouter } from '../Suppliers/router/Suppliers.router';
 import { InvoiceRouter } from '../Invoices/router/Invoice.router';
 
-export enum ValidRoles {
-  admin = 'admin',
-  despachador = 'despachador',
-  mesero = 'mesero',
-}
+
 
 
 export const PrivateRouter: RouteObject[] = [

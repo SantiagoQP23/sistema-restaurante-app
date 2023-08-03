@@ -15,6 +15,7 @@ import { statusModalClientOrder } from "../../../services/sharing-information.se
 import { ComboBoxClient } from "../../../components/ComboBoxClient.component";
 import { PeopleCounter } from "./PeopleCounter.component";
 import { DesktopDatePicker, DesktopTimePicker, MobileDateTimePicker } from "@mui/x-date-pickers";
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 interface Props {
@@ -99,25 +100,31 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
             <CardHeader title='Información del pedido' />
             <CardContent>
 
-              <Stack direction='column' spacing={2}>
+              <Stack direction='column' spacing={2} textAlign='center'>
 
                 {
                   typeOrder === TypeOrder.IN_PLACE && (
                     <Box>
                       <InputLabel>Mesa</InputLabel>
-                      <Typography variant='h5' fontWeight='bold'>
-                        {table?.name || 'Sin mesa'}
+                      <Typography variant='h3' fontWeight='bold'>
+                        N° {table?.name || 'Sin mesa'}
                       </Typography>
                     </Box>
 
                   )
                 }
-                <Box>
-                  <InputLabel>Tipo de orden</InputLabel>
-                  <Typography variant='h5' fontWeight='bold'>
-                    {typeOrder === TypeOrder.IN_PLACE ? 'En el local' : 'Para llevar'}
-                  </Typography>
-                </Box>
+
+                {
+                  typeOrder === TypeOrder.TAKE_AWAY && (
+                    <Box>
+                      <InputLabel>Tipo de orden</InputLabel>
+                      <Typography variant='h3' fontWeight='bold'>
+                        {'Para llevar'}
+                      </Typography>
+                    </Box>
+
+                  )
+                }
 
                 <TextField
                   id="descripcion-pedido"
@@ -143,72 +150,11 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
             </CardContent>
           </Box>
 
-          {/* <Box>
-
-            <CardHeader title='Información del cliente'
-              action={
-                <IconButton
-                  size='small'
-                  onClick={() => setShowClient(!showClient)}
-                >
-                  {
-                    !showClient && client
-                      ? <Visibility />
-                      : <EditOutlined />
-                  }
-                </IconButton>
-              }
-            />
-            <CardContent>
-
-              {
-                showClient && client
-                  ? (
-                    <Box>
-                      <Typography variant='h5' fontWeight='bold'>
-                        {client.person.firstName + client?.person.lastName}
-                      </Typography>
-                      <Typography variant='body1'>
-                        {client?.person.numPhone || 'Sin teléfono'}
-                      </Typography>
-
-                      <Typography variant='body1'>
-                        {client?.person.email || 'Sin correo'}
-                      </Typography>
-
-
-                    </Box>)
-
-                  : (
-                    <>
-                      <ComboBoxClient client={null} handleChangeClient={handleChangeClient} />
-
-                      <Box display='flex' flexDirection='row-reverse' mt={1}>
-
-                        <Button
-                          size="small"
-                          onClick={openModalAddClient}
-                          startIcon={<AddOutlined />}
-                          variant="outlined"
-                        >
-                          Nuevo cliente
-                        </Button>
-
-                      </Box>
-
-                    </>
-                  )
-
-              }
-
-
-            </CardContent>
-          </Box> */}
 
           <Box display='flex' justifyContent='space-between' alignItems='center' p={2}>
 
             <Typography variant='h4' fontWeight='bold'>Total </Typography>
-            <Typography variant='h4' fontWeight='bold'>${details.reduce((acc, detail) => acc + detail.product.price * detail.quantity, 0)}</Typography>
+            <Typography variant='h4' fontWeight='bold'>{formatMoney(details.reduce((acc, detail) => acc + detail.product.price * detail.quantity, 0))}  </Typography>
           </Box>
 
         </Stack>

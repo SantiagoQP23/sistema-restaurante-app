@@ -22,7 +22,6 @@ import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
 
 import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../../redux';
-import { ValidRoles } from '../../../../router';
 import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { NavItem, navItemsAdmin, navItemsAdmin2, navItemsManagement, navItemsOrders } from '../../models';

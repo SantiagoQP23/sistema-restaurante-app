@@ -7,6 +7,8 @@ import { es } from "date-fns/locale";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { formatMoney } from "../../Common/helpers/format-money.helper";
 
+import logo from '../../../../assets/logo3.png';
+
 
 
 export const generateFinancialsReportPdf = async (data: FinanceResponse[], filters: DateFilterDto, urlImage?: string): Promise<ICreatePDF> => {
@@ -30,14 +32,18 @@ export const generateFinancialsReportPdf = async (data: FinanceResponse[], filte
     fontSize: 10,
   });
 
+  pdf.add(
+    await new Img(logo).width(50).height(50).alignment('center').margin([0, 0, 0, 10]).build()
+  )
+
 
 
   pdf.add(
-    new Txt('Restaurant Doña Yoli').alignment('center').bold().end
+    new Txt('Restaurante Doña Yoli').alignment('center').bold().end
   );
 
   pdf.add(
-    new Txt('Reporte de Productos y categorías').alignment('center').bold().fontSize(15).margin([0, 10, 0, 1]).end
+    new Txt('Reporte de Ingresos y gastos').alignment('center').bold().fontSize(15).margin([0, 10, 0, 1]).end
   );
 
   // Fecha de generación del reporte
@@ -87,19 +93,19 @@ export const generateFinancialsReportPdf = async (data: FinanceResponse[], filte
   }
 
   pdf.add(
-    new Txt('Resumen').alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
+    new Txt('Resumen').bold().fontSize(10).margin([0, 10, 0, 5]).end
   );
 
   pdf.add(
-    new Txt(`Total de ingresos: ${formatMoney(totalIncomes)}`).alignment('center').fontSize(10).margin([0, 10, 0, 10]).end
+    new Txt(`Total de ingresos: ${formatMoney(totalIncomes)}`).fontSize(10).margin([0, 10, 0, 5]).end
   );
 
   pdf.add(
-    new Txt(`Total de egresos: ${formatMoney(totalExpenses)}`).alignment('center').fontSize(10).margin([0, 10, 0, 10]).end
+    new Txt(`Total de egresos: ${formatMoney(totalExpenses)}`).fontSize(10).margin([0, 10, 0, 5]).end
   );
 
   pdf.add(
-    new Txt(`Balance: ${formatMoney(balanceYear)}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
+    new Txt(`Balance: ${formatMoney(balanceYear)}`).bold().fontSize(10).margin([0, 10, 0, 10]).end
   );
 
 

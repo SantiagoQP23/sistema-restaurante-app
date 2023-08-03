@@ -35,7 +35,11 @@ export interface Invoice {
   details: InvoiceDetail[];
 
   isActive: boolean;
-  user: IUser
+  user: IUser;
+
+  comments: string;
+
+  notaDeVenta: string;
 
 
 }

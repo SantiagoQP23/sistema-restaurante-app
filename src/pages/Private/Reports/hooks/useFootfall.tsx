@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { FootfallResponse, getFootfall, getSimulatedFootfall, executeSimulation, getPredictionFootfall, getComparisonFootfall } from '../services/footfall.service';
+import { FootfallResponse, getFootfall, getSimulatedFootfall, 
+  executeSimulation, getPredictionFootfall, getComparisonFootfall, updateForecastFootfall } from '../services/footfall.service';
 import { useDateFilter } from "../../../../hooks/useDateFilter";
 import { Period, GroupBy } from "../../../../models/period.model";
 import {useEffect} from 'react';
@@ -11,7 +12,21 @@ export const useFootfall = () => {
   return useQuery(['footfall'], getFootfall, { });
 }
 
+export const useUpdateFootfallPrediction = () => {
 
+  const updatePredictionQuery = useQuery(['updateFootfallPrediction'], () => {
+    return updateForecastFootfall()
+     
+  }, {
+    enabled: false,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['forecastFootfall'])
+    }
+  })
+
+  return updatePredictionQuery;
+
+}
 
 export const useSimulatedFootfall = (period: Period, groupBy: GroupBy) => {
 

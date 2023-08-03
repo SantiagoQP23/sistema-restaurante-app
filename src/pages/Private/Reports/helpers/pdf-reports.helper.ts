@@ -8,6 +8,8 @@ import { Chart as ChartJS } from 'chart.js';
 import { formatMoney } from "../../Common/helpers/format-money.helper";
 import { es } from "date-fns/locale";
 
+import logo from '../../../../assets/logo3.png';
+
 
 export function triggerTooltip(chart: ChartJS | null) {
   if (!chart) {
@@ -56,17 +58,28 @@ export const generateWaiterReportPdf = async (data: ResponseIncomesByUser[], fil
   const { period, startDate, endDate } = filterDto;
 
 
+  
+  
   const pdf = new PdfMakeWrapper();
-
+  
   pdf.pageSize('A4');
+ 
+  
+  pdf.add(
+    await new Img(logo).width(50).height(50).alignment('center').margin([0, 0, 0, 10]).build()
+  )
 
   pdf.add(
     new Txt('Restaurante Doña Yoli').alignment('center').bold().end
   )
 
   pdf.add(
-    new Txt('Reporte de desempeño de meseros').alignment('center').bold().fontSize(15).margin([0, 10, 0, 10]).end
+    new Txt('Reporte de desempeño de meseros').alignment('center').bold().fontSize(15).margin([0, 10, 0, 1]).end
   )
+
+  pdf.add(
+    new Txt(`Generado en: ${format(new Date(), 'dd MMMM yyyy HH:mm', { locale: es })}`).margin([0, 0, 0, 10]).alignment('center').fontSize(8).end
+  );
 
   if(period === Period.TODAY){
     pdf.add(

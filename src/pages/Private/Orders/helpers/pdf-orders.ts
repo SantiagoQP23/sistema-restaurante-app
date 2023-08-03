@@ -1,4 +1,4 @@
-import { ICreatePDF, PdfMakeWrapper, Txt } from "pdfmake-wrapper";
+import { ICreatePDF, Img, PdfMakeWrapper, Txt } from "pdfmake-wrapper";
 import { IOrder, TypeOrder } from "../../../../models";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { format } from "date-fns";
@@ -6,8 +6,9 @@ import { es } from "date-fns/locale";
 import { formatMoney } from "../../Common/helpers/format-money.helper";
 
 
+import logo from '../../../../assets/logo3.png';
 
-export const generateOrderPdf = (order: IOrder): ICreatePDF => {
+export const generateOrderPdf = async (order: IOrder): Promise< ICreatePDF> => {
 
 
   PdfMakeWrapper.setFonts(pdfFonts);
@@ -19,6 +20,11 @@ export const generateOrderPdf = (order: IOrder): ICreatePDF => {
   pdf.defaultStyle({
     fontSize: 8,
   });
+
+  pdf.add(
+    await new Img(logo).width(35).height(35).alignment('center').margin([0, 0, 0, 10]).build()
+  )
+
 
   pdf.add(
     new Txt('Restaurant Doña Yoli').alignment('center').bold().end

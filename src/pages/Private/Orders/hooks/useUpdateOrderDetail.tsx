@@ -34,7 +34,7 @@ export const useUpdateOrderDetail = () => {
 
       if (ok) {
 
-        dispatch(setActiveOrder(order!))
+        // dispatch(setActiveOrder(order!))
         enqueueSnackbar('Detalle actualizado', { variant: 'success' });
 
       } else {

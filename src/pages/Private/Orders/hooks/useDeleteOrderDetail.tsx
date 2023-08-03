@@ -25,7 +25,9 @@ export const useDeleteOrderDetail = () => {
       socket?.emit(EventsEmitSocket.deleteOrderDetail, data, ({ ok, order, msg }: SocketResponseOrder) => {
   
         if (ok) {
-          dispatch(setActiveOrder(order!))
+          // dispatch(setActiveOrder(order!))
+
+          enqueueSnackbar('Producto eliminado', { variant: 'success' });
   
         } else {
           enqueueSnackbar(msg, { variant: 'error' });

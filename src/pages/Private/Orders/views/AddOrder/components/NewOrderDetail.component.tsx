@@ -11,6 +11,7 @@ import { useCounter } from '../../../hooks';
 import { OrderActionType, OrderContext } from '../../../context/Order.context';
 import { sharingInformationService } from '../../../services/sharing-information.service';
 import { CounterInput } from '../../../components/CounterInput.component';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 interface Props {
@@ -116,11 +117,11 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
           />
 
-          <Typography variant='body1'>$ {detalle.product.price}</Typography>
+          <Typography variant='body1'>{formatMoney(detalle.product.price)}</Typography>
         </Stack>
 
 
-        <Typography variant="h5" textAlign='right'>$ {detalle.product.price * quantity}</Typography>
+        <Typography variant="h5" textAlign='right'>{formatMoney(detalle.product.price * quantity)}</Typography>
 
 
 

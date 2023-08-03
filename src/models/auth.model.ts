@@ -19,13 +19,6 @@ export enum Roles {
   despachador = 'Despachador',
 }
 
-export enum ValidRoles {
-
-  admin = 'admin',
-  despachador = 'despachador',
-  mesero = 'mesero',
-
-}
 
 
 export interface IUser {

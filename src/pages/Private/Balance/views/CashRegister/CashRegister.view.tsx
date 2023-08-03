@@ -36,9 +36,9 @@ export const CashRegister = () => {
 
   const {expensesQuery, ...filterExpenses} = useExpenses();
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if( cashRegisterQuery.data ){
-      const pdf = generatePdfCashReport(cashRegisterQuery.data, incomesQuery.data?.incomes || [], expensesQuery.data?.expenses  || [])
+      const pdf =  await generatePdfCashReport(cashRegisterQuery.data, incomesQuery.data?.incomes || [], expensesQuery.data?.expenses  || [])
       pdf.open();
     }
   }

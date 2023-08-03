@@ -3,6 +3,10 @@ import { TypeOrder } from "../../../../../models";
 import { useDrawerInvoiceStore } from "../../store/drawerInvoiceStore"
 import { Box, Button, Dialog, DialogActions, DialogContent, Stack, Typography, DialogTitle } from '@mui/material';
 import { useRemoveInvoice } from "../../hooks/useInvoices";
+import { useDeleteInvoice, useUpdateInvoiceOrder } from "../../hooks/useInvocesOrder";
+import { UpdateInvoiceDto } from "../../dto";
+import { useSelector } from "react-redux";
+import { selectOrders } from "../../../../../redux";
 
 
 
@@ -10,14 +14,30 @@ export const ModalDeleteInvoice = () => {
 
   const { activeInvoice, handleCloseModal, openModal, handleCloseDrawer, } = useDrawerInvoiceStore();
 
-  const { mutateAsync, isLoading } = useRemoveInvoice();
+  // const { mutateAsync, isLoading } = useRemoveInvoice();
+
+  const {activeOrder }  = useSelector(selectOrders);
+
+  const {loading, deleteInvoiceOrder} = useDeleteInvoice();
+
 
   const submitDeleteInvoice = () => {
 
     console.log('delete invoice')
 
-    if (activeInvoice)
-      mutateAsync(activeInvoice.id);
+    if (activeInvoice && activeOrder){
+
+      const data : UpdateInvoiceDto = {
+        id: activeInvoice.id,
+        orderId: activeOrder.id,
+        // isActive: false
+      }
+
+      deleteInvoiceOrder(data)
+
+
+    }
+        // mutateAsync(activeInvoice.id);
 
 
 
@@ -82,7 +102,7 @@ export const ModalDeleteInvoice = () => {
           variant='contained'
           color='error'
           onClick={submitDeleteInvoice}
-          loading={isLoading}
+          loading={loading}
         >
           Eliminar
         </LoadingButton>

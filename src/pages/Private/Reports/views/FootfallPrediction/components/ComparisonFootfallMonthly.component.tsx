@@ -5,18 +5,20 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Print } from '@mui/icons-material';
 import { useComparisonFootfall } from '../../../hooks/useFootfall';
 import { GroupBy, Period } from '../../../../../../models/period.model';
+import { generateFootfallComparisonReport } from '../../../helpers/pdf-footfall-comparison-report.helper';
+import { useRef } from 'react';
+import { Chart as ChartJS } from 'chart.js';
+import html2canvas from 'html2canvas';
 
 
 
 export const ComparisonFootfallMonthly = () => {
 
-  const { startDate, handleChangeStartDate, comparisonFootfallQuery } = useComparisonFootfall(Period.YEAR, GroupBy.MONTH);
+  const chartRef = useRef<ChartJS>(null);
 
-
-  const predictedData = [100, 150, 200, 250]; // Datos de afluencia predecida
-  const actualData = [90, 160, 190, 260]; // Datos de afluencia real
-
-
+  const filters = useComparisonFootfall(Period.YEAR, GroupBy.MONTH);
+  const { startDate, handleChangeStartDate, comparisonFootfallQuery } = filters;
+  
   const data = {
     labels: comparisonFootfallQuery.data?.footfall?.map(f => f.date), // Etiquetas para cada punto de tiempo
     datasets: [
@@ -56,6 +58,27 @@ export const ComparisonFootfallMonthly = () => {
     ],
   };
 
+  const handlePrint = async () => {
+
+    let urlImage = '';
+
+    
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    if(!comparisonFootfallQuery.data) return;
+
+    const pdf = await generateFootfallComparisonReport(comparisonFootfallQuery.data, filters, urlImage);
+
+    pdf.open();
+  }
+
+
+
   return (
     <>
       <Stack direction='row' spacing={2} my={2}>
@@ -71,6 +94,7 @@ export const ComparisonFootfallMonthly = () => {
         <Button
           variant='contained'
           startIcon={<Print />}
+          onClick={handlePrint}
         >
 
           Imprimir
@@ -89,7 +113,7 @@ export const ComparisonFootfallMonthly = () => {
 
               {
                 comparisonFootfallQuery.data &&
-                <Line data={data} options={options} />
+                <Line data={data} options={options} ref={chartRef} />
               }
 
             </CardContent>

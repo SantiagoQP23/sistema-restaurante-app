@@ -13,13 +13,13 @@ import { statusModalDeleteUser, updateUser as updateUserS } from '../../services
 import { Label } from "../../../../../components/ui";
 import { IClient } from '../../../../../models/client.model';
 import { useSnackbar } from 'notistack';
-import { ValidRoles } from "../../../router";
 import { TitlePage } from "../../../components/TitlePage.component";
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
 import { useUsers } from "../../hooks/useUsers";
 import SearchIcon from '@mui/icons-material/Search';
 import { selectAuth } from "../../../../../redux";
+import { ValidRoles } from "../../../Common/models/valid-roles.model";
 
 
 

@@ -3,7 +3,7 @@ import { FC } from "react";
 
 import { Label } from "../../../../../../components/ui";
 import { OrderStatus } from "../../../../../../models";
-import { Chip } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 import { LocalDining, Pending, SoupKitchen } from "@mui/icons-material";
 
 
@@ -41,18 +41,40 @@ export const LabelStatusOrder: FC<Props> = (
 
 
   return (
-    <Chip
-      color={colorStatusOrderMap[status]}
-      label={textStatusOrderMap[status]}
-      icon={status === OrderStatus.PENDING
-        ? <Pending />
-        : status === OrderStatus.IN_PROGRESS
-          ? <SoupKitchen />
-          : <LocalDining />
-      }
+    // <Chip
+    //   color={colorStatusOrderMap[status]}
+    //   label={textStatusOrderMap[status]}
+    //   icon={status === OrderStatus.PENDING
+    //     ? <Pending />
+    //     : status === OrderStatus.IN_PROGRESS
+    //       ? <SoupKitchen />
+    //       : <LocalDining />
+    //   }
 
-      size="small"
-    />
+    //   size="small"
+    // />
+
+    <Typography variant="h4" fontWeight='bold'>
+      <Label
+
+        color={colorStatusOrderMap[status]}
+      >
+
+        <Box mr={1}>
+
+          {status === OrderStatus.PENDING
+            ? <Pending fontSize="small" />
+            : status === OrderStatus.IN_PROGRESS
+              ? <SoupKitchen fontSize="small" />
+              : <LocalDining fontSize="small" />
+          }
+        </Box>
+
+
+        {textStatusOrderMap[status]}
+
+      </Label>
+    </Typography>
 
   )
 }

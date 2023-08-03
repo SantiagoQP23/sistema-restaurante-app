@@ -103,6 +103,8 @@ export const Orders = () => {
       dispatch(updateOrder(order!));
 
       if (activeOrder?.id === order?.id) {
+
+        console.log({update: order})
         dispatch(setActiveOrder(order!))
       }
 

@@ -15,7 +15,7 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
-import { ExpandLess, ExpandMore, ListAlt, LocalShipping, MonetizationOn, Receipt, TableRestaurant, ViewKanban } from '@mui/icons-material';
+import { AccountBalance, AccountBalanceWallet, Assessment, Assignment, ExpandLess, ExpandMore, ListAlt, LocalShipping, MenuBook, MonetizationOn, Receipt, ReceiptLong, SoupKitchen, TableRestaurant, ViewKanban } from '@mui/icons-material';
 
 
 
@@ -38,7 +38,7 @@ export const navItemsAdmin: NavItem[] = [
   },
   {
     title: 'Balance',
-    icon: <MonetizationOn />,
+    icon: <AccountBalanceWallet/>,
     to: '/balance'
   },
 
@@ -46,13 +46,13 @@ export const navItemsAdmin: NavItem[] = [
 
 export const navItemsOrders: NavItem[] = [
   {
-    title: 'Mesas',
-    icon: <TableRestaurant />,
+    title: 'Pedidos',
+    icon: <Assignment />,
     to: '/orders/'
   },
   {
-    title: 'Pedidos Activos',
-    icon: <ViewKanban />,
+    title: 'Cocina',
+    icon: <SoupKitchen />,
     to: '/orders/actives'
   },
   {
@@ -63,7 +63,7 @@ export const navItemsOrders: NavItem[] = [
   },
   {
     title: 'Comprobantes',
-    icon: <Receipt />,
+    icon: <ReceiptLong />,
     to: '/invoices',
 
   },
@@ -73,16 +73,16 @@ export const navItemsOrders: NavItem[] = [
 export const navItemsManagement: NavItem[] = [
   {
     title: 'Menú del restaurante',
-    icon: <RestaurantOutlinedIcon />,
+    icon: <MenuBook />,
     to: '/menu/edit'
   },
   {
-    title: 'Mesas',
+    title: 'Gestión de mesas',
     icon: <TableRestaurantOutlinedIcon />,
     to: '/tables'
   },
   {
-    title: 'Clientes',
+    title: 'Gestión de clientes',
     icon: <Groups3OutlinedIcon />,
     to: '/clients'
   },
@@ -97,7 +97,7 @@ export const navItemsManagement: NavItem[] = [
 
 export const navItemsAdmin2: NavItem[] = [
   {
-    title: 'Empleados',
+    title: 'Gestión de usuarios',
     icon: <PeopleOutlineIcon />,
     to: '/users'
   },

@@ -84,7 +84,7 @@ export const useActiveOrders = () => {
 
   const pagination = usePaginationAsync();
 
-  const dateFilter = useDateFilter(Period.MONTH);
+  const dateFilter = useDateFilter(Period.YEAR);
 
   const dispatch = useDispatch();
 

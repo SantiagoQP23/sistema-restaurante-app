@@ -52,21 +52,33 @@ export const Product: FC<Props> = ({ product }) => {
 
 
             product.status !== ProductStatus.AVAILABLE && (
-              <Chip
+              // <Chip
+              //   color='warning'
+              //   sx={{
+              //     zIndex: 9,
+              //     top: 16,
+              //     right: 16,
+              //     position: 'absolute',
+              //   }}
+              //   size='small'
+              //   variant='outlined'
+              //   label={ProductStatusSpanish[`${product.status as ProductStatus}`]}
+              // />
 
+              <Label
                 color='warning'
 
                 sx={{
-                  zIndex: 9,
-                  top: 16,
-                  right: 16,
-                  position: 'absolute',
-                  textTransform: 'uppercase',
-                }}
-                size='small'
+                      zIndex: 9,
+                      top: 16,
+                      right: 16,
+                      position: 'absolute',
+                    }}
 
-                label={ProductStatusSpanish[`${product.status as ProductStatus}`]}
-              />
+
+              >
+                {ProductStatusSpanish[`${product.status as ProductStatus}`]}
+              </Label>
             )
           }
 

@@ -45,6 +45,14 @@ export const getOneFootfall = async (date: string): Promise<Footfall> => {
 }
 
 
+export const updateForecastFootfall = async (): Promise<void> => {
+
+  const resp = await restauranteApi.get<void>(`footfall/update-forecast`);
+
+  return resp.data;
+
+}
+
 export const getSimulatedFootfall = async (filterDto: DateFilterDto): Promise<FootfallResponse> => {
 
   const {data} = await restauranteApi.get<FootfallResponse>(`footfall/simulated-by-date`, {
@@ -86,21 +94,12 @@ export const getComparisonFootfall = async (filterDto: DateFilterDto): Promise<C
 
 }
 
-
-
-
-
-
-
 export const getPredictionFootfall = async (): Promise<Footfall[]> => {
 
   const resp = await restauranteApi.get<Footfall[]>(`footfall/forecast`);
 
   return resp.data;
 }
-
-
-
 
 export const getDay = async (date: string): Promise<IDay> => {
 
@@ -117,6 +116,9 @@ export const getDays = async (): Promise<IDay[]> => {
   return resp.data;
 
 }
+
+
+
 
 
 

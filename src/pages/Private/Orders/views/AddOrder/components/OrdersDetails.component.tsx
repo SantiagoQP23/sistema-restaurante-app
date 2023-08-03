@@ -67,27 +67,27 @@ export const OrderDetails = () => {
 
             <TableBody> */}
 
-              <Stack spacing={1} divider={<Divider />}>
+        <Stack spacing={1} divider={<Divider />}>
 
-              {
-                details.length > 0
-                ? details.map((detail) => (
-                    <>
-                      <NewOrderDetail detalle={detail} key={detail.product.id}/>
-                    </>
+          {
+            details.length > 0
+              ? details.map((detail) => (
+                <>
+                  <NewOrderDetail detalle={detail} key={detail.product.id} />
+                </>
 
 
-                  ))
-                  : (<TableRow>
-                    <TableCell colSpan={5}>
+              ))
+              : (<TableRow>
+                <TableCell colSpan={5}>
 
-                      <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
-                    </TableCell>
-                  </TableRow>)
+                  <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
+                </TableCell>
+              </TableRow>)
 
-}
-</Stack>
-            {/* </TableBody>
+          }
+        </Stack>
+        {/* </TableBody>
           </Table>
         </TableContainer> */}
 

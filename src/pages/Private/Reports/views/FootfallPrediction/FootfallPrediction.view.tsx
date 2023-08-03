@@ -22,7 +22,10 @@ import { TitlePage } from '../../../components/TitlePage.component';
 import { useQuery } from '@tanstack/react-query';
 import { getPredictionFootfall } from '../../services/footfall.service';
 import { ComparisonFootfall } from './components/ComparisonFootfall.component';
-import { useForecastFootfall } from '../../hooks/useFootfall';
+import { useForecastFootfall, useUpdateFootfallPrediction } from '../../hooks/useFootfall';
+import { generatePredictionReport } from '../../helpers/pdf-prediction-report.helper';
+import { Chart as ChartJS } from 'chart.js';
+import html2canvas from 'html2canvas';
 
 // interface PdfAffluencePredictionType {
 //   print: () => void;
@@ -34,8 +37,23 @@ export const FootfallPrediction = () => {
   const {isLoading, data} = useForecastFootfall();
 
 
+  const chartRef = useRef<ChartJS>(null);
+
+  const {refetch, isFetching, } = useUpdateFootfallPrediction();
+
+
+
 
   const navigate = useNavigate();
+
+  const handleUpdatePrediction = () => {
+
+    refetch();
+
+
+
+    
+  }
 
  
 
@@ -60,6 +78,23 @@ export const FootfallPrediction = () => {
     },
   };
 
+  const handlePrint = async () => {
+
+    let urlImage = '';
+
+    
+    if (chartRef.current) {
+
+      const canvas = await html2canvas(chartRef.current.canvas);
+
+      urlImage = canvas.toDataURL('image/png');
+    };
+
+    const pdf = await generatePredictionReport(data || [], urlImage);
+
+    pdf.open();
+
+  }
 
 
 
@@ -76,23 +111,30 @@ export const FootfallPrediction = () => {
               variant="outlined"
               startIcon={<Settings />}
               onClick={() => navigate('simulation')}
+              size='small'
             >
               Simulación
             </LoadingButton>
+            <Button
+              variant='outlined'
+            
+              onClick={handlePrint}
+              size='small'
+            >
+              <Print />
+            </Button>
             <LoadingButton
               variant="contained"
+              loading={isFetching}
+              onClick={handleUpdatePrediction}
               // loading={loadingPrediction}
               // onClick={submitUpdatePrediction}
               startIcon={<Update />}
+              size='small'
             >
               Actualizar
             </LoadingButton>
-            <Button
-              variant='outlined'
-              startIcon={<Print />}
-            >
-              Imprimir
-            </Button>
+          
 
             {/* {
               days.length > 0 &&
@@ -129,7 +171,7 @@ export const FootfallPrediction = () => {
             <CardContent>
 
               {
-                data && <Line data={dataChart} options={options} />
+                data && <Line data={dataChart} options={options} ref={chartRef} />
 
               }
               {/* <Line data={dataPrediction} ></Line> */}

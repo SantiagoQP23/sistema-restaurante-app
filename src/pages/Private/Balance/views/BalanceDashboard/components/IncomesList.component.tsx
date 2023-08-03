@@ -41,8 +41,8 @@ export const IncomesList: FC<Props> = ({ cashRegister, editable = false, data, f
   }
 
 
-  const handlePrint = (income: Income) => {
-    const pdf = generatePdfIncome(income)
+  const handlePrint = async (income: Income) => {
+    const pdf = await generatePdfIncome(income)
 
     pdf.open();
 
