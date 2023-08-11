@@ -35,11 +35,11 @@ export const CashRegisterPopover = () => {
       <IconButton
         ref={ref} onClick={handleOpen}
         sx={{
-          display: {
-            xs: 'flex',
-            md: 'none',
+          // display: {
+          //   xs: 'flex',
+          //   md: 'none',
 
-          },
+          // },
           border: `1px solid ${theme.palette.divider}`,
         }}
 
@@ -174,6 +174,9 @@ export const CashRegisterPopover = () => {
                       mt: 2,
                     }}
                     startIcon={<PointOfSale />}
+                    onClick={() => {
+                      navigate('/balance');
+                    }}
                   >
                     Ver detalle
                   </Button>

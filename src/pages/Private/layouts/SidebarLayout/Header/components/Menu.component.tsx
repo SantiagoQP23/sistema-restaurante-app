@@ -127,8 +127,7 @@ function HeaderMenu() {
           >
           </IconButton> */}
 
-        <ListItemButton
-          // classes={{ root: 'MuiListItem-indicators' }}
+       {/* <ListItemButton
 
           component={NavLink}
           to="/balance"
@@ -152,17 +151,9 @@ function HeaderMenu() {
             primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
             primary="Caja"
             secondary={activeCashRegister ? 'Abierta' : 'Cerrada'}
-          />
-          {/* <ListItemSecondaryAction 
-            sx={{
-             
-            }}
-          >
-            <PointOfSale
-            
-            />
-          </ListItemSecondaryAction> */}
-        </ListItemButton>
+          /> 
+          
+        </ListItemButton> */}
         <ListItemButton
           // classes={{ root: 'MuiListItem-indicators' }}
 

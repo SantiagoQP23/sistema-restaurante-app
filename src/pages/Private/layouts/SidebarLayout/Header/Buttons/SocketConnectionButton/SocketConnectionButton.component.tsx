@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import { IconButton, useTheme, Stack, Box, Typography, CircularProgress } from '@mui/material';
-import { ExpandLess, SyncOutlined, WifiTetheringErrorOutlined } from "@mui/icons-material";
+import { ExpandLess, SyncOutlined, WifiTethering, WifiTetheringErrorOutlined } from "@mui/icons-material";
 import { SocketContext } from "../../../../../../../context";
 import { Popover, Button } from '@mui/material/';
 import { Label } from "../../../../../../../components/ui";
@@ -14,8 +14,6 @@ export const SocketConnectionButton = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
 
   const { online, conectarSocket } = useContext(SocketContext)
-
-
 
 
   const handleOpen = (): void => {
@@ -65,8 +63,11 @@ export const SocketConnectionButton = () => {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-        >
-          <Typography variant="h4" color='error'>Sin conexión</Typography>
+        >{
+            online
+              ? <Typography variant="h4" color='success'>Conectado</Typography>
+              : <Typography variant="h4" color='error'>Sin conexión</Typography>
+          }
           <Stack direction='row' spacing={1} alignItems='center'>
             <IconButton
               onClick={handleClose}
@@ -88,24 +89,48 @@ export const SocketConnectionButton = () => {
             display='flex'
             justifyContent='center'
           >
-            <WifiTetheringErrorOutlined fontSize="large" />
+            {
+              online
+              ? <WifiTethering fontSize="large" color="success" />
+              : <WifiTetheringErrorOutlined fontSize="large" color="error" />
+            }
           </Box>
 
 
-          <Box
-            display='flex'
-            justifyContent='center'
-          >
-            <LoadingButton
-              color="success"
-              startIcon={<SyncOutlined />}
-              onClick={conectarSocket}
-            >
-              Conectar
-            </LoadingButton>
+          {
+            !online && (
+              <Box
+                display='flex'
+                justifyContent='center'
+              >
+                <LoadingButton
+                 
+                  endIcon={<SyncOutlined />}
+                  onClick={conectarSocket}
+                >
+                  Conectar
+                </LoadingButton>
 
 
-          </Box>
+              </Box>
+            )
+          }
+
+          {
+            online && (
+              <Box
+                display='flex'
+                justifyContent='center'
+                flexDirection='column'
+                mb={2}
+              >
+                <Typography variant="h4" color='success.main' textAlign='center'>Conexión exitosa</Typography>
+
+                <Typography variant="subtitle2"  textAlign='center'>Puede continuar con sus operaciones</Typography>
+              </Box>
+            )
+          }
+
         </Box>
 
 

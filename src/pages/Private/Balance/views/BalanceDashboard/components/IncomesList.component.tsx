@@ -161,7 +161,7 @@ export const IncomesList: FC<Props> = ({ cashRegister, editable = false, data, f
                           {
                             editable && (
                               <Button
-                                variant='outlined'
+                             
                                 startIcon={<Edit />}
                                 size='small'
                                 onClick={() => handleOpenDrawer(income)}

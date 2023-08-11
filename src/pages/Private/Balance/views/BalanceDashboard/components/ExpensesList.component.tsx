@@ -178,7 +178,7 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
                         {
                           editable && (
                             <Button
-                              variant='outlined'
+                              
                               startIcon={<Edit />}
                               size='small'
                               onClick={() => handleOpenDrawer(expense)}

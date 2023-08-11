@@ -10,7 +10,7 @@ import { CloseCashRegister } from "../views/CloseCashRegister/CloseCashRegister.
 
 
 
-const Balance = (lazy(() => import('../Balance.page')))
+const Balance = lazy(() => import('../Balance.page'))
 
 
 export const BalanceRouter: RouteObject = {

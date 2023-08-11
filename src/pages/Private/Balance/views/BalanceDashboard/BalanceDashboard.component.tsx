@@ -3,22 +3,16 @@ import { TitlePage } from '../../../components/TitlePage.component';
 import { Grid, Card, CardHeader, CardContent, Typography, Button, Box, TableContainer, Stack, InputLabel, Input, Tabs, Tab, Divider, CircularProgress } from '@mui/material';
 import { ExpensesList, IncomesList } from './components';
 import { AddExpense } from '../Expenses/components/AddExpense.component';
-import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { AddIncome } from '../Incomes/components/AddIncome.component';
-import { CashRegisterSummary } from '../CashRegister/components/CashRegisterSummary.view';
 import { useCashRegisterStore } from '../../../Common/store/cashRegisterStore';
 import { CardAddCashRegister } from './components/CardAddCashRegister.component';
 import { useEffect, useState } from 'react';
 import { useCashRegisterActive } from '../../hooks/useCashRegister';
-import { TabPanel } from '@mui/lab';
-import { TableIncomes } from '../CashRegister/components/TableIncomes.component';
-import { TableExpenses } from '../CashRegister/components/TableExpenses.component';
-import { Label } from '../../../../../components/ui';
+
 import { formatMoney } from '../../../Common/helpers/format-money.helper';
 import { useIncomes } from '../../hooks/useIncomes';
 import { useExpenses } from '../../hooks/useExpenses';
-// import { CloseCashRegister } from '../CashRegister/components/FormCloseCashRegister.component';
 
 
 export enum AddTransactionTabs {
@@ -40,30 +34,24 @@ export const BalanceDashboard = () => {
   const navigate = useNavigate();
 
   const { activeCashRegister } = useCashRegisterStore(state => state);
-  
+
   const [tabAddTransaction, setTabAddTransaction] = useState<AddTransactionTabs>(AddTransactionTabs.EXPENSES);
-  
+
   const [tabViewTransaction, setTabViewTransaction] = useState<ViewTransactionTabs>(ViewTransactionTabs.INCOMES);
-  
-  
-  
-  const {incomesQuery, ...filterIncomes} = useIncomes();
 
-  const {expensesQuery, ...filterExpenses} = useExpenses();
+  const { incomesQuery, ...filterIncomes } = useIncomes();
 
-
-
-  const { cashRegisterQuery } = useCashRegisterActive();
+  const { expensesQuery, ...filterExpenses } = useExpenses();
 
 
   const handleChangeTabAddTransaction = (value: AddTransactionTabs) => {
 
     setTabAddTransaction(value)
-  }  
+  }
 
   const navigateTo = (path: string) => {
     navigate(path)
-  }  
+  }
 
 
   const balanceTransfer = activeCashRegister ? activeCashRegister.totalIncomesTransfer + activeCashRegister.totalInvoicesTransfer - activeCashRegister.totalExpensesTransfer : 0;
@@ -73,8 +61,7 @@ export const BalanceDashboard = () => {
 
 
   useEffect(() => {
-    cashRegisterQuery.refetch()
-
+  
     if (activeCashRegister) {
       filterIncomes.handleChangeCashRegister(activeCashRegister);
       filterExpenses.handleChangeCashRegister(activeCashRegister);
@@ -87,9 +74,7 @@ export const BalanceDashboard = () => {
   return (
     <>
       <TitlePage
-
         title='Balance'
-
         action={
           <Stack direction='row' spacing={1}>
 
@@ -131,7 +116,7 @@ export const BalanceDashboard = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12} md={4}>
 
-                  <CardAddCashRegister  />
+                  <CardAddCashRegister />
 
                 </Grid>
 
@@ -142,8 +127,7 @@ export const BalanceDashboard = () => {
 
             <Grid container spacing={2}>
 
-
-              <Grid item xs={12} md={7} >
+              <Grid item xs={12} md={4} >
 
                 <Card>
 
@@ -151,56 +135,39 @@ export const BalanceDashboard = () => {
                     title='Efectivo'
                     titleTypographyProps={{
                       variant: 'h5',
-                      textAlign: 'center'
-
                     }}
-
+                    avatar={<Paid color='success' fontSize='large' />}
                   />
-                  <CardContent
-
-                  >
-
-                    <Box display='flex' justifyContent='center'>
-
-                      <Paid color='success' fontSize='large' />
-                    </Box>
+                  <CardContent                 >
 
                     <Typography variant='h3'
-                      // color={balanceTranfer > 0 ? 'success.main' : 'error.main'}
-                      textAlign='center'
-                      my={2}
+                      mb={1}
                     >
                       {formatMoney(activeCashRegister.balance)}
                     </Typography>
 
                     <Stack
-                      spacing={2}
-                      // divider={<Divider orientation='vertical'/>} 
+                      spacing={3}
                       direction='row'
-                      justifyContent='space-between'
                     >
-
-
                       <Box>
-                        <Typography variant='caption' >Monto inicial</Typography>
-                        <Typography variant='h4' color='success.main' >{formatMoney(activeCashRegister.initialAmount)}</Typography>
+                        <Typography variant='caption' >Inicio</Typography>
+                        <Typography variant='h5' color='success.main' >{formatMoney(activeCashRegister.initialAmount)}</Typography>
                       </Box>
                       <Box>
                         <Typography variant='caption' >Ingresos</Typography>
-                        <Typography variant='h4' color='success.main' >{formatMoney(activeCashRegister.totalIncomesCash)}</Typography>
+                        <Typography variant='h5' color='success.main' >{formatMoney(activeCashRegister.totalIncomesCash)}</Typography>
                       </Box>
                       <Box>
                         <Typography variant='caption' >Ventas</Typography>
-                        <Typography variant='h4' color='success.main' >{formatMoney(activeCashRegister.totalInvoicesCash)}</Typography>
+                        <Typography variant='h5' color='success.main' >{formatMoney(activeCashRegister.totalInvoicesCash)}</Typography>
                       </Box>
                       <Box>
                         <Typography variant='caption' >Gastos</Typography>
-                        <Typography variant='h4' color='error.main' >{formatMoney(activeCashRegister.totalExpensesCash)}</Typography>
+                        <Typography variant='h5' color='error.main' >{formatMoney(activeCashRegister.totalExpensesCash)}</Typography>
                       </Box>
 
                     </Stack>
-
-
                   </CardContent>
 
                 </Card>
@@ -208,7 +175,7 @@ export const BalanceDashboard = () => {
               </Grid>
 
 
-              <Grid item xs={12} md={5} >
+              <Grid item xs={12} md={4} >
 
                 <Card>
 
@@ -216,47 +183,43 @@ export const BalanceDashboard = () => {
                     title='Transferencias'
                     titleTypographyProps={{
                       variant: 'h5',
-                      textAlign: 'center'
+
 
                     }}
+                    avatar={<CreditCard color='warning' fontSize='large' />}
 
                   />
                   <CardContent
 
                   >
 
-                    <Box display='flex' justifyContent='center'>
-
-                      <CreditCard color='warning' fontSize='large' />
-                    </Box>
 
                     <Typography variant='h3'
-                      // color={balanceTransfer > 0 ? 'success.main' : 'error.main'}
-                      textAlign='center'
-                      my={2}
+                     
+                      mb={1}
+
                     >
                       {formatMoney(balanceTransfer)}
                     </Typography>
 
                     <Stack
-                      spacing={2}
-                      // divider={<Divider orientation='vertical'/>} 
+                      spacing={3}
+                      
                       direction='row'
-                      justifyContent='space-between'
                     >
 
 
                       <Box>
                         <Typography variant='caption' >Ingresos</Typography>
-                        <Typography variant='h4' color='success.main' >{formatMoney(activeCashRegister.totalIncomesTransfer)}</Typography>
+                        <Typography variant='h5' color='success.main' >{formatMoney(activeCashRegister.totalIncomesTransfer)}</Typography>
                       </Box>
                       <Box>
                         <Typography variant='caption' >Ventas</Typography>
-                        <Typography variant='h4' color='success.main' >{formatMoney(activeCashRegister.totalInvoicesTransfer)}</Typography>
+                        <Typography variant='h5' color='success.main' >{formatMoney(activeCashRegister.totalInvoicesTransfer)}</Typography>
                       </Box>
                       <Box>
                         <Typography variant='caption' >Gastos</Typography>
-                        <Typography variant='h4' color='error.main' >{formatMoney(activeCashRegister.totalExpensesTransfer)}</Typography>
+                        <Typography variant='h5' color='error.main' >{formatMoney(activeCashRegister.totalExpensesTransfer)}</Typography>
                       </Box>
 
                     </Stack>
@@ -292,26 +255,22 @@ export const BalanceDashboard = () => {
                   tabAddTransaction === AddTransactionTabs.INCOMES
                     ? (
                       <>
-                        {/* <Typography>Ingresssso</Typography> */}
+                     
                         <AddIncome />
 
                       </>
                     )
                     : (
-                      // <Typography>Gasto</Typography>
+                   
                       <AddExpense />
                     )
                 }
 
-
-
-
-              </Grid>
-
-              <Grid item xs={12} md={8}  >
+              </Grid> 
+             
+              <Grid item xs={12} md={6}  >
 
                 <Typography variant='h4' mb={2}>Transacciones {incomesQuery.isLoading && <CircularProgress size={12} />} </Typography>
-
 
                 {
                   tabAddTransaction === AddTransactionTabs.INCOMES
@@ -319,12 +278,6 @@ export const BalanceDashboard = () => {
                     : <ExpensesList cashRegister={activeCashRegister} editable/>
                 }
 
-                {/* <Card>
-                  <CardContent>
-
-
-                  </CardContent>
-                </Card> */}
 
               </Grid>
 
