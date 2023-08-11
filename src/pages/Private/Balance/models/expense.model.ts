@@ -5,7 +5,7 @@ import { Transaction } from './transaction.model';
 
 
 export interface Expense {
-    id: number;
+    id: string;
 
     transaction: Transaction;
     supplier?: Supplier;

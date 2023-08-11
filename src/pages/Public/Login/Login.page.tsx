@@ -103,7 +103,7 @@ export const LoginPage = () => {
                   margin="normal"
                   required
                   fullWidth
-                  label="Password"
+                  label="Contraseña"
                   type="password"
                   error={!!errors.password}
                   {

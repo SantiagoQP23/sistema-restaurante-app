@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createExpense, getExpenses, updateExpense } from "../services/expenses.service";
+import { createExpense, deleteExpense, getExpenses, updateExpense } from "../services/expenses.service";
 import { useSnackbar } from "notistack";
 import { CreateExpenseDto } from "../dto/create-expense.dto";
 import { Expense } from "../models/expense.model";
@@ -64,9 +64,9 @@ export const useCreateExpense = () => {
 
     onSuccess: () => {
       enqueueSnackbar('Gasto creado correctamente', { variant: 'success' });
+      queryClient.invalidateQueries({queryKey: ['cashRegisterActive']});
       queryClient.invalidateQueries(['expenses']);
 
-      queryClient.invalidateQueries(['cashRegisterActive']);
 
 
     },
@@ -105,5 +105,25 @@ export const useUpdateExpense = () => {
     }
 
   })
+
+}
+
+
+
+export const useDeleteExpense = (id: string) => {
+  
+    const { enqueueSnackbar } = useSnackbar();
+  
+    return useMutation(() => deleteExpense(id), {
+  
+      onSuccess: () => {
+        enqueueSnackbar('Gasto eliminado correctamente', { variant: 'success' })
+        queryClient.invalidateQueries(['expenses']);
+  
+        queryClient.invalidateQueries(['cashRegisterActive']);
+
+      }
+
+    })
 
 }

@@ -32,6 +32,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { useCashRegisterActive } from "./Balance/hooks/useCashRegister"
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component"
+import { useActiveOrders } from "./Orders/hooks"
 
 
 export const Private = () => {
@@ -46,6 +47,8 @@ export const Private = () => {
   const { user } = useSelector(selectAuth);
 
   const { socket } = useContext(SocketContext);
+
+  useActiveOrders();
 
 
 

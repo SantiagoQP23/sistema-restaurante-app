@@ -43,29 +43,7 @@ export const OrderDetails = () => {
         <Divider />
 
 
-        {/* <TableContainer>
-
-          <Table>
-
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  Cantidad
-                </TableCell>
-                <TableCell>
-                  Producto
-                </TableCell>
-                <TableCell>
-                  Descripción
-                </TableCell>
-              
-                <TableCell align="center">
-                  Acciones
-                </TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody> */}
+       
 
         <Stack spacing={1} divider={<Divider />}>
 

@@ -13,3 +13,5 @@ export const getPaymentMethod = (paymentMethod: PaymentMethod): string => {
       return '';
   }
 }
+
+

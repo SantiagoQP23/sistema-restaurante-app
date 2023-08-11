@@ -49,7 +49,8 @@ export const DailyFinances = () => {
 
 
   const dataChart = {
-    labels: data?.map(finance => format(new Date(finance.date), 'eeee dd/MM/yyyy', { locale: es })),
+    labels: data && data?.map(finance => finance.date),
+    // labels: data && data?.map(finance => format(new Date(finance.date), 'eeee dd/MM/yyyy', { locale: es })),
     datasets: [
       {
         label: 'Ventas Diarias',
@@ -166,8 +167,9 @@ export const DailyFinances = () => {
                   <TableBody>
                     {
                       data?.map((day) => (
-                        <TableRow>
-                          <TableCell>{format(new Date(day.date), 'eeee dd/MM/yyyy', { locale: es })}</TableCell>
+                        <TableRow key={day.date}>
+                          {/* <TableCell>{format(new Date(day.date), 'eeee dd/MM/yyyy', { locale: es })}</TableCell> */}
+                          <TableCell>{day.date}</TableCell>
                           <TableCell>
                             <Label color='success'>
 
@@ -219,7 +221,7 @@ export const DailyFinances = () => {
                   alignItems: 'center'
                 }}
               >
-                <Typography variant='h3' color={balanceMonth && balanceMonth > 0 ? 'success.main' : 'error.main'}>$ {formatMoney(balanceMonth || 0)}</Typography>
+                <Typography variant='h3' color={balanceMonth && balanceMonth > 0 ? 'success.main' : 'error.main'}>{formatMoney(balanceMonth || 0)}</Typography>
 
 
 

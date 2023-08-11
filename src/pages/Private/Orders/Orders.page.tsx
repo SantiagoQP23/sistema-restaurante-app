@@ -35,15 +35,9 @@ export const Orders = () => {
 
   const dispatch = useDispatch();
 
-  const { activeOrdersQuery } = useActiveOrders();
-
-  // const {sortOrdersByDeliveryTime} = useOrderHelper();
-
-
   const { loading, callEndpoint } = useFetchAndLoad();
 
-  const { tables } = useSelector(selectTables);
-
+  
   const { activeOrder, orders } = useSelector(selectOrders);
 
   const { socket } = useContext(SocketContext);
@@ -64,26 +58,6 @@ export const Orders = () => {
 
       dispatch(sortOrdersByDeliveryTime())
       
-
-      // tables.forEach(table => {
-
-      //   let orders = table.orders;
-
-      //   if (table.id === order.table?.id) {
-      //     orders = [...orders!, order];
-      //   }
-
-      //   console.log({
-      //     table: {...table, orders }
-      //   })
-      //   dispatch(updateTable({...table, orders }));
-
-
-      // });
-
-
-
-      //dispatch(pedidoAddNew(pedido))
 
 
     });
@@ -112,30 +86,6 @@ export const Orders = () => {
 
       dispatch(sortOrdersByDeliveryTime())
 
-
-      // let table = tables.find(t => t.id === order?.table?.id) ?? null;
-
-      // if (table) {
-
-      //   const orderInTable = table.orders?.find(o => o.id === order?.id) ?? null;
-
-      //   if (orderInTable) {
-      //     const index = table.orders?.indexOf(orderInTable) ?? -1;
-      //     if (index !== -1) {
-      //       table.orders?.splice(index, 1, order!);
-      //     }
-      //   } else {
-      //     let newOrders: IOrder[] = [];
-      //     if (table.orders) {
-      //       newOrders = [...table.orders, order!];
-      //     }
-
-      //     table = { ...table, orders: newOrders };
-
-      //   }
-
-      //   dispatch(updateTable(table));
-      // }
 
 
 
@@ -175,17 +125,6 @@ export const Orders = () => {
       })
   }
 
-
-  // const getOrdersCall = async () => await callEndpoint(getOrdersToday());
-
-  // const loadOrdersState = (data: IOrder[]) => {
-  //   dispatch(loadOrders(data));
-
-  //   dispatch(setLastUpdatedOrders(new Date().toISOString()))
-
-  // }
-
-  // useAsync(getOrdersCall, loadOrdersState, () => { }, []);
 
 
 

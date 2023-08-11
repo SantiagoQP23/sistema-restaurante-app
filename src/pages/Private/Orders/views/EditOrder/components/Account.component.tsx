@@ -6,6 +6,7 @@ import { CounterInput } from "../../../components";
 import { CardHeader } from '@mui/material/';
 import { ArrowBackIos, ArrowRight, Print } from '@mui/icons-material';
 import { Label } from '../../../../../../components/ui';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 interface Props {
   order: IOrder;
@@ -187,12 +188,12 @@ export const Account: FC<Props> = ({ order }) => {
           <CardHeader
             title='Detalle de la orden'
 
-            action={
-              details.length > 0 &&
-              (<IconButton color='success'>
-                <Print />
-              </IconButton>)
-            }
+            // action={
+            //   details.length > 0 &&
+            //   (<IconButton color='success'>
+            //     <Print />
+            //   </IconButton>)
+            // }
           />
 
           <TableContainer>
@@ -240,10 +241,10 @@ export const Account: FC<Props> = ({ order }) => {
                         {detail.orderDetail.product.name}
                       </TableCell>
                       <TableCell>
-                        {detail.orderDetail.price}
+                        {formatMoney(detail.orderDetail.price)}
                       </TableCell>
                       <TableCell>
-                        {detail.orderDetail.price * detail.quantity}
+                        {formatMoney(detail.orderDetail.price * detail.quantity)}
                       </TableCell>
                       {/* <TableCell align='center'>
                             <IconButton
@@ -274,7 +275,7 @@ export const Account: FC<Props> = ({ order }) => {
 
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography variant='h6' textAlign='right'>${amount}</Typography>
+                    <Typography variant='h6' textAlign='right'>{formatMoney(amount)}</Typography>
 
                   </Grid>
                   <Grid item xs={8}>
@@ -298,7 +299,7 @@ export const Account: FC<Props> = ({ order }) => {
 
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography variant='h4' textAlign='right'>${amount - discount}</Typography>
+                    <Typography variant='h4' textAlign='right'>{formatMoney(amount - discount)}</Typography>
 
                   </Grid>
 

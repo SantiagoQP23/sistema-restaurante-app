@@ -45,13 +45,11 @@ export const EditOrder = () => {
   const { dispatch } = useContext(OrderContext);
 
 
-  const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
-
-
+  // const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
 
   const { activeOrder } = useSelector(selectOrders);
 
-
+  let orderDelivered = false;
 
   const { data, isLoading } = useOrder(orderId!);
 
@@ -99,11 +97,13 @@ export const EditOrder = () => {
 
 
 
-  useEffect(() => {
-    if (activeOrder) {
-      setOrderDelivered(!!(activeOrder.details?.find(detail => detail.qtyDelivered > 0)))
-    }
-  }, [activeOrder])
+  // useEffect(() => {
+  //   if (activeOrder) {
+  //     setOrderDelivered(!!(activeOrder.details?.find(detail => detail.qtyDelivered > 0)))
+  //   }
+  // }, [activeOrder])
+
+  orderDelivered = activeOrder?.details?.find(detail => detail.qtyDelivered >= 1) ? true : false;
 
 
   useEffect(() => {
@@ -143,7 +143,7 @@ export const EditOrder = () => {
             <>
               <Stack direction='row' spacing={1}>
                 {
-                  !(activeOrder.status === OrderStatus.PENDING) && !activeOrder.isPaid && (
+                  (activeOrder.status === OrderStatus.PENDING) && !activeOrder.isPaid && (
                     <Tooltip
                       title={!orderDelivered
                         ? 'Eliminar pedido' :

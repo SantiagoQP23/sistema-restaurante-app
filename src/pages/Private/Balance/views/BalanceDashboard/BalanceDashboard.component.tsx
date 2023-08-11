@@ -1,6 +1,6 @@
 import { ArrowOutward, CallReceived, CreditCard, Lock, Paid, Visibility } from '@mui/icons-material';
 import { TitlePage } from '../../../components/TitlePage.component';
-import { Grid, Card, CardHeader, CardContent, Typography, Button, Box, TableContainer, Stack, InputLabel, Input, Tabs, Tab, Divider } from '@mui/material';
+import { Grid, Card, CardHeader, CardContent, Typography, Button, Box, TableContainer, Stack, InputLabel, Input, Tabs, Tab, Divider, CircularProgress } from '@mui/material';
 import { ExpensesList, IncomesList } from './components';
 import { AddExpense } from '../Expenses/components/AddExpense.component';
 import { format } from 'date-fns';
@@ -310,7 +310,7 @@ export const BalanceDashboard = () => {
 
               <Grid item xs={12} md={8}  >
 
-                <Typography variant='h4' mb={2}>Transacciones</Typography>
+                <Typography variant='h4' mb={2}>Transacciones {incomesQuery.isLoading && <CircularProgress size={12} />} </Typography>
 
 
                 {

@@ -7,7 +7,7 @@ import { AddUser } from '../components/AddUser/AddUser.component';
 import { UsersList } from '../pages/UsersList.page';
 
 import { EditUser } from '../components/EditUser/EditUser.component';
-import { Profile } from '../views/Profile.view';
+import { Profile } from '../views/Profile/Profile.view';
 import { Account } from '../views/Account/Account.view';
 import { Roles } from '../../../../models';
 import { ValidRoles } from '../../Common/models/valid-roles.model';

@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { IProduct } from "../../../../models";
 import { CreateProductDto, UpdateProductDto } from "../dto/product.dto";
-import { UpdateProductImageDto, createProduct, updateProduct } from "../services/menu.service";
+import { UpdateProductImageDto, createProduct, updateProduct, updateProductImage } from "../services/menu.service";
 
 
 export const useProducts = () => {
@@ -51,13 +51,13 @@ export const  useUpdateImageProduct = () => {
 
   const {enqueueSnackbar} = useSnackbar();
 
-  return useMutation<IProduct, unknown, UpdateProductImageDto>((data) => updateProduct(data.id, data), {
+  return useMutation<IProduct, unknown, UpdateProductImageDto>((data) => updateProductImage(data.id, data), {
 
     onSuccess: (data) => {
       enqueueSnackbar('Se actualizó correctamente', {variant: 'success'})
     },
     onError: (error) => {
-      enqueueSnackbar('No se pudo actualizar', {variant: 'error'})
+      enqueueSnackbar('No se pudo actualizar la imagen', {variant: 'error'})
     }
     
   });

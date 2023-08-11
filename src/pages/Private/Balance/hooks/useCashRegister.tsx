@@ -83,7 +83,7 @@ export const useCashRegisterActive = () => {
 
   const cashRegisterQuery = useQuery<ActiveCashRegister>(['cashRegisterActive'], getCashRegisterActive, {
 
-    enabled: false,
+    // enabled: false,
     onSuccess: (data) => {
       console.log(data)
       enqueueSnackbar('Caja activa', { variant: 'success' })

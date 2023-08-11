@@ -6,6 +6,7 @@ import { statusModalAddOrder } from "../../../services/orders.service";
 import { useModal } from "../../../../../../hooks";
 import { ArrowBackIos, Close, Edit, Print } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { generateOrderPdf } from "../../../helpers/pdf-orders";
 
 
 interface Props {
@@ -23,6 +24,13 @@ export const ModalAddOrder: FC<Props> = ({  }) => {
 
   const navigate = useNavigate();
 
+  const openPDF = async  () => {
+    if(order){
+      const pdf = await generateOrderPdf(order);
+      pdf.open();
+    }
+  }
+  
 
 
   useEffect(() => {
@@ -78,7 +86,7 @@ export const ModalAddOrder: FC<Props> = ({  }) => {
             variant="contained"
             color="primary"
             startIcon={<Print />}
-            disabled
+            onClick={openPDF}
           >
             Imprimir pedido
           </Button>

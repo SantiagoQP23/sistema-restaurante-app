@@ -209,7 +209,7 @@ export const EditClient = () => {
               onChange={(e, value) => setView(value)}
             >
               <Tab label="Información" value={ViewClient.INFO} />
-              <Tab label="Historial de pedidos" value={ViewClient.HISTORY} />
+              {/* <Tab label="Historial de pedidos" value={ViewClient.HISTORY} /> */}
             </Tabs>
 
             {

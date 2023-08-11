@@ -11,6 +11,12 @@ export enum OrderStatus {
 
 }
 
+export enum OrderStatusPay {
+  NO_PAY = 'NO_PAY',
+  PAY = 'PAY',
+  PARTIAL_PAY = 'PARTIAL_PAY',
+}
+
 
 export enum TypeOrder {
   TAKE_AWAY = 'TAKE_AWAY',

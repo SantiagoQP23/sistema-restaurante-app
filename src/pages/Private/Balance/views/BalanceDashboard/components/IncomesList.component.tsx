@@ -2,7 +2,7 @@ import { useState, useEffect, FC } from 'react';
 
 
 import { CreditCard, Edit, Paid, Print } from '@mui/icons-material';
-import { Card, CardHeader, Button, CardContent, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, TablePagination, ListItem, ListItemAvatar, ListItemText, Stack } from '@mui/material';
+import { Card, CardHeader, Button, CardContent, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, TablePagination, ListItem, ListItemAvatar, ListItemText, Stack, CircularProgress } from '@mui/material';
 import { useIncomes } from '../../../hooks/useIncomes';
 import { format } from 'date-fns';
 import { PaymentMethod } from '../../../../../../models';
@@ -79,6 +79,10 @@ export const IncomesList: FC<Props> = ({ cashRegister, editable = false, data, f
         // action={
         //   <Button variant='outlined' size='small'>Añadir</Button>
         // }
+
+          // action={
+          //   <CircularProgress />
+          // }
         />
 
 

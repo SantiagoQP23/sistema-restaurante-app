@@ -14,7 +14,9 @@ import {
   Typography,
   ListItemButton,
   ListItemIcon,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Badge,
+  ListItemAvatar
 } from '@mui/material';
 
 import { grey } from '@mui/material/colors';
@@ -37,6 +39,7 @@ import { useSocket } from '../../../../../../hooks/useSocket';
 import { SocketContext } from '../../../../../../context/SocketContext';
 import { Label } from '../../../../../../components/ui';
 import { ValidRoles } from '../../../../Common/models/valid-roles.model';
+import { ButtonTheme } from '../../components';
 
 
 const UserBoxButton = styled(Button)(
@@ -108,22 +111,37 @@ export const Userbox = () => {
 
   return (
     <>
-      <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
+        <Badge
+          overlap="circular"
+          color={online ? 'success' : 'error'}
+          variant="dot"
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          badgeContent={''}
+          sx={{
+            cursor: 'pointer',
+          }}
+          // component={Button}
+        >
+          <Avatar variant="circular" alt={user.name} ref={ref} onClick={handleOpen} >{user.name.at(0)}</Avatar>
+        </Badge>
+      {/* <UserBoxButton color="secondary" >
+        </UserBoxButton> */}
 
-        <UserBoxText>
+        {/* <UserBoxText>
 
           <UserBoxLabel variant="body1">  {user.name} </UserBoxLabel>
           <UserBoxDescription variant="body2">
             <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
             {online ? ' En línea' : ' Desconectado'}
           </UserBoxDescription>
-        </UserBoxText>
+        </UserBoxText> */}
 
 
-        <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+        {/* <ExpandMoreTwoToneIcon sx={{ ml: 1 }} /> */}
 
-      </UserBoxButton>
       <Popover
         anchorEl={ref.current}
         onClose={handleClose}
@@ -140,7 +158,7 @@ export const Userbox = () => {
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
           {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">{user.name} <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} /></UserBoxLabel>
             <UserBoxDescription variant="body2">
               {user.jobtitle}
             </UserBoxDescription>
@@ -148,6 +166,22 @@ export const Userbox = () => {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
+
+
+
+          <ListItemButton
+
+            to="/users/profile"
+            component={NavLink}
+            onClick={handleClose}
+          >
+ 
+            <ListItemText primary="Mi perfil" />
+            <ListItemSecondaryAction>
+              <Label color="info">Nuevo</Label>
+            </ListItemSecondaryAction>
+          </ListItemButton>
+
 
           <ListItemButton
 
@@ -159,9 +193,9 @@ export const Userbox = () => {
                 <AccountBoxTwoToneIcon fontSize="small" />
 
               </ListItemIcon> */}
-            <ListItemText primary="Mi perfil" />
+            <ListItemText primary="Cuenta" />
             <ListItemSecondaryAction>
-              <Label color="info">Nuevo</Label>
+              {/* <Label color="info">Nuevo</Label> */}
             </ListItemSecondaryAction>
           </ListItemButton>
 
@@ -170,21 +204,16 @@ export const Userbox = () => {
             onClick={() => !online && conectarSocket()}
           >
 
-
             <ListItemText primary={online ? 'Conectado' : 'Conectar'} />
 
-            <ListItemSecondaryAction>
+            {/* <ListItemSecondaryAction>
               <Circle sx={{ fontSize: 10 }} color={online ? 'success' : 'error'} />
-            </ListItemSecondaryAction>
-
+            </ListItemSecondaryAction> */}
 
 
           </ListItemButton>
 
-
-
-
-
+          <ButtonTheme />
 
           {/* 
           <ListItem

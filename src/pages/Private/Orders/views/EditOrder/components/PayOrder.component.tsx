@@ -12,6 +12,7 @@ import { useCreateInvoice } from '../../../hooks/useInvoices';
 import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
 import { useCreateInvoiceOrder } from '../../../hooks/useInvocesOrder';
 import { LoadingButton } from '@mui/lab';
+import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
 
 interface Props {
@@ -327,7 +328,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
                   difference >= 0 && (
                     <Typography variant='h4' textAlign='center'>
 
-                      {`Cambio: $${difference}`}
+                      {`Cambio: ${formatMoney(difference)}`}
 
                     </Typography>
                   )

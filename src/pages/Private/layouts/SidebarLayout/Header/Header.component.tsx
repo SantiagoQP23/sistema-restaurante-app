@@ -126,7 +126,7 @@ function Header() {
           <HeaderMenu />
         </Stack>
 
-        <Stack direction='row' spacing={0.5} alignItems='center'>
+        <Stack direction='row' spacing={1} alignItems='center'>
 
           <HeaderButtons />
           <HeaderUserbox />

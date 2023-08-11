@@ -4,7 +4,7 @@ import { Print } from '@mui/icons-material';
 import { Box, Card, CardContent, CardHeader, Grid, List, ListItem, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Stack, Button, Typography } from '@mui/material';
 import { DatePicker } from "@mui/x-date-pickers";
 import { useQuery } from '@tanstack/react-query';
-import { startOfWeek } from 'date-fns';
+import { endOfYear, startOfWeek } from 'date-fns';
 import { Bar } from "react-chartjs-2";
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
 import { FinanceResponse, getFinances } from '../../../services/finances.service';
@@ -22,11 +22,12 @@ export const MonthlyFinances = () => {
   const chartRef = useRef<ChartJS>(null);
 
 
-  const filters = useDateFilter(Period.CUSTOM);
+  const filters = useDateFilter(Period.YEAR);
 
   const {
     startDate,
-    handleChangeStartDate
+    handleChangeStartDate,
+    endDate
 
   } = filters;
 
@@ -36,7 +37,7 @@ export const MonthlyFinances = () => {
       return getFinances({
         period: Period.YEAR,
         startDate,
-        // endDate: new Date(), 
+        endDate: endDate, 
         groupBy: GroupBy.MONTH,
 
       })

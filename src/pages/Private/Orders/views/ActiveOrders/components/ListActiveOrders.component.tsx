@@ -80,16 +80,7 @@ export const ListActiveOrders = () => {
           variant='scrollable'
 
           indicatorColor='primary'
-
-
-
-
-
-
           sx={{
-
-
-
             '& .MuiTabs-indicator': {
               backgroundColor:
                 !statusOrderFilter
@@ -105,28 +96,8 @@ export const ListActiveOrders = () => {
               borderBottom: 'transparent',
             },
 
-
           }}
         >
-          {/* <Tab
-            label={
-              <>
-                <Typography variant='h5' component='span' >Todos</Typography>
-                <Chip
-                  label={orders.length}
-                  color='primary'
-                  size='small'
-                  sx={{ ml: 1 }}
-                />
-              </>}
-            value={null}
-            onClick={() => setStatusOrderFilter(null)}
-            icon={<DeliveryDining />}
-            iconPosition='start'
-
-
-          /> */}
-
           <Tab
             label={
               <>

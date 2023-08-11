@@ -76,7 +76,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
 
           <Stack>
 
-            <Typography variant='h5' noWrap>{detalle.product.name}</Typography>
+            <Typography variant='h4' noWrap>{detalle.product.name}</Typography>
 
             <Typography variant="body2" whiteSpace='pre-wrap'>
 

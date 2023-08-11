@@ -4,7 +4,7 @@ import { Transaction } from './transaction.model';
 
 
 export interface Income {
-  id: number;
+  id: string;
   transaction: Transaction;
 
   client?: IClient;

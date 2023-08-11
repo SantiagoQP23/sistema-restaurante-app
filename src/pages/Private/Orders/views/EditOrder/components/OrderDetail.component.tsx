@@ -169,7 +169,7 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
         <TableCell>
 
-          <Typography variant='body1'>{formatMoney(detail.product.price)}</Typography>
+          <Typography variant='body1'>{formatMoney(detail.price)}</Typography>
 
         </TableCell>
 

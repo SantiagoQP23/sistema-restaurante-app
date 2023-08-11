@@ -43,9 +43,9 @@ export const updateIncome = async (income: UpdateIncomeDto): Promise<Income> => 
 
 }
 
-export const deleteIncome= async (id: number): Promise<void> => {
+export const deleteIncome= async (id: string): Promise<void> => {
 
-  await restauranteApi.delete<void>(`/Income/${id}`);
+  await restauranteApi.delete<void>(`/incomes/${id}`);
 
 }
 

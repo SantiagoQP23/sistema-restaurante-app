@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Box, Button, Divider, Drawer, FormControl, FormControlLabel, Grid, IconButton, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from '@mui/material';
 import { Expense } from '../../../models/expense.model';
@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab';
 import { PaymentMethod } from '../../../../Orders/models/Invoice.model';
 import { useModal } from '../../../../../../hooks';
 import { IClient, IUser } from '../../../../../../models';
-import { useUpdateIncome } from '../../../hooks/useIncomes';
+import { useDeleteIncome, useUpdateIncome } from '../../../hooks/useIncomes';
 import { ModalSelectClient } from '../../../../Clients/components/ModalSelectClient.component';
 import { ModalSelectUser } from '../../../../Users/components/ModalSelectUser.component';
 
@@ -26,6 +26,8 @@ interface Props {
 export const DrawerIncome: FC<Props> = ({
   open, onClose, income
 }) => {
+
+
   const [client, setClient] = useState<IClient | null>(income.client || null);
 
   const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<UpdateIncomeDto>({
@@ -36,16 +38,26 @@ export const DrawerIncome: FC<Props> = ({
     }
   });
 
-  const [responsibleUser, setResponsibleUser] = useState<IUser|null>(income.transaction.responsible);
+  const deleteMutation = useDeleteIncome(income.id);
+
+  const [responsibleUser, setResponsibleUser] = useState<IUser | null>(income.transaction.responsible);
 
 
   const { handleClose, isOpen, handleOpen } = useModal();
+
+  const deleteModal = useModal();
 
 
   const handleChangeResponsible = (user: IUser | null) => {
 
     setResponsibleUser(user);
 
+  }
+
+  const handleDelete = () => {
+    deleteMutation.mutateAsync().then(() => {
+      onClose();
+    });
   }
 
 
@@ -90,10 +102,10 @@ export const DrawerIncome: FC<Props> = ({
   return (
     <>
 
-<ModalSelectUser 
-      open={isOpen}
-      onClose={handleClose}
-      onChange={handleChangeResponsible}
+      <ModalSelectUser
+        open={isOpen}
+        onClose={handleClose}
+        onChange={handleChangeResponsible}
       />
 
       {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}
@@ -137,6 +149,7 @@ export const DrawerIncome: FC<Props> = ({
                   variant='outlined'
                   color='error'
                   size='small'
+                  onClick={deleteModal.handleOpen}
                 >
                   Eliminar
                 </Button>
@@ -147,135 +160,197 @@ export const DrawerIncome: FC<Props> = ({
             </Stack>
             <Divider />
 
-
-            <Box px={2}>
-
-              <Typography variant="h4"  >
-
-                Editar ingreso
-              </Typography>
-            </Box>
+            {
+              !deleteModal.isOpen ? (
+                <>
 
 
-            <FormControl fullWidth component='form' onSubmit={handleSubmit(onSubmit)} >
-              <Grid container spacing={2} p={2}>
+                  <Box px={2}>
 
-                <Grid item xs={12} >
-                  {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
-                  <TextField
-                    label="Nombre"
-                    type="text"
-                    // placeholder="Nombre del gasto"
-                    fullWidth
-                    {
-                    ...register('description', {
-                      required: 'Este campo es requerido',
-                      minLength: { value: 2, message: 'Minimo 2 caracteres' },
-                    })
-                    }
-                    rows={2}
+                    <Typography variant="h4"  >
 
-                    error={!!errors.description}
-                    helperText={errors.description?.message}
-
-                  />
-
-
-                </Grid>
-                <Grid item xs={12} >
-
-                  <TextField
-                    label="Monto"
-                    type="number"
-                    fullWidth
-                    inputProps={{ step: 0.05, min: 0.05 }}
-
-                    {
-                    ...register('amount', {
-                      required: 'Este campo es requerido',
-                      min: { value: 0.05, message: 'Debe ser mayor a 5 centavos' },
-                      valueAsNumber: true
-                    })
-                    }
-
-                    error={!!errors.amount}
-                    helperText={errors.amount?.message}
-
-                  />
-                </Grid>
-
-
-                <Grid item xs={12}>
-                <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
-                  <Typography variant="subtitle2">
-                    Responsable
-                  </Typography>
-                  <Box>
-
-
-                    <Button
-                      onClick={handleOpen}
-                    >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
-                    {
-                      responsibleUser && (
-                        <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
-                          <Close />
-                        </IconButton>)
-                    }
+                      Editar ingreso
+                    </Typography>
                   </Box>
 
-                </Stack>
-                <Typography variant="h6">
-                  {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
-                </Typography>
+
+                  <FormControl fullWidth component='form' onSubmit={handleSubmit(onSubmit)} >
+                    <Grid container spacing={2} p={2}>
+
+                      <Grid item xs={12} >
+                        {/* <InputLabel id="demo-simple-select-label">Nombre</InputLabel> */}
+                        <TextField
+                          label="Nombre"
+                          type="text"
+                          // placeholder="Nombre del gasto"
+                          fullWidth
+                          {
+                          ...register('description', {
+                            required: 'Este campo es requerido',
+                            minLength: { value: 2, message: 'Minimo 2 caracteres' },
+                          })
+                          }
+                          rows={2}
+
+                          error={!!errors.description}
+                          helperText={errors.description?.message}
+
+                        />
 
 
-                </Grid>
-                <Grid item xs={12} >
+                      </Grid>
+                      <Grid item xs={12} >
 
-                  <Controller
+                        <TextField
+                          label="Monto"
+                          type="number"
+                          fullWidth
+                          inputProps={{ step: 0.05, min: 0.05 }}
 
-                    name='paymentMethod'
-                    control={control}
+                          {
+                          ...register('amount', {
+                            required: 'Este campo es requerido',
+                            min: { value: 0.05, message: 'Debe ser mayor a 5 centavos' },
+                            valueAsNumber: true
+                          })
+                          }
 
-                    render={
-                      ({ field: { onChange, onBlur, value } }) => (
-                        <FormControl fullWidth>
-                          <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
-                            <Typography variant="subtitle2">
-                              Metodo de pago
-                            </Typography>
-                            <Stack direction='row' spacing={2}>
-                              <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
-                              <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
-                            </Stack>
-                          </RadioGroup>
-                        </FormControl>
+                          error={!!errors.amount}
+                          helperText={errors.amount?.message}
 
-                      )
-                    }
+                        />
+                      </Grid>
 
 
-                  />
-                </Grid>
-
-                <Grid item  xs={12}>
-                  <LoadingButton
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    loading={isLoading}
+                      <Grid item xs={12}>
+                        <Stack direction='row' spacing={2} justifyContent='space-between' alignItems='center'>
+                          <Typography variant="subtitle2">
+                            Responsable
+                          </Typography>
+                          <Box>
 
 
-                  >
-                    Guardar
-                  </LoadingButton>
+                            <Button
+                              onClick={handleOpen}
+                            >{responsibleUser ? 'Cambiar' : 'Seleccionar'}</Button>
+                            {
+                              responsibleUser && (
+                                <IconButton color="error" onClick={() => handleChangeResponsible(null)}>
+                                  <Close />
+                                </IconButton>)
+                            }
+                          </Box>
 
-                </Grid>
+                        </Stack>
+                        <Typography variant="h6">
+                          {responsibleUser ? `${responsibleUser.person.firstName} ${responsibleUser.person.lastName} ` : 'No seleccionado'}
+                        </Typography>
 
-              </Grid>
 
-            </FormControl>
+                      </Grid>
+                      <Grid item xs={12} >
+
+                        <Controller
+
+                          name='paymentMethod'
+                          control={control}
+
+                          render={
+                            ({ field: { onChange, onBlur, value } }) => (
+                              <FormControl fullWidth>
+                                <RadioGroup name="use-radio-group" value={value} onChange={onChange} >
+                                  <Typography variant="subtitle2">
+                                    Metodo de pago
+                                  </Typography>
+                                  <Stack direction='row' spacing={2}>
+                                    <FormControlLabel value={PaymentMethod.CASH} label={'Efectivo'} control={<Radio />} />
+                                    <FormControlLabel value={PaymentMethod.TRANSFER} label={'Transferencia'} control={<Radio />} />
+                                  </Stack>
+                                </RadioGroup>
+                              </FormControl>
+
+                            )
+                          }
+
+
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <LoadingButton
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          loading={isLoading}
+
+
+                        >
+                          Guardar
+                        </LoadingButton>
+
+                      </Grid>
+
+                    </Grid>
+
+                  </FormControl>
+                </>
+
+              ) : (
+                <>
+                  <Box px={2}>  
+
+                    <Typography variant="h4"  >
+
+                      Eliminar ingreso
+                    </Typography>
+
+                  </Box>
+
+                  <Box p={2}>
+
+                    <Typography variant="h6"  >
+
+                      ¿Estas seguro de eliminar este ingreso?
+                    </Typography>
+
+                  </Box>
+
+                  <Divider />
+
+                  <Box p={2}>
+
+                    <Stack direction='row' spacing={2} justifyContent='flex-end' alignItems='center'>
+
+                      <Button
+                        variant='outlined'
+                        color='error'
+                        size='small'
+                        onClick={deleteModal.handleClose}
+                      >
+                        Cancelar
+                      </Button>
+
+                      <LoadingButton
+                        variant="contained"
+                        color="error"
+                        type="submit"
+                        loading={deleteMutation.isLoading}
+                        onClick={handleDelete}
+
+
+                      >
+                        Eliminar
+
+                      </LoadingButton>
+
+                    </Stack>
+
+                  </Box>
+
+                </>
+              )
+
+            }
 
           </Stack>
 
@@ -283,6 +358,7 @@ export const DrawerIncome: FC<Props> = ({
 
 
         </Box>
+
 
 
       </Drawer>
