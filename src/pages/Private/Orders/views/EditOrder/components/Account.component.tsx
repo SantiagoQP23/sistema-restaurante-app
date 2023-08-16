@@ -1,10 +1,10 @@
-import { Card, CardContent, FormControlLabel, Checkbox, Box, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, IconButton, Button, TextField } from '@mui/material';
+import { Card, CardContent, FormControlLabel, Checkbox, Box, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, IconButton, Button, TextField, InputAdornment } from '@mui/material';
 import { useInvoiceStore } from "../../../store/invoiceStore";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { IOrder } from "../../../../../../models";
 import { CounterInput } from "../../../components";
 import { CardHeader } from '@mui/material/';
-import { ArrowBackIos, ArrowRight, Print } from '@mui/icons-material';
+import { ArrowBackIos, ArrowRight, AttachMoney, Print } from '@mui/icons-material';
 import { Label } from '../../../../../../components/ui';
 import { formatMoney } from '../../../../Common/helpers/format-money.helper';
 
@@ -15,17 +15,19 @@ interface Props {
 
 export const Account: FC<Props> = ({ order }) => {
 
-  const { details, addDetail, updateDetail, removeDetail, resetDetails, discount, handleBackStep, handleNextStep, setDiscount, amount } = useInvoiceStore((state) => state)
-
-
+  const { details, addDetail, updateDetail, removeDetail,
+    resetDetails, discount, handleBackStep, handleNextStep,
+    setDiscount, amount, total
+  } = useInvoiceStore((state) => state)
 
   const [selectedDetails, setSelectedDetails] = useState<string[]>(details.map((detail) => detail.orderDetail.id));
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAll, setSelectAll] = useState(true);
 
   const handleUpdateDetail = (detailId: string, quantity: number) => {
     const orderDetail = order.details.find((detail) => detail.id === detailId)!;
     updateDetail({ orderDetail, quantity })
   }
+
 
 
   const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,29 +75,44 @@ export const Account: FC<Props> = ({ order }) => {
     setSelectedDetails(newSelectedDetails);
   };
 
-  const handleSelectAll = () => {
-    if (selectAll) {
-      setSelectedDetails([]);
+  const handleSelectAll = (all: boolean) => {
 
-      resetDetails();
+    resetDetails();
 
+    console.log({ all })
 
-    } else {
-      const allDetails = order.details.filter(detail => detail.qtyPaid !== detail.quantity).map((detail) => detail.id);
+    const allDetails = order.details.filter(detail => detail.qtyPaid !== detail.quantity).map((detail) => detail.id);
 
-      allDetails.forEach((detailId) => {
-        const orderDetail = order.details.find((detail) => detail.id === detailId)!;
+    allDetails.forEach((detailId) => {
+      const orderDetail = order.details.find((detail) => detail.id === detailId)!;
 
-        addDetail({
-          orderDetail,
-          quantity: orderDetail.quantity - orderDetail.qtyPaid
-        })
+      addDetail({
+        orderDetail,
+        quantity: all ? orderDetail.quantity - orderDetail.qtyPaid : 0
       })
+    })
 
-      setSelectedDetails(allDetails);
-    }
+    setSelectedDetails(allDetails);
 
-    setSelectAll(!selectAll);
+    console.log({ details })
+
+  };
+  const handleUpdateAll = (all: boolean) => {
+
+    console.log({ all })
+
+    const allDetails = order.details.filter(detail => detail.qtyPaid !== detail.quantity).map((detail) => detail.id);
+
+    allDetails.forEach((detailId) => {
+      const orderDetail = order.details.find((detail) => detail.id === detailId)!;
+
+      handleUpdateDetail(detailId, all ? orderDetail.quantity - orderDetail.qtyPaid : 0)
+    })
+
+    setSelectedDetails(allDetails);
+
+    console.log({ details })
+
   };
 
 
@@ -125,86 +142,60 @@ export const Account: FC<Props> = ({ order }) => {
   )
 
 
+  useEffect(() => {
+    handleSelectAll(true);
+
+  }, [])
+
 
   return (
     <>
 
       <Stack spacing={2}>
 
-        <Card>
-
-
-          <CardContent>
-
-            <Typography variant='h5' >Productos por pagar</Typography>
-
-
-            <div>
-
-              <FormControlLabel
-                label="Todos los productos"
-                control={
-                  <Checkbox
-                    checked={selectAll}
-                    onChange={handleSelectAll}
-
-                  // checked={checked[0] && checked[1]}
-                  // indeterminate={checked[0] !== checked[1]}
-                  // onChange={handleChange1}
-                  />
-                }
-              />
-
-              <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-                {
-                  order.details.map((detail, index) => detail.qtyPaid !== detail.quantity && (
-
-
-                    <FormControlLabel
-                      label={
-                        <>
-                          <Typography>
-                            {detail.quantity - detail.qtyPaid + ' - ' + detail.product.name}
-
-                          </Typography>
-                        </>
-                      }
-                      control={<Checkbox
-                        disabled={detail.qtyPaid === detail.quantity}
-                        checked={selectedDetails.indexOf(detail.id) !== -1}
-                        onChange={handleDetailToggle(detail.id)}
-                      />}
-                    />
-
-                  ))
-                }
-
-              </Box>
-            </div>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardHeader
             title='Detalle de la orden'
+            action={
+              <>
+                <FormControlLabel
+                  label='Todo'
 
-            // action={
-            //   details.length > 0 &&
-            //   (<IconButton color='success'>
-            //     <Print />
-            //   </IconButton>)
-            // }
+                  control={
+                    <Checkbox
+                      checked={selectAll}
+                      onChange={(e) => {
+                        setSelectAll(e.target.checked);
+                        handleUpdateAll(e.target.checked);
+                      }}
+                    />
+
+                  }
+                // labelPlacement='start'
+                />
+              </>
+            }
           />
 
           <TableContainer>
             <Table
-              padding='checkbox'
+
+              sx={{
+                whiteSpace: 'nowrap'
+              }}
+
             >
               <TableHead>
                 <TableRow>
-                  <TableCell padding='checkbox' align='center'>
-                    Cantidad
-                  </TableCell>
+                  {
+                    !selectAll && (
+
+                      <TableCell padding='checkbox' align='center'>
+                        Cantidad
+                      </TableCell>
+                    )
+                  }
                   <TableCell>
                     Producto
                   </TableCell>
@@ -227,18 +218,30 @@ export const Account: FC<Props> = ({ order }) => {
                     <TableRow
                       key={index}
                     >
+                      {
+                        !selectAll && (
+                          <TableCell>
+
+
+
+                            <CounterInput
+                              value={detail.quantity}
+                              onChange={(value: number) => {
+                                handleUpdateDetail(detail.orderDetail.id, value)
+                              }}
+                              max={detail.orderDetail.quantity - detail.orderDetail.qtyPaid}
+                              min={0}
+                            />
+                          </TableCell>
+
+                        )
+                      }
                       <TableCell>
 
-                        <CounterInput
-                          value={detail.quantity}
-                          onChange={(value: number) => {
-                            handleUpdateDetail(detail.orderDetail.id, value)
-                          }}
-                          max={detail.orderDetail.quantity - detail.orderDetail.qtyPaid}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {detail.orderDetail.product.name}
+                        <Label color='warning'>
+                          {detail.orderDetail.quantity - detail.orderDetail.qtyPaid}
+
+                        </Label> <b>{detail.orderDetail.product.name}</b> de <b>{detail.orderDetail.quantity}</b>
                       </TableCell>
                       <TableCell>
                         {formatMoney(detail.orderDetail.price)}
@@ -285,11 +288,32 @@ export const Account: FC<Props> = ({ order }) => {
                   <Grid item xs={4} display='flex' justifyContent='right'>
 
                     <TextField
+                      id="precio-producto"
 
-                      value={discount}
-                      onChange={handleChangeDiscount}
+
+                      type='number'
+                      value={discount || ''}
+
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AttachMoney />
+                          </InputAdornment>
+                        ),
+                      }}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setDiscount(Number(e.target.value));
+
+                      }
+                      }
                       size='small'
 
+                      inputProps={{
+                        min: 0,
+
+                        step: 0.25
+                      }}
                     />
 
 

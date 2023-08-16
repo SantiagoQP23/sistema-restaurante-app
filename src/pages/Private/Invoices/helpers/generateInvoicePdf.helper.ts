@@ -1,6 +1,9 @@
 import { ICreatePDF, PdfMakeWrapper, Txt, Table as TablePdf, Img } from 'pdfmake-wrapper';
 import { Invoice } from "../../Orders/models/Invoice.model";
+
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+
 import { formatMoney } from '../../Common/helpers/format-money.helper';
 import { getPaymentMethod } from '../../Common/helpers/get-payment-method';
 import { format } from 'date-fns';
@@ -9,8 +12,6 @@ import logo from '../../../../assets/logo3.png';
 import { es } from 'date-fns/locale';
 
 export const generateInvoicePdf = async (invoice: Invoice): Promise<ICreatePDF> => {
-
-
 
   PdfMakeWrapper.setFonts(pdfFonts);
 
@@ -87,14 +88,9 @@ export const generateInvoicePdf = async (invoice: Invoice): Promise<ICreatePDF> 
     new Txt(`Teléfono: ${invoice.client?.person.numPhone}`).margin([0, 0, 0, 0]).end
   );
 
-
-
-
   pdf.add(
     new Txt('Productos').bold().fontSize(14).margin([0, 10, 0, 5]).end
   );
-
-
 
   const productHeaders = ['Producto', 'Cantidad', 'Precio', 'Total'];
   const productData = invoice.details.map((detail) => [detail.product.name, detail.quantity, formatMoney(detail.price), formatMoney(detail.amount)]);

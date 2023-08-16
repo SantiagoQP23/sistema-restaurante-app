@@ -41,7 +41,7 @@ const initialState: IOrderState = {
   amount: 0,
   client: null,
   table: undefined,
-  people: 1,
+  people: 0,
   typeOrder: TypeOrder.IN_PLACE,
   totalProducts: 0,
   notes: '',

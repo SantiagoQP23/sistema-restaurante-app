@@ -111,7 +111,8 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu })
 
             </Typography>
             <Typography variant='subtitle1' mt={1}>
-              {`Categorías: ${seccion.categories.length}`}
+              Categorías: <Label color='info'>{seccion.categories.length}</Label>
+              {/* {`Categorías: ${seccion.categories.length}`} */}
             </Typography>
 
           </CardContent>
@@ -125,26 +126,5 @@ export const Section: FC<Props> = ({ seccion, eliminarSeccion, handleOpenMenu })
   )
 }
 
-
-{/*  <Button
-              variant='text'
-              
-              onClick={() => {
-                editarSeccion();
-              }}>
-              <EditOutlined />
-
-            </Button>
-
-            <Button
-              variant='text'
-              size='small'
-              color='error'
-              onClick={() => { eliminarSeccion(seccion) }}
-            >
-              <DeleteOutlined />
-
-            </Button>
-          </Box> */}
 
 

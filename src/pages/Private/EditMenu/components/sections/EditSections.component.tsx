@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 //Material UI
-import { Typography, Box, Button, Grid, Popover, MenuItem } from '@mui/material/'
+import { Typography, Box, Button, Grid, Popover, MenuItem, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/'
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddIcon from '@mui/icons-material/Add'
@@ -34,7 +34,7 @@ export const EditSections = () => {
   const [open, setOpen] = useState(null);
 
 
-  
+
   const handleOpenMenu = (event: any, section: ISection) => {
     dispatch(setActiveSection(section))
     setOpen(event.currentTarget);
@@ -93,7 +93,7 @@ export const EditSections = () => {
 
         {
           sections.length === 0 && (
-            <Typography variant='h6'>Aún no se han ingresado sections</Typography>
+            <Typography variant='h6'>Aún no se han agregado secciones</Typography>
           )
         }
         {
@@ -134,6 +134,7 @@ export const EditSections = () => {
               },
             }}
           >
+
             <MenuItem
               onClick={() => {
 
@@ -141,7 +142,7 @@ export const EditSections = () => {
                 handleCloseMenu();
               }}
             >
-              <EditOutlined />
+              <EditOutlined sx={{mr: 2}} />
               Editar
             </MenuItem>
 

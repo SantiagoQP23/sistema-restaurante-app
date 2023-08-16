@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { LabelStatusOrder } from '../OrdersList/components/LabelStatusOrder.component';
 import { index } from '../../../../Status/Maintenance/index';
 import { Table } from './components/Table.component';
+import { OrderTakeAway } from './components/OrderTakeAway.component';
 
 
 
@@ -42,28 +43,6 @@ export const Tables = () => {
   const handleClickTable = (table: ITable) => {
     
     handleOpenDrawer(table);
-    // if (table.isAvailable) {
-    //   // Seleccionar mesa
-
-    //   dispatch({
-    //     type: OrderActionType.SET_TYPE_ORDER,
-    //     payload: TypeOrder.IN_PLACE
-    //   })
-      
-    //   dispatch({
-    //     type: OrderActionType.SET_TABLE,
-    //     payload: table
-    //   })
-      
-    //   navigate('/orders/add/menu');
-      
-    //   // Redirigir a la página de productos
-    // } else {
-    //   // TODO Mostrar la orden de la mesa
-    //   handleOpenDrawer(table);
-
-    // }
-
   }
 
   const handleOpenDrawer = (table: ITable) => {
@@ -136,86 +115,8 @@ export const Tables = () => {
 
                 {
                   ordersTakeAway.map(order => (
-                    <Grid item xs={12} md={6} lg={4} direction='row'>
-                      <Card>
-                        <CardActionArea
-                          onClick={() => {
-                            navigate(`/orders/list/edit/${order.id}`);
-                          }}
-                        >
-
-                          <CardHeader
-                            title={`Pedido #${order.num}`}
-                            subheader={`Mesero: ${order.user.username}`}
-                            action={
-                              <LabelStatusOrder status={order.status} />
-
-                            }
-                          />
-                          <Stack spacing={1} px={1} mb={1}>
-
-                            <Stack direction='row' spacing={1} alignItems='center'
-                              sx={{
-                                maxWidth: 'auto', // Establecer el ancho máximo aquí
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-
-                            >
-                              {
-                                order.details.map((detail, index) => (
-                                  <Typography variant='body1' key={index}>
-                                    {detail.quantity} {detail.product.name}
-                                    {index < order.details.length - 1 ? ',' : '.'}
-                                  </Typography>
-                                ))
-                              }
-
-                            </Stack>
-
-                            <Grid container spacing={1} alignItems='center'>
-
-                              <Grid item xs={12}>
-                                <Chip
-                                  label={`${format(new Date(order.deliveryTime), 'dd/MM/yyyy HH:mm')}`}
-                                  size='small'
-                                  icon={<TimerOutlined />}
-                                />
-
-                              </Grid>
-
-                              <Grid item xs={6}>
-                                <Chip
-                                  label={`Personas: ${order.people}`}
-                                  size='small'
-                                  icon={<Person />}
-                                />
-                              </Grid>
-
-                              <Grid item xs={6}>
-                                <Chip
-                                  label={`Total: $${order.total}`}
-                                  size='small'
-                                  icon={<Paid />}
-
-                                />
-
-
-
-                              </Grid>
-                            </Grid>
-
-
-
-
-                          </Stack>
-
-
-                        </CardActionArea>
-
-
-                      </Card>
+                    <Grid key={order.id} item xs={12} md={6} lg={4} direction='row'>
+                      <OrderTakeAway order={order} />
                     </Grid>
                   ))
                 }
@@ -271,7 +172,6 @@ export const Tables = () => {
                   table={table}
                   handleClickTable={handleClickTable}
                 />
-
 
               </Grid>
             ))

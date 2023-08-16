@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { SocketContext } from '../../../../../context/SocketContext';
 import { UpdateOrderDto } from '../../dto/update-order.dto';
+import { useDispatch } from "react-redux";
+import { deleteOrder } from "../../../../../redux";
 
 
 export const ModalPayOrder: FC = () => {
@@ -25,6 +27,8 @@ export const ModalPayOrder: FC = () => {
   const { socket } = useContext(SocketContext);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -46,6 +50,8 @@ export const ModalPayOrder: FC = () => {
       console.log(response);
 
       if (response.ok) {
+
+        dispatch(deleteOrder(order!.id));
 
         closeModal();
 

@@ -19,6 +19,7 @@ interface InvoiceState {
   details: CreateInvoiceDetail[];
   step: number;
   amount: number;
+  total: number;
 
   setPaymentMethod: (paymentMethod: PaymentMethod) => void;
 
@@ -71,12 +72,13 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
   details: [],
   step: 0,
   amount: 0,
+  total: 0,
 
   setPaymentMethod: (paymentMethod: PaymentMethod) => set({ paymentMethod }),
   setDiscount: (discount: number) => set({
 
     discount,
-   
+
   }),
   setAmountPaid: (amountPaid: number) => set({ amountPaid }),
   setClient: (client: IClient | null) => set({ client }),
@@ -108,7 +110,11 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
       set({ details: newDetails });
     }
 
-    set({ amount: get().amount + detail.orderDetail.price * detail.quantity });
+    set({
+      amount: get().amount + detail.orderDetail.price * detail.quantity,
+      total: get().amount - get().discount
+    });
+
 
 
   },
@@ -124,7 +130,10 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
       details: newDetails,
     });
 
-    set({ amount: get().details.reduce((acc, d) => acc + d.orderDetail.price * d.quantity, 0)});
+    set({
+      amount: get().details.reduce((acc, d) => acc + d.orderDetail.price * d.quantity, 0),
+      total: get().amount - get().discount
+    });
   },
 
 
@@ -136,12 +145,13 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
     set({
       details:
         details.filter((d) => d.orderDetail.id !== orderDetailId),
-      amount: get().amount - detail.orderDetail.price * detail.quantity
+      amount: get().amount - detail.orderDetail.price * detail.quantity,
+      total: get().amount - get().discount
     });
 
   },
 
-  resetDetails: () => set({ details: [] }),
+  resetDetails: () => set({ details: [], amount: 0, total: 0, discount: 0 }),
 
   setStep: (step: number) => set({ step }),
 
@@ -157,7 +167,7 @@ export const useInvoiceStore = create<InvoiceState>((set, get) => ({
       paymentMethod,
       discount,
       amountPaid,
-      details: get().details.map((detail) => ({
+      details: get().details.filter(detail => detail.quantity > 0).map((detail) => ({
         orderDetailId: detail.orderDetail.id,
         quantity: detail.quantity,
       })),

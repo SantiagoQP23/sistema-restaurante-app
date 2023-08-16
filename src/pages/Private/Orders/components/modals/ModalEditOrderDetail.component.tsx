@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 
-import { useSelector } from "react-redux";
-import { selectOrders } from '../../../../../redux/slices/orders/orders.slice';
 import { IOrderDetail } from "../../../../../models";
 import { statusModalDeleteOrderDetail, statusModalEditOrderDetail } from "../../services/orders.service";
-import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, DialogActions, Button, FormControl, FormHelperText, TextField, Grid, Stack, InputLabel } from '@mui/material';
-import { useCounter, useOrders } from '../../hooks';
-import { RemoveCircleOutline, AddCircleOutline, CheckOutlined, Grid3x3, DeleteOutline, CloseFullscreen, Close, DoneAllOutlined, Delete, Edit } from '@mui/icons-material';
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography, DialogActions, TextField, Grid, InputAdornment } from '@mui/material';
+import { useCounter, } from '../../hooks';
+import { Close, Delete, Edit, AttachMoney, Save } from '@mui/icons-material';
 import { UpdateOrderDetailDto } from '../../dto/update-order-detail.dto';
 import { LoadingButton } from '@mui/lab';
 import { DeleteOrderDetailDto } from '../../dto/delete-order-detail.dto';
@@ -18,9 +16,8 @@ import { CounterInput } from '../CounterInput.component';
 
 export const ModalEditOrderDetail = () => {
 
-  const { activeOrder } = useSelector(selectOrders);
-
   const [detail, setDetail] = useState<IOrderDetail>();
+
 
   const [orderId, setOrderId] = useState<string>();
 
@@ -29,28 +26,17 @@ export const ModalEditOrderDetail = () => {
   const [quantity, setQuantity] = useState(detail?.quantity || 1);
   const [qtyDelivered, setQtyDelivered] = useState(detail?.qtyDelivered || 1);
 
-
   // form
   const [description, setDescription] = useState(detail?.description || '');
   const [price, setPrice] = useState(detail?.price || 0);
 
   const { loading: loadingDelete, deleteOrderDetail } = useDeleteOrderDetail();
 
-
-
   const qtyCounter = useCounter(0, 1, 100, detail?.qtyDelivered)
 
   const qtyDeliveredCounter = useCounter(0, 1, detail?.quantity);
 
-  // const {
-  //   state: counterQty,
-  //   increment: incrementQty,
-  //   decrement: decrementQty,
-  //   setCounter: setCounterQty
-  // } = useCounter(0, 1, 100, detail?.qtyDelivered);
-
   const { update, loading } = useUpdateOrderDetail();
-
 
   const subscription$ = statusModalEditOrderDetail.getSubject();
 
@@ -155,18 +141,31 @@ export const ModalEditOrderDetail = () => {
 
       </DialogTitle>
 
-
-
-      <DialogContent>
-
-
-
+      <DialogContent
+        sx={{
+          width: 300
+        }}
+      >
 
         <Grid container spacing={1} alignItems='center'>
 
+          <Grid item xs={12}>
+
+            <Typography variant='body2' color='text.secondary' whiteSpace='break-spaces'>{detail?.product.description}</Typography>
+
+          </Grid>
+          <Grid item xs={12} display='flex' justifyContent='right'>
+            <CounterInput
+              value={quantity}
+              onChange={handleChangeQuantity}
+              min={detail?.qtyDelivered}
+
+            />
+
+          </Grid>
 
           <Grid item xs={12}>
-            {/* <FormHelperText>Ingrese aquí los pedidos especiales del cliente</FormHelperText> */}
+
             <TextField
               id="descripcion-pedido"
               label="Notas"
@@ -183,24 +182,25 @@ export const ModalEditOrderDetail = () => {
               }
               }
 
-
-
             />
           </Grid>
 
-          <Grid item xs={4}>
-            <InputLabel htmlFor="qty">Precio</InputLabel>
-          </Grid>
-
-          <Grid item xs={8}>
+          <Grid item xs={12}>
 
             <TextField
-              id="descripcion-pedido"
-
+              id="precio-producto"
+              label="Precio"
               margin="dense"
               type='number'
               defaultValue={detail?.price}
               fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoney />
+                  </InputAdornment>
+                ),
+              }}
               onBlur={(e) => {
                 console.log(e.target.value);
                 setPrice(Number(e.target.value));
@@ -214,38 +214,14 @@ export const ModalEditOrderDetail = () => {
 
                 step: 0.25
               }}
-
-
-
             />
 
-
-            {/* <Divider sx={{ my: 1 }} /> */}
-
-
           </Grid>
 
-          <Grid item xs={4}>
-            <InputLabel htmlFor="qty">Cantidad</InputLabel>
-          </Grid>
-          <Grid item xs={8} display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' >
+          <Grid item xs={12} >
+            <Typography variant='h5' mt={2}>Cantidad entregada</Typography>
 
-            <CounterInput
-              value={quantity}
-              onChange={handleChangeQuantity}
-              min={detail?.qtyDelivered}
-
-            />
-
-          </ Grid>
-
-          <Grid item xs={4}>
-            <InputLabel htmlFor="qty">Entregado</InputLabel>
-          </Grid>
-
-          <Grid item xs={8} display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
-
-            <Box display='flex' alignItems='center' justifyContent='space-between'>
+            <Box display='flex' alignItems='center' justifyContent='right' mt={1}>
 
               <CounterInput
                 value={qtyDelivered}
@@ -304,44 +280,12 @@ export const ModalEditOrderDetail = () => {
           variant='contained'
           onClick={updateDetail}
           loading={loading}
-          color='info'
-          startIcon={<Edit />}
+
+          startIcon={<Save />}
 
         >
           Actualizar
         </LoadingButton>
-
-
-
-
-        {
-             /*  detail?.qtyDelivered !== detail?.quantity &&
-              <LoadingButton
-              
-                onClick={deliverDetail}
-                color='info'
-
-                variant='contained'
-                loading={loading}
-
-              >
-                <DoneAllOutlined />
-              </LoadingButton> */}
-        {/* 
-        <Button
-          color='inherit'
-          variant='outlined'
-          startIcon={<CheckOutlined />}
-          size='small'
-          onClick={deliverDetail}
-        >
-          Entregado
-        </Button> */}
-
-
-
-
-
       </DialogActions>
 
 

@@ -39,6 +39,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
                 <>
                   <ListItemButton
                     onClick={() => handleOpenDrawer(invoice)}
+                    key={invoice.id}
                   >
 
                     <ListItemAvatar>
@@ -67,7 +68,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
                     <ListItemSecondaryAction>
                       <Typography variant='h5'>
-                        {formatMoney(invoice.amount)}
+                        {formatMoney(invoice.total)}
                       </Typography>
                     </ListItemSecondaryAction>
 

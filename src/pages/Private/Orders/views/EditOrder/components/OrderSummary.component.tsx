@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useContext } from 'react';
 
-import { AddOutlined, CheckCircle, Circle, DeleteOutline, Edit, EditOutlined, Paid, Pending, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
+import { AddOutlined, CheckCircle, Circle, DeleteOutline, Edit, EditOutlined, Notes, Paid, Pending, PointOfSaleOutlined, Print, Receipt, ShoppingCart, Visibility } from "@mui/icons-material";
 import { Card, CardContent, Box, Typography, Button, IconButton, CardHeader, Stack, Divider, Tooltip, Grid, TextField, ListItem, ListItemText, List, ListItemSecondaryAction, ListItemAvatar, Avatar, ListItemButton, Chip } from '@mui/material';
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
@@ -135,6 +135,12 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
           alignItems='center'
           spacing={1}
         >
+
+          <LabelStatusOrder status={order.status} />
+
+          <LabelStatusPaid isPaid={order.isPaid} />
+
+
           {/* <LabelStatusOrder status={
             order.status === OrderStatus.DELIVERED && !order.isPaid
               ? "unpaid"
@@ -153,10 +159,10 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <>
                 <Stack direction='column' spacing={1}>
 
-                  <LabelStatusOrder status={
+                  {/* <LabelStatusOrder status={
                     order.status
 
-                  } />
+                  } /> */}
                   <Typography variant='h4' fontWeight='bold' >
 
                     {/* <Circle sx={{ fontSize: 10, mr: 1 }} color={!(order.isClosed) ? 'success' : 'error'} /> */}
@@ -272,33 +278,62 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
               </Grid>
 
-              <Grid item xs={4} display='flex' flexDirection='column' gap={1}>
-                {/* <Typography variant='h4'>Total</Typography> */}
+              {
+                order.notes
+                && (
+                  <>
+                    <Grid item xs={12}>
+                      <CardHeader
 
-              <LabelStatusPaid isPaid={order.isPaid} />
+                        sx={{
+                          px: 1,
+                          py: 0.5
+                        }}
 
-              </Grid>
+
+                        avatar={<Notes />}
+                        title='Notas'
+                        titleTypographyProps={{
+                          variant: 'subtitle2'
+
+                        }}
+
+                        subheaderTypographyProps={{
+                          variant: 'h5',
+                          color: 'inherith'
+                        }}
+                        subheader={order.notes}
+                      />
+
+
+
+                    </Grid>
+                  </>
+                )
+              }
+
 
               <Grid
                 item
-                xs={8}
+                xs={12}
                 display='flex'
                 flexDirection='row'
                 gap={1}
-                alignItems='flex-end'
+                alignItems='center'
+                justifyContent='flex-end'
               >
 
                 <Typography variant="h3">
                   {formatMoney(order.total)}
 
                 </Typography>
-                
+
 
               </Grid>
             </Grid>
 
 
-           
+
 
             <Stack
 
@@ -309,7 +344,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               direction='column'
             >
 
-             
+
             </Stack>
 
 
@@ -323,7 +358,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
             divider={<Divider />}
           >
 
-            
+
 
             {
               activeStep === 0 &&

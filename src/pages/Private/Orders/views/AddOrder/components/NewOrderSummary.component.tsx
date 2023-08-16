@@ -126,6 +126,8 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
                   )
                 }
 
+                <PeopleCounter />
+
                 <TextField
                   id="descripcion-pedido"
                   label="Notas"
@@ -143,7 +145,6 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
                 />
 
 
-                <PeopleCounter />
 
               </ Stack>
 
@@ -166,7 +167,7 @@ export const NewOrderSummary: FC<Props> = ({ step }) => {
 
       {<LoadingButton
         variant='contained'
-        disabled={details.length <= 0 || (!table && typeOrder === TypeOrder.IN_PLACE)}
+        disabled={details.length <= 0 || (!table && typeOrder === TypeOrder.IN_PLACE) || people<= 0}
         onClick={submitAddOrder}
         fullWidth
         loading={loading}

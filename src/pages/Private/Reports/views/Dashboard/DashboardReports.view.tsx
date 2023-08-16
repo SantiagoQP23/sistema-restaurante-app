@@ -54,7 +54,7 @@ export const DashboardReports = () => {
 
             <Grid item xs={12} md={6} >
 
-            <IncomesAndExpensesSummary />
+            {/* <IncomesAndExpensesSummary /> */}
 
           </Grid>
 

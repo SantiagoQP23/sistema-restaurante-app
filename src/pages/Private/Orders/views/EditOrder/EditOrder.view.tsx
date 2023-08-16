@@ -2,9 +2,8 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-
 // Material UI
-import { Grid, Container, CircularProgress, Stepper, Step, StepLabel, Card, CardContent, Button, Stack, Tooltip, IconButton } from '@mui/material';
+import { Grid, Container, CircularProgress, Stepper, Step, StepLabel, Button, Stack, Tooltip } from '@mui/material';
 
 import { selectOrders, setActiveOrder } from '../../../../../redux';
 
@@ -16,23 +15,20 @@ import { useOrder } from '../../hooks';
 import { PayOrder } from './components/PayOrder.component';
 import { useInvoiceStore } from '../../store/invoiceStore';
 import { Account } from './components/Account.component';
-import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline, RemoveCircle, DownloadOutlined } from '@mui/icons-material';
+import { ArrowRight, ArrowBackIos, PointOfSaleOutlined, Print, DeleteOutline, RemoveCircle } from '@mui/icons-material';
 import { DrawerInvoice } from './components/DrawerInvoice.component';
 import { useDrawerInvoiceStore } from '../../store/drawerInvoiceStore';
 import { statusModalDeleteOrder, statusModalPayOrder } from '../../services/orders.service';
-import { useModal } from '../../../../../hooks';
-import { ModalEditOrder } from './components/ModalEditOrder.component';
+
 import { OrderStatus } from '../../../../../models';
 import { ModalDeleteInvoice } from '../../components/modals/ModalDeleteInvoice.component';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PdfReceiptOrder } from '../OrderReceipt/pdf/PdfReceiptOrder.component';
+
 import { generateOrderPdf } from '../../helpers/pdf-orders';
 
 
 export const EditOrder = () => {
 
   const navigate = useNavigate();
-
 
   const { open: openDrawer, handleCloseDrawer } = useDrawerInvoiceStore(state => state);
 
@@ -43,9 +39,6 @@ export const EditOrder = () => {
   const { step: activeStep, setStep: changeStep, handleBackStep, handleNextStep, resetDetails, reset } = useInvoiceStore(state => state);
 
   const { dispatch } = useContext(OrderContext);
-
-
-  // const [orderDelivered, setOrderDelivered] = useState<boolean>(false)
 
   const { activeOrder } = useSelector(selectOrders);
 
@@ -58,8 +51,8 @@ export const EditOrder = () => {
       statusModalPayOrder.setSubject(true, activeOrder);
   }
 
-  const openPDF = async  () => {
-    if(activeOrder){
+  const openPDF = async () => {
+    if (activeOrder) {
       const pdf = await generateOrderPdf(activeOrder);
       pdf.open();
     }
@@ -88,20 +81,11 @@ export const EditOrder = () => {
     </Button>
   )
 
-
   const eliminarPedido = () => {
 
     if (activeOrder)
       statusModalDeleteOrder.setSubject(true, activeOrder)
   }
-
-
-
-  // useEffect(() => {
-  //   if (activeOrder) {
-  //     setOrderDelivered(!!(activeOrder.details?.find(detail => detail.qtyDelivered > 0)))
-  //   }
-  // }, [activeOrder])
 
   orderDelivered = activeOrder?.details?.find(detail => detail.qtyDelivered >= 1) ? true : false;
 
@@ -116,13 +100,6 @@ export const EditOrder = () => {
 
     }
   }, [])
-
-
-
-
-
-
-
 
   if (!activeOrder)
     return <></>;
@@ -166,19 +143,7 @@ export const EditOrder = () => {
                     </Tooltip>
                   )
                 }
-{/* 
-                <PDFDownloadLink
-                  document={<PdfReceiptOrder order={activeOrder!} />}
-                  fileName={'pedido-' + activeOrder!.id}
-                >
-                  <IconButton>
-                    <DownloadOutlined />
-                  </IconButton>
-
-
-
-
-                </PDFDownloadLink> */}
+               
 
                 <Button
                   startIcon={<Print />}
@@ -245,34 +210,34 @@ export const EditOrder = () => {
               >
 
                 <Grid item xs={12} md={8}>
+                  {
+                    !activeOrder.isPaid && (
 
-                  <Stepper activeStep={activeStep} alternativeLabel
-                    sx={{
-                      background: 'transparent'
-                    }}
-                  >
-                    <Step>
-                      <StepLabel>Carrito</StepLabel>
-                    </Step>
-
-                    <Step>
-                      <StepLabel>Cuenta</StepLabel>
-
+                      <Stepper activeStep={activeStep} alternativeLabel
+                        sx={{
+                          background: 'transparent'
+                        }}
+                      >
+                        <Step>
+                          <StepLabel>Carrito</StepLabel>
+                        </Step>
 
 
+                        <Step>
+                          <StepLabel>Cuenta</StepLabel>
 
-                      {
-                        //TODO productos y resumen de cuenta
-                      }
+                        </Step>
+                        <Step>
+                          <StepLabel>Pago</StepLabel>
 
-                    </Step>
-                    <Step>
-                      <StepLabel>Pago</StepLabel>
-
-                    </Step>
+                        </Step>
 
 
-                  </Stepper>
+
+
+                      </Stepper>
+                    )
+                  }
 
                   {
                     activeStep === 0

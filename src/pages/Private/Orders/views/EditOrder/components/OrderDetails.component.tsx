@@ -1,12 +1,13 @@
 import { FC, useContext } from 'react';
-import { Box, Typography, Grid, Divider, Button, Card, CardHeader, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Stack } from '@mui/material';
-import { OrderDetail } from "./OrderDetail.component"
+import { Box, Typography, Grid, Divider, Button, Card, CardHeader, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Stack, IconButton } from '@mui/material';
+import { LinearProgressWrapper, OrderDetail } from "./OrderDetail.component"
 import { useNavigate } from 'react-router-dom';
 import { OrderContext } from '../../../context/Order.context';
 import { IOrder, IOrderDetail } from '../../../../../../models';
 import { ModalUpdateDetail } from '../../../components/EditOrder/ModalUpdateDescriptionDetail.component';
-import { AddShoppingCartOutlined } from '@mui/icons-material';
+import { AddShoppingCartOutlined, MoreVert } from '@mui/icons-material';
 import { formatMoney } from '../../../../Common/helpers/format-money.helper';
+import { CounterInput } from '../../../components';
 
 
 
@@ -38,8 +39,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
 
               color="primary"
               onClick={() => navigate('products')}
-              size='small'
-              variant='contained'
+              // variant='contained'
               startIcon={
                 <AddShoppingCartOutlined />
               }
@@ -53,6 +53,71 @@ export const OrderDetails: FC<Props> = ({ order }) => {
 
 
         <Divider />
+
+        {/* {
+          details.map((detail) => {
+
+            if (detail.isActive)
+              return (
+                <>
+                  <Box p={2}>
+
+                    <Box display='flex' justifyContent='space-between' alignItems='top'>
+
+                      <Box>
+                        <Typography variant='h6'>{detail.quantity} - {detail.product.name}</Typography>
+                        <Typography variant='subtitle1'>{detail.description}</Typography>
+                      </Box>
+                      <IconButton>
+                        <MoreVert fontSize='small' />
+
+                      </IconButton>
+                    </Box>
+
+                    <Box display='flex' justifyContent='space-between' alignItems='center'>
+
+                      <Stack width={100} direction='column' alignItems='right' mt={0.5} >
+
+                        <LinearProgressWrapper
+                          value={(detail.qtyDelivered * 100) / detail.quantity}
+                          color="info"
+                          variant="determinate"
+                          sx={{
+                            width: '100%'
+                          }}
+
+                        />
+                        <Typography variant='subtitle1' fontSize={12}>{detail.qtyDelivered} / {detail.quantity}</Typography>
+                      </Stack>
+
+
+                      <CounterInput
+                        value={detail.quantity}
+                        // onChange={handleChangeQuantity}
+                        min={0.5}
+
+                      />
+
+                    </Box>
+
+
+
+
+
+
+
+                  </Box>
+
+
+                </>
+
+              )
+          })
+        } */}
+
+
+
+
 
         <TableContainer>
           <Table>
@@ -133,7 +198,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
                     border: 'none'
                   }}
 
-                  
+
                 >
                   <Typography variant='h6' >{formatMoney(order.total)}</Typography>
                 </TableCell>

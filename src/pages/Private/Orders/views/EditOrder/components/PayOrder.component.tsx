@@ -48,7 +48,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
   }
 
 
-  const difference = amountPaid - amount;
+  const difference = amountPaid - (amount - discount);
 
 
   const createClient = () => {
@@ -68,28 +68,20 @@ export const PayOrder: FC<Props> = ({ order }) => {
       return;
     }
     const invoice = getInvoice();
+    console.log(invoice)
 
     if (activeCashRegister) {
 
       invoice.cashRegisterId = activeCashRegister.id;
 
       createInvoiceOrder(invoice);
-
-
-      // createInvoiceMutation.mutateAsync(invoice).then(() => {
-      //   reset();
-      // });
-
-
     } else {
 
       alert('No hay caja activa');
-      // TODO modal crear caja
     }
 
 
 
-    console.log(invoice)
 
   }
 
@@ -287,7 +279,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
                   <Typography variant='subtitle2'> Total a pagar</Typography>
                   <Typography variant='h2'>
-                    {`$ ${amount}`}
+                    {`${formatMoney(amount - discount)}`}
                   </Typography>
                 </Box>
 
@@ -297,9 +289,10 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
                   <TextField
                     label='Cantidad pagada'
+
                     variant='outlined'
                     type='number'
-                    value={amountPaid}
+                    value={amountPaid || ''}
                     onChange={handleChangeAmountPaid}
                     InputProps={{
                       startAdornment: (

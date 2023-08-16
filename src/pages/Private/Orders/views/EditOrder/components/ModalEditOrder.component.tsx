@@ -1,6 +1,6 @@
-import { Close } from "@mui/icons-material"
+import { Close, Save } from "@mui/icons-material"
 import { FC, useEffect, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Input, TextField, Typography, InputLabel } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Input, TextField, Typography, InputLabel, InputBase, Box } from '@mui/material';
 import { IOrder, ITable, TypeOrder } from "../../../../../../models";
 import { OrderTable } from "./OrderTable.component";
 import { OrderTypeSelector } from "./OrderTypeSelector.component";
@@ -10,6 +10,8 @@ import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 import { UpdateOrderDto } from "../../../dto";
 import { CounterInput } from "../../../components";
 import { formatDate } from '../../../../Common/helpers/format-date.helper';
+import { Pagination } from '@mui/lab';
+import { useModal } from "../../../../../../hooks";
 
 interface Props {
   open: boolean;
@@ -28,6 +30,8 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
 
   const [notes, setNotes] = useState<string>(order.notes || '');
 
+
+  const { isOpen, handleOpen } = useModal();
 
   const [deliveryTime, setDeliveryTime] = useState<Date | null>(order.deliveryTime || null);
 
@@ -144,18 +148,18 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
       </DialogTitle>
 
 
-      <DialogContent>
+      <DialogContent
+        sx={{
+          maxWidth: '400px',
+        }}
+      >
 
-        <Typography>
-          Datos de entrega
-        </Typography>
-        <Grid container spacing={2} mt={1}>
+    
+        <Grid container spacing={3} >
 
+    
           <Grid item xs={12} >
-            <InputLabel>Tipo de pedido</InputLabel>
-          </Grid>
-
-          <Grid item xs={12} >
+            {/* <InputLabel >Tipo de pedido</InputLabel> */}
             <OrderTypeSelector type={type} setType={handleChangeType} />
           </Grid>
           {
@@ -186,22 +190,73 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
           </Grid>
 
         </Grid>
-        <Divider sx={{ my: 3 }} />
+        {/* <Divider sx={{ my: 3 }} />
 
         <Typography>
           Información adicional
-        </Typography>
+        </Typography> */}
 
         <Grid container spacing={2} mt={1} >
 
 
           <Grid item xs={12}>
-            <CounterInput
-              value={people}
-              onChange={handleChangePeople}
-              min={6}
-            />
 
+            <Typography>Personas</Typography>
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' mt={1}>
+
+
+              <Pagination
+                count={5}
+                hidePrevButton
+                hideNextButton
+                // variant='outlined'
+                color='primary'
+                page={people || 0}
+                onChange={(e, value) => handleChangePeople(value)}
+
+              />
+
+              {
+                !isOpen && (
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    onClick={handleOpen}
+                  >
+                    Otro
+                  </Button>
+
+                )
+              }
+
+              {
+                isOpen && (
+                  <InputBase
+                    value={people || ''}
+                    onChange={(e) => {
+                      const newValue = Number(e.target.value);
+                      if (newValue >= 0) {
+                        handleChangePeople(newValue);
+                      }
+                    }}
+                    type='number'
+                    inputProps={{
+                      min: 0,
+                    }}
+                    sx={{
+                      border: (theme) => `1px solid ${theme.colors.primary.main} `,
+                      borderRadius: '8px',
+                      padding: '0 8px',
+                      width: '80px',
+                    }}
+                    size='small'
+                  />
+
+                )
+              }
+
+            </Box>
 
           </Grid>
 
@@ -240,6 +295,7 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
         <Button
           variant='contained'
           onClick={submitUpdateOrder}
+          startIcon={<Save />}
         >
           Actualizar
         </Button>

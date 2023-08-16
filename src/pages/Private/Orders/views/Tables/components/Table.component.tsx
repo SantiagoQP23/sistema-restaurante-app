@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { PersonOutline } from "@mui/icons-material"
+import { PersonOutline, Receipt } from "@mui/icons-material"
 import { Card, CardActionArea, Box, Typography, Chip } from "@mui/material"
 import { ITable } from "../../../../../../models"
 import { useSelector } from "react-redux";
@@ -18,9 +18,9 @@ export const Table: FC<Props> = (
 ) => {
 
 
-  const {orders} = useSelector(selectOrders);
+  const { orders } = useSelector(selectOrders);
 
-  const ordersTable = orders.filter(order => order.table?.id === table.id); 
+  const ordersTable = orders.filter(order => order.table?.id === table.id);
 
 
 
@@ -47,27 +47,35 @@ export const Table: FC<Props> = (
             Mesa {table.name}
           </Typography>
 
-          <Chip
-            size='small'
-            label={
-              <Typography fontSize={12} display='flex' alignItems='center'>
+          {
+            !table.isAvailable && (
+              <Box display='flex' gap={1}>
+                <Chip
+                  icon={<Receipt fontSize='small' />}
+                  label={ordersTable.length}
+                  size='small'
+                />
+                <Chip
+                  icon={<PersonOutline fontSize='small' />}
+                  label={ordersTable!.reduce((acc, order) => acc + order.people, 0)}
+                  size='small'
 
-                {
-                  table.isAvailable
+                />
 
-                    ? 'Disponible'
-                    : <>
-                      <PersonOutline
-                        fontSize={'small'}
-                      />
-                      {ordersTable!.reduce((acc, order) => acc + order.people, 0)} - Ocupada
+              </Box>
+            )
+          }
 
-                    </>
-                }
-              </Typography>
-            }
-            color={table.isAvailable ? 'success' : 'default'}
-          />
+          {
+            table.isAvailable && (
+              <Chip
+                size='small'
+                label={table.isAvailable ? 'Disponible' : 'Ocupada'}
+                color={table.isAvailable ? 'success' : 'default'}
+              />
+            )
+          }
+
         </Box>
 
 

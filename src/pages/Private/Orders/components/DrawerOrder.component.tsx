@@ -1,12 +1,12 @@
 import { FC, useContext } from 'react';
 import { IOrder, TypeOrder } from "../../../../models";
-import { Box, Drawer, Stack, useTheme, Typography, IconButton, Card, CardHeader, CardContent, Grid, List, ListItem, Chip, ListItemIcon, ListItemText, Button, ToggleButton, ToggleButtonGroup, Switch } from '@mui/material';
+import { Box, Drawer, Stack, useTheme, Typography, IconButton, Card, CardHeader, CardContent, Grid, List, ListItem, Chip, ListItemIcon, ListItemText, Button, ToggleButton, ToggleButtonGroup, Switch, CardActions, ListItemSecondaryAction } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { selectOrders, selectTables } from '../../../../redux';
 import { CloseOutlined, Print, DeleteOutline, Edit, Add, Done, DoneRounded, CheckCircle, Pending, TimerOutlined, Notes, People, Person, Restaurant, TableRestaurant, TakeoutDining, Circle } from '@mui/icons-material';
 import { Divider } from '@mui/material/';
 import { ActiveOrder } from '../views';
-import { OrderDetails } from './EditOrder';
+import { LinearProgressWrapper, OrderDetails } from './EditOrder';
 import { format, formatDistance } from 'date-fns';
 import { LabelStatusOrder } from '../views/OrdersList/components/LabelStatusOrder.component';
 import { useNavigate } from 'react-router-dom';
@@ -117,33 +117,7 @@ export const DrawerOrder: FC<Props> = ({
                 <CloseOutlined />
               </IconButton>
               <Stack direction='row' spacing={1} >
-                {/* <IconButton
-                  color='inherit'
-                >
-                  <Print />
-                </IconButton>
 
-                <IconButton
-                  color='error'
-                >
-                  <DeleteOutline />
-                </IconButton> */}
-
-                {
-                  // !activeTable?.isAvailable && (
-
-                  //   <Button
-                  //     variant='contained'
-                  //     color='primary'
-                  //     size='small'
-                  //     startIcon={<Add />}
-                  //     onClick={handleAddOrder}
-                  //   >
-                  //     Añadir Pedido
-                  //   </Button>
-
-                  // )
-                }
 
               </Stack>
 
@@ -154,16 +128,26 @@ export const DrawerOrder: FC<Props> = ({
 
             <Box px={2}>
 
-              {/* <Typography variant="h4"  >
 
-                Restaurante Doña Yoli
-              </Typography> */}
+
+            </Box>
+
+
+            <Box display='flex' justifyContent='space-between' alignItems='center' mt={2}>
 
               <Typography variant="h3" textAlign='center'  >
                 Mesa {activeTable?.name}
-                {/* Pedido N° {order.num} */}
               </Typography>
 
+              <Button
+                variant='contained'
+                color='primary'
+                startIcon={<Add />}
+                onClick={handleAddOrder}
+                size='small'
+              >
+                Añadir Pedido
+              </Button>
             </Box>
 
 
@@ -174,26 +158,21 @@ export const DrawerOrder: FC<Props> = ({
 
                     <Card>
                       <CardHeader
-                        title={`Pedido N° ${order.num}`}
-                        titleTypographyProps={{ variant: 'h4', textAlign: 'center' }}
 
-                        subheader={
-                          <LabelStatusOrder status={order.status} />
-                        }
+                        title={`Pedido N° ${order.num}`}
+                        titleTypographyProps={{ variant: 'h4' }}
+
+                        // subheader={
+                        // }
 
                         subheaderTypographyProps={{ variant: 'h6', textAlign: 'center' }}
                         action={
-                          <Stack direction='row' spacing={1}>
+                          <Stack direction='row' spacing={1} alignItems='center'>
+                            <LabelStatusOrder status={order.status} />
+                            <LabelStatusPaid isPaid={order.isPaid} />
 
-                            <IconButton aria-label="settings">
-                              <Print />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => navigate(`/orders/list/edit/${order.id}`)}
-                            >
-                              <Edit
-                              />
-                            </IconButton>
+
+
                           </Stack>
                         }
                       />
@@ -399,8 +378,7 @@ export const DrawerOrder: FC<Props> = ({
                             }
 
                             <Grid item xs={4} display='flex' flexDirection='column' gap={1}>
-                              {/* <Typography variant='h4'>Total</Typography> */}
-                              <LabelStatusPaid isPaid={order.isPaid} />
+                              {/* <Typography variant='h5' textAlign='right'>Total</Typography> */}
 
 
                             </Grid>
@@ -412,6 +390,7 @@ export const DrawerOrder: FC<Props> = ({
                               flexDirection='row'
                               gap={1}
                               alignItems='flex-end'
+                              justifyContent='flex-end'
                             >
 
                               <Typography variant="h3">
@@ -437,8 +416,6 @@ export const DrawerOrder: FC<Props> = ({
                             <List
 
                             >
-
-
                               {
                                 order.details?.map((detail) => (
                                   <>
@@ -446,33 +423,35 @@ export const DrawerOrder: FC<Props> = ({
 
                                       <ListItemIcon>
                                         <Typography
-                                          variant='h4'
-                                          color={detail.qtyDelivered === detail.quantity ? 'GrayText' : 'textPrimary'}
-
+                                          variant='body1'
 
                                         >{detail.quantity}</Typography>
-                                        {/* <Chip
-                                          label={
-
-                                          }
-                                          variant={detail.qtyDelivered !== detail.quantity ? 'filled' : 'outlined'}
-                                        /> */}
 
                                       </ListItemIcon>
 
                                       <ListItemText
                                         primary={detail.product.name}
-
-
                                       />
 
-                                      {/* <Typography variant='h6'  >
-                                        {detail.quantity} - {detail.product.name}
-                                      </Typography> */}
+                                      <ListItemSecondaryAction
+                                        sx={{
+                                          width: 50
+                                        }}
+                                      >
+                                        <LinearProgressWrapper
+                                          value={(detail.qtyDelivered * 100) / detail.quantity}
+                                          color="info"
+                                          variant="determinate"
+                                          sx={{
+                                            width: '100%'
+                                          }}
+                                        />
+                                        <Typography variant='subtitle1' fontSize={12}>{detail.qtyDelivered} / {detail.quantity}</Typography>
+                                      </ListItemSecondaryAction>
+
+
                                     </ListItem>
-                                    {/* <Typography variant='h6' >
-                              ${detail.product.price}
-                            </Typography> */}
+
 
                                   </>
                                 ))
@@ -481,14 +460,23 @@ export const DrawerOrder: FC<Props> = ({
                             </List>
                           </Grid>
 
-
-
                         </Grid>
 
 
                       </CardContent>
 
+                      <CardActions sx={{ justifyContent: 'right' }}>
 
+                        <Button
+                          startIcon={<Edit />}
+                          variant='outlined'
+                          size='small'
+                          onClick={() => navigate(`/orders/list/edit/${order.id}`)}
+                        >
+                          Editar
+                        </Button>
+
+                      </CardActions>
 
                     </Card>
 
@@ -504,8 +492,8 @@ export const DrawerOrder: FC<Props> = ({
               {
                 ordersTable.length === 0 && (
                   <>
-                    <Typography variant='h4' color='secondary' textAlign='center' mt={2}>
-                      No hay pedidos
+                    <Typography variant='h4' color='secondary' textAlign='center' my={5}>
+                      Sin pedidos
                     </Typography>
 
                     <Stack
@@ -549,17 +537,7 @@ export const DrawerOrder: FC<Props> = ({
                 )
               }
 
-                    <Box display='flex' justifyContent='center' mt={2}>
 
-                      <Button
-                        variant='contained'
-                        color='primary'
-                        startIcon={<Add />}
-                        onClick={handleAddOrder}
-                      >
-                        Añadir Pedido
-                      </Button>
-                    </Box>
             </Box>
           </Stack>
 

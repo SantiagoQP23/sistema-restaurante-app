@@ -3,9 +3,9 @@ import { FC, useContext, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress, TableCell, TableRow, Stack } from '@mui/material';
+import { Box, IconButton, Typography, Button, CircularProgress, LinearProgress, TableCell, TableRow, Stack, Checkbox } from '@mui/material';
 
-import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined, CloseOutlined, CurtainsSharp, CheckCircle, Pending } from '@mui/icons-material';
+import { AddCircleOutline, RemoveCircleOutline, SaveOutlined, DeleteOutline, EditOutlined, CloseOutlined, CurtainsSharp, CheckCircle, Pending, CheckCircleOutline } from '@mui/icons-material';
 import { IOrderDetail } from '../../../../../../models';
 import { useCounter } from '../../../hooks';
 
@@ -33,7 +33,7 @@ interface Props {
 }
 
 
-const LinearProgressWrapper = styled(LinearProgress)(
+export const LinearProgressWrapper = styled(LinearProgress)(
   ({ theme }) => `
         flex-grow: 1;
         height: 10px;
@@ -78,7 +78,25 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
 
 
   const { loading: loadingDelete, deleteOrderDetail } = useDeleteOrderDetail();
+  
+  const [checked, setChecked] = useState(detail.qtyDelivered === detail.quantity);
 
+
+  
+  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const value = event.target.checked;
+
+    if(value) {
+      updateQtyDelivered(detail.quantity)
+      
+    }else {
+      updateQtyDelivered(0)
+      
+    }
+
+    setChecked(event.target.checked);
+  };
 
   const updateQuantity = () => {
 
@@ -91,6 +109,23 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
     update(data);
 
   }
+
+  const updateQtyDelivered = (qtyDelivered: number) => {
+
+
+
+    const data: UpdateOrderDetailDto = {
+      orderId: activeOrder!.id,
+      id: detail!.id,
+      qtyDelivered: qtyDelivered,
+
+    }
+
+    update(data)
+    
+  }
+
+
 
 
   const editDetail = () => {
@@ -202,6 +237,16 @@ export const OrderDetail: FC<Props> = ({ detail }) => {
         <TableCell
           align='center'
         >
+
+          <Checkbox
+            icon={<CheckCircleOutline />}
+            checkedIcon={<CheckCircle />}
+            checked={checked}
+            onChange={handleChangeChecked}
+            inputProps={{ 'aria-label': 'controlled' }}
+            color='success'
+          />
+
           <IconButton
             onClick={editDetail}
             color='primary'
