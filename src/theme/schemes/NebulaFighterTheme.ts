@@ -50,7 +50,7 @@ const colors = {
   },
   layout: {
     general: {
-      bodyBg: '#070C27'
+      bodyBg: '#0f111c'
     },
     sidebar: {
       background: themeColors.primaryAlt,
@@ -683,6 +683,18 @@ export const NebulaFighterTheme = createTheme({
         }
       }
     },
+
+        MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          background: colors.layout.sidebar.background,
+          color: colors.layout.sidebar.textColor,
+          // border: 'none'
+        }
+      }
+    },
+
+    
     MuiDivider: {
       styleOverrides: {
         root: {
