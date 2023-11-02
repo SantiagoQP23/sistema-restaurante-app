@@ -1,17 +1,13 @@
-import { createContext, FC } from 'react';
+import { createContext, FC } from "react";
 
 import { ICategory, IProduct, ISection } from "../models";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { resetActiveCategory,  setActiveCategory, setActiveSection } from '../redux/slices/menu';
-import { useAppSelector } from '../hooks';
-import { useAppDispatch } from '../hooks/useRedux';
-import { useSelector } from 'react-redux';
-import { selectMenu } from '../redux/slices/menu/menu.slice';
-
-
-
+import { setActiveSection } from "../redux/slices/menu";
+import { useAppDispatch } from "../hooks/useRedux";
+import { useSelector } from "react-redux";
+import { selectMenu } from "../redux/slices/menu/menu.slice";
 
 interface IMenuContext {
   changeSection: (idSection: string) => void;
@@ -23,29 +19,22 @@ interface IMenuContext {
   activeCategory: ICategory | null;
   /*  idSection: string;
    idCategory: string; */
-
-
 }
-
 
 interface Props {
   children: React.ReactNode;
 }
 
-
 export const MenuContext = createContext({} as IMenuContext);
 
-
 export const MenuProvider: FC<Props> = ({ children }) => {
-
-
   const dispatch = useAppDispatch();
 
   const [categoriasSeccion, setCategoriasSeccion] = useState<ICategory[]>([]);
 
   const [productosCategoria, setProductosCategoria] = useState<IProduct[]>([]);
 
-  const { sections, activeSection, activeCategory} = useSelector(selectMenu);
+  const { sections, activeSection, activeCategory } = useSelector(selectMenu);
 
   //const { sections, activeSection } = useAppSelector((selectSections));
 
@@ -54,36 +43,30 @@ export const MenuProvider: FC<Props> = ({ children }) => {
   //const { products, activeProduct } = useAppSelector((selectProducts));
 
   const changeSection = (idSection: string) => {
-
-    const section = sections.find(section => section.id === idSection);
+    const section = sections.find((section) => section.id === idSection);
 
     dispatch(setActiveSection(section!));
     //setMenu({ ...menu, idSection });
   };
 
   const changeCategory = (idCategory: string) => {
+    const category = categoriasSeccion.find((cate) => cate.id === idCategory);
 
-    const category = categoriasSeccion.find(cate => cate.id === idCategory);
-
-   // dispatch(setActiveCategory(category!))
+    // dispatch(setActiveCategory(category!))
     //setMenu({ ...menu, idCategory });
-  }
+  };
 
- 
   const filterCategories = () => {
-    
-    if(activeSection) {
+    if (activeSection) {
       setCategoriasSeccion(activeSection.categories!);
 
-      if(categoriasSeccion.length > 0) changeCategory(categoriasSeccion[0].id);
+      if (categoriasSeccion.length > 0) changeCategory(categoriasSeccion[0].id);
     }
-
-
-  }
+  };
 
   // Funciona
   const cargarProductosByIdCategoria = (idCategory?: string) => {
-/* 
+    /* 
     if (categories.length > 0 && activeCategory) {
 
       let productosCategoria = products.filter(product => product.category.id === activeCategory!.id);
@@ -93,11 +76,9 @@ export const MenuProvider: FC<Props> = ({ children }) => {
     }else {
       setProductosCategoria([])
     } */
+  };
 
-
-  }
-
-/*   useEffect(() => {
+  /*   useEffect(() => {
     
     if (categoriasSeccion.length > 0) {
       changeCategory(categoriasSeccion[0].id)
@@ -109,33 +90,27 @@ export const MenuProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     filterCategories();
+  }, [activeSection]);
 
-  }, [activeSection])
-
- /*  useEffect(() => {
+  /*  useEffect(() => {
     filterCategories();
   }, [categories]) */
 
   // Funciona
   useEffect(() => {
-    cargarProductosByIdCategoria()
-
-  }, [activeCategory])
-
+    cargarProductosByIdCategoria();
+  }, [activeCategory]);
 
   useEffect(() => {
-
     // Al actualizar se debe mostrar la nueva información
     if (sections.length > 0 && !activeSection) {
-      changeSection(sections[0].id)
+      changeSection(sections[0].id);
     }
-
-  }, [sections])
-
+  }, [sections]);
 
   return (
-    <MenuContext.Provider value={
-      {
+    <MenuContext.Provider
+      value={{
         changeSection,
         changeCategory,
         sections,
@@ -143,15 +118,9 @@ export const MenuProvider: FC<Props> = ({ children }) => {
         products: productosCategoria,
         activeCategory,
         activeSection,
-
-
       }}
     >
       {children}
     </MenuContext.Provider>
-  )
-
-
-}
-
-
+  );
+};

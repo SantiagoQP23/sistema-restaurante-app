@@ -1,136 +1,79 @@
-import { loadAbort } from '../../../../helpers/load-abort-axios.helper';
-import { IUser } from '../../../../models/auth.model';
-import restauranteApi from '../../../../api/restauranteApi';
-import { UpdateUserDto, ResetPasswordUserDto } from '../dto/update-user.dto';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { SubjectDeleteUser } from '../helpers/subjects-users.helper';
-import { PaginationDto } from '../../Clients/dto/pagination.dto';
-import { ChangePasswordDto } from '../dto/change-password.dto';
-import { FilterUsersDto } from '../dto/filterUsers.dto';
-
+import { loadAbort } from "../../../../helpers/load-abort-axios.helper";
+import { IUser } from "../../../../models/auth.model";
+import restauranteApi from "../../../../api/restauranteApi";
+import { UpdateUserDto, ResetPasswordUserDto } from "../dto/update-user.dto";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { SubjectDeleteUser } from "../helpers/subjects-users.helper";
+import { ChangePasswordDto } from "../dto/change-password.dto";
+import { FilterUsersDto } from "../dto/filterUsers.dto";
 
 export const statusModalDeleteUser = new SubjectDeleteUser();
 
-
-
 export const getUser = async (term: string): Promise<IUser> => {
-
   const resp = await restauranteApi.get<IUser>(`users/${term}`);
 
   return resp.data;
+};
 
-}
+export const getUsers = async (
+  pagination: FilterUsersDto
+): Promise<{ users: IUser[]; count: number }> => {
+  const { offset = 0, limit = 5, search } = pagination;
 
-
-export const getUsers = async (pagination: FilterUsersDto): Promise<{users: IUser[], count: number}> => {
-
-  const {offset = 0, limit = 5, search} = pagination;
-
-  const resp = await restauranteApi.get<{users: IUser[], count: number}>(`users/` ,{
-    params: {
-      offset: offset   * limit ,
-      limit,
-      search
-  }});
-
+  const resp = await restauranteApi.get<{ users: IUser[]; count: number }>(
+    `users/`,
+    {
+      params: {
+        offset: offset * limit,
+        limit,
+        search,
+      },
+    }
+  );
 
   return resp.data;
+};
 
-}
-
-export const updateUser = async (id: string, data: UpdateUserDto): Promise<IUser> => {
-
-  const {id: userId, ...rest} = data;
+export const updateUser = async (
+  id: string,
+  data: UpdateUserDto
+): Promise<IUser> => {
+  const { id: userId, ...rest } = data;
 
   const resp = await restauranteApi.patch<IUser>(`users/${id}`, rest);
 
   return resp.data;
+};
 
-}
-
-export const resetPasswordUser = async (data: ResetPasswordUserDto): Promise<IUser> => {
-
-  const resp = await restauranteApi.patch<IUser>(`auth/reset-password-user`, data);
+export const resetPasswordUser = async (
+  data: ResetPasswordUserDto
+): Promise<IUser> => {
+  const resp = await restauranteApi.patch<IUser>(
+    `auth/reset-password-user`,
+    data
+  );
 
   return resp.data;
-
-}
+};
 
 export const createUser = async (data: CreateUserDto): Promise<IUser> => {
-
   const resp = await restauranteApi.post<IUser>(`users/`, data);
 
   return resp.data;
+};
 
-}
-
-export const changePassword = async (data: ChangePasswordDto): Promise<void> => {
-
+export const changePassword = async (
+  data: ChangePasswordDto
+): Promise<void> => {
   await restauranteApi.patch(`auth/change-password`, data);
-
-}
-
-
-// export const getUser = (term: string) => {
-//   const controller = loadAbort();
-//   return {
-//     call: restauranteApi.get<IUser>(`users/${term}`,
-
-//       { signal: controller.signal }),
-//     controller
-//   }
-// }
-
-// export const getUsers = () => {
-  
-//     const controller = loadAbort();
-  
-//     return {
-//       call: restauranteApi.get<IUser>(`users/`,
-//         { signal: controller.signal }),
-//       controller
-//     }
-// }
-
-
-// export const updateUser = (id: string, data: UpdateUserDto) => {
-//   const controller = loadAbort();
-//   return {
-//     call: restauranteApi.patch<IUser>(`users/${id}`,
-//       data,
-//       { signal: controller.signal }),
-//     controller
-//   }
-// }
-
-
-// export const resetPasswordUser = (data: ResetPasswordUserDto) => {
-//   const controller = loadAbort();
-//   return {
-//     call: restauranteApi.patch<IUser>(`auth/reset-password-user`,
-//       data,
-//       { signal: controller.signal }),
-//     controller
-//   }
-// }
-
-// export const createUser = (data: CreateUserDto) => {
-//   const controller = loadAbort();
-//   return {
-//     call: restauranteApi.post<IUser>(`users/`,
-//       data,
-//       { signal: controller.signal }),
-//     controller
-//   }
-// }
-
+};
 
 export const deleteUser = (id: string) => {
   const controller = loadAbort();
   return {
-    call: restauranteApi.delete<IUser>(`users/${id}`,
-      { signal: controller.signal }),
-    controller
-  }
-}
-  
+    call: restauranteApi.delete<IUser>(`users/${id}`, {
+      signal: controller.signal,
+    }),
+    controller,
+  };
+};

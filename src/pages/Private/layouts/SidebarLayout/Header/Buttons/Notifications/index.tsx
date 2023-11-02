@@ -106,7 +106,7 @@ function HeaderNotifications() {
       <Tooltip arrow title="Mis pedidos">
 
         <IconButton ref={ref} onClick={handleOpen} sx={{
-          border: `1px solid ${theme.palette.divider}`,
+          // border: `1px solid ${theme.palette.divider}`,
         }}>
           <Badge
             badgeContent={''}

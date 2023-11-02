@@ -6,6 +6,8 @@ import { Popover, Button } from '@mui/material/';
 import { Label } from "../../../../../../../components/ui";
 import { LoadingButton } from '@mui/lab';
 
+import './SocketConnectionButton.styles.css'
+
 
 
 export const SocketConnectionButton = () => {
@@ -37,6 +39,7 @@ export const SocketConnectionButton = () => {
 
               ref={ref} onClick={handleOpen}
               color='error'
+              className="parpadeo"
             >
               <WifiTetheringErrorOutlined />
             </IconButton>

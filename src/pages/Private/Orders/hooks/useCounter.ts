@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 
 export const useCounter = (initialState = 1, step = 1, max?: number, min: number = 0) => {
   const [state, setCounter] = useState(initialState);
@@ -15,6 +15,10 @@ export const useCounter = (initialState = 1, step = 1, max?: number, min: number
       setCounter(state > 0 && state != min ? value : state);
     }
   }
+
+  useEffect(() => {
+    setCounter(initialState);
+  }, [initialState])
 
   return {
     state, increment, decrement, setCounter

@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import { Container, CssBaseline, Box, Avatar, Typography, Grid, TextField, Button, Link, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider } from "@mui/material";
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useFetchAndLoad } from "../../../hooks";
+import { useFetchAndLoad } from "../../../../hooks";
 import { resetPassword } from "../services/reset-password.service";
-import { PublicRoutes } from "../../../models";
+import { PublicRoutes } from "../../../../models";
 import { LoadingButton } from "@mui/lab";
-import { useModal } from '../../../hooks/useModal';
+import { useModal } from '../../../../hooks/useModal';
 
 interface ModalProps {
   open: boolean;

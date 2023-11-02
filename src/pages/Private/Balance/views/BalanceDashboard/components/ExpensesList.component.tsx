@@ -155,11 +155,11 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
 
 
                     <TableCell>
-                      <Label
-                        color='error'
+                      <Typography
+                        color='error.main'
                       >
                         - {formatMoney(expense.transaction.amount)}
-                      </Label>
+                      </Typography>
 
 
                     </TableCell>

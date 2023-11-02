@@ -1,161 +1,71 @@
-import {FC} from 'react';
+import { FC } from "react";
 
-import { Label } from "../../../../../../components/ui"
-import { IOrder, OrderStatus } from "../../../../../../models"
-import { Tab, Tabs } from '@mui/material';
-import { Order } from '../../../../Reports/components/OrdersReports/Order.component';
-
-
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: string;
-  onChange: (event: React.SyntheticEvent, newValue: string) => void;
-}
-
-
-// const StyledTabs = styled((props: StyledTabsProps) => (
-//   <Tabs
-//     {...props}
-//     TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-//   />
-// ))({
-//   '& .MuiTabs-indicator': {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     backgroundColor: 'transparent',
-//   },
-//   '& .MuiTabs-indicatorSpan': {
-//     maxWidth: 40,
-//     width: '100%',
-//     backgroundColor: '#635ee7',
-//   },
-// });
-
-
-// interface StyledTabProps {
-//   label: string;
-//   icon: React.ReactElement;
-//   iconPosition: 'top' | 'bottom' | 'start' | 'end';
-//   value: string;
-// }
-
-// const StyledTab = styled((props: StyledTabProps) => (
-//   <Tab disableRipple {...props} />
-// ))(({ theme }) => ({
-//   textTransform: 'none',
-//   fontWeight: theme.typography.fontWeightRegular,
-//   fontSize: theme.typography.pxToRem(15),
-//   marginRight: theme.spacing(1),
-//   color: 'rgba(255, 255, 255, 0.7)',
-//   '&.Mui-selected': {
-//     color: '#fff',
-//   },
-//   '&.Mui-focusVisible': {
-//     backgroundColor: 'rgba(100, 95, 228, 0.32)',
-//   },
-// }));
-
-
-
+import { IOrder, OrderStatus } from "../../../../../../models";
+import { Tab, Tabs } from "@mui/material";
 
 interface Props {
-  orders: IOrder[],
-  statusOrderFilter: OrderStatus | null,
-  changeStatus: (value: OrderStatus | null) => void,
-  isPaid: boolean | null,
-  changeIsPaid: (value: boolean | null) => void,
-
+  orders: IOrder[];
+  statusOrderFilter: OrderStatus | null;
+  changeStatus: (value: OrderStatus | null) => void;
+  isPaid: boolean | null;
+  changeIsPaid: (value: boolean | null) => void;
 }
 
-
-export const TabsOrderStatus:FC<Props> = (
-  {
-    orders,
-    isPaid,
-    statusOrderFilter,
-    changeStatus,
-    changeIsPaid
-  
-  }
-) => {
-
-
+export const TabsOrderStatus: FC<Props> = ({
+  statusOrderFilter,
+  changeStatus,
+  changeIsPaid,
+}) => {
   return (
     <Tabs
-
       value={statusOrderFilter}
-     
-      onChange={(e, newValue: OrderStatus | null | 'paid' ) => {
-
-
-         if (newValue === 'paid') {
+      onChange={(e, newValue: OrderStatus | null | "paid") => {
+        if (newValue === "paid") {
           changeIsPaid(true);
           changeStatus(null);
           return;
-         }
+        }
 
-        // if (newValue === null) {
-
-
-        // if (newValue === 'unpaid') {
-        //   changeStatus(OrderStatus.DELIVERED);
-          
-
-        // } else if(newValue === OrderStatus.DELIVERED){
-        //   changeStatus(newValue);
-        //   changeIsPaid(true);
-          
-        // } else {
-
-        //   changeIsPaid(false);
-        //   changeStatus(newValue);
-        // }
-
-
-          changeStatus(newValue);
+        changeStatus(newValue);
       }}
       variant="scrollable"
     >
-
       <Tab
-        label='Todos'
+        label="Todos"
         // icon={<Label color='info'>{orders.length}</Label>}
-        iconPosition='end'
+        iconPosition="end"
         value={null}
-      // onClick={() => setView('list')}
+        // onClick={() => setView('list')}
       />
       <Tab
-        label='Pendiente'
+        label="Pendiente"
         value={OrderStatus.PENDING}
         // icon={<Label color='success'>{orders.filter(order => order.status === OrderStatus.PENDING).length}</Label>}
-        iconPosition='end'
-      // onClick={() => setView('list')}
+        iconPosition="end"
+        // onClick={() => setView('list')}
       />
       <Tab
-        label='En preparación'
+        label="En preparación"
         value={OrderStatus.IN_PROGRESS}
         // icon={<Label color='primary'>{orders.filter(order => order.status === OrderStatus.IN_PROGRESS).length}</Label>}
-        iconPosition='end'
-      // onClick={() => setView('list')}
+        iconPosition="end"
+        // onClick={() => setView('list')}
       />
       <Tab
-        label='Entregados'
+        label="Entregados"
         value={OrderStatus.DELIVERED}
         // icon={<Label color='warning'>{orders.filter(order => order.status === OrderStatus.DELIVERED && !order.isPaid).length}</Label>}
-        iconPosition='end'
-      // onClick={() => setView('list')}
+        iconPosition="end"
+        // onClick={() => setView('list')}
       />
-      
+
       <Tab
-        label='Cancelados'
+        label="Cancelados"
         value={OrderStatus.CANCELLED}
         // icon={<Label color='error'>{orders.filter(order => order.status === OrderStatus.CANCELLED).length}</Label>}
-        iconPosition='end'
-      // onClick={() => setView('list')}
+        iconPosition="end"
+        // onClick={() => setView('list')}
       />
-
-
-
     </Tabs>
-  )
-}
+  );
+};

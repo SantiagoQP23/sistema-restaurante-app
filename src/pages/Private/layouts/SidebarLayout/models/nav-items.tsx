@@ -1,23 +1,18 @@
-import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
+import Groups3OutlinedIcon from "@mui/icons-material/Groups3Outlined";
+import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutlined";
 
-import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone';
-import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
-import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
-import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
-import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
-import Groups3OutlinedIcon from '@mui/icons-material/Groups3Outlined';
-import TableRestaurantOutlinedIcon from '@mui/icons-material/TableRestaurantOutlined';
-import DeliveryDiningOutlinedIcon from '@mui/icons-material/DeliveryDiningOutlined';
-import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 
-import { AccountBalance, AccountBalanceWallet, Assessment, Assignment, ExpandLess, ExpandMore, ListAlt, LocalShipping, MenuBook, MonetizationOn, Receipt, ReceiptLong, SoupKitchen, TableRestaurant, ViewKanban } from '@mui/icons-material';
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
-
+import {
+  AccountBalanceWallet,
+  Assignment,
+  ListAlt,
+  MenuBook,
+  ReceiptLong,
+  SoupKitchen,
+} from "@mui/icons-material";
 
 export interface NavItem {
   title: string;
@@ -32,75 +27,67 @@ export const navItemsAdmin: NavItem[] = [
   //   to: '/dashboard'
   // },
   {
-    title: 'Dashboard',
+    title: "Dashboard",
     icon: <DashboardOutlinedIcon />,
-    to: '/reports'
+    to: "/reports",
   },
   {
-    title: 'Balance',
-    icon: <AccountBalanceWallet/>,
-    to: '/balance'
+    title: "Balance",
+    icon: <AccountBalanceWallet />,
+    to: "/balance",
   },
-
-]
+];
 
 export const navItemsOrders: NavItem[] = [
   {
-    title: 'Pedidos',
+    title: "Pedidos",
     icon: <Assignment />,
-    to: '/orders/'
+    to: "/orders/",
   },
   {
-    title: 'Cocina',
+    title: "Cocina",
     icon: <SoupKitchen />,
-    to: '/orders/actives'
+    to: "/orders/actives",
   },
   {
-    title: 'Lista de pedidos',
+    title: "Lista de pedidos",
     icon: <ListAlt />,
-    to: '/orders/list',
-
+    to: "/orders/list",
   },
   {
-    title: 'Comprobantes',
+    title: "Comprobantes",
     icon: <ReceiptLong />,
-    to: '/invoices',
-
+    to: "/invoices",
   },
-
-]
+];
 
 export const navItemsManagement: NavItem[] = [
   {
-    title: 'Menú del restaurante',
+    title: "Menú del restaurante",
     icon: <MenuBook />,
-    to: '/menu/edit'
+    to: "/menu/edit",
   },
   {
-    title: 'Gestión de mesas',
+    title: "Gestión de mesas",
     icon: <TableRestaurantOutlinedIcon />,
-    to: '/tables'
+    to: "/tables",
   },
   {
-    title: 'Gestión de clientes',
+    title: "Gestión de clientes",
     icon: <Groups3OutlinedIcon />,
-    to: '/clients'
+    to: "/clients",
   },
   // {
   //   title: 'Proveedores',
   //   icon: <LocalShipping />,
   //   to: '/suppliers'
   // }
-
-]
-
+];
 
 export const navItemsAdmin2: NavItem[] = [
   {
-    title: 'Gestión de usuarios',
+    title: "Gestión de usuarios",
     icon: <PeopleOutlineIcon />,
-    to: '/users'
+    to: "/users",
   },
-  
-]
-
+];

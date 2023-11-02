@@ -4,16 +4,14 @@ import { Socket } from "socket.io-client";
 import { useAppSelector } from "../hooks/useRedux";
 import { useSocket } from "../hooks/useSocket";
 import { selectAuth } from "../redux/slices/auth";
-import { getEnvVariables } from '../helpers/getEnvVariables';
+import { getEnvVariables } from "../helpers/getEnvVariables";
 
 const { VITE_WS_URL } = getEnvVariables();
 
-
-interface ISocket{
+interface ISocket {
   socket: Socket | null;
   online: boolean | undefined;
   conectarSocket: () => void;
- 
 }
 
 interface Props {
@@ -22,46 +20,33 @@ interface Props {
 
 export const SocketContext = createContext({} as ISocket);
 
-
-
-export const SocketProvider:FC<Props> = ({children}) => {
-
-  const { socket, online, conectarSocket, desconectarSocket} = useSocket(VITE_WS_URL);
+export const SocketProvider: FC<Props> = ({ children }) => {
+  const { socket, online, conectarSocket, desconectarSocket } =
+    useSocket(VITE_WS_URL);
 
   const { status } = useSelector(selectAuth);
 
   //const {usuario, status} = useAppSelector(selectAuth);
 
   useEffect(() => {
-
     //console.log(usuario?.online)
-     
-    if(status === 'not-authenticated'){
 
+    if (status === "not-authenticated") {
       console.log("Desconectando socket");
       desconectarSocket();
     }
-
   }, [status, desconectarSocket]);
-  
 
   useEffect(() => {
-    
-    if(status === 'authenticated'){
+    if (status === "authenticated") {
       console.log("conectando socket");
       conectarSocket();
-
-    }  
-
-  }, [status, conectarSocket])  
-
-
+    }
+  }, [status, conectarSocket]);
 
   return (
-
-    <SocketContext.Provider value={{socket, online, conectarSocket}}>
+    <SocketContext.Provider value={{ socket, online, conectarSocket }}>
       {children}
-    </ SocketContext.Provider>
-
-  )
-}
+    </SocketContext.Provider>
+  );
+};

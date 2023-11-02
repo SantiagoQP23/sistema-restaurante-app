@@ -1,27 +1,18 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
 
-import { Container } from '@mui/material';
+import { Container } from "@mui/material";
 import { useCashRegisterActive } from "./hooks/useCashRegister";
 
-
-
 const Balance = () => {
-
-  const { cashRegisterQuery } = useCashRegisterActive();
-
-
-
+  useCashRegisterActive();
 
   return (
     <>
-    <Container maxWidth='lg'>
-
-      <Outlet />
-
-    </Container>
-
+      <Container maxWidth="lg">
+        <Outlet />
+      </Container>
     </>
-  )
-}
+  );
+};
 
-export default Balance
+export default Balance;

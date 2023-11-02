@@ -1,8 +1,20 @@
 import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
 
+// const themeColors = {
+//   primary: '#3498db',
+//   secondary: '#e74c3c',
+//   success: '#2ecc71',
+//   warning: '#f1c40f',
+//   error: '#e67e22',
+//   info: '#9b59b6',
+//   black: '#34495e',
+//   white: '#ecf0f1',
+//   primaryAlt: '#2980b9'
+// };
+
 const themeColors = {
-  primary: '#5569ff',
+  primary: '#2C77D7',
   secondary: '#6E759F',
   success: '#57CA22',
   warning: '#FFA319',
@@ -459,6 +471,7 @@ export const PureLightTheme = createTheme({
         }
       }
     },
+   
     MuiCardHeader: {
       styleOverrides: {
         action: {
@@ -567,6 +580,7 @@ export const PureLightTheme = createTheme({
         }
       }
     },
+    
     MuiButton: {
       defaultProps: {
         disableRipple: true

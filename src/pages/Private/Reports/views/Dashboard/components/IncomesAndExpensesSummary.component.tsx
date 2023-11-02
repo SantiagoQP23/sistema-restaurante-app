@@ -35,7 +35,8 @@ export const IncomesAndExpensesSummary = () => {
 
 
   const dataChart = {
-    labels: data?.map(finance => format(new Date(finance.date), 'eeee dd/MM/yyyy', { locale: es })),
+    labels: data?.map(finance => finance.date),
+    // labels: data?.map(finance => format(new Date(finance.date), 'eeee dd/MM/yyyy', { locale: es })),
     datasets: [
       {
         label: 'Ingresos',

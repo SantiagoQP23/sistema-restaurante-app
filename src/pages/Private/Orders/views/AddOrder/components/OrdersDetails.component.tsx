@@ -1,39 +1,43 @@
-import { AddShoppingCartOutlined } from "@mui/icons-material";
-import { Card, CardHeader, IconButton, Divider, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, Stack } from "@mui/material";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { OrderContext } from "../../../context/Order.context";
-import { NewOrderDetail } from "./NewOrderDetail.component";
 
+import {
+  Card,
+  CardHeader,
+  IconButton,
+  Divider,
+  Typography,
+  Stack,
+} from "@mui/material";
+
+import { AddShoppingCartOutlined } from "@mui/icons-material";
+
+import { NewOrderDetail } from "./NewOrderDetail.component";
+import { useNewOrderStore } from "../../../store/newOrderStore";
 
 export const OrderDetails = () => {
-
-
   const navigate = useNavigate();
 
-  const { state: { details, totalProducts }, dispatch } = useContext(OrderContext)
-
+  const { details } = useNewOrderStore((state) => state);
 
   return (
-
     <>
-
       <Card>
-
         <CardHeader
-          title='Productos'
-          subheader={`Total: ${details.reduce((acc, detail) => acc + Math.floor(detail.quantity) + (Number.isInteger(detail.quantity) ? 0 : 1), 0)}`}
+          title="Productos"
+          subheader={`Total: ${details.reduce(
+            (acc, detail) =>
+              acc +
+              Math.floor(detail.quantity) +
+              (Number.isInteger(detail.quantity) ? 0 : 1),
+            0
+          )}`}
           action={
             <>
               <IconButton
-                // sx={{ display: { xs: 'flex', md: 'none' } }}
                 size="small"
-                onClick={() => navigate('/orders/menu')}
+                onClick={() => navigate("/orders/menu")}
                 color="primary"
-
-
               >
-
                 <AddShoppingCartOutlined />
               </IconButton>
             </>
@@ -42,37 +46,18 @@ export const OrderDetails = () => {
 
         <Divider />
 
-
-       
-
         <Stack spacing={1} divider={<Divider />}>
-
-          {
-            details.length > 0
-              ? details.map((detail) => (
-                <>
-                  <NewOrderDetail detalle={detail} key={detail.product.id} />
-                </>
-
-
-              ))
-              : (<TableRow>
-                <TableCell colSpan={5}>
-
-                  <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
-                </TableCell>
-              </TableRow>)
-
-          }
+          {details.length > 0 ? (
+            details.map((detail) => (
+              <NewOrderDetail detalle={detail} key={detail.product.id} />
+            ))
+          ) : (
+            <Typography variant="body1" align="center" my={5}>
+              No se han añadido productos
+            </Typography>
+          )}
         </Stack>
-        {/* </TableBody>
-          </Table>
-        </TableContainer> */}
-
-
-
       </Card>
-
     </>
-  )
-}
+  );
+};

@@ -6,8 +6,8 @@ import { useSnackbar } from "notistack";
 import { CreateExpenseDto } from "../dto/create-expense.dto";
 import { Expense } from "../models/expense.model";
 import { UpdateExpenseDto } from "../dto/update-expense.dto";
-import { queryClient } from "../../../../main";
 import { useFilterExpenses } from "./useFilterExpenses";
+import { queryClient } from '../../../../api/query-client';
 
 
 

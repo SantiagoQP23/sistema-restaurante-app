@@ -40,7 +40,7 @@ export const CashRegisterPopover = () => {
           //   md: 'none',
 
           // },
-          border: `1px solid ${theme.palette.divider}`,
+          // border: `1px solid ${theme.palette.divider}`,
         }}
 
       // onClick={() => {

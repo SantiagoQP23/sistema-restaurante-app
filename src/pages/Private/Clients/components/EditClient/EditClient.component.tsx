@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
-import { Grid, Typography, Button, Container, Card, CardContent, Stack, Box, Switch, CardHeader, Tabs, Tab } from '@mui/material';
+import { Grid, Typography, Card, CardContent, Stack, Box, Switch, CardHeader, Tabs, Tab } from '@mui/material';
 
 import { useNavigate, } from 'react-router-dom';
-import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addClient, selectClients, setActiveClient, updateClient } from '../../../../../redux/slices/clients/clients.slice';
-import { ArrowBack } from '@mui/icons-material';
+import { selectClients, setActiveClient, updateClient } from '../../../../../redux/slices/clients/clients.slice';
 import { ICreateClient } from '../../../../../models/client.model';
-import { createClient, updateClient as updateClientS } from '../../services/clients.service';
 import { useSnackbar } from 'notistack';
 import { TypeIdentification, CreatePerson } from '../../../../../models/common.model';
 import { FormClient } from '../FormClient.component';

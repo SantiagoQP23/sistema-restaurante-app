@@ -2,11 +2,11 @@ import { Container, CssBaseline, Box, Avatar, Typography, Grid, TextField, Butto
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { FC, useEffect, useState } from "react";
-import { useFetchAndLoad, useModal } from "../../../hooks";
+import { useFetchAndLoad, useModal } from "../../../../hooks";
 import { sendRequestResetPassword } from '../services/reset-password.service';
 import { useSnackbar } from "notistack";
 import { LoadingButton } from '@mui/lab';
-import { PublicRoutes } from "../../../models";
+import { PublicRoutes } from "../../../../models";
 
 interface ModalProps {
   open: boolean;

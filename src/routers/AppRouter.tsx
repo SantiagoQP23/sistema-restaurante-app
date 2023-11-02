@@ -1,52 +1,32 @@
-import { lazy, useEffect } from 'react';
-import { Navigate, Route, Routes, useRoutes } from 'react-router-dom';
+import { lazy, useEffect } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import { checkAuthToken, selectAuth } from '../redux/slices/auth';
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { RoutesWithNotFound } from '../helpers';
-import { PublicRoutes } from '../models';
+import { checkAuthToken, selectAuth } from "../redux/slices/auth";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
+import { PublicRoutes } from "../models";
 
+import { Public } from "../pages/Public/Public.page";
 
-const Login = lazy(() => import('../pages/Public/Login/Login.page'))
-const Signup = lazy(() => import('../pages/Public/Signup/Signup.page'))
-const ForgotPassword = lazy(() => import('../pages/Public/ForgotPassword/ForgotPassword.page'));
-const ResetPassword = lazy(() => import('../pages/Public/ResetPassword/ResetPassword.page'));
-
-const Private = lazy(() => import('../pages/Private/Private'));
+const Private = lazy(() => import("../pages/Private/Private"));
 
 export const AppRouter = () => {
-
   const dispatch = useAppDispatch();
 
   const { status, user } = useAppSelector(selectAuth);
 
-
   useEffect(() => {
     dispatch(checkAuthToken());
-  }, [])
+  }, []);
 
   return (
-
     <Routes>
-      {
-        (status === 'not-authenticated')
-          ? 
-            <>
-
-              <Route path={ PublicRoutes.LOGIN} element={<Login />}></Route>
-              <Route path={ PublicRoutes.SIGNUP} element={<Signup />}></Route>
-              <Route path={ PublicRoutes.FORGOT_PASSWORD} element={<ForgotPassword />}></Route>
-              <Route path={ PublicRoutes.RESET_PASSWORD} element={<ResetPassword />}></Route>
-              <Route path='/*' element={<Navigate to={PublicRoutes.LOGIN} />} />
-            </>
-          
-          : user && <Route path='/*' element={<Private />} />
-
-          
-      }
-
+      {status === "not-authenticated" ? (
+        <>
+          <Route path="/*" element={<Public />} />
+        </>
+      ) : (
+        user && <Route path="/*" element={<Private />} />
+      )}
     </Routes>
-
-
-  )
-}
+  );
+};

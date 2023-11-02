@@ -1,15 +1,17 @@
-import { IOrderDetail, IProduct } from "../../../../models";
+import { IOrderDetail } from "../../../../models";
 
 
 export interface InvoiceDetail {
 
   id: string;
 
+  title: string;
+
+  description: string;
+
   quantity: number;
 
   orderDetail: IOrderDetail;
-
-  product: IProduct;
 
   price: number;
 

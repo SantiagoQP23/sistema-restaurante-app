@@ -1,49 +1,28 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from "react";
 
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 
-import { useSelector } from 'react-redux';
+import { CssBaseline } from "@mui/material";
 
-import { CssBaseline } from '@mui/material'
+import ThemeProvider from "./theme/ThemeProvider";
+import { SuspenseLoader } from "./components/ui/";
 
-import { selectAuth } from './redux';
+import { AppRouter } from "./routers";
 
-
-import ThemeProvider from './theme/ThemeProvider';
-import { SuspenseLoader } from './components/ui/';
-
-import { AppRouter } from './routers';
-
+import "./styles/global-styles.css";
 
 function App() {
-
-  const { status } = useSelector(selectAuth);
-
   return (
-
-
-    <ThemeProvider >
-
+    <ThemeProvider>
       <Suspense fallback={<SuspenseLoader />}>
         <CssBaseline />
 
-        <BrowserRouter >
-
-          {
-            // status === 'checking'
-            // ? <SuspenseLoader />
-            // : <AppRouter />
-
-          }
+        <BrowserRouter>
           <AppRouter />
-
         </BrowserRouter>
-
       </Suspense>
-
     </ThemeProvider>
-
-  )
+  );
 }
 
-export default App
+export default App;

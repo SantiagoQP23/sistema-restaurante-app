@@ -1,121 +1,66 @@
-import { Card, CardContent, CardHeader, Divider, lighten, useTheme, Box, Button, Stack } from '@mui/material';
-import { IOrder, OrderStatus } from "../../../../../../models"
-import { FC } from "react"
-import { ActiveOrder } from "./ActiveOrder.component"
-import { Label } from "../../../../../../components/ui"
-import { useDispatch } from 'react-redux';
-import { resetActiveOrder } from '../../../../../../redux';
-import { useNavigate } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-import { Scrollbar } from '../../../../components';
-
-
+import { Card, CardHeader, Box, Stack } from "@mui/material";
+import { IOrder, OrderStatus } from "../../../../../../models";
+import { FC } from "react";
+import { ActiveOrder } from "./ActiveOrder.component";
+import { Label } from "../../../../../../components/ui";
 
 interface Props {
-  orders: IOrder[],
-  title: string,
-  color: 'success' | 'error' | 'warning' | 'info' | 'primary' | 'secondary',
-  status?: OrderStatus,
-  alignment?: string
+  orders: IOrder[];
+  title: string;
+  color: "success" | "error" | "warning" | "info" | "primary" | "secondary";
+  status?: OrderStatus;
+  alignment?: string;
 }
-
 
 export const CardActiveOrder: FC<Props> = ({
   orders,
   title,
   color,
-  status,
-  alignment = 'vertical'
+  alignment = "vertical",
 }) => {
-
-  const theme = useTheme();
-
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-
-
   return (
     <>
-
       <Card
         sx={{
-         
-          width: alignment === 'horizontal' ? 'auto' : '325px',
-        
-        
-          border: 'none'
+          width: alignment === "horizontal" ? "auto" : "325px",
 
+          border: "none",
         }}
       >
-
         <CardHeader
-          title={
-            <>
-              {title}
-            </>
-          }
-
-          action={
-              <Label
-                color={color}
-              >
-                {orders.length}
-              </Label>
-            
-          }
-
+          title={<>{title}</>}
+          action={<Label color={color}>{orders.length}</Label>}
         />
 
-
-       
-       
-
-          <Stack
-
-            direction={alignment === 'horizontal' ? 'row' : 'column'}
-
-            // direction='row'
-            sx={{
-
-              height: alignment === 'horizontal' ? 'auto' : '600px',
-              width: alignment === 'horizontal' ? 'auto' : '100%',
-              overflowX: 'auto',
-            
-    
-            }}
-            spacing={1}
-             p={0.5}
-          >
-
-
-
-            {
-              orders.length > 0
-              &&
-              orders.map((order, index) => (
-                <Box
+        <Stack
+          direction={alignment === "horizontal" ? "row" : "column"}
+          // direction='row'
+          sx={{
+            height: alignment === "horizontal" ? "auto" : "600px",
+            width: alignment === "horizontal" ? "auto" : "100%",
+            overflowX: "auto",
+          }}
+          spacing={1}
+          p={0.5}
+        >
+          {orders.length > 0 &&
+            orders.map((order, index) => (
+              <Box
+                key={order.id}
+                sx={{
+                  minWidth: alignment === "horizontal" ? "325px" : "100%",
+                }}
+              >
+                <ActiveOrder
                   key={order.id}
-                  sx={{
-                    
-                    minWidth: alignment === 'horizontal' ? '325px' : '100%',
-                  }}
-                >
-                  <ActiveOrder key={order.id} order={order} color={color} index={index} />
-
-                </Box>
-              ))
-            }
-          </Stack>
-     
-
-
+                  order={order}
+                  color={color}
+                  index={index}
+                />
+              </Box>
+            ))}
+        </Stack>
       </Card>
-
-
-
-
     </>
-  )
-}
+  );
+};

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { executeSimulation } from "../services/footfall.service"
 import { useSnackbar } from "notistack";
-import { queryClient } from "../../../../main";
+import { queryClient } from "../../../../api/query-client";
 
 
 

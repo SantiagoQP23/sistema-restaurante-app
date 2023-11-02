@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 import { Provider } from 'react-redux';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 import 'nprogress/nprogress.css';
 
@@ -11,8 +11,8 @@ import App from './App'
 
 import { SocketProvider } from './context'
 import { store } from './redux';
+import { queryClient } from './api/query-client';
 
-export const queryClient = new QueryClient()
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

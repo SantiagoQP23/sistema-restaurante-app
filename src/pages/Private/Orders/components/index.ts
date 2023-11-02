@@ -8,6 +8,5 @@ export * from './TableOrder.component';
 export * from './modals/ModalAddDetail.component';
 export * from './modals/ModalClientOrder.component';
 export * from './modals/ModalDeleteOrder.component';
-export * from './modals/ModalDiscountOrder.component';
 export * from './modals/ModalEditOrderDetail.component';
-export * from './modals/ModalPayOrder.component';
+export * from './modals/ModalCloseOrder.component';

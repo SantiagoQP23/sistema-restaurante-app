@@ -1,54 +1,74 @@
 import { ChangeEvent, FC, useState, useEffect } from "react";
 
-import { Box, Card, Checkbox, IconButton, LinearProgress, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, Button, FormControlLabel, TableSortLabel, Paper, InputBase, CircularProgress } from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { resetActiveUser, selectUsers, setActiveUser, updateUser } from '../../../../../redux/slices/users/users.slice';
-import { useSelector, useDispatch } from 'react-redux';
-import { IUser, Roles } from '../../../../../models/auth.model';
-import { useNavigate } from 'react-router-dom';
-import { useTheme } from '@mui/material/';
-import { statusModalDeleteUser, updateUser as updateUserS } from '../../services/users.service';
+import {
+  Box,
+  Card,
+  Checkbox,
+  IconButton,
+  LinearProgress,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Tooltip,
+  Typography,
+  Button,
+  FormControlLabel,
+  TableSortLabel,
+  Paper,
+  InputBase,
+  CircularProgress,
+} from "@mui/material";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import { useFetchAndLoad } from "../../../../../hooks/useFetchAndLoad";
+import {
+  resetActiveUser,
+  selectUsers,
+  setActiveUser,
+  updateUser,
+} from "../../../../../redux/slices/users/users.slice";
+import { useSelector, useDispatch } from "react-redux";
+import { IUser, Roles } from "../../../../../models/auth.model";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/";
+import {
+  statusModalDeleteUser,
+  updateUser as updateUserS,
+} from "../../services/users.service";
 import { Label } from "../../../../../components/ui";
-import { IClient } from '../../../../../models/client.model';
-import { useSnackbar } from 'notistack';
+import { IClient } from "../../../../../models/client.model";
+import { useSnackbar } from "notistack";
 import { TitlePage } from "../../../components/TitlePage.component";
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
+import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
+import { usePaginationAsync } from "../../../../../hooks/usePaginationAsync";
 import { useUsers } from "../../hooks/useUsers";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import { selectAuth } from "../../../../../redux";
 import { ValidRoles } from "../../../Common/models/valid-roles.model";
 
-
-
-
 export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
-
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  const {user: currentUser} = useSelector(selectAuth);
+  const { user: currentUser } = useSelector(selectAuth);
 
   const theme = useTheme();
 
   const editUser = (user: IUser) => {
     dispatch(setActiveUser(user));
 
-    if(currentUser!.id === user.id){
-      navigate('/users/account');
+    if (currentUser!.id === user.id) {
+      navigate("/users/account");
     } else {
-      navigate('edit');
-
+      navigate("edit");
     }
-  }
-
-
-
-
-
+  };
 
   return (
     <TableRow>
@@ -72,86 +92,53 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
         </Typography>
       </TableCell>
 
-
       <TableCell>
-        <Typography
-          variant="body1"
-
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
+        <Typography variant="body1" color="text.primary" gutterBottom noWrap>
           {user.person.identification.num}
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography
-          variant="body1"
-
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
+        <Typography variant="body1" color="text.primary" gutterBottom noWrap>
           {user.username}
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography
-          variant="body1"
-
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
+        <Typography variant="body1" color="text.primary" gutterBottom noWrap>
           {user.person.email}
         </Typography>
       </TableCell>
       <TableCell>
-        <Typography
-          variant="body1"
-
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
-          <Label color={
-            user?.role.name === 'admin'
-              ? 'info'
-              : user?.role.name === 'mesero'
-                ? 'primary'
-                : 'secondary'
-          }>
+        <Typography variant="body1" color="text.primary" gutterBottom noWrap>
+          <Label
+            color={
+              user?.role.name === "admin"
+                ? "info"
+                : user?.role.name === "mesero"
+                ? "primary"
+                : "secondary"
+            }
+          >
             {Roles[`${user?.role.name! as ValidRoles}`]}
           </Label>
         </Typography>
       </TableCell>
 
       <TableCell>
-        <Typography
-          variant="body1"
-
-          color="text.primary"
-          gutterBottom
-          noWrap
-        >
-          <Label color={
-            user.isActive ? 'success' : 'error'
-          }>
-            {user.isActive ? 'Activo' : 'Inactivo'}
+        <Typography variant="body1" color="text.primary" gutterBottom noWrap>
+          <Label color={user.isActive ? "success" : "error"}>
+            {user.isActive ? "Activo" : "Inactivo"}
           </Label>
         </Typography>
       </TableCell>
-
-
 
       <TableCell align="right">
         <Tooltip title="Edit Order" arrow>
           <IconButton
             sx={{
-              '&:hover': {
-                background: theme.colors.primary.lighter
+              "&:hover": {
+                background: theme.colors.primary.lighter,
               },
-              color: theme.palette.primary.main
+              color: theme.palette.primary.main,
             }}
             color="inherit"
             size="small"
@@ -174,24 +161,16 @@ export const TableRowUser: FC<{ user: IUser }> = ({ user }) => {
           </IconButton>
         </Tooltip> */}
       </TableCell>
-
     </TableRow>
+  );
+};
 
-  )
-}
+interface Props {}
 
-
-
-interface Props {
-
-}
-
-export const UsersTable: FC<Props> = ({ }) => {
-
+export const UsersTable: FC<Props> = ({}) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-
 
   const {
     usersQuery,
@@ -201,110 +180,75 @@ export const UsersTable: FC<Props> = ({ }) => {
 
     handleChangeSearch,
     handleChangePage,
-    handleChangeRowsPerPage
+    handleChangeRowsPerPage,
   } = useUsers();
-  
 
   const { users } = useSelector(selectUsers);
 
   const [dense, setDense] = useState<boolean>(false);
 
-
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
   };
 
-
-
   const editUser = (user: IUser) => {
     dispatch(setActiveUser(user));
-    navigate('edit')
-  }
+    navigate("edit");
+  };
 
   const createUser = () => {
-    dispatch(resetActiveUser())
-    navigate('add');
-
-  }
+    dispatch(resetActiveUser());
+    navigate("add");
+  };
 
   const updateList = () => {
     usersQuery.refetch();
-
-  }
+  };
 
   useEffect(() => {
-
     updateList();
-  }, [page, rowsPerPage, search])
-
+  }, [page, rowsPerPage, search]);
 
   return (
-
     <>
-
-
-
       <Paper
         component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center'}}
+        sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}
       >
-
         <InputBase
-          type='text'
+          type="text"
           onChange={handleChangeSearch}
           sx={{ ml: 1, flex: 1 }}
           placeholder="Buscar usuario"
-          inputProps={{ 'aria-label': 'Buscar usuario' }}
+          inputProps={{ "aria-label": "Buscar usuario" }}
           value={search}
         />
         <IconButton
           type="button"
-          sx={{ p: '10px' }}
+          sx={{ p: "10px" }}
           aria-label="search"
           onClick={updateList}
         >
-          {
-            usersQuery.isLoading
-              ? <CircularProgress size={20} />
-              : <SearchIcon />
-          }
+          {usersQuery.isLoading ? (
+            <CircularProgress size={20} />
+          ) : (
+            <SearchIcon />
+          )}
         </IconButton>
-
-
       </Paper>
 
-
-
-      <Box sx={{ height: 400, width: '100%', my: 1 }} >
-
-        {
-          usersQuery.isLoading &&
-          <LinearProgress />
-        }
+      <Box sx={{ height: 400, width: "100%", my: 1 }}>
+        {usersQuery.isLoading && <LinearProgress />}
         <Card>
-
           <TableContainer>
-            <Table
-              size={dense ? 'small' : 'medium'}
-            >
-              <TableHead
-
-              >
-
+            <Table size={dense ? "small" : "medium"}>
+              <TableHead>
                 <TableRow>
                   {/* <TableCell padding="checkbox">
                   Estado
                 </TableCell> */}
-                  <TableCell
-
-
-
-                  >
-                    <TableSortLabel
-
-                    >
-                      Nombres y apellidos
-                    </TableSortLabel>
+                  <TableCell>
+                    <TableSortLabel>Nombres y apellidos</TableSortLabel>
                   </TableCell>
                   <TableCell>Número de identificación</TableCell>
                   <TableCell>Nombre de usuario</TableCell>
@@ -313,7 +257,6 @@ export const UsersTable: FC<Props> = ({ }) => {
                   <TableCell>Estado</TableCell>
                   <TableCell>Acciones</TableCell>
                 </TableRow>
-
               </TableHead>
               <TableBody>
                 {/* {
@@ -325,20 +268,15 @@ export const UsersTable: FC<Props> = ({ }) => {
 
 
                 } */}
-                {
-                  usersQuery.data && usersQuery.data.count > 0 && usersQuery.data.users.map(user => (
+                {usersQuery.data &&
+                  usersQuery.data.count > 0 &&
+                  usersQuery.data.users.map((user) => (
                     <TableRowUser key={user.id} user={user} />
-                  ))
-                }
+                  ))}
               </TableBody>
-
             </Table>
           </TableContainer>
-          <Box p={2}
-            display="flex"
-            justifyContent="space-between"
-          >
-
+          <Box p={2} display="flex" justifyContent="space-between">
             <FormControlLabel
               control={<Switch checked={dense} onChange={handleChangeDense} />}
               label="Dense padding"
@@ -353,15 +291,8 @@ export const UsersTable: FC<Props> = ({ }) => {
               rowsPerPageOptions={[5, 10, 25, 30]}
             />
           </Box>
-
         </Card>
-
-
-
-
-
       </Box>
     </>
-
-  )
-}
+  );
+};

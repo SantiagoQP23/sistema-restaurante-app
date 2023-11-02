@@ -13,6 +13,8 @@ export interface AuthState {
   status: 'checking' | 'authenticated' | 'not-authenticated';
   restaurant: Restaurant | null;
 }
+
+
 /*
 usuario:  idUsuario: 1,
  nombreUsuario: "Nombre del usuario",

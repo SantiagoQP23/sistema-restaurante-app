@@ -1,55 +1,36 @@
+import { FC, useState } from "react";
 
-import { FC, useState } from 'react'
+import {  Button, Grid } from "@mui/material/";
+import { TextField } from "@mui/material";
+import { Add } from "@mui/icons-material";
 
-import { Box, Button, Grid } from '@mui/material/';
-import { TextField } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { useCreateCashIncome } from '../../../hooks/useCashIncome';
-import { LoadingButton } from '@mui/lab';
+import { LoadingButton } from "@mui/lab";
 // import { CreateCashIncomeDto } from '../../../dto/create-cash-transaction.dto';
 
-
 interface Props {
-  handleClose: () => void,
-  cashRegisterId: string
+  handleClose: () => void;
+  cashRegisterId: string;
 }
 
-export const FormCashIncome: FC<Props> = ({ handleClose, cashRegisterId }) => {
-
-
+export const FormCashIncome: FC<Props> = ({ handleClose, }) => {
   // const { mutateAsync, isLoading } = useCreateCashIncome();
 
   const [amount, setAmount] = useState<number>(0);
 
   const handleChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
 
-    const value = Number(event.target.value)
-
-    setAmount(value)
-
-  }
+    setAmount(value);
+  };
 
   const handleSubmit = () => {
-
-    // const data: CreateCashIncomeDto = {
-    //   cashRegisterId,
-    //   amount
-    // }
-
-    // console.log(data)
-
-    // mutateAsync(data)
-
-  }
-
-
+ 
+  };
 
   return (
     <>
       <Grid container spacing={1}>
-
         <Grid item xs={12}>
-
           <TextField
             label="Monto"
             variant="outlined"
@@ -58,20 +39,15 @@ export const FormCashIncome: FC<Props> = ({ handleClose, cashRegisterId }) => {
             fullWidth
             value={amount}
             onChange={handleChangeAmount}
-
-
-
           />
         </Grid>
 
-        <Grid item xs={12} display='flex' justifyContent='right' gap={1}>
-
+        <Grid item xs={12} display="flex" justifyContent="right" gap={1}>
           <Button
             color="inherit"
-            size='small'
+            size="small"
             onClick={handleClose}
-          // startIcon={<Close />}
-
+            // startIcon={<Close />}
           >
             Cancelar
           </Button>
@@ -79,17 +55,14 @@ export const FormCashIncome: FC<Props> = ({ handleClose, cashRegisterId }) => {
           <LoadingButton
             color="success"
             startIcon={<Add />}
-            size='small'
-            variant='contained'
+            size="small"
+            variant="contained"
             onClick={handleSubmit}
           >
             Añadir dinero
           </LoadingButton>
         </Grid>
-
-
       </Grid>
-
     </>
-  )
-}
+  );
+};

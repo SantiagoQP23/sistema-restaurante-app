@@ -1,25 +1,19 @@
-import { lazy } from 'react';
-
 import { Navigate, RouteObject } from "react-router-dom";
 
-import SidebarLayout from '../layouts/SidebarLayout/SidebarLayout.component';
+import SidebarLayout from "../layouts/SidebarLayout/SidebarLayout.component";
 
 import { PrivateRoutes } from "../../../models";
-import { OrderRouter } from '../Orders/router';
-import { MenuEditRouter } from '../EditMenu/router/MenuEdit.router';
-import { ClientsRouter } from '../Clients/router/Clients.router';
-import { TablesRouter } from '../Tables/router/Tables.router';
-import { UsersRouter } from '../Users/router/Users.router';
-import { ReportsRouter } from '../Reports/router/Reports.router';
-import { BalanceRouter } from '../Balance/router/Balance.router';
-import { SuppliersRouter } from '../Suppliers/router/Suppliers.router';
-import { InvoiceRouter } from '../Invoices/router/Invoice.router';
-
-
-
+import { OrderRouter } from "../Orders/router";
+import { MenuEditRouter } from "../EditMenu/router/MenuEdit.router";
+import { ClientsRouter } from "../Clients/router/Clients.router";
+import { TablesRouter } from "../Tables/router/Tables.router";
+import { UsersRouter } from "../Users/router/Users.router";
+import { ReportsRouter } from "../Reports/router/Reports.router";
+import { BalanceRouter } from "../Balance/router/Balance.router";
+import { SuppliersRouter } from "../Suppliers/router/Suppliers.router";
+import { InvoiceRouter } from "../Invoices/router/Invoice.router";
 
 export const PrivateRouter: RouteObject[] = [
-
   {
     path: "/",
     element: <SidebarLayout />,
@@ -35,30 +29,24 @@ export const PrivateRouter: RouteObject[] = [
       BalanceRouter,
       SuppliersRouter,
       {
-        path: '/auth/login',
-        element: <Navigate to={PrivateRoutes.MENU} />
+        path: "/auth/login",
+        element: <Navigate to={PrivateRoutes.MENU} />,
       },
       {
         path: "",
-        element: <Navigate to={PrivateRoutes.MENU} />
+        element: <Navigate to={PrivateRoutes.MENU} />,
       },
       {
         path: "menu",
-        element: <Navigate to={PrivateRoutes.MENU} />
+        element: <Navigate to={PrivateRoutes.MENU} />,
       },
       {
         path: "*",
-        element: <Navigate to={PrivateRoutes.MENU} />
-      }
-
-    ]
-
-  }
-]
-
-
-
-
+        element: <Navigate to={PrivateRoutes.MENU} />,
+      },
+    ],
+  },
+];
 
 //   {
 //     path: '/',
@@ -125,16 +113,13 @@ export const PrivateRouter: RouteObject[] = [
 
 //           },
 
-
 //         ]
 
 //       },
 
-
 //     ]
 //   },
 
-  
 //   {
 //     path: PrivateRoutes.CLIENTS,
 //     element: <SidebarLayout allowedRoles={[ValidRoles.admin, ValidRoles.mesero, ValidRoles.despachador]} />,
@@ -157,7 +142,6 @@ export const PrivateRouter: RouteObject[] = [
 //             element: <AddClient />
 //           },
 
-
 //         ]
 //       },
 //     ]
@@ -178,7 +162,6 @@ export const PrivateRouter: RouteObject[] = [
 //             path: 'edit',
 //             element: <EditTable />
 //           }
-
 
 //         ]
 //       },
@@ -206,9 +189,6 @@ export const PrivateRouter: RouteObject[] = [
 //           },
 //         ]
 //       }
-
-
-
 
 //     ]
 //   },

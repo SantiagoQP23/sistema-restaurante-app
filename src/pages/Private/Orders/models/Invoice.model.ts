@@ -1,32 +1,40 @@
 import { IClient, IUser } from "../../../../models";
 import { InvoiceDetail } from "./invoice-detail.model";
 
-
 export enum PaymentMethod {
-  CASH = 'CASH',
+  CASH = "CASH",
   // CARD = 'CARD',
-  TRANSFER = 'TRANSFER',
+  TRANSFER = "TRANSFER",
 }
 
-export interface Invoice {
 
+export enum InvoiceStatus {
+  PAID = 'PAID',
+  PENDING = 'PENDING',
+  DRAFT = 'DRAFT', // Si está draft eliminar completamente la factura
+}
+
+
+export interface Invoice {
   id: string;
 
-  transactionNumber: string;
+  num: number;
 
-  paymentMethod: PaymentMethod;
+  paymentMethod?: PaymentMethod;
 
   amount: number;
 
-  amountPaid: number;
+  amountPaid?: number;
 
-  difference: number;
+  difference?: number;
 
-  discount: number;
+  discount?: number;
 
-  total: number;
+  total?: number;
 
-  client: IClient;
+  client?: IClient;
+
+  status: InvoiceStatus;
 
   createdAt: Date;
 
@@ -34,12 +42,11 @@ export interface Invoice {
 
   details: InvoiceDetail[];
 
-  isActive: boolean;
   user: IUser;
 
   comments: string;
 
   notaDeVenta: string;
 
-
+  isActive: boolean;
 }

@@ -1,167 +1,86 @@
-import { FC, useContext, useState } from 'react';
-
-import { useNavigate } from 'react-router-dom';
+import { FC, useState } from "react";
 
 import {
-  Card, CardHeader, Grid, CardContent, Box, Typography, Collapse, ToggleButton, ToggleButtonGroup, Radio, RadioGroup,
-  Button, CardActions, IconButton, Tooltip, useTheme, Tab, Tabs, Chip, Divider, Stack, Avatar
-} from '@mui/material';
+  Card,
+  CardHeader,
+  Grid,
+  Box,
+  Typography,
+  Button,
+  CardActions,
+  Tab,
+  Tabs,
+  Chip,
+  Divider,
+  Stack,
+} from "@mui/material";
 
-import { ArrowBack, Check, CheckCircleOutline, EditOutlined, EditTwoTone, ExpandLess, ExpandMoreOutlined, PlayArrow, ExpandMore, TableRestaurant, Numbers, Person, DoneAll, Restaurant, PendingOutlined, AccessTimeOutlined, Done, MoreVert, Edit, ArrowRight, ArrowForward, Undo, PlayCircleOutline, People, TakeoutDining, Timer, TimerOutlined, Notes } from '@mui/icons-material';
+import {
+  Check,
+  TableRestaurant,
+  Person,
+  Restaurant,
+  Undo,
+  PlayCircleOutline,
+  People,
+  TakeoutDining,
+  TimerOutlined,
+  Notes,
+} from "@mui/icons-material";
 
-import { format, formatDistance, subHours } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { formatDistance } from "date-fns";
+import { es } from "date-fns/locale";
 
-import { useSnackbar } from 'notistack';
+import { DetailInProgress } from ".";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { Label } from "../../../../../../components/ui";
+import { UpdateOrderDto } from "../../../dto/update-order.dto";
+import { OrderStatus, TypeOrder } from "../../../../../../models/orders.model";
 
-import { DetailInProgress } from '.';
-import { Label } from '../../../../../../components/ui';
-import { SocketContext } from '../../../../../../context';
-import { UpdateOrderDto } from '../../../dto/update-order.dto';
-import { OrderStatus, IOrderDetail, TypeOrder } from '../../../../../../models/orders.model';
-import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
-import { selectMenu, setActiveOrder } from '../../../../../../redux';
-
-import { IOrder } from '../../../../../../models';
-import { statusModalEditOrderDetail, statusModalStartOrder } from '../../../services/orders.service';
-import { BtnAddProduct } from './BtnAddProduct.component';
-import { queryClient } from '../../../../../../main';
-import { useQueryClient } from '@tanstack/react-query';
-import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
-import { LabelStatusOrder } from '../../OrdersList/components/LabelStatusOrder.component';
-import { useOrderHelper } from '../../../hooks/useOrders';
+import { IOrder } from "../../../../../../models";
+import { statusModalStartOrder } from "../../../services/orders.service";
+import { BtnAddProduct } from "./BtnAddProduct.component";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { LabelStatusOrder } from "../../OrdersList/components/LabelStatusOrder.component";
+import { useOrderHelper } from "../../../hooks/useOrders";
 
 interface Props {
   order: IOrder;
   setStatusFilter?: (status: OrderStatus) => void;
-  color: 'success' | 'error' | 'warning' | 'info' | 'primary' | 'secondary',
-  index: number
+  color: "success" | "error" | "warning" | "info" | "primary" | "secondary";
+  index: number;
 }
 
-
-const PendingDetail: FC<{ detail: IOrderDetail }> = ({ detail }) => {
-
-  return (
-    <>
-      {
-        detail.quantity !== detail.qtyDelivered &&
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box>
-            <Typography variant='h5' color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}>
-              {`${detail.quantity - detail.qtyDelivered}`} - {`${detail.product.name}`}
-            </Typography>
-
-            <Typography
-              variant="inherit"
-
-              color={detail.quantity === detail.qtyDelivered ? 'gray' : 'initial'}
-              style={{ whiteSpace: 'pre-wrap' }}
-            >
-              {detail.description}
-            </Typography>
-
-          </Box>
-        </Box>
-
-      }
-    </>
-  )
-
-}
-
-
-const DetailDispatched: FC<{ detail: IOrderDetail, orderId: string }> = ({ detail, orderId }) => {
-
-  const theme = useTheme();
-
-  const editDetail = () => {
-
-    statusModalEditOrderDetail.setSubject(true, detail, orderId);
-  }
-
-
-
-  return (
-    <>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-
-        <Typography variant='h5' color='gray'
-        // sx={{
-        //   textDecoration: 'line-through'
-        // }}
-        >
-          {`${detail.quantity}`} - {`${detail.product.name}`}
-
-        </Typography>
-        <Tooltip title="Editar detalle" arrow>
-          <IconButton
-            sx={{
-              '&:hover': {
-                background: theme.colors.primary.lighter
-              },
-              color: theme.palette.success.main
-            }}
-            color='success'
-            size="small"
-            onClick={() => editDetail()}
-
-          >
-            <CheckCircleOutline fontSize="small" />
-          </IconButton>
-        </Tooltip>
-
-
-      </Box>
-    </>
-  )
-
-}
-
-enum StatusDetail {
-  NOT_DELIVERED = 'NOT_DELIVERED',
-  DELIVERED = 'DELIVERED'
-
-}
-
-export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color, index }) => {
-
+export const ActiveOrder: FC<Props> = ({
+  order,
+  setStatusFilter,
+  color,
+  index,
+}) => {
   // const color= "primary";
 
   const { details } = order;
 
   const { getFirstPendingOrder } = useOrderHelper();
 
-
   const queryClient = useQueryClient();
 
-  queryClient.prefetchQuery(['order', order.id], () => order)
+  queryClient.prefetchQuery(["order", order.id], () => order);
 
-  const { sections } = useSelector(selectMenu);
-
-  const { socket } = useContext(SocketContext);
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  const [expanded, setExpanded] = useState<boolean>(order.status === OrderStatus.DELIVERED ? true : false);
+  const [expanded, setExpanded] = useState<boolean>(
+    order.status === OrderStatus.DELIVERED ? true : false
+  );
 
   const handleExpanded = () => {
     setExpanded(!expanded);
   };
 
-  const { updateOrder, loading } = useUpdateOrder()
-
+  const { updateOrder } = useUpdateOrder();
 
   const handleStartOrder = (order: IOrder) => {
-
     // TODO
-    // Obtener el primer pedido pendiente 
+    // Obtener el primer pedido pendiente
     const firstOrder = getFirstPendingOrder();
 
     if (firstOrder.id === order.id) {
@@ -169,504 +88,369 @@ export const ActiveOrder: FC<Props> = ({ order, setStatusFilter, color, index })
       // se puede iniciar
       changeStatusOrder(OrderStatus.IN_PROGRESS);
 
-      console.log('es el primero')
+      console.log("es el primero");
     } else {
       // Si el pedido no es el primero en la lista de pedidos pendientes
-      console.log('hay un pedido pendiente')
-
-
+      console.log("hay un pedido pendiente");
 
       statusModalStartOrder.setSubject({ value: true, order });
     }
-
-  }
-
-
+  };
 
   const changeStatusOrder = (status: OrderStatus) => {
-
     const data: UpdateOrderDto = {
       id: order.id,
-      status
-    }
+      status,
+    };
 
     updateOrder(data);
-
-  }
+  };
 
   return (
     <>
-
-      {/* <Stack direction='row' spacing={1} alignItems='center'>
-
-<AccessTimeOutlined color='secondary' fontSize='small' />
-<Typography variant='body2'  >
-  {'Creado ' +
-    formatDistance(new Date(order.createdAt), new Date(), {
-      addSuffix: true,
-      includeSeconds: true,
-      locale: es
-    })}
-</Typography>
-
-</Stack> */}
-
-
       <Card
-
         sx={{
-
-          // borderTop: (theme) => `1px solid ${theme.palette[color].main}`,
-          // border: (theme) => `2px solid ${theme.palette[color].main}`,
           borderTop: (theme) => `5px solid ${theme.palette[color].main}`,
-          // backgroundColor: (theme) => `${theme.colors.alpha.black}`,
-          // backgroundColor: 'transparent'
         }}
-        variant='elevation'
-
+        variant="elevation"
       >
-
         <CardHeader
           title={
-            <Stack spacing={0.5} direction='column' my={1} alignItems='center' justifyContent='center' >
+            <Stack
+              spacing={0.5}
+              direction="column"
+              my={1}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Chip
+                label={index + 1}
+                color={color}
+                size="small"
+                variant="outlined"
+              />
 
-              <Chip label={index + 1} color={color} size='small' variant='outlined'/>
-
-              <Typography variant='h3'>{`N° ${order.num}`}</Typography>
+              <Typography variant="h3">{`N° ${order.num}`}</Typography>
               <LabelStatusOrder status={order.status} />
-
             </Stack>
-
-
           }
-
         />
 
-        <Grid container spacing={1} alignItems='center' px={1}>
-
+        <Grid container spacing={1} alignItems="center" px={1}>
           <Grid item xs={12}>
-
             <CardHeader
-
               sx={{
                 px: 1,
-                py: 0.5
+                py: 0.5,
               }}
-
               avatar={<TimerOutlined />}
               // title='Hora de entrega'
               titleTypographyProps={{
-                variant: 'subtitle2'
-
+                variant: "subtitle2",
               }}
-
               subheaderTypographyProps={{
-                variant: 'h5',
-                color: 'inherith'
+                variant: "h5",
+                color: "inherith",
               }}
-              subheader={`${formatDistance(new Date(order.deliveryTime), new Date(), {
-                addSuffix: true,
-                includeSeconds: true,
-                locale: es
-              })}`}
+              subheader={`${formatDistance(
+                new Date(order.deliveryTime),
+                new Date(),
+                {
+                  addSuffix: true,
+                  includeSeconds: true,
+                  locale: es,
+                }
+              )}`}
             />
-
           </Grid>
-
-         
 
           <Grid item xs={6}>
             <CardHeader
               sx={{
                 px: 1,
-                py: 0.5
+                py: 0.5,
               }}
-
-              avatar={order.type === TypeOrder.IN_PLACE ? <Restaurant /> : <TakeoutDining />}
+              avatar={
+                order.type === TypeOrder.IN_PLACE ? (
+                  <Restaurant />
+                ) : (
+                  <TakeoutDining />
+                )
+              }
               // title='Orden'
               titleTypographyProps={{
-                variant: 'subtitle2'
-
+                variant: "subtitle2",
               }}
-
               subheaderTypographyProps={{
-                variant: 'h5',
-                color: 'inherith'
+                variant: "h5",
+                color: "inherith",
               }}
-              subheader={order.type === TypeOrder.IN_PLACE ? 'Para servir' : 'Para llevar'}
+              subheader={
+                order.type === TypeOrder.IN_PLACE
+                  ? "Para servir"
+                  : "Para llevar"
+              }
             />
-          
-
           </Grid>
 
           <Grid item xs={6}>
             <CardHeader
               sx={{
                 px: 1,
-                py: 0.5
+                py: 0.5,
               }}
-
-
               avatar={<People />}
               // title='Personas'
               titleTypographyProps={{
-                variant: 'subtitle2'
-
+                variant: "subtitle2",
               }}
-
               subheaderTypographyProps={{
-                variant: 'h5',
-                color: 'inherith'
+                variant: "h5",
+                color: "inherith",
               }}
               subheader={`${order.people}`}
             />
-            <Card>
-
-
-            </Card>
-
+            <Card></Card>
           </Grid>
 
-         
-          {
-            order.type === TypeOrder.IN_PLACE && (
-              <>
-                <Grid item xs={12}>
-                  <CardHeader
-                    sx={{
-                      px: 1,
-                      py: 0.5
-                    }}
+          {order.type === TypeOrder.IN_PLACE && (
+            <>
+              <Grid item xs={12}>
+                <CardHeader
+                  sx={{
+                    px: 1,
+                    py: 0.5,
+                  }}
+                  avatar={<TableRestaurant />}
+                  // title='Mesa'
+                  titleTypographyProps={{
+                    variant: "subtitle2",
+                  }}
+                  subheaderTypographyProps={{
+                    variant: "h5",
+                    color: "inherith",
+                  }}
+                  subheader={`Mesa ${order.table?.name}` || "No seleccionada"}
+                />
 
-
-                    avatar={<TableRestaurant />}
-                    // title='Mesa'
-                    titleTypographyProps={{
-                      variant: 'subtitle2'
-
-                    }}
-
-                    subheaderTypographyProps={{
-                      variant: 'h5',
-                      color: 'inherith'
-                    }}
-                    subheader={`Mesa ${order.table?.name}` || 'No seleccionada'}
-                  />
-
-                  <Card>
-
-
-                  </Card>
-
-
-
-                </Grid>
-
-
-              </>
-
-            )
-          }
-
-
-      
+                <Card></Card>
+              </Grid>
+            </>
+          )}
 
           <Grid item xs={12}>
             <CardHeader
               sx={{
                 px: 1,
-                py: 0.5
+                py: 0.5,
               }}
-
-
-              avatar={
-
-                <Person />
-
-              }
+              avatar={<Person />}
               // title='Mesero'
               titleTypographyProps={{
-                variant: 'subtitle2'
-
+                variant: "subtitle2",
               }}
-
               subheaderTypographyProps={{
-                variant: 'h5',
-                color: 'inherith'
+                variant: "h5",
+                color: "inherith",
               }}
               subheader={`${order.user.person.firstName} ${order.user.person.lastName}`}
             />
-            <Card>
-
-
-            </Card>
+            <Card></Card>
           </Grid>
 
-         
-
-          {
-            order.notes
-            && (
-              <>
-                <Grid item xs={12}>
-                  <CardHeader
-
-                    sx={{
-                      px: 1,
-                      py: 0.5
-                    }}
-
-
-                    avatar={<Notes />}
-                    title='Notas'
-                    titleTypographyProps={{
-                      variant: 'subtitle2'
-
-                    }}
-
-                    subheaderTypographyProps={{
-                      variant: 'h5',
-                      color: 'inherith'
-                    }}
-                    subheader={order.notes}
-                  />
-                 
-
-
-                </Grid>
-              </>
-            )
-          }
-
-
+          {order.notes && (
+            <>
+              <Grid item xs={12}>
+                <CardHeader
+                  sx={{
+                    px: 1,
+                    py: 0.5,
+                  }}
+                  avatar={<Notes />}
+                  title="Notas"
+                  titleTypographyProps={{
+                    variant: "subtitle2",
+                  }}
+                  subheaderTypographyProps={{
+                    variant: "h5",
+                    color: "inherith",
+                  }}
+                  subheader={order.notes}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
-
-
 
         <Divider sx={{ mb: 0.5, mt: 1, mx: 1 }} />
 
-        <Stack
-          spacing={1.5}
-          sx={{ px: 1 }}
-        >
+        <Stack spacing={1.5} sx={{ px: 1 }}>
+          {order.status !== OrderStatus.DELIVERED && (
+            <Tabs
+              value={expanded ? 1 : 0}
+              onChange={handleExpanded}
+              indicatorColor="primary"
+              // allowScrollButtonsMobile
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                zIndex: 1,
 
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "transparent",
 
-          {order.status !== OrderStatus.DELIVERED && <Tabs
-            value={expanded ? 1 : 0}
-            onChange={handleExpanded}
-            indicatorColor='primary'
-            // allowScrollButtonsMobile
-            variant='scrollable'
-            scrollButtons='auto'
-
-            sx={{
-
-              zIndex: 1,
-
-
-
-              '& .MuiTabs-indicator': {
-                // backgroundColor: color + '.main',
-                backgroundColor: 'transparent',
-
-                // borderRadius: '10px 10px 0 0',
-                borderColor: 'transparent',
-                boxShadow: 'none',
-                borderRadius: '0',
-                color: 'text.primary',
-
-                // border: '0 0 3px 0 solid' + color + '.main',
-                // border: `2px solid ${color + '.main'}`,
-                // color: color + '.main',
-
-              },
-              '& .MuiTab-indicatorSpan': {
-                backgroundColor: color + '.main',
-                borderRadius: '10px 10px 0 0',
-                color: 'text.primary',
-
-
-              },
-              '& .Mui-selected': {
-                borderRadius: '0',
-                borderBottom: (theme) => `3px solid ${theme.palette[color].main}`,
-                color: (theme) => 'text.primary',
-                // color: (theme) => theme.colors[color].main,
-              },
-              '& .Mui-selected:hover': {
-                color: (theme) => theme.palette[color].main,
-              },
-
-              // }, '& .MuiTab-root': {
-              //   color: color === 'success' ? 'success.main' : color === 'error' ? 'error.main' : color === 'warning' ? 'warning.main' : color === 'info' ? 'info.main' : color === 'primary' ? 'primary.main' : 'secondary.main',
-
-              //   border: `2px solid ${'color'+'.main'}`
-              // }
-            }}
-
-          >
-
-            {
-
+                  borderColor: "transparent",
+                  boxShadow: "none",
+                  borderRadius: "0",
+                  color: "text.primary",
+                },
+                "& .MuiTab-indicatorSpan": {
+                  backgroundColor: color + ".main",
+                  borderRadius: "10px 10px 0 0",
+                  color: "text.primary",
+                },
+                "& .Mui-selected": {
+                  borderRadius: "0",
+                  borderBottom: (theme) =>
+                    `3px solid ${theme.palette[color].main}`,
+                  color: "text.primary",
+                },
+                "& .Mui-selected:hover": {
+                  color: (theme) => theme.palette[color].main,
+                },
+              }}
+            >
+              {
+                <Tab
+                  // disabled={order.status === OrderStatus.DELIVERED}
+                  label="Por entregar"
+                  icon={
+                    <Label color={color}>
+                      {
+                        details?.filter(
+                          (detail) => detail.quantity !== detail.qtyDelivered
+                        ).length
+                      }
+                    </Label>
+                  }
+                  iconPosition="end"
+                  sx={{
+                    "&.Mui-selected, &.Mui-selected:hover": {
+                      color: (theme) => theme.colors.alpha.black[100],
+                    },
+                  }}
+                />
+              }
               <Tab
-                // disabled={order.status === OrderStatus.DELIVERED}
-                label='Por entregar'
+                label={"Entregado"}
                 icon={
                   <Label color={color}>
-                    {details?.filter(detail => detail.quantity !== detail.qtyDelivered).length}
+                    {
+                      details?.filter(
+                        (detail) => detail.quantity === detail.qtyDelivered
+                      ).length
+                    }
                   </Label>
                 }
-
-                iconPosition='end'
-
+                iconPosition="end"
                 sx={{
-                  '&.Mui-selected, &.Mui-selected:hover': {
-                    color: (theme) => theme.colors.alpha.black[100]
-                  }
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    color: (theme) => theme.colors.alpha.black[100],
+                  },
                 }}
-
               />
-            }
-            <Tab
-              label={
-                'Entregado'
+            </Tabs>
+          )}
 
-              }
-              icon={
-                <Label color={color}>
-                  {details?.filter(detail => detail.quantity === detail.qtyDelivered).length}
-                </Label>
-              }
-              iconPosition='end'
-              sx={{
-                '&.Mui-selected, &.Mui-selected:hover': {
-                  color: (theme) => theme.colors.alpha.black[100]
-                }
-              }}
-            />
-          </Tabs>
-          }
-
-          {
-            !expanded
-              ? details?.filter(detail => detail.quantity !== detail.qtyDelivered)
-                .map(detail => (
-
-                  <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
-
-                ))
-              :
-              details?.filter(detail => detail.quantity === detail.qtyDelivered).length >= 1
-                ?
-                details.filter(detail => detail.quantity === detail.qtyDelivered)
-                  .map(detail => (
-
-                    <DetailInProgress key={detail.id} detail={detail} orderId={order.id} />
-
-                  ))
-                : (
-                  <Box>
-
-                    <Typography variant='body1' color='gray' my={5} textAlign='center'>
-                      No hay productos entregados
-                    </Typography>
-                  </Box>
-                )
-
-
-          }
-
+          {!expanded ? (
+            details
+              ?.filter((detail) => detail.quantity !== detail.qtyDelivered)
+              .map((detail) => (
+                <DetailInProgress
+                  key={detail.id}
+                  detail={detail}
+                  orderId={order.id}
+                />
+              ))
+          ) : details?.filter(
+              (detail) => detail.quantity === detail.qtyDelivered
+            ).length >= 1 ? (
+            details
+              .filter((detail) => detail.quantity === detail.qtyDelivered)
+              .map((detail) => (
+                <DetailInProgress
+                  key={detail.id}
+                  detail={detail}
+                  orderId={order.id}
+                />
+              ))
+          ) : (
+            <Box>
+              <Typography
+                variant="body1"
+                color="gray"
+                my={5}
+                textAlign="center"
+              >
+                No hay productos entregados
+              </Typography>
+            </Box>
+          )}
 
           <BtnAddProduct order={order} />
-
-
         </Stack>
 
+        <Divider
+          sx={{
+            mt: 1,
+            display: order.status === OrderStatus.DELIVERED ? "none" : "block",
+          }}
+        />
 
-        <Divider sx={{ mt: 1, display: order.status === OrderStatus.DELIVERED ? 'none' : 'block' }} />
-
-        <CardActions sx={{
-          justifyContent: 'center',
-        }}>
-
-
-
-
-          {
-            order.status === OrderStatus.PENDING
-              ? <Button
-
-                // variant='contained'
-                startIcon={<PlayCircleOutline />}
-                onClick={() => {
-                  // changeStatusOrder(OrderStatus.IN_PROGRESS)
-                  // setStatusFilter && setStatusFilter(OrderStatus.IN_PROGRESS)
-                  handleStartOrder(order);
-
-                }}
-                // color={color}
-                // size='small'
-                variant='outlined'
-                color='warning'
-
-
-              >Iniciar</Button>
-              : order.status === OrderStatus.IN_PROGRESS
-              &&
-              < >
+        <CardActions
+          sx={{
+            justifyContent: "center",
+          }}
+        >
+          {order.status === OrderStatus.PENDING ? (
+            <Button
+              startIcon={<PlayCircleOutline />}
+              onClick={() => {
+                handleStartOrder(order);
+              }}
+              variant="outlined"
+              color="warning"
+            >
+              Iniciar
+            </Button>
+          ) : (
+            order.status === OrderStatus.IN_PROGRESS && (
+              <>
                 <Button
-                  // variant='outlined'
                   onClick={() => {
-                    changeStatusOrder(OrderStatus.PENDING)
-                    setStatusFilter && setStatusFilter(OrderStatus.PENDING)
+                    changeStatusOrder(OrderStatus.PENDING);
+                    setStatusFilter && setStatusFilter(OrderStatus.PENDING);
                   }}
-                  color='warning'
+                  color="warning"
                   startIcon={<Undo />}
-                  variant='outlined'
-
-                // color={color}
+                  variant="outlined"
                 >
                   Pendiente
                 </Button>
 
                 <Button
-                  // variant='contained'
-                  // color={color}
-                  color='success'
+                  color="success"
                   startIcon={<Check />}
-                  variant='outlined'
-
+                  variant="outlined"
                   onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
-                >Entregado</Button>
-
-              </ >
-
-
-
-
-          }
-
-          {/* <Button
-            onClick={() => {
-              navigate(`/orders/list/edit/${order.id}`)
-            }}
-            // size='small'
-            color='secondary'
-            // variant='outlined'
-            startIcon={<EditOutlined />}
-
-          >
-            Editar
-          </Button> */}
-
+                >
+                  Entregado
+                </Button>
+              </>
+            )
+          )}
         </CardActions>
-
-
       </Card>
-
-
-
     </>
-
-  )
-}
+  );
+};

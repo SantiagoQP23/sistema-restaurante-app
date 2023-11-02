@@ -1,8 +1,21 @@
 import { alpha, createTheme, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
 
+// const themeColors = {
+//   primary: '#3498db',
+//   secondary: '#e74c3c',
+//   success: '#2ecc71',
+//   warning: '#f1c40f',
+//   error: '#e67e22',
+//   info: '#9b59b6',
+//   black: '#34495e',
+//   white: '#ecf0f1',
+//   primaryAlt: '#2980b9',
+//   trueWhite: '#ffffff'
+// };
+
 const themeColors = {
-  primary: '#8C7CF0',
+  primary: '#2C77D7',
   secondary: '#9EA4C1',
   success: '#57CA22',
   warning: '#FFA319',
@@ -10,7 +23,7 @@ const themeColors = {
   info: '#33C2FF',
   black: '#CBCCD2',
   white: '#111633',
-  primaryAlt: '#111633',
+  primaryAlt: '#0f111c',
   trueWhite: '#ffffff'
 };
 
@@ -43,14 +56,14 @@ const colors = {
       '0px 1px 4px rgba(112, 99, 192, 0.25), 0px 3px 12px 2px rgba(112, 99, 192, 0.35)',
     warning:
       '0px 1px 4px rgba(255, 163, 25, 0.25), 0px 3px 12px 2px rgba(255, 163, 25, 0.35)',
-    card: '0px 0px 2px #6A7199',
-    cardSm: '0px 0px 2px #6A7199',
+    card: '0px 0px 2px #0f111c',
+    cardSm: '0px 0px 2px #0f111c',
     cardLg:
       '0 0rem 14rem 0 rgb(255 255 255 / 20%), 0 0.8rem 2.3rem rgb(111 130 156 / 3%), 0 0.2rem 0.7rem rgb(17 29 57 / 15%)'
   },
   layout: {
     general: {
-      bodyBg: '#070C27'
+      bodyBg: '#0f111c'
     },
     sidebar: {
       background: themeColors.primaryAlt,
@@ -294,7 +307,7 @@ export const NebulaFighterTheme = createTheme({
       disabled: colors.alpha.black[50]
     },
     background: {
-      paper: colors.alpha.white[100],
+      paper:  '#1c2536',
       default: colors.layout.general.bodyBg
     },
     action: {
@@ -464,6 +477,17 @@ export const NebulaFighterTheme = createTheme({
           color: colors.alpha.black[70]
         }
       }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 6,
+          boxShadow: colors.shadows.card,
+          background: '#1c2536',
+          overflow: 'hidden'
+        }
+      }
+    
     },
     MuiCardHeader: {
       styleOverrides: {
@@ -683,6 +707,18 @@ export const NebulaFighterTheme = createTheme({
         }
       }
     },
+
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          background: colors.layout.sidebar.background,
+          color: colors.layout.sidebar.textColor,
+          // border: 'none'
+        }
+      }
+    },
+    
+
     MuiDivider: {
       styleOverrides: {
         root: {

@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { getRulesMonth, updateRuleMonth } from "../services/rule-month.service"
-import { queryClient } from "../../../../main";
 import { RuleMonth } from "../models/rule-month.model";
 import { UpdateRuleMonthDto } from "../dto/update-rule-month.dto";
 import { useSnackbar } from "notistack";
+import { queryClient } from "../../../../api/query-client";
 
 
 
