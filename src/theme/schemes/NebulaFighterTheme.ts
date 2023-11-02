@@ -294,7 +294,7 @@ export const NebulaFighterTheme = createTheme({
       disabled: colors.alpha.black[50]
     },
     background: {
-      paper: colors.alpha.white[100],
+      paper: '#1c2536',
       default: colors.layout.general.bodyBg
     },
     action: {
@@ -464,6 +464,17 @@ export const NebulaFighterTheme = createTheme({
           color: colors.alpha.black[70]
         }
       }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 6,
+          boxShadow: colors.shadows.card,
+          background: '#1c2536',
+          overflow: 'hidden'
+        }
+      }
+    
     },
     MuiCardHeader: {
       styleOverrides: {
