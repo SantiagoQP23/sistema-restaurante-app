@@ -12,7 +12,7 @@ import { sharingInformationService } from "../../../services/sharing-information
 
 interface Props {
   product: IProduct;
-  onClick: () => void;
+  onClick: (productId: string) => void;
 }
 
 const StyledProductImg = styled("img")({
@@ -24,7 +24,7 @@ const StyledProductImg = styled("img")({
   position: "absolute",
 });
 
-export const Product: FC<Props> = ({ product }) => {
+export const Product: FC<Props> = ({ product, onClick }) => {
   const addProductoToOrder = () => {
     sharingInformationService.setSubject(true, {
       product,
@@ -65,6 +65,7 @@ export const Product: FC<Props> = ({ product }) => {
                 cursor: "pointer",
               },
             }}
+            onClick={() => onClick(product.id)}
           >
             <Typography variant="h4">{product.name}</Typography>
           </Link>

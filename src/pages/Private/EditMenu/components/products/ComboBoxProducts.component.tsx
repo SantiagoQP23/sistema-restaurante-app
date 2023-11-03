@@ -33,9 +33,10 @@ const GroupItems = styled("ul")({
 
 interface Props {
   onFocus?: (event: React.FocusEvent<HTMLDivElement, Element>) => void;
+  selectProduct: (product: IProduct) => void;
 }
 
-export const ComboBoxProducts: FC<Props> = ({ onFocus }) => {
+export const ComboBoxProducts: FC<Props> = ({ onFocus, selectProduct }) => {
   const { sections } = useSelector(selectMenu);
 
   const products = getProducts(sections);
@@ -43,13 +44,6 @@ export const ComboBoxProducts: FC<Props> = ({ onFocus }) => {
   const [nameProduct, setNameProduct] = useState("");
 
   const filteredProducts = findProductsByName(nameProduct, products);
-
-  const addProductoToOrder = (product: IProduct) => {
-    sharingInformationService.setSubject(true, {
-      product,
-      quantity: 1,
-    });
-  };
 
   return (
     <>
@@ -66,7 +60,7 @@ export const ComboBoxProducts: FC<Props> = ({ onFocus }) => {
         }}
         onChange={(event, newValue: IProduct | null) => {
           if (newValue) {
-            addProductoToOrder(newValue);
+            selectProduct(newValue);
           }
         }}
         renderGroup={(params) => (
@@ -84,56 +78,3 @@ export const ComboBoxProducts: FC<Props> = ({ onFocus }) => {
     </>
   );
 };
-
-// export const ComboBoxProducts = () => {
-
-//   const { sections } = useSelector(selectMenu);
-
-//   const products = getProducts(sections);
-
-//   const [nameProduct, setNameProduct] = useState('');
-
-//   const filteredProducts = findProductsByName(nameProduct, products);
-
-//   const addProductoToOrder = (product: IProduct) => {
-
-//     sharingInformationService.setSubject(
-//       true,
-//       {
-//         product,
-//         quantity: 1
-//       }
-//     )
-//   }
-
-//   return (
-//     <>
-
-//       <Autocomplete
-//         id="combo-box-products"
-
-//         filterOptions={(x) => x}
-//         options={filteredProducts || []}
-//         getOptionLabel={(option) => option.name}
-//         // value={client}
-
-//         onInputChange={(event, newInputValue) => {
-//           setNameProduct(newInputValue);
-
-//         }}
-
-//         onChange={(event, newValue: IProduct | null) => {
-
-//           if (newValue) {
-//             addProductoToOrder(newValue);
-//           }
-//         }}
-
-//         renderInput={(params) => <TextField {...params} label="Producto" variant="outlined" />}
-//         fullWidth
-//       />
-
-//     </>
-
-//   )
-// }

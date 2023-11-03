@@ -1,59 +1,57 @@
 import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 
-import { ISection, ICreateSection, IUpdateSection, ICreateCategory, ICategory, IProduct, ICreateProduct } from "../../../../models";
-import { UpdateCategoryDto, CreateCategoryDto } from '../dto/category.dto';
+import { ISection, ICategory, IProduct } from "../../../../models";
+import { UpdateCategoryDto, CreateCategoryDto } from "../dto/category.dto";
 import { CreateSectionDto } from "../dto/create-section.dto";
-import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
-import { UpdateSectionDto } from '../dto/update-section.dto';
+import { CreateProductDto, UpdateProductDto } from "../dto/product.dto";
+import { UpdateSectionDto } from "../dto/update-section.dto";
 
-
-
-export const createSection = async (data: CreateSectionDto): Promise<ISection> => {
-
-  const resp = await restauranteApi.post<ISection>('/sections',data);
-
-  return resp.data;
-}
-
-export const updateSection = async  (id: string, data: UpdateSectionDto): Promise<ISection> => {
-
-  const resp = await restauranteApi.patch<ISection>(`/sections/${id}`,data);
+export const createSection = async (
+  data: CreateSectionDto
+): Promise<ISection> => {
+  const resp = await restauranteApi.post<ISection>("/sections", data);
 
   return resp.data;
-}
+};
 
+export const updateSection = async (
+  id: string,
+  data: UpdateSectionDto
+): Promise<ISection> => {
+  const resp = await restauranteApi.patch<ISection>(`/sections/${id}`, data);
+
+  return resp.data;
+};
 
 export const deleteSection = async (id: string): Promise<void> => {
-
   const resp = await restauranteApi.delete(`/sections/${id}`);
 
   return resp.data;
-}
+};
 
-export const createCategory = async (data: CreateCategoryDto): Promise<ICategory> => {
-
-  const resp = await restauranteApi.post<ICategory>('/categories',data);
-
-  return resp.data;
-}
-
-
-export const updateCategory = async (id: string, data: UpdateCategoryDto): Promise<ICategory> => {
-
-  const resp = await restauranteApi.patch<ICategory>(`/categories/${id}`,data);
+export const createCategory = async (
+  data: CreateCategoryDto
+): Promise<ICategory> => {
+  const resp = await restauranteApi.post<ICategory>("/categories", data);
 
   return resp.data;
-}
+};
+
+export const updateCategory = async (
+  id: string,
+  data: UpdateCategoryDto
+): Promise<ICategory> => {
+  const resp = await restauranteApi.patch<ICategory>(`/categories/${id}`, data);
+
+  return resp.data;
+};
 
 export const deleteCategory = async (id: string): Promise<void> => {
-
   const resp = await restauranteApi.delete(`/categories/${id}`);
 
   return resp.data;
-}
-
-
+};
 
 // export const createCategory = (data: CreateCategoryDto) => {
 
@@ -65,7 +63,6 @@ export const deleteCategory = async (id: string): Promise<void> => {
 //     { signal: controller.signal }),
 //     controller
 //   }
-
 
 // }
 
@@ -80,7 +77,6 @@ export const deleteCategory = async (id: string): Promise<void> => {
 //     controller
 //   }
 
-
 // }
 
 // export const deleteCategory = (id: string) => {
@@ -94,21 +90,28 @@ export const deleteCategory = async (id: string): Promise<void> => {
 //   }
 // }
 
-
-export const createProduct = async (data: CreateProductDto): Promise<IProduct> => {
-
-  const resp = await restauranteApi.post<IProduct>('/products',data);
+export const createProduct = async (
+  data: CreateProductDto
+): Promise<IProduct> => {
+  const resp = await restauranteApi.post<IProduct>("/products", data);
 
   return resp.data;
-}
+};
 
-export const updateProduct = async (id: string,data: UpdateProductDto): Promise<IProduct> => {
+export const updateProduct = async (
+  id: string,
+  data: UpdateProductDto
+): Promise<IProduct> => {
+  const resp = await restauranteApi.patch<IProduct>(`/products/${id}`, data);
 
-  const resp = await restauranteApi.patch<IProduct>(`/products/${id}`,data);
-  
   return resp.data;
-}
+};
 
+export const getProduct = async (id: string): Promise<IProduct> => {
+  const resp = await restauranteApi.get<IProduct>(`/products/${id}`);
+
+  return resp.data;
+};
 
 // export const createProduct = (data: CreateProductDto) => {
 
@@ -141,18 +144,20 @@ export interface UpdateProductImageDto {
   file: File;
 }
 
-
-export const updateProductImage = async (id: string, data: UpdateProductImageDto): Promise<IProduct> => {
-
+export const updateProductImage = async (
+  id: string,
+  data: UpdateProductImageDto
+): Promise<IProduct> => {
   const formData = new FormData();
-  formData.append('file', data.file);
+  formData.append("file", data.file);
 
-  const resp = await restauranteApi.patch<IProduct>(`/files/product-image/${id}`,formData);
+  const resp = await restauranteApi.patch<IProduct>(
+    `/files/product-image/${id}`,
+    formData
+  );
 
   return resp.data;
-
-
-}
+};
 
 // export const updateProductImage = (id: string, data: UpdateProductImageDto) => {
 
@@ -170,21 +175,15 @@ export const updateProductImage = async (id: string, data: UpdateProductImageDto
 //     controller
 //   }
 
-
 // }
 
-
 export const deleteProduct = (id: string) => {
-
   const controller = loadAbort();
 
   return {
-    call: restauranteApi.delete(`/products/${id}`,
-    { signal: controller.signal }),
-    controller
-  }
-
-
-}
-
-
+    call: restauranteApi.delete(`/products/${id}`, {
+      signal: controller.signal,
+    }),
+    controller,
+  };
+};

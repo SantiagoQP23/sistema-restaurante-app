@@ -22,13 +22,9 @@ export const Menu = () => {
 
   const details = useNewOrderStore((state) => state.details);
 
-
-
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
- 
 
   useEffect(() => {
     dispatch(setActiveSection(sections[0]));
