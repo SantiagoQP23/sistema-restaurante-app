@@ -173,7 +173,7 @@ export const Userbox = () => {
                 <AccountBoxTwoToneIcon fontSize="small" />
 
               </ListItemIcon> */}
-            <ListItemText primary="Cuenta" />
+            <ListItemText primary="Mi cuenta" />
             <ListItemSecondaryAction>
               {/* <Label color="info">Nuevo</Label> */}
             </ListItemSecondaryAction>
