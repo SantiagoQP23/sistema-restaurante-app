@@ -15,7 +15,7 @@ import '@mui/lab/themeAugmentation';
 // };
 
 const themeColors = {
-  primary: '#2C77D7',
+  primary: '#8C7CF0',
   secondary: '#9EA4C1',
   success: '#57CA22',
   warning: '#FFA319',
