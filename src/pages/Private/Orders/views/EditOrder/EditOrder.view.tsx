@@ -201,7 +201,7 @@ export const EditOrder = () => {
                 Imprimir
               </Button>
 
-              {
+              {!activeOrder.isPaid && (
                 <Button
                   startIcon={<PointOfSaleOutlined />}
                   variant="contained"
@@ -210,7 +210,7 @@ export const EditOrder = () => {
                 >
                   Cobrar
                 </Button>
-              }
+              )}
               {activeOrder.isPaid &&
                 activeOrder.status === OrderStatus.DELIVERED &&
                 !activeOrder.isClosed && (
