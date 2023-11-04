@@ -7,7 +7,7 @@ export const BtnFinalConsumer = () => {
 
   const { data, isLoading } = useClient('0999999999', true);
 
-  // const {setClient} = useInvoiceStore(state => state)
+  const {setClient} = useInvoiceStore(state => state)
 
 
   if (!data) return null;
@@ -34,13 +34,13 @@ export const BtnFinalConsumer = () => {
               <Typography variant='h4'>
                 {data.person.lastName} {data.person.firstName}
               </Typography>
-              {/* <Button
+              <Button
                 variant='outlined'
                 size='small'
                 onClick={() => setClient(data)}
               >
                 Seleccionar
-              </Button> */}
+              </Button>
             </>
 
         }
