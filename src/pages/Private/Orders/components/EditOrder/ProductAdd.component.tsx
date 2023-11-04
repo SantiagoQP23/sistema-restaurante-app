@@ -32,7 +32,7 @@ export const ProductAdd: FC<Props> = ({ producto, abrirModal, setDetalle }) => {
     <>
 
 
-      <Product  product={producto} />
+      <Product  product={producto} onClick={() => {}} />
 
       <Card>
 

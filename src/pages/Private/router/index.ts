@@ -1,2 +1,2 @@
-export * from './Private.router';
+export * from './private.router';
 

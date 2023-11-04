@@ -82,7 +82,7 @@ export const DraftInvoice: FC<Props> = ({ invoice }) => {
   return (
     <Card>
       <CardHeader
-        title={`Cuenta ${invoice.num}`}
+        title={`Cuenta ${invoice.transactionNumber}`}
         action={
           <IconButton color="error" onClick={() => removeInvoice()}>
             <DeleteOutline />

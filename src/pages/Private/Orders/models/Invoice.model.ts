@@ -18,7 +18,7 @@ export enum InvoiceStatus {
 export interface Invoice {
   id: string;
 
-  num: number;
+  transactionNumber: number;
 
   paymentMethod?: PaymentMethod;
 

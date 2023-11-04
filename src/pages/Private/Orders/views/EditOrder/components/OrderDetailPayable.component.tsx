@@ -4,13 +4,12 @@ import { TableRow, TableCell } from "@mui/material";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { CounterInput } from "../../../components";
 import {
-  OrderDetailPayable as IOrderDetailPayable,
   useInvoiceStore,
 } from "../../../store/invoiceStore";
 import { Label } from "../../../../../../components/ui";
 
 interface Props {
-  detail: IOrderDetailPayable;
+  detail: any;
   qtyToPay: number;
 }
 

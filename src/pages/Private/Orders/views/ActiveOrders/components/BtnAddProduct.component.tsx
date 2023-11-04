@@ -46,7 +46,7 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
           <>
             <CardContent>
               <Stack spacing={1}>
-                <ComboBoxProducts onFocus={handleActiveOrder} />
+                <ComboBoxProducts onFocus={handleActiveOrder} selectProduct={() => {}} />
                 <Button
                   variant="outlined"
                   color="secondary"

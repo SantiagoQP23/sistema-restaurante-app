@@ -27,14 +27,7 @@ import { Circle } from "@mui/icons-material";
 import { SocketContext } from "../../../../../../context/SocketContext";
 import { Label } from "../../../../../../components/ui";
 import { ValidRoles } from "../../../../Common/models/valid-roles.model";
-import { ButtonTheme } from "../../components";
 
-const UserBoxButton = styled(Button)(
-  ({ theme }) => `
-        padding-left: ${theme.spacing(1)};
-        padding-right: ${theme.spacing(1)};
-`
-);
 // background: ${grey[900]};
 
 const MenuUserBox = styled(Box)(
@@ -68,7 +61,7 @@ export const Userbox = () => {
   const { user: userState } = useAppSelector(selectAuth);
   const dispatch = useAppDispatch();
 
-  const { online, conectarSocket } = useContext(SocketContext);
+  const { online } = useContext(SocketContext);
 
   const user = {
     name: userState?.username!,

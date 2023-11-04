@@ -6,23 +6,23 @@ import { useInvoiceStore } from "../../../store/invoiceStore";
 import Select from "@mui/material/Select";
 
 export const DraftInvoiceSelect = () => {
-  const { invoices, setActiveInvoice, activeInvoice } = useInvoiceStore(
-    (state) => state
-  );
+  // const { invoices, setActiveInvoice, activeInvoice } = useInvoiceStore(
+  //   (state) => state
+  // );
 
-  const handleChangeInvoice = (value: number) => {
-    const invoiceId = value;
+  // const handleChangeInvoice = (value: number) => {
+  //   const invoiceId = value;
 
-    const invoice = invoices.find((invoice) => invoice.id === invoiceId);
+  //   const invoice = invoices.find((invoice) => invoice.id === invoiceId);
 
-    if (!invoice) return setActiveInvoice(null);
+  //   if (!invoice) return setActiveInvoice(null);
 
-    setActiveInvoice(invoice);
-  };
+  //   setActiveInvoice(invoice);
+  // };
 
   return (
     <FormControl size="small">
-      <InputLabel id="active-invoice">Cuenta</InputLabel>
+      {/* <InputLabel id="active-invoice">Cuenta</InputLabel>
 
       <Select
         labelId="active-invoice"
@@ -36,7 +36,7 @@ export const DraftInvoiceSelect = () => {
             Cuenta {invoice.id}
           </MenuItem>
         ))}
-      </Select>
+      </Select> */}
     </FormControl>
   );
 };

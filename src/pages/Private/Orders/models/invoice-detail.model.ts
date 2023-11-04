@@ -1,4 +1,4 @@
-import { IOrderDetail } from "../../../../models";
+import { IOrderDetail, IProduct } from "../../../../models";
 
 
 export interface InvoiceDetail {
@@ -6,6 +6,8 @@ export interface InvoiceDetail {
   id: string;
 
   title: string;
+
+  product: IProduct;
 
   description: string;
 

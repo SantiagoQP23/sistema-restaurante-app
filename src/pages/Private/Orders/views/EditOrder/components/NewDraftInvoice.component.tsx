@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
-import { CreateInvoice, useInvoiceStore } from "../../../store/invoiceStore";
+import { useInvoiceStore } from "../../../store/invoiceStore";
 import { Close, DeleteOutline, MoreVert } from "@mui/icons-material";
 import { CreateInvoiceDto } from "../../../dto";
 import { useSelector } from "react-redux";
@@ -26,64 +26,64 @@ import { LoadingButton } from "@mui/lab";
 import { useCreateInvoiceOrder } from "../../../hooks/useInvocesOrder";
 
 interface Props {
-  invoice: CreateInvoice;
+  invoice: any;
   index: number;
 }
 
 export const NewDraftInvoice: FC<Props> = ({ invoice }) => {
-  const { activeOrder } = useSelector(selectOrders);
+  // const { activeOrder } = useSelector(selectOrders);
 
-  const {
-    activeInvoice,
-    setActiveInvoice,
-    removeInvoice,
-    accountDetails,
-    removeDetail,
-  } = useInvoiceStore((state) => state);
+  // const {
+  //   activeInvoice,
+  //   setActiveInvoice,
+  //   removeInvoice,
+  //   accountDetails,
+  //   removeDetail,
+  // } = useInvoiceStore((state) => state);
 
-  const { activeCashRegister } = useCashRegisterStore();
+  // const { activeCashRegister } = useCashRegisterStore();
 
-  const { createInvoiceOrder, loading } = useCreateInvoiceOrder();
+  // const { createInvoiceOrder, loading } = useCreateInvoiceOrder();
 
-  const handleSelectInvoice = (e: ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
+  // const handleSelectInvoice = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const checked = e.target.checked;
 
-    if (!checked) return setActiveInvoice(null);
+  //   if (!checked) return setActiveInvoice(null);
 
-    setActiveInvoice(invoice);
-  };
+  //   setActiveInvoice(invoice);
+  // };
 
-  const details = Object.entries(accountDetails).filter(([, value]) => {
-    if (value.invoiceId === invoice.id) return value;
-  });
+  // const details = Object.entries(accountDetails).filter(([, value]) => {
+  //   if (value.invoiceId === invoice.id) return value;
+  // });
 
-  // const totalInvoice = details.reduce(
-  //   (acc, detail) =>
-  //     acc + detail.orderDetailPayable.orderDetail.price * detail.quantity,
-  //   0
-  // );
+  // // const totalInvoice = details.reduce(
+  // //   (acc, detail) =>
+  // //     acc + detail.orderDetailPayable.orderDetail.price * detail.quantity,
+  // //   0
+  // // );
 
-  const handleCreateInvoice = () => {
-    if (!activeOrder || !activeCashRegister) return;
+  // const handleCreateInvoice = () => {
+  //   if (!activeOrder || !activeCashRegister) return;
 
-    const data: CreateInvoiceDto = {
-      orderId: activeOrder.id,
-      details: details.map(([, detail]) => ({
-        orderDetailId: detail.orderDetailPayable.id,
-        quantity: detail.quantity,
-        title: detail.orderDetailPayable.product.name,
-        price: detail.orderDetailPayable.price,
-      })),
-      cashRegisterId: activeCashRegister.id,
-    };
+  //   const data: CreateInvoiceDto = {
+  //     orderId: activeOrder.id,
+  //     details: details.map(([, detail]) => ({
+  //       orderDetailId: detail.orderDetailPayable.id,
+  //       quantity: detail.quantity,
+  //       title: detail.orderDetailPayable.product.name,
+  //       price: detail.orderDetailPayable.price,
+  //     })),
+  //     cashRegisterId: activeCashRegister.id,
+  //   };
 
-    console.log(data);
-    createInvoiceOrder(data);
-  };
+  //   console.log(data);
+  //   createInvoiceOrder(data);
+  // };
 
   return (
     <Card>
-      <CardHeader
+      {/* <CardHeader
         avatar={
           <Checkbox
             checked={
@@ -167,7 +167,7 @@ export const NewDraftInvoice: FC<Props> = ({ invoice }) => {
         }}
       >
         <Typography>
-          {/* <b>Total:</b> {formatMoney(totalInvoice)} */}
+          {/* <b>Total:</b> {formatMoney(totalInvoice)} 
         </Typography>
         <LoadingButton
           variant="contained"
@@ -178,7 +178,8 @@ export const NewDraftInvoice: FC<Props> = ({ invoice }) => {
         >
           Crear cuenta
         </LoadingButton>
-      </CardActions>
+      </CardActions> 
+          */}
     </Card>
   );
 };
