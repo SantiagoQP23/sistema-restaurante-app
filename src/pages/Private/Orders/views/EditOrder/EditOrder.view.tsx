@@ -166,7 +166,7 @@ export const EditOrder = () => {
             </Stack>
           </Box>
 
-          {activeStep !== 1 ? (
+          {activeStep < 1 ? (
             <Stack direction="row" justifyContent="flex-end" spacing={1}>
               {activeOrder.status === OrderStatus.PENDING &&
                 !activeOrder.isPaid && (
@@ -226,7 +226,7 @@ export const EditOrder = () => {
             </Stack>
           ) : (
             <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              <BtnBack />
+              {/* <BtnBack /> */}
             </Stack>
           )}
         </Stack>
