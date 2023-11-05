@@ -1,27 +1,23 @@
-import { Typography, Grid, Card, CardContent, Button, CardHeader, Box } from '@mui/material';
-
-import { NavLink as RouterLink } from 'react-router-dom';
-import { MuiDateRangePicker, Day } from '../../components';
-
-import { TitlePage } from '../../../components/TitlePage.component';
 import {
-  BestSellingProductsSummary, IncomesSummary, OrdersSummary,
-  PredictionAffluenceSummary, SimulatorAffluenceSummary, StaffPlanningSummary
-} from './components';
-import { People } from '@mui/icons-material';
-import { IncomesAndExpensesSummary } from './components/IncomesAndExpensesSummary.component';
-import { UsersSummary } from '../../../Balance/views/BalanceDashboard/components/UsersSummary.component';
-import { FootfallSummary } from './components/FootfallSummary.component';
-import { ClientsSummary } from './components/ClientsSummary.component';
+  Grid,
+} from "@mui/material";
 
+import { TitlePage } from "../../../components/TitlePage.component";
+import {
+  BestSellingProductsSummary,
+  IncomesSummary,
+  OrdersSummary,
+  PredictionAffluenceSummary,
+} from "./components";
+import { IncomesAndExpensesSummary } from "./components/IncomesAndExpensesSummary.component";
+import { UsersSummary } from "../../../Balance/views/BalanceDashboard/components/UsersSummary.component";
+import { FootfallSummary } from "./components/FootfallSummary.component";
+import { ClientsSummary } from "./components/ClientsSummary.component";
 
 export const DashboardReports = () => {
   return (
     <>
-
-      <TitlePage
-        title='Dashboard'
-      />
+      <TitlePage title="Dashboard" />
 
       <Grid container spacing={2} my={1}>
         {/* 
@@ -42,47 +38,30 @@ export const DashboardReports = () => {
           <IncomesSummary />
         </Grid>
 
-
         <Grid item xs={12} md={3}>
           <OrdersSummary />
         </Grid>
 
-
-
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <IncomesAndExpensesSummary />
+            </Grid>
 
-            <Grid item xs={12} md={6} >
-
-            <IncomesAndExpensesSummary />
-
-          </Grid>
-
-
-
+            {/* <Grid item xs={12} md={6}>
+              <PredictionAffluenceSummary />
+            </Grid> */}
 
             <Grid item xs={12} md={6}>
-            <PredictionAffluenceSummary />
+              <BestSellingProductsSummary />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <UsersSummary />
+            </Grid>
           </Grid>
-
-       
-          <Grid item xs={12} md={6}>
-            <BestSellingProductsSummary />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <UsersSummary />
-
-          </Grid>
-
-
-          </Grid>
-
         </Grid>
-
       </Grid>
-
-
     </>
-  )
-}
+  );
+};

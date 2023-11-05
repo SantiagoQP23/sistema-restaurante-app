@@ -1,75 +1,81 @@
-import { People } from "@mui/icons-material"
-import { Card, CardHeader, Button, CardContent, Box, Typography } from "@mui/material"
-import { NavLink as RouterLink } from 'react-router-dom';
+import { People } from "@mui/icons-material";
+import {
+  Card,
+  CardHeader,
+  Button,
+  CardContent,
+  Box,
+  Typography,
+} from "@mui/material";
+import { NavLink as RouterLink } from "react-router-dom";
 import { GroupBy, Period } from "../../../../../../models/period.model";
 import { useQuery } from "@tanstack/react-query";
-import { getForecastByDate, getRealFootfall } from "../../../services/footfall.service";
-
-
+import {
+  getForecastByDate,
+  getRealFootfall,
+} from "../../../services/footfall.service";
 
 export const FootfallSummary = () => {
-
   const period = Period.TODAY;
 
   const groupBy = GroupBy.DAY;
 
-  const realFootfallQuery = useQuery(['realFootfall', period, groupBy], () => getRealFootfall({
-    period, groupBy, startDate: new Date()
-  }));
+  const realFootfallQuery = useQuery(["realFootfall", period, groupBy], () =>
+    getRealFootfall({
+      period,
+      groupBy,
+      startDate: new Date(),
+    })
+  );
 
-  const forecastFootfallQuery = useQuery(['forecastFootfall', period, groupBy], () => getForecastByDate({
-    period, groupBy, startDate: new Date()
-  }));
-
-
-
-
-
+  const forecastFootfallQuery = useQuery(
+    ["forecastFootfall", period, groupBy],
+    () =>
+      getForecastByDate({
+        period,
+        groupBy,
+        startDate: new Date(),
+      })
+  );
 
   return (
     <Card>
       <CardHeader
-        title='Afluencia de clientes'
-        subheader='Hoy'
+        title="Afluencia de clientes"
         action={
           <Button
-            variant='outlined'
+            variant="outlined"
             component={RouterLink}
             to="/clients"
-            size='small'
+            size="small"
           >
             Ver todo
           </Button>
         }
       />
 
-      <CardContent sx={{
-        display: 'flex',
-        gap: 1,
-        alignItems: 'center'
-
-      }}>
-
+      <CardContent
+        sx={{
+          display: "flex",
+          gap: 1,
+          alignItems: "center",
+        }}
+      >
         <People />
-        <Box
-          display='flex'
-          alignItems='flex-end'
-        >
-          <Typography variant='h3'>{
-            !!realFootfallQuery.data?.footfall.length
+        <Box display="flex" alignItems="flex-end">
+          <Typography variant="h3">
+            {!!realFootfallQuery.data?.footfall.length
               ? realFootfallQuery.data?.footfall[0].quantity
-              : 0
-          }</Typography>
-          <Typography variant='h6'>/{
-            !!forecastFootfallQuery.data?.footfall.length
+              : 0}
+          </Typography>
+          <Typography variant="h6">
+            /
+            {!!forecastFootfallQuery.data?.footfall.length
               ? forecastFootfallQuery.data?.footfall[0].quantity
-              : 0
-
-}</Typography>
-
+              : 0}
+          </Typography>
         </Box>
-
       </CardContent>
     </Card>
-  )
-}
+  );
+};

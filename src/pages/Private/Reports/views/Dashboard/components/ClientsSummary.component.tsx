@@ -12,7 +12,6 @@ export const ClientsSummary = () => {
     <Card>
       <CardHeader
         title='Clientes'
-        subheader='Cliente registrados'
         action={
           <Button
             variant='outlined'

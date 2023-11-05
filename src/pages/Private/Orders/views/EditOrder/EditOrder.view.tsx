@@ -258,20 +258,21 @@ export const EditOrder = () => {
               </Stepper>
             }
 
-            {activeStep === 0 && <OrderSummary order={activeOrder} />}
+            <Container maxWidth="lg">
+              {activeStep === 0 && <OrderSummary order={activeOrder} />}
 
-            {activeStep === 1 && <Account order={activeOrder} />}
+              {activeStep === 1 && <Account order={activeOrder} />}
 
-            {activeStep === 2 && (
-              <>
-                <PayOrder order={activeOrder} />
+              {activeStep === 2 && (
+                <>
+                  <PayOrder order={activeOrder} />
 
-                <Stack direction="row">
-                  <BtnBack />
-                </Stack>
-              </>
-            )}
-
+                  <Stack direction="row">
+                    <BtnBack />
+                  </Stack>
+                </>
+              )}
+            </Container>
             {/* <Grid item xs={12} md={4}>
               </Grid> */}
           </>
