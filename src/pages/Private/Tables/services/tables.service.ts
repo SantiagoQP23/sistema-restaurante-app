@@ -2,77 +2,56 @@ import { restauranteApi } from "../../../../api";
 import { loadAbort } from "../../../../helpers";
 import { ICreateTable, ITable } from "../../../../models";
 import { UpdateTableDto } from "../dto/table.dto";
-import { SubjectDeleteTable } from '../helpers/subjects-tables.helper';
-
-
+import { SubjectDeleteTable } from "../helpers/subjects-tables.helper";
 
 export const statusModalDeleteTable = new SubjectDeleteTable();
 
-
-
 export const getTables = () => {
-
   const controller = loadAbort();
 
   return {
-    call: restauranteApi.get<ITable>('/tables',
-    { signal: controller.signal }),
-    controller
-  }
-
-
-}
-
-
-
+    call: restauranteApi.get<ITable>("/tables", { signal: controller.signal }),
+    controller,
+  };
+};
 
 export const createTable = (data: ICreateTable) => {
-  
   const controller = loadAbort();
-  
+
   return {
-    call: restauranteApi.post<ITable>('/tables',
-    data,
-    { signal: controller.signal }),
-    controller
-  }
-  
-  
-}
+    call: restauranteApi.post<ITable>("/tables", data, {
+      signal: controller.signal,
+    }),
+    controller,
+  };
+};
 
-export const updateTable = async  (updateTableDto: UpdateTableDto) : Promise<ITable> => {
-
-  const controller = loadAbort();
-
+export const updateTable = async (
+  updateTableDto: UpdateTableDto
+): Promise<ITable> => {
   const { id, ...data } = updateTableDto;
 
-  const resp = await restauranteApi.patch<ITable>(`/tables/${id}`,
+  const resp = await restauranteApi.patch<ITable>(`/tables/${id}`, data);
 
-    data,
+  return resp.data;
+};
 
+export const updateManyTables = async (
+  tablesToUpdateDto: UpdateTableDto[]
+): Promise<ITable[]> => {
+  const resp = await restauranteApi.patch<ITable[]>(
+    `/tables`,
+    tablesToUpdateDto
   );
 
   return resp.data;
-
-  // return {
-  //   call: restauranteApi.patch<ITable>(`/tables/${id}`,
-  //   data,
-  //   { signal: controller.signal }),
-  //   controller
-  // }
-
-
-}
+};
 
 export const deleteTable = (id: string) => {
-
   const controller = loadAbort();
 
   return {
-    call: restauranteApi.delete(`/tables/${id}`,
-    { signal: controller.signal }),
-    controller
-  }
-
-
-}
+    call: restauranteApi.delete(`/tables/${id}`, { signal: controller.signal }),
+    controller,
+  };
+};
