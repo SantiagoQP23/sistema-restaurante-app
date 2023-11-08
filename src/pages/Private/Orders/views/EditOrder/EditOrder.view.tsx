@@ -258,7 +258,7 @@ export const EditOrder = () => {
               </Stepper>
             }
 
-            <Container maxWidth="lg">
+            
               {activeStep === 0 && <OrderSummary order={activeOrder} />}
 
               {activeStep === 1 && <Account order={activeOrder} />}
@@ -272,7 +272,7 @@ export const EditOrder = () => {
                   </Stack>
                 </>
               )}
-            </Container>
+            
             {/* <Grid item xs={12} md={4}>
               </Grid> */}
           </>
