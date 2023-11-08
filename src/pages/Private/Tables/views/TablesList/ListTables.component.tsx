@@ -21,6 +21,7 @@ import { TitlePage } from "../../../components/TitlePage.component";
 import { DraggableTable } from "../../components/DraggableTable.component";
 import { useUpdateManyTables } from "../../hooks/useTables";
 import { ITable } from "../../../../../models";
+import { LoadingButton } from "@mui/lab";
 
 export const ListTables = () => {
   const { tables } = useSelector(selectTables);
@@ -93,15 +94,16 @@ export const ListTables = () => {
                 >
                   Cancelar
                 </Button>
-                <Button
+                <LoadingButton
                   size="small"
                   variant="contained"
                   startIcon={<Save />}
                   disabled={tablesListAreEqual}
                   onClick={saveOrderedTables}
+                  loading={updateManyTablesMutation.isLoading}
                 >
                   Guardar
-                </Button>
+                </LoadingButton>
               </>
             ) : (
               <>
