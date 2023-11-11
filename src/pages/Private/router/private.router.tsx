@@ -30,19 +30,19 @@ export const PrivateRouter: RouteObject[] = [
       SuppliersRouter,
       {
         path: "/auth/login",
-        element: <Navigate to={PrivateRoutes.MENU} />,
+        element: <Navigate to={PrivateRoutes.ORDERS} />,
       },
       {
         path: "",
-        element: <Navigate to={PrivateRoutes.MENU} />,
+        element: <Navigate to={PrivateRoutes.ORDERS} />,
       },
       {
-        path: "menu",
-        element: <Navigate to={PrivateRoutes.MENU} />,
+        path: "ORD.ORDERS",
+        element: <Navigate to={PrivateRoutes.ORDERS} />,
       },
       {
         path: "*",
-        element: <Navigate to={PrivateRoutes.MENU} />,
+        element: <Navigate to={PrivateRoutes.ORDERS} />,
       },
     ],
   },

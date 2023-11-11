@@ -1,22 +1,35 @@
 import { IOrder } from "../../../../../../models";
-import { FC, useEffect, useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, IconButton } from '@mui/material';
-import { pedidoStart } from '../../../../../../redux/slices/orders/orders.thunks';
+import { FC, useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  Typography,
+  IconButton,
+  Stack,
+} from "@mui/material";
+import { pedidoStart } from "../../../../../../redux/slices/orders/orders.thunks";
 import { statusModalAddOrder } from "../../../services/orders.service";
 import { useModal } from "../../../../../../hooks";
-import { ArrowBackIos, Close, Edit, Print } from "@mui/icons-material";
+import {
+  ArrowBack,
+  ArrowBackIos,
+  Close,
+  Edit,
+  Kitchen,
+  ListAlt,
+  Print,
+  SoupKitchen,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { generateOrderPdf } from "../../../helpers/pdf-orders";
 
+interface Props {}
 
-interface Props {
- 
-}
-
-
-export const ModalAddOrder: FC<Props> = ({  }) => {
-
-  const {handleClose, handleOpen, isOpen, setOpen} = useModal();
+export const ModalAddOrder: FC<Props> = ({}) => {
+  const { handleClose, handleOpen, isOpen, setOpen } = useModal();
 
   const [order, setOrder] = useState<IOrder>();
 
@@ -24,20 +37,20 @@ export const ModalAddOrder: FC<Props> = ({  }) => {
 
   const navigate = useNavigate();
 
-  const openPDF = async  () => {
-    if(order){
+  const openPDF = async () => {
+    if (order) {
       const pdf = await generateOrderPdf(order);
       pdf.open();
     }
-  }
-  
+  };
 
+  const navigateToOrders = () => {
+    navigate("/orders");
+  };
 
   useEffect(() => {
-
     suscription$.subscribe((resp) => {
-
-      setOpen(resp.value)
+      setOpen(resp.value);
 
       setOrder(resp.order);
 
@@ -45,88 +58,56 @@ export const ModalAddOrder: FC<Props> = ({  }) => {
       // if (resp) {
       //   closeModal();
       // }
-    })
+    });
 
-    return () => {
-      
-    }
-  }, [])
-
+    return () => {};
+  }, []);
 
   return (
     <>
-      <Dialog
-        open={isOpen}
-        onClose={handleClose}
-      >
+      <Dialog open={isOpen}>
         <DialogTitle
-        
           sx={{
-            display: 'flex',
-            justifyContent: 'right',
+            display: "flex",
+            justifyContent: "right",
           }}
-          
         >
-
-          <IconButton
-            onClick={handleClose}
-          >
+          <IconButton onClick={handleClose}>
             <Close />
           </IconButton>
-
         </DialogTitle>
 
+        <DialogContent sx={{ textAlign: "center" }}>
+          <Typography variant="h3" mb={5}>
+            Has añadido un nuevo pedido
+          </Typography>
 
-        <DialogContent sx={{textAlign: 'center'}}>
-          <Typography variant='h3' mb={5}>Has añadido un nuevo pedido</Typography>
+          <Typography variant="h4" mb={3}>
+            Pedido N° {order?.num}
+          </Typography>
+          <Stack spacing={1} direction="row" justifyContent='center'>
+            <Button variant="outlined" onClick={() => navigate("/orders")}>
+              <ArrowBack />
+            </Button>
+            <Button variant="outlined" onClick={openPDF}>
+              <Print />
+            </Button>
+            <Button variant="outlined" onClick={() => navigate("/orders/actives")}>
+              <SoupKitchen />
+            </Button>
 
-          <Typography variant='h4' mb={3}>Pedido N° {order?.num}</Typography>
-
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Print />}
-            onClick={openPDF}
-          >
-            Imprimir pedido
-          </Button>
-
-
-
-
+            <Button variant="outlined" onClick={() => navigate(`/orders/list/edit/${order?.id}`)}>
+              <Edit />
+            </Button>
+          </Stack>
         </DialogContent>
 
         <DialogActions
           sx={{
-            justifyContent: 'center',
+            justifyContent: "center",
           }}
-        >
-
-          <Button
-            startIcon={<ArrowBackIos />}
-            onClick={() => navigate('/orders')}
-          >
-            Ir a pedidos
-
-          </Button>
-
-
-          <Button
-            variant="outlined"
-            startIcon={<Edit />}
-            onClick={() => navigate(`/orders/list/edit/${order?.id}`)}
-          >
-            Editar
-          </Button>
-
-        </DialogActions>
-
+        ></DialogActions>
       </Dialog>
-
-
-
-
-
     </>
-  )
-}
+  );
+};
