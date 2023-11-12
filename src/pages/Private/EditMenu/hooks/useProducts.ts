@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { IProduct } from "../../../../models";
-import { CreateProductDto, UpdateProductDto } from "../dto/product.dto";
+import { CreateProductDto, UpdateProductDto } from "../dto/";
 import {
   UpdateProductImageDto,
   createProduct,
@@ -22,10 +22,10 @@ export const useCreateProduct = () => {
   return useMutation<IProduct, unknown, CreateProductDto>(
     (data) => createProduct(data),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         enqueueSnackbar("Se creó correctamente", { variant: "success" });
       },
-      onError: (error) => {
+      onError: () => {
         enqueueSnackbar("No se pudo crear", { variant: "error" });
       },
     }
@@ -38,10 +38,10 @@ export const useUpdateProduct = () => {
   return useMutation<IProduct, unknown, UpdateProductDto>(
     (data) => updateProduct(data.id, data),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         enqueueSnackbar("Se actualizó correctamente", { variant: "success" });
       },
-      onError: (error) => {
+      onError: () => {
         enqueueSnackbar("No se pudo actualizar", { variant: "error" });
       },
     }
@@ -54,10 +54,10 @@ export const useUpdateImageProduct = () => {
   return useMutation<IProduct, unknown, UpdateProductImageDto>(
     (data) => updateProductImage(data.id, data),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         enqueueSnackbar("Se actualizó correctamente", { variant: "success" });
       },
-      onError: (error) => {
+      onError: () => {
         enqueueSnackbar("No se pudo actualizar la imagen", {
           variant: "error",
         });

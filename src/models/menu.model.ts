@@ -3,15 +3,11 @@ export interface ISection {
   name: string;
   categories: ICategory[];
   isActive: boolean;
-
 }
-
-
 
 export interface ISectionCategory {
   id: string;
   name: string;
-
 }
 
 export interface ICreateSection {
@@ -25,17 +21,15 @@ export interface IUpdateSection {
 export interface ICategory {
   id: string;
   name: string;
-  products: IProduct[]
+  products: IProduct[];
   section: ISectionCategory;
   isActive: boolean;
-
 }
 
 export interface ICategoryProduct {
   id: string;
   name: string;
   section: ISectionCategory;
-
 }
 
 export interface ICreateCategory {
@@ -43,17 +37,15 @@ export interface ICreateCategory {
   sectionId: string;
 }
 
-
-
 export enum ProductStatus {
-  AVAILABLE = 'AVAILABLE',
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
-  OUT_OF_SEASON = 'OUT_OF_SEASON',
+  AVAILABLE = "AVAILABLE",
+  OUT_OF_STOCK = "OUT_OF_STOCK",
+  OUT_OF_SEASON = "OUT_OF_SEASON",
 }
 export enum ProductStatusSpanish {
-  AVAILABLE = 'Disponible',
-  OUT_OF_STOCK = 'Agotado',
-  OUT_OF_SEASON = 'Fuera de temporada',
+  AVAILABLE = "Disponible",
+  OUT_OF_STOCK = "Agotado",
+  OUT_OF_SEASON = "Fuera de temporada",
 }
 
 export interface IProduct {
@@ -64,19 +56,16 @@ export interface IProduct {
   images: string;
   status: ProductStatus;
   isActive: boolean;
-  
+  isPublic: boolean;
+
   category: ICategoryProduct;
-  
-  
 }
 
-export interface ICreateProduct{
-  
+export interface ICreateProduct {
   name: string;
   price: number;
   description: string;
   categoryId: string;
   status: ProductStatus;
   isActive: boolean;
-  
 }

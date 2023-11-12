@@ -79,25 +79,7 @@ export const Private = () => {
 
   return (
     <>
-      <SnackbarProvider
-        maxSnack={3}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        autoHideDuration={3000}
-        action={(key) => (
-          <IconButton
-            color="inherit"
-            onClick={() => {
-              closeSnackbar(key);
-            }}
-          >
-            <CloseTwoToneIcon />
-          </IconButton>
-        )}
-        dense
-        style={{
-          zIndex: 105500,
-        }}
-      >
+     
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <OrderProvider>
             <SidebarProvider>
@@ -107,7 +89,6 @@ export const Private = () => {
 
           <ModalCreateCashRegister />
         </LocalizationProvider>
-      </SnackbarProvider>
     </>
   );
 };

@@ -4,7 +4,7 @@ import { loadAbort } from "../../../../helpers";
 import { ISection, ICategory, IProduct } from "../../../../models";
 import { UpdateCategoryDto, CreateCategoryDto } from "../dto/category.dto";
 import { CreateSectionDto } from "../dto/create-section.dto";
-import { CreateProductDto, UpdateProductDto } from "../dto/product.dto";
+import { CreateProductDto, UpdateProductDto } from "../dto/";
 import { UpdateSectionDto } from "../dto/update-section.dto";
 
 export const createSection = async (

@@ -10,16 +10,12 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import { pedidoStart } from "../../../../../../redux/slices/orders/orders.thunks";
 import { statusModalAddOrder } from "../../../services/orders.service";
 import { useModal } from "../../../../../../hooks";
 import {
   ArrowBack,
-  ArrowBackIos,
   Close,
   Edit,
-  Kitchen,
-  ListAlt,
   Print,
   SoupKitchen,
 } from "@mui/icons-material";
@@ -85,18 +81,24 @@ export const ModalAddOrder: FC<Props> = ({}) => {
           <Typography variant="h4" mb={3}>
             Pedido N° {order?.num}
           </Typography>
-          <Stack spacing={1} direction="row" justifyContent='center'>
+          <Stack spacing={1} direction="row" justifyContent="center">
             <Button variant="outlined" onClick={() => navigate("/orders")}>
               <ArrowBack />
             </Button>
             <Button variant="outlined" onClick={openPDF}>
               <Print />
             </Button>
-            <Button variant="outlined" onClick={() => navigate("/orders/actives")}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate("/orders/actives")}
+            >
               <SoupKitchen />
             </Button>
 
-            <Button variant="outlined" onClick={() => navigate(`/orders/list/edit/${order?.id}`)}>
+            <Button
+              variant="outlined"
+              onClick={() => navigate(`/orders/list/edit/${order?.id}`)}
+            >
               <Edit />
             </Button>
           </Stack>
