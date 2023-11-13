@@ -18,12 +18,12 @@ import { Add, Edit, HelpOutline } from "@mui/icons-material";
 
 import { ITable, TypeOrder } from "../../../../../models";
 import { useNavigate } from "react-router-dom";
-import { useModal } from "../../../../../hooks";
-import { DrawerOrder } from "../../components/DrawerOrder.component";
 
 import { Table } from "./components/Table.component";
 import { OrderTakeAway } from "./components/OrderTakeAway.component";
 import { useNewOrderStore } from "../../store/newOrderStore";
+import NiceModal from "@ebay/nice-modal-react";
+import { RegisteredModals } from "../../../modals";
 
 export const Tables = () => {
   const { tables } = useSelector(selectTables);
@@ -33,8 +33,6 @@ export const Tables = () => {
   const { setOrderType } = useNewOrderStore((state) => state);
 
   const dispatchRedux = useDispatch();
-
-  const { isOpen, handleClose, handleOpen } = useModal();
 
   const { orders } = useSelector(selectOrders);
 
@@ -48,21 +46,10 @@ export const Tables = () => {
 
   const handleOpenDrawer = (table: ITable) => {
     dispatchRedux(setActiveTable(table));
-
-    handleOpen();
-  };
-
-  const handleCloseDrawer = () => {
-    dispatchRedux(setActiveTable(null));
-    handleClose();
+    NiceModal.show(RegisteredModals.DrawerOrder);
   };
 
   const createOrderTakeAway = () => {
-    // dispatch({
-    //   type: OrderActionType.SET_TYPE_ORDER,
-    //   payload: TypeOrder.TAKE_AWAY,
-    // });
-
     setOrderType(TypeOrder.TAKE_AWAY);
 
     navigate("/orders/add/menu");
@@ -70,8 +57,6 @@ export const Tables = () => {
 
   return (
     <>
-      <DrawerOrder open={isOpen} onClose={handleCloseDrawer} />
-
       <Container maxWidth="lg">
         <TitlePage
           title="Pedidos"

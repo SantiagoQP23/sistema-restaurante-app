@@ -19,35 +19,34 @@ import { SuspenseLoader } from "./components/ui/";
 function App() {
   return (
     <ThemeProvider>
-      <SnackbarProvider
-        maxSnack={3}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        autoHideDuration={3000}
-        action={(key) => (
-          <IconButton
-            color="inherit"
-            onClick={() => {
-              closeSnackbar(key);
-            }}
-          >
-            <CloseTwoTone />
-          </IconButton>
-        )}
-        dense
-        style={{
-          zIndex: 105500,
-        }}
-      >
-        <NiceModal.Provider>
-          <Suspense fallback={<SuspenseLoader />}>
-            <CssBaseline />
-
-            <BrowserRouter>
+      <Suspense fallback={<SuspenseLoader />}>
+        <CssBaseline />
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          autoHideDuration={3000}
+          action={(key) => (
+            <IconButton
+              color="inherit"
+              onClick={() => {
+                closeSnackbar(key);
+              }}
+            >
+              <CloseTwoTone />
+            </IconButton>
+          )}
+          dense
+          style={{
+            zIndex: 105500,
+          }}
+        >
+          <BrowserRouter>
+            <NiceModal.Provider>
               <AppRouter />
-            </BrowserRouter>
-          </Suspense>
-        </NiceModal.Provider>
-      </SnackbarProvider>
+            </NiceModal.Provider>
+          </BrowserRouter>
+        </SnackbarProvider>
+      </Suspense>
     </ThemeProvider>
   );
 }

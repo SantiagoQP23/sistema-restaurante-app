@@ -16,7 +16,6 @@ import {
   setActiveTable,
 } from "../../../../../redux/slices/tables";
 
-import { DeleteTable } from "../../components/DeleteTable.component";
 import { TitlePage } from "../../../components/TitlePage.component";
 import { DraggableTable } from "../../components/DraggableTable.component";
 import { useUpdateManyTables } from "../../hooks/useTables";
@@ -144,8 +143,6 @@ export const ListTables = () => {
           </Typography>
         </Grid>
       </Grid>
-
-      <DeleteTable />
 
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={orderedTables}>

@@ -1,5 +1,7 @@
-import { FC, useContext } from "react";
 import { IOrder, TypeOrder } from "../../../../models";
+
+import NiceModal from "@ebay/nice-modal-react";
+
 import {
   Box,
   Drawer,
@@ -19,9 +21,10 @@ import {
   Switch,
   CardActions,
   ListItemSecondaryAction,
+  Divider
 } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectOrders, selectTables } from "../../../../redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectOrders, selectTables, setActiveTable } from "../../../../redux";
 import {
   CloseOutlined,
   Edit,
@@ -35,12 +38,10 @@ import {
   TakeoutDining,
   Circle,
 } from "@mui/icons-material";
-import { Divider } from "@mui/material/";
 import { LinearProgressWrapper } from "./EditOrder";
 import { formatDistance } from "date-fns";
 import { LabelStatusOrder } from "../views/OrdersList/components/LabelStatusOrder.component";
 import { useNavigate } from "react-router-dom";
-import { OrderActionType, OrderContext } from "../context/Order.context";
 import { es } from "date-fns/locale";
 import { LabelStatusPaid } from "./LabelStatusPaid.component";
 import { formatMoney } from "../../Common/helpers/format-money.helper";
@@ -48,15 +49,12 @@ import { Label } from "../../../../components/ui";
 import { useUpdateTable } from "../hooks/useUpdateTable";
 import { useNewOrderStore } from "../store/newOrderStore";
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-}
-
-export const DrawerOrder: FC<Props> = ({ open, onClose }) => {
+export const DrawerOrder = NiceModal.create(() => {
   const theme = useTheme();
 
-  const { dispatch } = useContext(OrderContext);
+  const modal = NiceModal.useModal();
+
+  const dispatch = useDispatch();
 
   const { setTable, setOrderType } = useNewOrderStore();
 
@@ -72,21 +70,20 @@ export const DrawerOrder: FC<Props> = ({ open, onClose }) => {
 
   const navigate = useNavigate();
 
+  const closeModal = () => {
+    modal.hide();
+    dispatch(setActiveTable(null));
+  }
+
   const handleAddOrder = () => {
-    dispatch({ type: OrderActionType.SET_TABLE, payload: activeTable! });
 
     setTable(activeTable!);
 
     setOrderType(TypeOrder.IN_PLACE);
 
-    dispatch({
-      type: OrderActionType.SET_TYPE_ORDER,
-      payload: TypeOrder.IN_PLACE,
-    });
-
     navigate("/orders/add/menu");
 
-    onClose();
+    closeModal();
   };
 
   const handleChangeStatusTable = (value: boolean) => {
@@ -99,8 +96,8 @@ export const DrawerOrder: FC<Props> = ({ open, onClose }) => {
     <>
       <Drawer
         anchor="right"
-        open={open}
-        onClose={onClose}
+        open={modal.visible}
+        onClose={closeModal}
         sx={{
           width: "auto",
           zIndex: 10000,
@@ -124,7 +121,7 @@ export const DrawerOrder: FC<Props> = ({ open, onClose }) => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <IconButton onClick={onClose}>
+              <IconButton onClick={closeModal}>
                 <CloseOutlined />
               </IconButton>
               <Stack direction="row" spacing={1}></Stack>
@@ -451,4 +448,5 @@ export const DrawerOrder: FC<Props> = ({ open, onClose }) => {
       </Drawer>
     </>
   );
-};
+});
+

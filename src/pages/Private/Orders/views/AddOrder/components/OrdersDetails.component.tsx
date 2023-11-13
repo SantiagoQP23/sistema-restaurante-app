@@ -35,7 +35,7 @@ export const OrderDetails = () => {
             <>
               <IconButton
                 size="small"
-                onClick={() => navigate("/orders/menu")}
+                onClick={() => navigate("/orders/add/menu")}
                 color="primary"
               >
                 <AddShoppingCartOutlined />
