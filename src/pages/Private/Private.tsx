@@ -79,16 +79,15 @@ export const Private = () => {
 
   return (
     <>
-     
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <OrderProvider>
-            <SidebarProvider>
-              <>{content}</>
-            </SidebarProvider>
-          </OrderProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <OrderProvider>
+          <SidebarProvider>
+            <>{content}</>
+          </SidebarProvider>
+        </OrderProvider>
 
-          <ModalCreateCashRegister />
-        </LocalizationProvider>
+        <ModalCreateCashRegister />
+      </LocalizationProvider>
     </>
   );
 };

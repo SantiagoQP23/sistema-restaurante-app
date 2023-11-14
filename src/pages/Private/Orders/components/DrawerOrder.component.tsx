@@ -101,8 +101,6 @@ export const DrawerOrder = NiceModal.create(() => {
         sx={{
           width: "auto",
           zIndex: 10000,
-
-          // minWidth: {xs: '100vw', sm: '100%', md: '100%', lg: '100%', xl: '100%'},
         }}
       >
         <Box
@@ -111,12 +109,10 @@ export const DrawerOrder = NiceModal.create(() => {
             p: 1,
             [theme.breakpoints.down("sm")]: { width: "100vw" },
             [theme.breakpoints.up("sm")]: { width: 500, flexShrink: 0 },
-
-            // width: { xs: '100%', sm: '100%', md: '100%', lg: '100%', xl: '100%' },
           }}
         >
           <Stack direction="column" spacing={2} width="100%">
-            <Stack
+            {/* <Stack
               direction="row"
               justifyContent="space-between"
               alignItems="center"
@@ -330,7 +326,6 @@ export const DrawerOrder = NiceModal.create(() => {
                           flexDirection="column"
                           gap={1}
                         >
-                          {/* <Typography variant='h5' textAlign='right'>Total</Typography> */}
                         </Grid>
 
                         <Grid
@@ -442,7 +437,7 @@ export const DrawerOrder = NiceModal.create(() => {
                   </Stack>
                 </>
               )}
-            </Box>
+            </Box> */}
           </Stack>
         </Box>
       </Drawer>

@@ -2,6 +2,7 @@ export * from './AddProductsMenu.component';
 export * from './AllMenu.component';
 export * from './CartWidget.component';
 export * from './Categories.compontent';
+export * from './DrawerProductsFilter.component';
 export * from './ListProducts.component';
 export * from './ModalCreateProduct.component';
 export * from './Product.component';
