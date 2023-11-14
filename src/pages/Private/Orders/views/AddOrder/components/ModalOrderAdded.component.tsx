@@ -24,8 +24,8 @@ import { generateOrderPdf } from "../../../helpers/pdf-orders";
 
 interface Props {}
 
-export const ModalAddOrder: FC<Props> = ({}) => {
-  const { handleClose, handleOpen, isOpen, setOpen } = useModal();
+export const ModalOrderAdded: FC<Props> = () => {
+  const { handleClose, isOpen, setOpen } = useModal();
 
   const [order, setOrder] = useState<IOrder>();
 
@@ -39,21 +39,11 @@ export const ModalAddOrder: FC<Props> = ({}) => {
       pdf.open();
     }
   };
-
-  const navigateToOrders = () => {
-    navigate("/orders");
-  };
-
   useEffect(() => {
     suscription$.subscribe((resp) => {
       setOpen(resp.value);
 
       setOrder(resp.order);
-
-      // console.log('resp', resp)
-      // if (resp) {
-      //   closeModal();
-      // }
     });
 
     return () => {};

@@ -7,7 +7,6 @@ import {
   ReceiptOrder,
   ActiveOrders,
 } from "../views";
-import { MenuNewOrder } from "../views/AddOrder/components";
 import { PrivateRoutes } from "../../../../models/routes.model";
 
 import { lazy } from "react";
@@ -55,10 +54,6 @@ export const OrderRouter: RouteObject = {
     {
       path: "add/menu",
       element: <Menu />,
-    },
-    {
-      path: "add/products",
-      element: <MenuNewOrder />,
     },
   ],
 };

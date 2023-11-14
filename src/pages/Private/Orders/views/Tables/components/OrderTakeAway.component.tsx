@@ -11,7 +11,7 @@ import {
 import { format } from "date-fns";
 import { IOrder } from "../../../../../../models";
 import { FC } from "react";
-import { LabelStatusOrder } from "../../OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useNavigate } from "react-router-dom";
 
 interface Props {

@@ -42,7 +42,7 @@ import { statusModalStartOrder } from "../../../services/orders.service";
 import { BtnAddProduct } from "./BtnAddProduct.component";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
-import { LabelStatusOrder } from "../../OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useOrderHelper } from "../../../hooks/useOrders";
 
 interface Props {

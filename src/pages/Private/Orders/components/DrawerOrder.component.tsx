@@ -21,7 +21,7 @@ import {
   Switch,
   CardActions,
   ListItemSecondaryAction,
-  Divider
+  Divider,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOrders, selectTables, setActiveTable } from "../../../../redux";
@@ -38,12 +38,12 @@ import {
   TakeoutDining,
   Circle,
 } from "@mui/icons-material";
-import { LinearProgressWrapper } from "./EditOrder";
+import { LinearProgressWrapper } from "./";
 import { formatDistance } from "date-fns";
-import { LabelStatusOrder } from "../views/OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "./LabelStatusOrder.component";
 import { useNavigate } from "react-router-dom";
 import { es } from "date-fns/locale";
-import { LabelStatusPaid } from "./LabelStatusPaid.component";
+import { LabelStatusPaid } from "./";
 import { formatMoney } from "../../Common/helpers/format-money.helper";
 import { Label } from "../../../../components/ui";
 import { useUpdateTable } from "../hooks/useUpdateTable";
@@ -62,21 +62,20 @@ export const DrawerOrder = NiceModal.create(() => {
 
   const { activeTable } = useSelector(selectTables);
 
-  const ordersTable = orders.filter(
-    (order) => order.table?.id === activeTable?.id
-  );
-
   const { updateTable } = useUpdateTable();
 
   const navigate = useNavigate();
 
+  const ordersTable = orders.filter(
+    (order) => order.table?.id === activeTable?.id
+  );
+
   const closeModal = () => {
     modal.hide();
     dispatch(setActiveTable(null));
-  }
+  };
 
   const handleAddOrder = () => {
-
     setTable(activeTable!);
 
     setOrderType(TypeOrder.IN_PLACE);
@@ -91,6 +90,11 @@ export const DrawerOrder = NiceModal.create(() => {
       updateTable({ tableId: activeTable.id, isAvailable: value });
     }
   };
+
+  const showEditOrderPage = (orderId: string) => {
+    closeModal();
+    navigate(`/orders/list/edit/${orderId}`);
+  }
 
   return (
     <>
@@ -112,41 +116,31 @@ export const DrawerOrder = NiceModal.create(() => {
           }}
         >
           <Stack direction="column" spacing={2} width="100%">
-            {/* <Stack
+            <Stack
               direction="row"
               justifyContent="space-between"
               alignItems="center"
             >
-              <IconButton onClick={closeModal}>
-                <CloseOutlined />
-              </IconButton>
-              <Stack direction="row" spacing={1}></Stack>
+              <Typography variant="h4" textAlign="center">
+                Mesa {activeTable?.name}
+              </Typography>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<Add />}
+                  onClick={handleAddOrder}
+                  size="small"
+                >
+                  Añadir Pedido
+                </Button>
+                <IconButton onClick={closeModal} size="small">
+                  <CloseOutlined fontSize="small" />
+                </IconButton>
+              </Stack>
             </Stack>
 
             <Divider />
-
-            <Box px={2}></Box>
-
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mt={2}
-            >
-              <Typography variant="h3" textAlign="center">
-                Mesa {activeTable?.name}
-              </Typography>
-
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<Add />}
-                onClick={handleAddOrder}
-                size="small"
-              >
-                Añadir Pedido
-              </Button>
-            </Box>
 
             <Stack spacing={2} direction="column">
               {ordersTable.map((order: IOrder) => (
@@ -270,8 +264,6 @@ export const DrawerOrder = NiceModal.create(() => {
                                   "No seleccionada"
                                 }
                               />
-
-                              <Card></Card>
                             </Grid>
                           </>
                         )}
@@ -303,30 +295,18 @@ export const DrawerOrder = NiceModal.create(() => {
                                 sx={{
                                   px: 1,
                                   py: 0.5,
+                               
+                                  borderRadius: 1,
                                 }}
-                                avatar={<Notes />}
-                                title="Notas"
+                                avatar={<Notes color="info" />}
+                                title={order.notes}
                                 titleTypographyProps={{
-                                  variant: "subtitle2",
-                                }}
-                                subheaderTypographyProps={{
                                   variant: "h5",
-                                  color: "inherith",
                                 }}
-                                subheader={order.notes}
                               />
                             </Grid>
                           </>
                         )}
-
-                        <Grid
-                          item
-                          xs={4}
-                          display="flex"
-                          flexDirection="column"
-                          gap={1}
-                        >
-                        </Grid>
 
                         <Grid
                           item
@@ -350,38 +330,36 @@ export const DrawerOrder = NiceModal.create(() => {
 
                         <List>
                           {order.details?.map((detail) => (
-                            <>
-                              <ListItem key={detail.id}>
-                                <ListItemIcon>
-                                  <Typography variant="body1">
-                                    {detail.quantity}
-                                  </Typography>
-                                </ListItemIcon>
+                            <ListItem key={detail.id}>
+                              <ListItemIcon>
+                                <Typography variant="body1">
+                                  {detail.quantity}
+                                </Typography>
+                              </ListItemIcon>
 
-                                <ListItemText primary={detail.product.name} />
+                              <ListItemText primary={detail.product.name} />
 
-                                <ListItemSecondaryAction
+                              <ListItemSecondaryAction
+                                sx={{
+                                  width: 50,
+                                }}
+                              >
+                                <LinearProgressWrapper
+                                  value={
+                                    (detail.qtyDelivered * 100) /
+                                    detail.quantity
+                                  }
+                                  color="info"
+                                  variant="determinate"
                                   sx={{
-                                    width: 50,
+                                    width: "100%",
                                   }}
-                                >
-                                  <LinearProgressWrapper
-                                    value={
-                                      (detail.qtyDelivered * 100) /
-                                      detail.quantity
-                                    }
-                                    color="info"
-                                    variant="determinate"
-                                    sx={{
-                                      width: "100%",
-                                    }}
-                                  />
-                                  <Typography variant="subtitle1" fontSize={12}>
-                                    {detail.qtyDelivered} / {detail.quantity}
-                                  </Typography>
-                                </ListItemSecondaryAction>
-                              </ListItem>
-                            </>
+                                />
+                                <Typography variant="subtitle1" fontSize={12}>
+                                  {detail.qtyDelivered} / {detail.quantity}
+                                </Typography>
+                              </ListItemSecondaryAction>
+                            </ListItem>
                           ))}
                         </List>
                       </Grid>
@@ -393,7 +371,7 @@ export const DrawerOrder = NiceModal.create(() => {
                       startIcon={<Edit />}
                       variant="outlined"
                       size="small"
-                      onClick={() => navigate(`/orders/list/edit/${order.id}`)}
+                      onClick={() => showEditOrderPage(order.id)}
                     >
                       Editar
                     </Button>
@@ -437,11 +415,10 @@ export const DrawerOrder = NiceModal.create(() => {
                   </Stack>
                 </>
               )}
-            </Box> */}
+            </Box>
           </Stack>
         </Box>
       </Drawer>
     </>
   );
 });
-

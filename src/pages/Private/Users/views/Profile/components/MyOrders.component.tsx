@@ -12,7 +12,7 @@ import { selectOrders, selectAuth } from "../../../../../../redux";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { getTypeOrder } from "../../../../Common/helpers/get-type-order.helper";
 import { TabsStatusOrder } from "../../../../Orders/components/TabsStatusOrder.component";
-import { LabelStatusOrder } from "../../../../Orders/views/OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../../../Orders/components/LabelStatusOrder.component";
 import { Card } from '@mui/material';
 
 

@@ -27,8 +27,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   const handleUpdateQuantity = (value: number) => {
     setQuantity(value);
     updateDetail({ ...detalle, quantity: value });
-  }
-
+  };
 
   const editDescription = () => {
     console.log(detalle);
@@ -39,7 +38,6 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   useEffect(() => {
     setQuantity(detalle.quantity);
   }, [detalle]);
-
 
   return (
     <>
@@ -90,7 +88,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
           justifyContent="right"
           alignItems="center"
         >
-          <CounterInput 
+          <CounterInput
             value={quantity}
             onChange={(value: number) => {
               handleUpdateQuantity(value);

@@ -49,7 +49,7 @@ import { OrderStatus } from "../../../../../models";
 import { ModalDeleteInvoice } from "../../components/modals/ModalDeleteInvoice.component";
 
 import { generateOrderPdf } from "../../helpers/pdf-orders";
-import { LabelStatusOrder } from "../OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 import { LabelStatusPaid } from "../../components/LabelStatusPaid.component";
 import { format } from "date-fns";
 

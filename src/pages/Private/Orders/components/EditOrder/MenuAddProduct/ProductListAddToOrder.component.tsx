@@ -1,10 +1,8 @@
 import { Grid } from "@mui/material"
 import { FC } from "react"
 import { IProduct } from "../../../../../../models"
-import { ProductAddToOrder } from "./ProductAddToOrder.component"
 import { useSelector } from 'react-redux';
 import { selectOrders } from '../../../../../../redux/slices/orders/orders.slice';
-import { ProductNewOrder } from '../../../views/AddOrder/components/ProductNewOrder.component';
 
 
 interface ProductsListProps {
@@ -24,12 +22,12 @@ export const ProductListAddToOrder: FC<ProductsListProps> = ({ products }) => {
             if(product.isActive)
               return (
               <Grid key={product.id} item xs={12} md={4}>
-                {
+                {/* {
                   activeOrder
                   ? <ProductAddToOrder product={product} />
                   : <ProductNewOrder product={product} />
                   
-                }
+                } */}
 
               </Grid>
           )})

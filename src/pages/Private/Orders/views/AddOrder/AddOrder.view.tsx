@@ -25,7 +25,7 @@ import { TitlePage } from "../../../components/TitlePage.component";
 import { OrderDetails, NewOrderSummary } from "./components";
 import { TypeOrder } from "../../../../../models";
 import { TableOrder } from "../../components";
-import { ModalAddOrder } from "./components/ModalAddOrder.component";
+import { ModalOrderAdded } from "./components/ModalOrderAdded.component";
 import { useNewOrderStore } from "../../store/newOrderStore";
 
 export const AddOrder = () => {
@@ -172,7 +172,7 @@ export const AddOrder = () => {
         </Grid>
       </Container>
 
-      <ModalAddOrder />
+      <ModalOrderAdded />
     </>
   );
 };

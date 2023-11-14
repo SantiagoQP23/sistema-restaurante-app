@@ -10,6 +10,7 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
+  Radio,
   FormGroup,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +81,7 @@ export const DrawerProductsFilter = NiceModal.create(() => {
                   {section.categories.map((category) => (
                     <FormControlLabel
                       key={category.id}
-                      control={<Checkbox />}
+                      control={<Radio />}
                       label={category.name}
                       checked={activeCategory?.id === category.id}
                       onChange={() => changeCategory(category)}

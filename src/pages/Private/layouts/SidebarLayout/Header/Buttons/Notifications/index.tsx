@@ -31,7 +31,7 @@ import { getPaymentMethod } from '../../../../../Common/helpers/get-payment-meth
 import { OrderStatus, OrderStatusPay, TypeOrder } from '../../../../../../../models';
 import { getTypeOrder } from '../../../../../Common/helpers/get-type-order.helper';
 import { formatMoney } from '../../../../../Common/helpers/format-money.helper';
-import { LabelStatusOrder } from '../../../../../Orders/views/OrdersList/components/LabelStatusOrder.component';
+import { LabelStatusOrder } from '../../../../../Orders/components/LabelStatusOrder.component';
 import { Stack, ListItemSecondaryAction, useTheme, Select, MenuItem, FormControl, InputLabel, Avatar, CardHeader, ListItemButton, Button } from '@mui/material';
 import { TabsStatusOrder } from '../../../../../Orders/components/TabsStatusOrder.component';
 import { useNavigate } from 'react-router-dom';

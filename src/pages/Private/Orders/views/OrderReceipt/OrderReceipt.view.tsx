@@ -33,7 +33,7 @@ import { OrderStatus, TypeOrder } from "../../../../../models/orders.model";
 import { es } from "date-fns/locale";
 import { PdfReceiptOrder } from "./pdf/PdfReceiptOrder.component";
 import { TitlePage } from "../../../components/TitlePage.component";
-import { LabelStatusOrder } from "../OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 
 export const ReceiptOrder = () => {
   const navigate = useNavigate();

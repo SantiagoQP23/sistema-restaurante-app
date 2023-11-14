@@ -1,20 +1,14 @@
 import { RemoveCircleOutline, AddCircleOutline } from "@mui/icons-material";
-import { Card, CardContent, Typography, Box, IconButton, Button } from "@mui/material";
+import { Card, Typography, Box, IconButton, Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { FC, useState, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SocketContext } from "../../../../../../context";
-import { IProduct, IOrderDetail } from "../../../../../../models";
-import { selectOrders, setActiveOrder } from "../../../../../../redux";
-import { OrderContext } from "../../../context/Order.context";
-import { CreateOrderDetailDto } from "../../../dto/create-order-detail.dto";
-import { UpdateOrderDetailDto } from "../../../dto/update-order-detail.dto";
+import { IProduct } from "../../../../../../models";
+import { selectOrders } from "../../../../../../redux";
 import { useCounter } from "../../../hooks";
-import { EventsEmitSocket } from "../../../interfaces/events-sockets.interface";
-import { SocketResponseOrder } from "../../../interfaces/responses-sockets.interface";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { ProductStatus } from '../../../../../../models/menu.model';
-import { ICreateOrderDetail } from '../../../../../../models/orders.model';
 import { sharingInformationService } from '../../../services/sharing-information.service';
 
 

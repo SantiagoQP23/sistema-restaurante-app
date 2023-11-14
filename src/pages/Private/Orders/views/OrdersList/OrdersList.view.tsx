@@ -35,7 +35,7 @@ import { OrderListToolbar } from "./components/OrderListToolbar.component";
 import { Checkbox } from "@mui/material/";
 import { TablePagination, IconButton } from "@mui/material";
 import { TabsOrderStatus } from "./components/TabsOrderStatus.component";
-import { LabelStatusOrder } from "./components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 import { useOrders } from "../../hooks";
 
 export const ListOrders = () => {

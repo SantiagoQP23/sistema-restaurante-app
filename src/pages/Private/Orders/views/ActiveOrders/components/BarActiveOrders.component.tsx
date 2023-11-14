@@ -8,7 +8,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { TypeOrder } from "../../../../../../models";
-import { LabelStatusOrder } from "../../OrdersList/components/LabelStatusOrder.component";
+import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";

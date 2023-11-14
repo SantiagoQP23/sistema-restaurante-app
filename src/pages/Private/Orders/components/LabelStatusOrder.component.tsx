@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-import { Label } from "../../../../../../components/ui";
-import { OrderStatus } from "../../../../../../models";
+import { Label } from "../../../../components/ui";
+import { OrderStatus } from "../../../../models";
 import { Box, Typography } from "@mui/material";
 import { LocalDining, Pending, SoupKitchen } from "@mui/icons-material";
 

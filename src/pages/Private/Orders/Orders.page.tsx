@@ -22,7 +22,7 @@ import {
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
 import { ModalClientOrder, ModalEditOrderDetail } from "./components";
 
-import { ModalAddDetail } from "./components/EditOrder";
+import { ModalAddDetail } from "./components/modals";
 import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
 
 import { ModalDeleteOrder } from "./components/modals/ModalDeleteOrder.component";

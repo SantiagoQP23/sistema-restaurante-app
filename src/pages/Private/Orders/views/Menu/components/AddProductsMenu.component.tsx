@@ -1,3 +1,5 @@
+import NiceModal from "@ebay/nice-modal-react";
+
 import {
   Box,
   Stack,
@@ -7,21 +9,17 @@ import {
   Paper,
   Chip,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectMenu } from "../../../../../../redux";
 import { ComboBoxProducts } from "../../../../EditMenu/components/products/ComboBoxProducts.component";
-import { Sections, AllMenu } from "../../../../Menu/components";
-import { Categories } from "./";
+import { AllMenu } from "../../../../Menu/components";
 import { IProduct } from "../../../../../../models";
 import { sharingInformationService } from "../../../services/sharing-information.service";
 import { FilterList } from "@mui/icons-material";
-import NiceModal from "@ebay/nice-modal-react";
 import { RegisteredModals } from "../../../../modals";
 
 export const AddProductsMenu = () => {
-  const { sections, activeSection, activeCategory } = useSelector(selectMenu);
-
-  const dispatch = useDispatch();
+  const { activeCategory } = useSelector(selectMenu);
 
   const addProductoToOrder = (product: IProduct) => {
     sharingInformationService.setSubject(true, {
@@ -45,23 +43,22 @@ export const AddProductsMenu = () => {
       </Box>
 
       <Stack spacing={1} my={1} direction="row" justifyContent="space-between">
-
         <Paper sx={{ p: 1 }}>
           {activeCategory && (
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Categoría:
-              <Chip
-                label={activeCategory.name}
-                sx={{ ml: 1 }}
-              />
+              <Chip label={activeCategory.name} sx={{ ml: 1 }} size="small" />
             </Typography>
           )}
         </Paper>
 
-        <Button startIcon={<FilterList />} onClick={openDrawerProductsFilter}>
+        <Button
+          startIcon={<FilterList />}
+          onClick={openDrawerProductsFilter}
+          size="small"
+        >
           Filtros
         </Button>
-
       </Stack>
 
       <Grid

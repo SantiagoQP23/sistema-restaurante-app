@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from "react";
 
-import { Box, Grid, Typography, Button, Card } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { InputSearch } from "../../../../../components/ui";
 import { IProduct, ICategory } from "../../../../../models";
@@ -9,12 +9,10 @@ import {
   setActiveCategory,
   setActiveSection,
 } from "../../../../../redux";
-import { Sections } from "../../../Menu/components";
 
 import { findProductsByName, getProducts } from "../../../../../helpers";
 import { useModal } from "../../../../../hooks";
 import { ICreateOrderDetail } from "../../../../../models/orders.model";
-import { ModalAddDetail } from "../modals/ModalAddDetail.component";
 
 import { ProductListAddToOrder } from "./MenuAddProduct/ProductListAddToOrder.component";
 
