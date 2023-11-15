@@ -1,104 +1,111 @@
-import { Card, CardHeader, CardContent, Button, Stack, IconButton, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography, ListItemButton, Chip, List } from '@mui/material';
-import { CardActions } from '@mui/material/';
-import { useNavigate } from 'react-router-dom';
-import { NavLink as RouterLink } from 'react-router-dom';
-import { ResultBestSellingProducts, getBestSellingProducts } from '../../../services/dashboard.service';
-import { useQuery } from '@tanstack/react-query';
-import { EditOutlined } from '@mui/icons-material';
-import { CustomGroupBy, GroupBy, Period } from '../../../hooks/useFilterSoldProducts';
-
+import {
+  Card,
+  CardHeader,
+  Button,
+  Typography,
+  Chip,
+  Table,
+  TableContainer,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+} from "@mui/material";
+import { NavLink as RouterLink } from "react-router-dom";
+import {
+  ResultBestSellingProducts,
+  getBestSellingProducts,
+} from "../../../services/dashboard.service";
+import { useQuery } from "@tanstack/react-query";
+import {
+  CustomGroupBy,
+  GroupBy,
+  Period,
+} from "../../../hooks/useFilterSoldProducts";
+import { ArrowRight } from "@mui/icons-material";
+import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 
 export const BestSellingProductsSummary = () => {
-
-
-  const { data } = useQuery<ResultBestSellingProducts>(['best-selling-products', { period: Period.DAILY, offset: 0, limit: 5 }], () => {
-    return getBestSellingProducts({ period: Period.MONTHLY, offset: 0, limit: 5, groupBy: GroupBy.DAY, customGroupBy: CustomGroupBy.PRODUCT, startDate: new Date(), endDate: new Date() })
-  })
-
-
+  const { data } = useQuery<ResultBestSellingProducts>(
+    ["best-selling-products", { period: Period.DAILY, offset: 0, limit: 5 }],
+    () => {
+      return getBestSellingProducts({
+        period: Period.MONTHLY,
+        offset: 0,
+        limit: 5,
+        groupBy: GroupBy.DAY,
+        customGroupBy: CustomGroupBy.PRODUCT,
+        startDate: new Date(),
+        endDate: new Date(),
+      });
+    }
+  );
 
   return (
     <Card>
       <CardHeader
         title="Productos"
-        subheader='Productos más vendidos del mes'
-        // subheader={
-        //   <Chip
-        //     label='Este mes'
-        //     variant='filled'
-        //     size='small'
-        //     color='default'
-        //   />
-        // }
+        subheader="Productos más vendidos del mes"
         action={
           <Button
-            variant='outlined'
             component={RouterLink}
             to="products"
-            size='small'
+            size="small"
+            color="inherit"
+            endIcon={<ArrowRight />}
           >
             Ver todo
-
-
           </Button>
         }
       />
 
-      <CardContent>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Producto</TableCell>
+              <TableCell>Categoría</TableCell>
+              <TableCell align="center">Cantidad</TableCell>
+              <TableCell align="right">Total</TableCell>
+            </TableRow>
+          </TableHead>
 
-        <List>
-
-          {
-
-            data?.products.length
-              ? data.products?.map((product, index) => (
-                <ListItem>
-                  <ListItemText
-                    primary={product.productName}
-                    primaryTypographyProps={{ variant: 'h5' }}
-                    secondary={
-                      <Chip
-                        sx={{ mt: 0.5 }}
-                        label={product.categoryName}
-                        size='small'
-                      />
-                    }
-                  />
-                  <ListItemSecondaryAction
-
-                  >
-                    <Typography variant='h6'>{product.totalSold}</Typography>
-                    <Typography variant='h5' color='success'>$ {2 * product.totalSold}</Typography>
-
-                  </ListItemSecondaryAction>
-
-
-                </ListItem>
+          <TableBody>
+            {data?.products.length ? (
+              data.products?.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>
+                    <Typography variant="h6" whiteSpace="nowrap">
+                      {product.productName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip label={product.categoryName} size="small" />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="h6">{product.totalSold}</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="h6" color="success">
+                      {formatMoney(product.totalSold * product.productPrice)}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
               ))
-              : <>
-                <Typography variant='h4' align='center'>No hay datos</Typography>
+            ) : (
+              <>
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    <Typography variant="h6">
+                      No hay datos para mostrar
+                    </Typography>
+                  </TableCell>
+                </TableRow>
               </>
-          }
-
-        </List>
-      </CardContent>
-
-      {/* <CardActions
-        sx={{
-          justifyContent: 'center',
-        }}
-      >
-        <Button
-          component={RouterLink}
-          to="products"
-        >
-          Ver más
-        </Button>
-
-      </CardActions> */}
-
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Card>
-
-
-  )
-}
+  );
+};
