@@ -12,6 +12,7 @@ import { ReportsRouter } from "../Reports/router/Reports.router";
 import { BalanceRouter } from "../Balance/router/Balance.router";
 import { SuppliersRouter } from "../Suppliers/router/Suppliers.router";
 import { InvoiceRouter } from "../Invoices/router/Invoice.router";
+import { RestaurantRouter } from "../Restaurant/router";
 
 export const PrivateRouter: RouteObject[] = [
   {
@@ -28,6 +29,7 @@ export const PrivateRouter: RouteObject[] = [
       ReportsRouter,
       BalanceRouter,
       SuppliersRouter,
+      RestaurantRouter,
       {
         path: "/auth/login",
         element: <Navigate to={PrivateRoutes.ORDERS} />,

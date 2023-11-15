@@ -21,7 +21,7 @@ import { EventsOnSocket } from "./Orders/interfaces/events-sockets.interface";
 import { SocketResponseTable } from "./Orders/interfaces/responses-sockets.interface";
 import { OrderProvider } from "./Orders/context/Order.context";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import { useRestaurant } from "./Reports/hooks/useRestaurant";
+import { useRestaurant } from "./Restaurant/hooks/useRestaurant";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";

@@ -18,6 +18,7 @@ import { selectAuth } from "../../../../../redux";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import SidebarMenuMobile from "./SidebarMenuMobile/SidebarMenuMobile.component";
 import { Label } from "../../../../../components/ui";
+import { useRestaurantStore } from "../../../Common/store/restaurantStore";
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -72,6 +73,9 @@ const DrawerPersistent = styled(MuiDrawer, {
 }));
 
 const Title = ({ open }: { open: boolean }) => {
+
+  const {restaurant } = useRestaurantStore((state) => state);
+
   return (
     <>
       {/* Logo del restaurante */}
@@ -86,11 +90,11 @@ const Title = ({ open }: { open: boolean }) => {
         <img src={logo} alt="logo" width="60px" style={{ borderRadius: 8 }} />
 
         <Box>
-          <Typography variant="subtitle1" color="text.primary">
+          <Typography variant="subtitle1" color="text.primary" >
             Restaurante
           </Typography>
           <Typography variant="h4" color="text.primary">
-            Doña Yoli <Label color="info">v2</Label>
+            {restaurant?.name} <Label color="info">v2</Label>
           </Typography>
         </Box>
       </Box>

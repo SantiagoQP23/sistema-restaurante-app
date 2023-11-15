@@ -12,6 +12,7 @@ import {
   MenuBook,
   ReceiptLong,
   SoupKitchen,
+  Storefront,
 } from "@mui/icons-material";
 
 export interface NavItem {
@@ -90,4 +91,9 @@ export const navItemsAdmin2: NavItem[] = [
     icon: <PeopleOutlineIcon />,
     to: "/users",
   },
+  {
+    title: "Restaurante",
+    icon: <Storefront />,
+    to: "/restaurant",
+  }
 ];

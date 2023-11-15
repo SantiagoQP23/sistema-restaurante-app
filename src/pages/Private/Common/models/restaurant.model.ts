@@ -1,7 +1,4 @@
-
-
-
-export interface Restaurant{
+export interface Restaurant {
   id: string;
   name: string;
   address: string;
@@ -11,5 +8,4 @@ export interface Restaurant{
   simulationStartDate: string;
   lastSimulationUpdate: string;
   lastPredictionUpdate: number;
-
 }

@@ -1,5 +1,5 @@
 import { Restaurant } from "../models/restaurant.model";
-import { useRestaurant } from '../../Reports/hooks/useRestaurant';
+import { useRestaurant } from '../../Restaurant/hooks/useRestaurant';
 import { create } from "zustand";
 
 

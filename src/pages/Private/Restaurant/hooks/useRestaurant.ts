@@ -1,8 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 // import { Restaurant } from "../models/restaurant.model";
-import { getRestaurant, updateRestaurant } from "../services/rules.service";
-import { UpdateRestaurantDto } from "../dto/update-restaurant.dto";
+import {
+  getRestaurant,
+  updateRestaurant,
+} from "../../Reports/services/rules.service";
+import { UpdateRestaurantDto } from "../../Reports/dto/update-restaurant.dto";
 import { useRestaurantStore } from "../../Common/store/restaurantStore";
 import { Restaurant } from "../../Common/models/restaurant.model";
 
@@ -18,9 +21,7 @@ export const useRestaurant = () => {
       onSuccess: (data) => {
         setRestaurant(data);
       },
-      onError: (error) => {
-        console.log(error);
-
+      onError: () => {
         enqueueSnackbar("Error al obtener el restaurante", {
           variant: "error",
         });
