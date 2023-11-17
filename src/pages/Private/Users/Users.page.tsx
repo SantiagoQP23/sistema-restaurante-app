@@ -28,4 +28,5 @@ const Users: FC<Props> = ({ allowedRoles }) => {
     </div>
   );
 };
+
 export default Users;

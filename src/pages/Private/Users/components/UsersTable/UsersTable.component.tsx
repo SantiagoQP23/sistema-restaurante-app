@@ -1,9 +1,8 @@
-import { ChangeEvent, FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 
 import {
   Box,
   Card,
-  Checkbox,
   IconButton,
   LinearProgress,
   Switch,
@@ -16,7 +15,6 @@ import {
   TableRow,
   Tooltip,
   Typography,
-  Button,
   FormControlLabel,
   TableSortLabel,
   Paper,
@@ -24,28 +22,16 @@ import {
   CircularProgress,
 } from "@mui/material";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
-import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
-import { useFetchAndLoad } from "../../../../../hooks/useFetchAndLoad";
 import {
   resetActiveUser,
   selectUsers,
   setActiveUser,
-  updateUser,
 } from "../../../../../redux/slices/users/users.slice";
 import { useSelector, useDispatch } from "react-redux";
 import { IUser, Roles } from "../../../../../models/auth.model";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/";
-import {
-  statusModalDeleteUser,
-  updateUser as updateUserS,
-} from "../../services/users.service";
 import { Label } from "../../../../../components/ui";
-import { IClient } from "../../../../../models/client.model";
-import { useSnackbar } from "notistack";
-import { TitlePage } from "../../../components/TitlePage.component";
-import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
-import { usePaginationAsync } from "../../../../../hooks/usePaginationAsync";
 import { useUsers } from "../../hooks/useUsers";
 import SearchIcon from "@mui/icons-material/Search";
 import { selectAuth } from "../../../../../redux";

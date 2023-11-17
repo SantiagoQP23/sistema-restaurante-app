@@ -48,7 +48,6 @@ export interface ResponseIncomesByUser {
 export const getBestSellingProducts = async (
   filterDto: FilterDto
 ): Promise<ResultBestSellingProducts> => {
-  console.log(filterDto);
 
   const { period, startDate, endDate, offset = 0, limit = 10 } = filterDto;
 
@@ -77,7 +76,6 @@ export const getBestSellingProducts = async (
 export const getBestSellingCategories = async (
   filterDto: FilterDto
 ): Promise<BestSellingCategoriesResponse> => {
-  console.log(filterDto);
 
   const { period, startDate, endDate, offset = 0, limit = 10 } = filterDto;
 
@@ -102,7 +100,6 @@ export const getBestSellingCategories = async (
 export const getIncomesByUser = async (
   filterDto: DateFilterDto
 ): Promise<ResponseIncomesByUser[]> => {
-  console.log(filterDto);
 
   const { period, startDate, endDate } = filterDto;
 

@@ -57,7 +57,7 @@ export const AddProductsMenu = () => {
           onClick={openDrawerProductsFilter}
           size="small"
         >
-          Filtros
+          Categorías
         </Button>
       </Stack>
 

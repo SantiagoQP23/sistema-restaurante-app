@@ -5,17 +5,18 @@ import { Paid, Pending } from "@mui/icons-material";
 
 interface Props {
   isPaid: boolean;
+  onlyIcon?: boolean;
 }
 
-export const LabelStatusPaid: FC<Props> = ({ isPaid }) => {
+export const LabelStatusPaid: FC<Props> = ({ isPaid, onlyIcon = false }) => {
   return (
     <>
       <Typography variant="h4" display="flex" alignItems="center">
         <Label color={isPaid ? "success" : "warning"}>
-          <Box mr={1}>
-            {isPaid ? <Paid fontSize="small" /> : <Pending fontSize="small" />}
+          <Box mr={onlyIcon ? 0 : 1} >
+            {isPaid ? <Paid fontSize="small" /> : <Paid fontSize="small" />}
           </Box>
-          {isPaid ? "Pagado" : "Por pagar"}
+          { !onlyIcon && ( isPaid ? "Pagado" : "Por pagar")}
         </Label>
       </Typography>
     </>

@@ -7,6 +7,7 @@ import {
   Divider,
   Typography,
   Stack,
+  Box,
 } from "@mui/material";
 
 import { AddShoppingCartOutlined } from "@mui/icons-material";
@@ -52,9 +53,11 @@ export const OrderDetails = () => {
               <NewOrderDetail detalle={detail} key={detail.product.id} />
             ))
           ) : (
-            <Typography variant="body1" align="center" my={5}>
-              No se han añadido productos
-            </Typography>
+            <Box my={5}>
+              <Typography variant="body1" align="center" my={5}>
+                No se han añadido productos
+              </Typography>
+            </Box>
           )}
         </Stack>
       </Card>

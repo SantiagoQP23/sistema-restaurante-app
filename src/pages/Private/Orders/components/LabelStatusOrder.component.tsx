@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Label } from "../../../../components/ui";
 import { OrderStatus } from "../../../../models";
 import { Box, Typography } from "@mui/material";
-import { LocalDining, Pending, SoupKitchen } from "@mui/icons-material";
+import { LocalDining, Pending, PendingActions, SoupKitchen } from "@mui/icons-material";
 
 const colorStatusOrderMap: {
   [key: string]:
@@ -32,9 +32,10 @@ const textStatusOrderMap: { [key: string]: string } = {
 
 interface Props {
   status: OrderStatus;
+  onlyIcon?: boolean;
 }
 
-export const LabelStatusOrder: FC<Props> = ({ status }) => {
+export const LabelStatusOrder: FC<Props> = ({ status, onlyIcon = false}) => {
   return (
     // <Chip
     //   color={colorStatusOrderMap[status]}
@@ -51,9 +52,9 @@ export const LabelStatusOrder: FC<Props> = ({ status }) => {
 
     <Typography variant="h4" fontWeight="bold">
       <Label color={colorStatusOrderMap[status]}>
-        <Box mr={1}>
+        <Box mr={ onlyIcon ? 0 : 1}>
           {status === OrderStatus.PENDING ? (
-            <Pending fontSize="small" />
+            <PendingActions fontSize="small" />
           ) : status === OrderStatus.IN_PROGRESS ? (
             <SoupKitchen fontSize="small" />
           ) : (
@@ -61,7 +62,7 @@ export const LabelStatusOrder: FC<Props> = ({ status }) => {
           )}
         </Box>
 
-        {textStatusOrderMap[status]}
+        {!onlyIcon && textStatusOrderMap[status]}
       </Label>
     </Typography>
   );

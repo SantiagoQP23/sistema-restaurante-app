@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-import { Assignment, PersonOutline } from "@mui/icons-material";
-import { Card, CardActionArea, Box, Typography, Badge, Stack } from "@mui/material";
+import { Assignment } from "@mui/icons-material";
+import { Card, CardActionArea, Box, Typography, Badge } from "@mui/material";
 import { ITable, OrderStatus } from "../../../../../../models";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
@@ -16,8 +16,6 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
   const { orders } = useSelector(selectOrders);
 
   const ordersTable = orders.filter((order) => order.table?.id === table.id);
-
-  const people = ordersTable.reduce((acc, order) => acc + order.people, 0);
 
   return (
     <Card>
