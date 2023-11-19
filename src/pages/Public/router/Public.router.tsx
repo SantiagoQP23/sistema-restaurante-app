@@ -4,17 +4,19 @@ import { Login } from "../Auth/Login";
 import { Signup } from "../Auth/Signup";
 import { ProductsMenu } from "../Shop/views/ProductsMenu/ProductsMenu.view";
 import { Product } from "../Shop/views/Product/Product.page";
+import { Home } from "../Home/Home.page";
 
 export const PublicRouter: RouteObject[] = [
   {
-    path: "/",
+    path: "",
     children: [
+      { path: "", element: <Home /> },
       {
         path: "shop",
         element: <Shop />,
         children: [
           {
-            path: "menu",
+            path: "",
             element: <ProductsMenu />,
           },
           {
@@ -23,11 +25,11 @@ export const PublicRouter: RouteObject[] = [
           },
           {
             path: "*",
-            element: <Navigate to="/shop/menu" />,
+            element: <Navigate to="" />,
           },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     path: "auth",
@@ -40,7 +42,7 @@ export const PublicRouter: RouteObject[] = [
         path: "register",
         element: <Signup />,
       },
-    ]
+    ],
   },
   {
     path: "*",

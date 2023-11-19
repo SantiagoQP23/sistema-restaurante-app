@@ -35,6 +35,10 @@ const breadcrumbNameMap: { [key: string]: string } = {
   "/clients/add": "Nuevo cliente",
   "/balance": "Balance",
 
+  "/shop/menu": "Menú",
+  "/shop": "Menú",
+  
+
   "/reports": "Dashboard",
   "/reports/products": "Productos",
   "/reports/incomes": "Ingresos",

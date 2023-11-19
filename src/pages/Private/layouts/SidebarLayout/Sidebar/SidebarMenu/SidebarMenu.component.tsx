@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useState } from "react";
 
 import {
   ListSubheader,
@@ -13,17 +13,23 @@ import {
   ListItemIcon,
   ListItemText,
   ListItemSecondaryAction,
-  IconButton
-} from '@mui/material';
-import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
-import { SidebarContext } from '../../../../Common/contexts/SidebarContext';
+  IconButton,
+} from "@mui/material";
+import { NavLink as RouterLink, useNavigate } from "react-router-dom";
+import { SidebarContext } from "../../../../Common/contexts/SidebarContext";
 
-import TableChartTwoToneIcon from '@mui/icons-material/TableChartTwoTone';
+import TableChartTwoToneIcon from "@mui/icons-material/TableChartTwoTone";
 
-import { useSelector } from 'react-redux';
-import { selectAuth } from '../../../../../../redux';
-import { Typography } from '@mui/material';
-import { navItemsAdmin2, navItemsManagement, navItemsOrders, navItemsAdmin, NavItem } from '../../models';
+import { useSelector } from "react-redux";
+import { selectAuth } from "../../../../../../redux";
+import { Typography } from "@mui/material";
+import {
+  navItemsAdmin2,
+  navItemsManagement,
+  navItemsOrders,
+  navItemsAdmin,
+  NavItem,
+} from "../../models";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -46,61 +52,47 @@ const MenuWrapper = styled(Box)(
 `
 );
 
-
 export interface NavItemButtonProps {
-  item: NavItem
-
+  item: NavItem;
 }
 
 export const NavItemButton: FC<NavItemButtonProps> = ({ item }) => {
-
   const { closeSidebar, open, toggleSidebar } = useContext(SidebarContext);
-
 
   return (
     <ListItem component="div" key={item.to}>
-
       <ListItemButton
-
         disableRipple
         component={RouterLink}
         onClick={closeSidebar}
         to={item.to}
         sx={{
           minHeight: 48,
-          justifyContent: open ? 'initial' : 'center',
+          justifyContent: open ? "initial" : "center",
           px: 2.5,
-          '&.active': {
-            color: 'text.primary',
-            bgcolor: 'action.selected',
-            fontWeight: 'fontWeightBold',
+          "&.active": {
+            color: "text.primary",
+            bgcolor: "action.selected",
+            fontWeight: "fontWeightBold",
           },
-
         }}
         end
       >
         <ListItemIcon
           sx={{
             minWidth: 0,
-            mr: open ? 3 : 'auto',
-            justifyContent: 'center',
+            mr: open ? 3 : "auto",
+            justifyContent: "center",
           }}
         >
           {item.icon}
-
         </ListItemIcon>
 
         <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-
       </ListItemButton>
-
     </ListItem>
-  )
-
-}
-
-
-
+  );
+};
 
 const SubMenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -132,7 +124,7 @@ const SubMenuWrapper = styled(Box)(
 
           .MuiButton-startIcon,
           .MuiButton-endIcon {
-            transition: ${theme.transitions.create(['color'])};
+            transition: ${theme.transitions.create(["color"])};
 
             .MuiSvgIcon-root {
               font-size: inherit;
@@ -196,9 +188,9 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.colors.alpha.trueWhite[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-    'transform',
-    'opacity'
-  ])};
+                  "transform",
+                  "opacity",
+                ])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -224,7 +216,6 @@ const SubMenuWrapper = styled(Box)(
 );
 
 function SidebarMenu() {
-
   const { closeSidebar, open, toggleSidebar } = useContext(SidebarContext);
 
   const [openOrders, setOpenOrders] = useState(true);
@@ -235,13 +226,9 @@ function SidebarMenu() {
     setOpenOrders(!openOrders);
   };
 
-
-
   const handleOpenMenuRestaurant = () => {
     setOpenMenuRestaurant(!openMenuRestaurant);
   };
-
-
 
   const { user } = useSelector(selectAuth);
 
@@ -263,56 +250,37 @@ function SidebarMenu() {
         <List
           component="div"
           subheader={
-            open && <ListSubheader component="div" disableSticky>
-              <Typography
-                color='text.primary'
-
-              >
-                GENERAL
-
-              </Typography>
-            </ListSubheader>
+            open && (
+              <ListSubheader component="div" disableSticky>
+                <Typography color="text.primary">GENERAL</Typography>
+              </ListSubheader>
+            )
           }
           sx={{
-            mt: 1
+            mt: 1,
           }}
         >
           <SubMenuWrapper>
-
             <List component="div">
-
-              {
-                navItemsAdmin.map((item, index) => (
-                  <NavItemButton key={index} item={item} />
-                ))
-              }
-
+              {navItemsAdmin.map((item, index) => (
+                <NavItemButton key={index} item={item} />
+              ))}
             </List>
-
           </SubMenuWrapper>
-
         </List>
 
         <List
           component="div"
           subheader={
-            open &&
-            <ListSubheader
-
-              component="div" disableSticky>
-              <Typography
-                color='text.primary'
-
-              >
-                PEDIDOS
-
-              </Typography>
-            </ListSubheader>
+            open && (
+              <ListSubheader component="div" disableSticky>
+                <Typography color="text.primary">PEDIDOS</Typography>
+              </ListSubheader>
+            )
           }
         >
           <SubMenuWrapper>
             <List component="div">
-
               {/* <ListItem disablePadding>
                 <ListItemButton
                   onClick={handleOpenOrders}
@@ -348,185 +316,136 @@ function SidebarMenu() {
 
               </ListItem> */}
 
-
-              <Collapse in={openOrders} >
-
-                {
-                  navItemsOrders.map((item, index) => (
-
-                    <ListItem component="div" key={item.to}>
-
-                      <ListItemButton
-
-                        disableRipple
-                        component={RouterLink}
-                        onClick={closeSidebar}
-                        to={item.to}
+              <Collapse in={openOrders}>
+                {navItemsOrders.map((item, index) => (
+                  <ListItem component="div" key={item.to}>
+                    <ListItemButton
+                      disableRipple
+                      component={RouterLink}
+                      onClick={closeSidebar}
+                      to={item.to}
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                        "&.active": {
+                          color: "text.primary",
+                          bgcolor: "action.selected",
+                          fontWeight: "fontWeightBold",
+                        },
+                      }}
+                      end
+                    >
+                      <ListItemIcon
                         sx={{
-                          minHeight: 48,
-                          justifyContent: open ? 'initial' : 'center',
-                          px: 2.5,
-                          '&.active': {
-                            color: 'text.primary',
-                            bgcolor: 'action.selected',
-                            fontWeight: 'fontWeightBold',
-                          },
-
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
                         }}
-                        end
                       >
-                        <ListItemIcon
-                          sx={{
-                            minWidth: 0,
-                            mr: open ? 3 : 'auto',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          {item.icon}
+                        {item.icon}
+                      </ListItemIcon>
 
-                        </ListItemIcon>
-
-                        <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-
-                      </ListItemButton>
-
-
-
-
-
-                    </ListItem>
-
-                  ))
-                }
-
+                      <ListItemText
+                        primary={item.title}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
               </Collapse>
-
-
-
             </List>
           </SubMenuWrapper>
-
         </List>
-
-
 
         <List
           component="div"
           subheader={
-            open && <ListSubheader component="div" disableSticky>
-              <Typography
-                color='text.primary'
-
-              >
-                Administración
-
-              </Typography>
-            </ListSubheader>
+            open && (
+              <ListSubheader component="div" disableSticky>
+                <Typography color="text.primary">Administración</Typography>
+              </ListSubheader>
+            )
           }
         >
           <SubMenuWrapper>
-
             <List component="div">
+              {navItemsManagement.map((item, index) => (
+                <ListItem component="div" key={item.to}>
+                  <ListItemButton
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to={item.to}
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      "&.active": {
+                        color: "text.primary",
+                        bgcolor: "action.selected",
+                        fontWeight: "fontWeightBold",
+                      },
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
 
-              {
-                navItemsManagement.map((item, index) => (
+                    <ListItemText
+                      primary={item.title}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
 
+              {user &&
+                user.role.name === "admin" &&
+                navItemsAdmin2.map((item, index) => (
                   <ListItem component="div" key={item.to}>
-
                     <ListItemButton
-
                       disableRipple
                       component={RouterLink}
                       onClick={closeSidebar}
                       to={item.to}
                       sx={{
                         minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
+                        justifyContent: open ? "initial" : "center",
                         px: 2.5,
-                        '&.active': {
-                          color: 'text.primary',
-                          bgcolor: 'action.selected',
-                          fontWeight: 'fontWeightBold',
+                        "&.active": {
+                          color: "text.primary",
+                          bgcolor: "action.selected",
+                          fontWeight: "fontWeightBold",
                         },
-
                       }}
                     >
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
-                          mr: open ? 3 : 'auto',
-                          justifyContent: 'center',
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
                         }}
                       >
                         {item.icon}
-
                       </ListItemIcon>
 
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-
+                      <ListItemText
+                        primary={item.title}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
                     </ListItemButton>
-
-
-
-
-
                   </ListItem>
-
-                ))
-              }
-
-              {
-                user && user.role.name === 'admin' && (navItemsAdmin2.map((item, index) => (
-
-                  <ListItem component="div" key={item.to}>
-
-                    <ListItemButton
-
-                      disableRipple
-                      component={RouterLink}
-                      onClick={closeSidebar}
-                      to={item.to}
-                      sx={{
-                        minHeight: 48,
-                        justifyContent: open ? 'initial' : 'center',
-                        px: 2.5,
-                        '&.active': {
-                          color: 'text.primary',
-                          bgcolor: 'action.selected',
-                          fontWeight: 'fontWeightBold',
-                        },
-
-                      }}
-                    >
-                      <ListItemIcon
-                        sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : 'auto',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {item.icon}
-
-                      </ListItemIcon>
-
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-
-                    </ListItemButton>
-
-                  </ListItem>
-
-                ))
-
-                )
-
-              }
-
+                ))}
             </List>
-
-
           </SubMenuWrapper>
         </List>
-
       </MenuWrapper>
     </>
   );

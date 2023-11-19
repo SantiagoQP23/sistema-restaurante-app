@@ -1,4 +1,6 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
+
+import NiceModal from "@ebay/nice-modal-react";
 
 import { ComboBoxProducts } from "../../../../Private/EditMenu/components/products/ComboBoxProducts.component";
 import { TitlePage } from "../../../../Private/components";
@@ -10,13 +12,14 @@ import { IProduct, ISection } from "../../../../../models";
 import { loadMenu, selectMenu, setActiveCategory } from "../../../../../redux";
 import { useAsync, useFetchAndLoad } from "../../../../../hooks";
 import { useNavigate } from "react-router-dom";
+import { RegisteredModals } from "../../../../Private/modals";
 
 export const ProductsMenu = () => {
   const { loading, callEndpoint } = useFetchAndLoad();
 
   const { activeCategory } = useSelector(selectMenu);
 
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -29,16 +32,18 @@ export const ProductsMenu = () => {
 
   const showProduct = (productId: string) => {
     navigate(`/shop/product/${productId}`);
-  }
+  };
 
-  useAsync(getMenuCall, loadMenuState, () => {}, []);
-
+  
   const navigateToProduct = (product: IProduct) => {
-
     navigate(`/shop/product/${product.id}`);
-
-  }
-
+  };
+  
+  const openDrawerProductsFilter = () => {
+    NiceModal.show(RegisteredModals.DrawerProductsFilter);
+  };
+  
+  useAsync(getMenuCall, loadMenuState, () => {}, []);
 
   return (
     <>
@@ -46,7 +51,7 @@ export const ProductsMenu = () => {
 
       <Box
         sx={{
-          width: "250px"
+          width: "250px",
         }}
       >
         <ComboBoxProducts selectProduct={navigateToProduct} />
@@ -55,26 +60,32 @@ export const ProductsMenu = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
-          mb: 2,
+          justifyContent: "space-between",
+          alignItems: "center",
+          my: 2,
         }}
       >
-        <Button variant="text" endIcon={<FilterList />}
+        <Typography variant="h4">{activeCategory?.name}</Typography>
+
+        <Button
+          variant="text"
+          endIcon={<FilterList />}
           color="inherit"
+          onClick={openDrawerProductsFilter}
         >
-          Filtros
+          Categorías
         </Button>
       </Box>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         {activeCategory?.products.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} lg={3} xl={2}>
-            <Product product={product} onClick={showProduct}/>
+          <Grid item key={product.id} xs={6} sm={3} lg={3} xl={2}>
+            <Product product={product} onClick={showProduct} />
           </Grid>
         ))}
       </Grid>
 
-      <CartWidget badge={1} />
+      {/* <CartWidget badge={1} /> */}
     </>
   );
 };

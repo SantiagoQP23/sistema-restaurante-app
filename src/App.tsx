@@ -16,7 +16,12 @@ import "./styles/global-styles.css";
 import ThemeProvider from "./theme/ThemeProvider";
 
 import { SuspenseLoader } from "./components/ui/";
+import { useRestaurant } from "./pages/Private/Restaurant/hooks/useRestaurant";
 function App() {
+
+
+  useRestaurant();
+
   return (
     <ThemeProvider>
       <Suspense fallback={<SuspenseLoader />}>

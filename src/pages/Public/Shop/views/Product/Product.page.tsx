@@ -1,10 +1,19 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useProduct } from "../../../../Private/EditMenu/hooks/useProducts";
-import { Box, Grid, Stack, Typography, styled, Rating, Button } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  Typography,
+  styled,
+  Rating,
+  Button,
+} from "@mui/material";
 import { formatMoney } from "../../../../Private/Common/helpers/format-money.helper";
 import { Label } from "../../../../../components/ui";
 import { ShoppingCart } from "@mui/icons-material";
+import { TitlePage } from "../../../../Private/components";
 
 const StyledProductImg = styled("img")({
   width: "100%",
@@ -25,6 +34,8 @@ export const Product = () => {
 
   return (
     <>
+      <TitlePage title={product.name} />
+
       <Grid container spacing={3} mt={5}>
         <Grid item xs={12} md={6}>
           <StyledProductImg
@@ -47,14 +58,11 @@ export const Product = () => {
 
             <Typography variant="body1">{product.description}</Typography>
 
-
             <Box>
-              <Button variant="contained" startIcon={<ShoppingCart /> } >
+              <Button variant="contained" startIcon={<ShoppingCart />} disabled>
                 Agregar al carrito
               </Button>
             </Box>
-
-
           </Stack>
         </Grid>
       </Grid>
