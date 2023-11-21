@@ -9,6 +9,9 @@ import { CashRegisterPopover } from "./CashRegister/CashRegisterPopover.componen
 import { useContext } from "react";
 import { SocketContext } from "../../../../../../context";
 import { SocketConnectionButton } from "./SocketConnectionButton/SocketConnectionButton.component";
+import { selectAuth } from "../../../../../../redux";
+import { useSelector } from "react-redux";
+import { ValidRoles } from "../../../../Common/models/valid-roles.model";
 
 function HeaderButtons() {
   const { activeCashRegister } = useCashRegisterStore();
@@ -17,18 +20,19 @@ function HeaderButtons() {
 
   const navigate = useNavigate();
 
+  const { user } = useSelector(selectAuth);
+
   return (
     <Box sx={{}}>
       {/* <HeaderSearch /> */}
       <Box sx={{ display: "flex", gap: 1 }} component="span">
         <ButtonTheme />
-        
+
         <SocketConnectionButton />
 
         <HeaderNotifications />
 
-        <CashRegisterPopover />
-
+        {user?.role.name === ValidRoles.admin && <CashRegisterPopover />}
       </Box>
     </Box>
   );

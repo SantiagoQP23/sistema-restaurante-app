@@ -25,6 +25,7 @@ import { selectAuth } from '../../../../../../redux';
 import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { NavItem, navItemsAdmin, navItemsAdmin2, navItemsManagement, navItemsOrders } from '../../models';
+import { Label } from '../../../../../../components/ui';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -503,6 +504,11 @@ function SidebarMenuMobile() {
                       </ListItemIcon>
 
                       <ListItemText primary={item.title} sx={{}} />
+                      {item.label && (
+                        <ListItemSecondaryAction>
+                          <Label color="info">{item.label}</Label>
+                        </ListItemSecondaryAction>
+                      )}
 
                     </ListItemButton>
 

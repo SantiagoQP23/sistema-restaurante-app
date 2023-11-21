@@ -15,7 +15,7 @@ const Balance = lazy(() => import('../Balance.page'))
 
 export const BalanceRouter: RouteObject = {
 
-  path: PrivateRoutes.BALANCE,
+  path: '',
   element: <Balance />,
   children: [
     {

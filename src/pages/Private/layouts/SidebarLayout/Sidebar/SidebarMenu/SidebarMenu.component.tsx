@@ -30,6 +30,8 @@ import {
   navItemsAdmin,
   NavItem,
 } from "../../models";
+import { ValidRoles } from "../../../../Common/models/valid-roles.model";
+import { Label } from "../../../../../../components/ui";
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -234,6 +236,8 @@ function SidebarMenu() {
 
   const navigate = useNavigate();
 
+  const userIsAdmin = user && user.role.name === ValidRoles.admin;
+
   return (
     <>
       <MenuWrapper>
@@ -247,27 +251,29 @@ function SidebarMenu() {
           </SubMenuWrapper>
         </List> */}
 
-        <List
-          component="div"
-          subheader={
-            open && (
-              <ListSubheader component="div" disableSticky>
-                <Typography color="text.primary">GENERAL</Typography>
-              </ListSubheader>
-            )
-          }
-          sx={{
-            mt: 1,
-          }}
-        >
-          <SubMenuWrapper>
-            <List component="div">
-              {navItemsAdmin.map((item, index) => (
-                <NavItemButton key={index} item={item} />
-              ))}
-            </List>
-          </SubMenuWrapper>
-        </List>
+        {userIsAdmin && (
+          <List
+            component="div"
+            subheader={
+              open && (
+                <ListSubheader component="div" disableSticky>
+                  <Typography color="text.primary">GENERAL</Typography>
+                </ListSubheader>
+              )
+            }
+            sx={{
+              mt: 1,
+            }}
+          >
+            <SubMenuWrapper>
+              <List component="div">
+                {navItemsAdmin.map((item, index) => (
+                  <NavItemButton key={index} item={item} />
+                ))}
+              </List>
+            </SubMenuWrapper>
+          </List>
+        )}
 
         <List
           component="div"
@@ -278,6 +284,9 @@ function SidebarMenu() {
               </ListSubheader>
             )
           }
+          sx={{
+            mt: userIsAdmin ? 0 : 1,
+          }}
         >
           <SubMenuWrapper>
             <List component="div">
@@ -317,7 +326,7 @@ function SidebarMenu() {
               </ListItem> */}
 
               <Collapse in={openOrders}>
-                {navItemsOrders.map((item, index) => (
+                {navItemsOrders.map((item) => (
                   <ListItem component="div" key={item.to}>
                     <ListItemButton
                       disableRipple
@@ -370,7 +379,7 @@ function SidebarMenu() {
         >
           <SubMenuWrapper>
             <List component="div">
-              {navItemsManagement.map((item, index) => (
+              {navItemsManagement.map((item) => (
                 <ListItem component="div" key={item.to}>
                   <ListItemButton
                     disableRipple
@@ -408,7 +417,7 @@ function SidebarMenu() {
 
               {user &&
                 user.role.name === "admin" &&
-                navItemsAdmin2.map((item, index) => (
+                navItemsAdmin2.map((item) => (
                   <ListItem component="div" key={item.to}>
                     <ListItemButton
                       disableRipple
@@ -440,6 +449,11 @@ function SidebarMenu() {
                         primary={item.title}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
+                      {item.label && open && (
+                        <ListItemSecondaryAction>
+                          <Label color="info">{item.label}</Label>
+                        </ListItemSecondaryAction>
+                      )}
                     </ListItemButton>
                   </ListItem>
                 ))}

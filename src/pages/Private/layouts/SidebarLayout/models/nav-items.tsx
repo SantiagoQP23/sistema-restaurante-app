@@ -19,14 +19,10 @@ export interface NavItem {
   title: string;
   icon: JSX.Element;
   to: string;
+  label?: string;
 }
 
 export const navItemsAdmin: NavItem[] = [
-  // {
-  //   title: 'Dashboard',
-  //   icon: <DashboardOutlinedIcon />,
-  //   to: '/dashboard'
-  // },
   {
     title: "Dashboard",
     icon: <DashboardOutlinedIcon />,
@@ -95,5 +91,6 @@ export const navItemsAdmin2: NavItem[] = [
     title: "Restaurante",
     icon: <Storefront />,
     to: "/restaurant",
-  }
+    label: "Nuevo",
+  },
 ];

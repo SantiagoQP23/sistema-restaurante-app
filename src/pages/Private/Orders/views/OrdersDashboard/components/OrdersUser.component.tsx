@@ -66,7 +66,7 @@ export const OrdersUser: FC<Props> = ({ user }) => {
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Typography variant="h4">
+                  <Typography variant="h5">
                     {format(new Date(order.createdAt), "HH:mm ")}-{" "}
                     {order.type === TypeOrder.TAKE_AWAY
                       ? getTypeOrder(order.type)

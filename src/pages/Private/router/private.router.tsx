@@ -13,6 +13,9 @@ import { BalanceRouter } from "../Balance/router/Balance.router";
 import { SuppliersRouter } from "../Suppliers/router/Suppliers.router";
 import { InvoiceRouter } from "../Invoices/router/Invoice.router";
 import { RestaurantRouter } from "../Restaurant/router";
+import { UnauthorizedPage } from "../../Status/Unauthorized.page";
+import Auth from "../components/Auth.component";
+import { ValidRoles } from "../Common/models/valid-roles.model";
 
 export const PrivateRouter: RouteObject[] = [
   {
@@ -25,11 +28,33 @@ export const PrivateRouter: RouteObject[] = [
       MenuEditRouter,
       ClientsRouter,
       TablesRouter,
-      UsersRouter,
-      ReportsRouter,
-      BalanceRouter,
+      {
+        path: PrivateRoutes.USERS,
+        element: <Auth allowedRoles={[ValidRoles.admin]} />,
+        children: [UsersRouter],
+      },
+
+      {
+        path: PrivateRoutes.REPORTS,
+        element: <Auth allowedRoles={[ValidRoles.admin]} />,
+        children: [ReportsRouter],
+      },
+      {
+        path: PrivateRoutes.BALANCE,
+        element: <Auth allowedRoles={[ValidRoles.admin]} />,
+        children: [BalanceRouter],
+      },
+      {
+        path: "restaurant",
+        element: <Auth allowedRoles={[ValidRoles.admin]} />,
+        children: [RestaurantRouter],
+      },
       SuppliersRouter,
-      RestaurantRouter,
+
+      {
+        path: "unauthorized",
+        element: <UnauthorizedPage />,
+      },
       {
         path: "/auth/login",
         element: <Navigate to={PrivateRoutes.ORDERS} />,
