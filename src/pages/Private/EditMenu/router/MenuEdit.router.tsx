@@ -1,54 +1,70 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 
-import { PrivateRoutes } from "../../../../models";
-import { EditSections, EditSection, EditCategories, EditCategory, EditProducts } from "../components";
-import { EditProduct } from "../components/products/EditProduct.component";
+import { EditCategory, ProductsList } from "../components";
+import { EditProduct, Products, CreateProduct } from "../views/Products/";
+import { Sections } from "../views/Sections/Sections.view";
+import { Categories } from "../views/Categories/Categories.view";
 
+const EditMenu = lazy(() => import("../EditMenu.page"));
 
-const EditMenu = lazy(() => import('../EditMenu.page'))
-
-
-
-
-export const MenuEditRouter: RouteObject =
-{
-  path: PrivateRoutes.MENU_EDIT,
-  element: <EditMenu/>,
+export const MenuEditRouter: RouteObject = {
+  path: "menu",
+  element: <EditMenu />,
   children: [
-
     {
-      path: '',
-      element: <EditSections />,
-
+      path: "",
+      element: <Navigate to={"sections"} />,
     },
     {
-      path: 'seccion',
-      element: <EditSection />,
-
+      path: "sections",
+      element: <Sections />,
     },
     {
-      path: ':nameSection',
-      element: <EditCategories />,
-
+      path: "categories",
+      element: <Categories />,
     },
     {
-      path: 'category',
-      element: <EditCategory />,
-
+      path: "products",
+      element: <Products />,
     },
     {
-      path: ':nameSection/:nameCategory',
-      element: <EditProducts />
+      path: "products/:id",
+      element: <>vista producto</>,
+      // loader: productLoader(queryClient)
     },
     {
-      path: 'product',
+      path: "products/:id/edit",
       element: <EditProduct />,
-
     },
-
-
-  ]
-
-}
+    {
+      path: "products/create",
+      element: <CreateProduct />,
+    },
+    // {
+    //   path: "seccion",
+    //   element: <EditSection />,
+    // },
+    // {
+    //   path: ":nameSection",
+    //   element: <EditCategories />,
+    // },
+    {
+      path: "category",
+      element: <EditCategory />,
+    },
+    {
+      path: ":nameSection/:nameCategory",
+      element: <ProductsList />,
+    },
+    {
+      path: "product",
+      element: <EditProduct />,
+    },
+    {
+      path: "*",
+      element: <Navigate to={"sections"} />,
+    },
+  ],
+};

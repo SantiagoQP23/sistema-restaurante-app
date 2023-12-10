@@ -24,8 +24,9 @@ import { useSelector } from 'react-redux';
 import { selectAuth } from '../../../../../../redux';
 import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import { NavItem, navItemsAdmin, navItemsAdmin2, navItemsManagement, navItemsOrders } from '../../models';
+import { navItemsAdmin, navItemsAdmin2, navItemsManagement, navItemsOrders } from '../../models';
 import { Label } from '../../../../../../components/ui';
+import { NavItem } from '../../../interfaces';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `

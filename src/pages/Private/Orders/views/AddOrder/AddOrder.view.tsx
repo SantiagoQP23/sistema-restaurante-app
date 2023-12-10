@@ -62,21 +62,6 @@ export const AddOrder = () => {
 
         <Grid container spacing={1}>
           <Grid item xs={12} md={8}>
-            {/* <Stepper activeStep={activeStep} alternativeLabel sx={{
-              background: 'transparent'
-            }}>
-              <Step >
-                <StepLabel> <Typography variant={activeStep === 0 ? 'h4' : 'body1'} >Carrito</Typography></StepLabel>
-              </Step>
-              <Step>
-                <StepLabel> <Typography variant={activeStep === 1 ? 'h4' : 'body1'} >Mesa</Typography></StepLabel>
-              </Step>
-             
-
-
-
-            </Stepper> */}
-
             {activeStep === 0 && (
               <>
                 <OrderDetails />
@@ -91,7 +76,7 @@ export const AddOrder = () => {
                     startIcon={<ShoppingCart />}
                     fullWidth={false}
                     onClick={() => {
-                      navigate("/orders/menu");
+                      navigate("/orders/add/menu");
                     }}
                     color="primary"
                   >

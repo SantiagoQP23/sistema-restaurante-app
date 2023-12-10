@@ -16,7 +16,7 @@ const Users = lazy(() => import('../Users.page'))
 export const UsersRouter: RouteObject = {
 
 
-  path: PrivateRoutes.USERS,
+  path: '',
   element: <Users />,
   children: [
     {

@@ -1,26 +1,20 @@
 import { useContext, useEffect } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { useFetchAndLoad, useAsync } from "../../hooks";
-
-import { ISection } from "../../models";
-
-import { getMenu } from "../../services";
+import { useFetchAndLoad, useAsync, useMenu } from "../../hooks";
 
 import { useDispatch } from "react-redux";
-import { loadMenu, loadTables, updateTable } from "../../redux";
+import { loadTables, updateTable } from "../../redux";
 import { PrivateRouter } from "./router";
 import { SidebarProvider } from "./Common/contexts/SidebarContext";
 
-import { SnackbarProvider, closeSnackbar } from "notistack";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { getTables } from "./Tables/services";
 import { ITable } from "../../models/table.model";
 import { SocketContext } from "../../context/SocketContext";
 import { EventsOnSocket } from "./Orders/interfaces/events-sockets.interface";
 import { SocketResponseTable } from "./Orders/interfaces/responses-sockets.interface";
 import { OrderProvider } from "./Orders/context/Order.context";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 import { useRestaurant } from "./Restaurant/hooks/useRestaurant";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -29,6 +23,15 @@ import { useCashRegisterActive } from "./Balance/hooks/useCashRegister";
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component";
 import { useActiveOrders } from "./Orders/hooks";
 
+/**
+ * Component that contains the private routes of the application
+ *
+ * @author Santiago Quirumbay
+ *
+ * @version 1.1 28/11/2023 Adding the useMenu hook to load the menu
+ *
+ * @returns JSX.Element
+ */
 export const Private = () => {
   const content = useRoutes(PrivateRouter);
 
@@ -40,11 +43,7 @@ export const Private = () => {
 
   useActiveOrders();
 
-  const getMenuCall = async () => await callEndpoint(getMenu());
-
-  const loadMenuState = (sections: ISection[]) => {
-    dispatch(loadMenu(sections));
-  };
+  useMenu();
 
   const getTablesCall = async () => await callEndpoint(getTables());
 
@@ -55,8 +54,6 @@ export const Private = () => {
   const { cashRegisterQuery } = useCashRegisterActive();
 
   useAsync(getTablesCall, loadTablesState, () => {}, []);
-
-  useAsync(getMenuCall, loadMenuState, () => {}, []);
 
   useEffect(() => {
     socket?.on(EventsOnSocket.updateTable, ({ table }: SocketResponseTable) => {

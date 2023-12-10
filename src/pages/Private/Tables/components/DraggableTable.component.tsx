@@ -27,6 +27,7 @@ export const DraggableTable: FC<Props> = ({ table, reorder }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: table.id });
 
@@ -42,7 +43,6 @@ export const DraggableTable: FC<Props> = ({ table, reorder }) => {
   };
 
   const deleteTable = () => {
-
     const props: ModalDeleteTableProps = {
       table,
     };

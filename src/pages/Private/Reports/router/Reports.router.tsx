@@ -21,7 +21,7 @@ const Reports = lazy(() => import('../Reports.page'));
 export const ReportsRouter: RouteObject = {
 
 
-  path: PrivateRoutes.REPORTS,
+  path: '',
   element: <Reports />,
   children: [
     {

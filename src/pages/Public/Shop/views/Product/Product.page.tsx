@@ -14,6 +14,7 @@ import { formatMoney } from "../../../../Private/Common/helpers/format-money.hel
 import { Label } from "../../../../../components/ui";
 import { ShoppingCart } from "@mui/icons-material";
 import { TitlePage } from "../../../../Private/components";
+import { LabelProductStatus } from "../../../../../components/ui/LabelProductStatus.component";
 
 const StyledProductImg = styled("img")({
   width: "100%",
@@ -47,7 +48,7 @@ export const Product = () => {
         <Grid item xs={12} md={6}>
           <Stack spacing={2}>
             <Box sx={{ width: 200 }}>
-              <Label color="success">Disponible</Label>
+              <LabelProductStatus status={product.status} />
             </Box>
 
             <Typography variant="h4">{product.name}</Typography>

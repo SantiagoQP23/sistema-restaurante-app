@@ -1,14 +1,11 @@
 import { Card, Typography, Box, styled, Link } from "@mui/material/";
 import { FC } from "react";
-import { Label } from "../../../../../../components/ui";
 import { IProduct } from "../../../../../../models";
-import {
-  ProductStatus,
-  ProductStatusSpanish,
-} from "../../../../../../models/menu.model";
+import { ProductStatus } from "../../../../../../models/menu.model";
 import { IconButton, Stack } from "@mui/material";
 import { AddShoppingCart } from "@mui/icons-material";
 import { sharingInformationService } from "../../../services/sharing-information.service";
+import { LabelProductStatus } from "../../../../../../components/ui/LabelProductStatus.component";
 
 interface Props {
   product: IProduct;
@@ -37,8 +34,7 @@ export const Product: FC<Props> = ({ product, onClick }) => {
       <Card sx={{}}>
         <Box sx={{ pt: "100%", position: "relative" }}>
           {product.status !== ProductStatus.AVAILABLE && (
-            <Label
-              color="warning"
+            <Box
               sx={{
                 zIndex: 9,
                 top: 16,
@@ -46,8 +42,8 @@ export const Product: FC<Props> = ({ product, onClick }) => {
                 position: "absolute",
               }}
             >
-              {ProductStatusSpanish[`${product.status as ProductStatus}`]}
-            </Label>
+              <LabelProductStatus status={product.status} />
+            </Box>
           )}
 
           <StyledProductImg

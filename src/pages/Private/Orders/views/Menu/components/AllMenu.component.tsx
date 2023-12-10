@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { Grid, } from "@mui/material";
 import { useSelector,  } from 'react-redux';
@@ -8,7 +8,18 @@ import { ListProducts } from './';
 
 export const AllMenu: FC = () => {
 
-  const { activeCategory } = useSelector(selectMenu);
+  const { activeCategory, products} = useSelector(selectMenu);
+
+  const activeProducts = useMemo(() => {
+    return products.filter(product => product.isActive)
+  }, [products]);
+
+  const productsByCategory = useMemo(() => {
+    if (activeCategory) {
+      return activeProducts.filter(product => product.category.id === activeCategory.id)
+    }
+    return [];
+  }, [activeCategory])
 
   return (
     <>
@@ -17,7 +28,9 @@ export const AllMenu: FC = () => {
         <Grid item xs={12} >
 
           {
-            activeCategory && <ListProducts products={activeCategory.products} />
+            activeCategory 
+            ? <ListProducts products={productsByCategory} />
+            : <ListProducts products={activeProducts.slice(0,10)} />
           }
         </Grid>
       </Grid>

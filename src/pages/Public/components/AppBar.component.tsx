@@ -73,8 +73,15 @@ export const AppBar = () => {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* Mobile */}
-
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <img
+                src={restaurant?.logo}
+                alt="logo"
+                width="60px"
+                style={{ borderRadius: 8 }}
+              />
+            </Box>
+            {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
             <Typography
               variant="h5"
               noWrap
@@ -85,7 +92,7 @@ export const AppBar = () => {
                 display: { xs: "flex", md: "none" },
                 flexGrow: 1,
                 textDecoration: "none",
-                color: "primary.main",
+                color: "text.primary",
               }}
             >
               {restaurant?.name}
@@ -146,12 +153,19 @@ export const AppBar = () => {
               sx={{ display: { xs: "none", md: "flex" }, flexGrow: 1 }}
             >
               <Stack
-                sx={{ display: { xs: "none", md: "flex" } }}
+                sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
                 direction="row"
                 spacing={2}
                 flexGrow={1}
               >
-                <AdbIcon sx={{ mr: 1 }} />
+                <Box>
+                  <img
+                    src={restaurant?.logo}
+                    alt="logo"
+                    width="60px"
+                    style={{ borderRadius: 8 }}
+                  />
+                </Box>
                 <Typography
                   variant="h6"
                   noWrap
@@ -159,9 +173,8 @@ export const AppBar = () => {
                   href="#app-bar-with-responsive-menu"
                   sx={{
                     mr: 2,
-
                     fontWeight: "bold",
-                    color: "primary.main",
+                    color: "text.primary",
                     textDecoration: "none",
                   }}
                 >

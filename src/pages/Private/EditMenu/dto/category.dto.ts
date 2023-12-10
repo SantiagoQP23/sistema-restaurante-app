@@ -1,14 +1,10 @@
-
 export interface CreateCategoryDto {
   name: string;
   sectionId: string;
 }
 
-
-
-export interface UpdateCategoryDto {
+export interface UpdateCategoryDto extends Partial<CreateCategoryDto> {
   id: string;
-  name?: string;
-  sectionId?: string;
   isActive?: boolean;
+  isPublic?: boolean;
 }

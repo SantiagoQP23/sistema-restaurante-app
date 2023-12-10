@@ -8,19 +8,15 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import {
   AccountBalanceWallet,
   Assignment,
+  FiberManualRecord,
   ListAlt,
   MenuBook,
   ReceiptLong,
   SoupKitchen,
   Storefront,
 } from "@mui/icons-material";
+import { NavItem } from "../../interfaces";
 
-export interface NavItem {
-  title: string;
-  icon: JSX.Element;
-  to: string;
-  label?: string;
-}
 
 export const navItemsAdmin: NavItem[] = [
   {
@@ -62,7 +58,24 @@ export const navItemsManagement: NavItem[] = [
   {
     title: "Menú del restaurante",
     icon: <MenuBook />,
-    to: "/menu/edit",
+    to: "/menu/sections",
+    subItems: [
+      {
+        title: "Secciones",
+        to: "/menu/sections",
+        icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+      },
+      {
+        title: "Categorías",
+        to: "/menu/categories",
+        icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+      },
+      {
+        title: "Productos",
+        to: "/menu/products",
+        icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+      },
+    ],
   },
   {
     title: "Gestión de mesas",

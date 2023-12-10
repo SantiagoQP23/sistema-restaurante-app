@@ -84,31 +84,7 @@ function Header() {
   const theme = useTheme();
 
   return (
-    // <HeaderWrapper
-    //   display="flex"
-    //   alignItems="center"
-    // >
-
-    <AppBar
-      position="fixed"
-      open={open}
-
-      // sx={{
-      //   boxShadow:
-      //     theme.palette.mode === 'dark'
-      //       ? `0 1px 0 ${alpha(
-      //           lighten(theme.colors.primary.main, 0.7),
-      //           0.15
-      //         )}, 0px 2px 8px -3px rgba(0, 0, 0, 0.2), 0px 5px 22px -4px rgba(0, 0, 0, .1)`
-      //       : `0px 2px 8px -3px ${alpha(
-      //           theme.colors.alpha.black[100],
-      //           0.2
-      //         )}, 0px 5px 22px -4px ${alpha(
-      //           theme.colors.alpha.black[100],
-      //           0.1
-      //         )}`
-      // }}
-    >
+    <AppBar position="fixed" open={false}>
       <Box
         display="flex"
         alignItems="center"
@@ -121,7 +97,7 @@ function Header() {
           alignItems="center"
           spacing={2}
         >
-          <HeaderMenu />
+          {/* <HeaderMenu /> */}
         </Stack>
 
         <Stack direction="row" spacing={1} alignItems="center">
@@ -138,13 +114,13 @@ function Header() {
                 color="primary"
                 onClick={() => {
                   toggleSidebar();
-                  // handleDrawerOpen();
+                  handleDrawerOpen();
                 }}
               >
-                {!sidebarToggle ? (
-                  <MenuTwoToneIcon fontSize="small" />
-                ) : (
+                {sidebarToggle ? (
                   <CloseTwoToneIcon fontSize="small" />
+                ) : (
+                  <MenuTwoToneIcon fontSize="small" />
                 )}
               </IconButton>
             </Tooltip>

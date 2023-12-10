@@ -16,25 +16,49 @@ import {
   TableContainer,
   TableRow,
   Tooltip,
-  Typography
-} from '@mui/material';
-import { useRef, useState } from 'react';
-import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
-import { styled } from '@mui/material/styles';
+  Typography,
+} from "@mui/material";
+import { useRef, useState } from "react";
+import NotificationsActiveTwoToneIcon from "@mui/icons-material/NotificationsActiveTwoTone";
+import { styled } from "@mui/material/styles";
 
-import { format, formatDistance, subDays } from 'date-fns';
-import { Ballot, Close, CloseRounded, DvrOutlined, ExpandLess, Input, ReadMore } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
-import { selectAuth, selectOrders } from '../../../../../../../redux';
-import { Label } from '../../../../../../../components/ui';
-import { getPaymentMethod } from '../../../../../Common/helpers/get-payment-method';
-import { OrderStatus, OrderStatusPay, TypeOrder } from '../../../../../../../models';
-import { getTypeOrder } from '../../../../../Common/helpers/get-type-order.helper';
-import { formatMoney } from '../../../../../Common/helpers/format-money.helper';
-import { LabelStatusOrder } from '../../../../../Orders/components/LabelStatusOrder.component';
-import { Stack, ListItemSecondaryAction, useTheme, Select, MenuItem, FormControl, InputLabel, Avatar, CardHeader, ListItemButton, Button } from '@mui/material';
-import { TabsStatusOrder } from '../../../../../Orders/components/TabsStatusOrder.component';
-import { useNavigate } from 'react-router-dom';
+import { format, formatDistance, subDays } from "date-fns";
+import {
+  Ballot,
+  Close,
+  CloseRounded,
+  DvrOutlined,
+  ExpandLess,
+  Input,
+  ReadMore,
+} from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { selectAuth, selectOrders } from "../../../../../../../redux";
+import { Label } from "../../../../../../../components/ui";
+import { getPaymentMethod } from "../../../../../Common/helpers/get-payment-method";
+import {
+  OrderStatus,
+  OrderStatusPay,
+  TypeOrder,
+} from "../../../../../../../models";
+import { getTypeOrder } from "../../../../../Common/helpers/get-type-order.helper";
+import { formatMoney } from "../../../../../Common/helpers/format-money.helper";
+import { LabelStatusOrder } from "../../../../../Orders/components/LabelStatusOrder.component";
+import {
+  Stack,
+  ListItemSecondaryAction,
+  useTheme,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Avatar,
+  CardHeader,
+  ListItemButton,
+  Button,
+} from "@mui/material";
+import { TabsStatusOrder } from "../../../../../Orders/components/TabsStatusOrder.component";
+import { useNavigate } from "react-router-dom";
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -69,10 +93,12 @@ function HeaderNotifications() {
 
   const { user } = useSelector(selectAuth);
 
-  const [statusOrderFilter, setStatusOrderFilter] = useState<OrderStatus | null>(OrderStatus.PENDING);
+  const [statusOrderFilter, setStatusOrderFilter] =
+    useState<OrderStatus | null>(OrderStatus.PENDING);
 
-  const [statusPayFilter, setStatusPayFilter] = useState<OrderStatusPay | string>(' ');
-
+  const [statusPayFilter, setStatusPayFilter] = useState<
+    OrderStatusPay | string
+  >(" ");
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -87,41 +113,48 @@ function HeaderNotifications() {
   const navigate = useNavigate();
 
   const handleEditOrder = (id: string): void => {
-
     handleClose();
     navigate(`/orders/list/edit/${id}`);
-  }
-
-
+  };
 
   const ordersUser = orders.filter((order) => order.user.id === user!.id);
 
-  let ordersFiltered = statusOrderFilter ? ordersUser.filter(order => order.status === statusOrderFilter) : orders;
+  let ordersFiltered = statusOrderFilter
+    ? ordersUser.filter((order) => order.status === statusOrderFilter)
+    : orders;
 
-  ordersFiltered = statusPayFilter !== ' ' ? ordersFiltered.filter(order => (order.isPaid ? OrderStatusPay.PAY : OrderStatusPay.NO_PAY) === statusPayFilter) : ordersFiltered;
-
+  ordersFiltered =
+    statusPayFilter !== " "
+      ? ordersFiltered.filter(
+          (order) =>
+            (order.isPaid ? OrderStatusPay.PAY : OrderStatusPay.NO_PAY) ===
+            statusPayFilter
+        )
+      : ordersFiltered;
 
   return (
     <>
       <Tooltip arrow title="Mis pedidos">
-
-        <IconButton ref={ref} onClick={handleOpen} sx={{
-          // border: `1px solid ${theme.palette.divider}`,
-        }}>
+        <IconButton
+          ref={ref}
+          onClick={handleOpen}
+          sx={
+            {
+              // border: `1px solid ${theme.palette.divider}`,
+            }
+          }
+        >
           <Badge
-            badgeContent={''}
+            badgeContent={""}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
+              vertical: "top",
+              horizontal: "right",
             }}
-            color='info'
-            variant='dot'
-          // size="small"
-
+            color="info"
+            variant="dot"
+            // size="small"
           >
-
             <DvrOutlined />
-
           </Badge>
         </IconButton>
       </Tooltip>
@@ -130,12 +163,12 @@ function HeaderNotifications() {
         onClose={handleClose}
         open={isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
       >
         <Box
@@ -145,30 +178,25 @@ function HeaderNotifications() {
           justifyContent="space-between"
         >
           <Typography variant="h4">Mis pedidos</Typography>
-          <Stack direction='row' spacing={1} alignItems='center'>
+          <Stack direction="row" spacing={1} alignItems="center">
             <Label color="info">{ordersUser.length}</Label>
-            <IconButton
-              onClick={handleClose}
-            >
+            <IconButton onClick={handleClose}>
               <ExpandLess />
             </IconButton>
-
           </Stack>
         </Box>
         <Box
           sx={{
-
             mb: 1,
             width: 250,
             // displays: 'flex',
             // justifyContent: 'right',
           }}
         >
-
           <List
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
+              display: "flex",
+              flexDirection: "column",
               gap: 1,
             }}
           >
@@ -179,15 +207,16 @@ function HeaderNotifications() {
                 color: theme.palette.warning.main,
               }}
             >
-              <ListItemText
-                primary="Pendientes"
-
-
-              />
+              <ListItemText primary="Pendientes" />
               <ListItemSecondaryAction>
-                <Label color="warning">{ordersUser.filter(order => order.status === OrderStatus.PENDING).length}</Label>
+                <Label color="warning">
+                  {
+                    ordersUser.filter(
+                      (order) => order.status === OrderStatus.PENDING
+                    ).length
+                  }
+                </Label>
               </ListItemSecondaryAction>
-
             </ListItem>
             <ListItem
               sx={{
@@ -196,15 +225,16 @@ function HeaderNotifications() {
                 color: theme.palette.info.main,
               }}
             >
-              <ListItemText
-                primary="En preparación"
-
-
-              />
+              <ListItemText primary="En preparación" />
               <ListItemSecondaryAction>
-                <Label color="info">{ordersUser.filter(order => order.status === OrderStatus.IN_PROGRESS).length}</Label>
+                <Label color="info">
+                  {
+                    ordersUser.filter(
+                      (order) => order.status === OrderStatus.IN_PROGRESS
+                    ).length
+                  }
+                </Label>
               </ListItemSecondaryAction>
-
             </ListItem>
             <ListItem
               sx={{
@@ -213,24 +243,23 @@ function HeaderNotifications() {
                 color: theme.palette.success.main,
               }}
             >
-              <ListItemText
-                primary="Entregados"
-
-
-              />
+              <ListItemText primary="Entregados" />
               <ListItemSecondaryAction>
-                <Label color="success">{ordersUser.filter(order => order.status === OrderStatus.DELIVERED).length}</Label>
+                <Label color="success">
+                  {
+                    ordersUser.filter(
+                      (order) => order.status === OrderStatus.DELIVERED
+                    ).length
+                  }
+                </Label>
               </ListItemSecondaryAction>
-
             </ListItem>
 
             <Button
               onClick={() => {
                 handleClose();
-                navigate('/users/profile');
-
-              }
-              }
+                navigate("/users/profile");
+              }}
             >
               Ver todos
             </Button>
@@ -249,12 +278,7 @@ function HeaderNotifications() {
               />
 
             </ListItemButton> */}
-
-
-
           </List>
-
-
         </Box>
       </Popover>
     </>

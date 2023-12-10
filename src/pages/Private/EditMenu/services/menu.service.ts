@@ -24,6 +24,16 @@ export const updateSection = async (
   return resp.data;
 };
 
+export const updateManySections = async (
+  data: UpdateSectionDto[]
+): Promise<ISection[]> => {
+  const resp = await restauranteApi.patch<ISection[]>("/sections", data);
+
+  return resp.data;
+}
+
+
+
 export const deleteSection = async (id: string): Promise<void> => {
   const resp = await restauranteApi.delete(`/sections/${id}`);
 

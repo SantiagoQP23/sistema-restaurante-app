@@ -8,6 +8,10 @@ import {
 import { UpdateRestaurantDto } from "../../Reports/dto/update-restaurant.dto";
 import { useRestaurantStore } from "../../Common/store/restaurantStore";
 import { Restaurant } from "../../Common/models/restaurant.model";
+import {
+  UpdateRestaurantLogoDto,
+  updateRestaurantLogo,
+} from "../services/restaurant.service";
 
 export const useRestaurant = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -45,6 +49,24 @@ export const useUpdateRestaurant = () => {
       onError: (error) => {
         console.log(error);
         enqueueSnackbar("Error al actualizar restaurante", {
+          variant: "error",
+        });
+      },
+    }
+  );
+};
+
+export const useUpdateRestaurantLogo = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  return useMutation<Restaurant, unknown, UpdateRestaurantLogoDto>(
+    (data) => updateRestaurantLogo(data.id, data),
+    {
+      onSuccess: () => {
+        enqueueSnackbar("Se actualizó correctamente", { variant: "success" });
+      },
+      onError: () => {
+        enqueueSnackbar("No se pudo actualizar la imagen", {
           variant: "error",
         });
       },

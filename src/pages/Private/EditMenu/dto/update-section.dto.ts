@@ -1,7 +1,9 @@
+import { CreateSectionDto } from "./";
 
 
-export interface UpdateSectionDto {
-  id: string;
-  name?: string;
+export interface UpdateSectionDto extends Partial<CreateSectionDto>{
+  id?: string;
+  order?: number;
   isActive?: boolean;
+  isPublic?: boolean;
 }

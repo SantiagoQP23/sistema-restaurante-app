@@ -20,7 +20,7 @@ interface Props {
 
 export const SidebarProvider: FC<Props> = ({ children }) => {
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);

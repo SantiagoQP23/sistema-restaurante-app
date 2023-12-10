@@ -1,14 +1,6 @@
 import NiceModal from "@ebay/nice-modal-react";
 
-import {
-  Box,
-  Stack,
-  Grid,
-  Button,
-  Typography,
-  Paper,
-  Chip,
-} from "@mui/material";
+import { Box, Stack, Grid, Button, Typography, Chip } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectMenu } from "../../../../../../redux";
 import { ComboBoxProducts } from "../../../../EditMenu/components/products/ComboBoxProducts.component";
@@ -42,16 +34,13 @@ export const AddProductsMenu = () => {
         <ComboBoxProducts selectProduct={addProductoToOrder} />
       </Box>
 
-      <Stack spacing={1} my={1} direction="row" justifyContent="space-between">
-        <Paper sx={{ p: 1 }}>
-          {activeCategory && (
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              Categoría:
-              <Chip label={activeCategory.name} sx={{ ml: 1 }} size="small" />
-            </Typography>
-          )}
-        </Paper>
-
+      <Stack spacing={1} my={2} direction="row" justifyContent="space-between">
+        {activeCategory && (
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            Categoría:
+            <Chip label={activeCategory.name} sx={{ ml: 1 }} size="small" />
+          </Typography>
+        )}
         <Button
           startIcon={<FilterList />}
           onClick={openDrawerProductsFilter}

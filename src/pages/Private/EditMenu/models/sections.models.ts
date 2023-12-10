@@ -1,9 +1,8 @@
 
 
-export interface ICreateSection{
+export interface CreateSectionDto{
   name: string;
 }
 
-export interface IUpdateSection{
-  name?: string;
+export interface UpdateSectionDto extends Partial<CreateSectionDto>{
 }

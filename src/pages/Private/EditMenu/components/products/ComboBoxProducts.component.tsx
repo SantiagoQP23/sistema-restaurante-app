@@ -37,9 +37,9 @@ interface Props {
 }
 
 export const ComboBoxProducts: FC<Props> = ({ onFocus, selectProduct }) => {
-  const { sections } = useSelector(selectMenu);
+  const { products } = useSelector(selectMenu);
 
-  const products = getProducts(sections);
+  // const products = getProducts(sections);
 
   const [nameProduct, setNameProduct] = useState("");
 

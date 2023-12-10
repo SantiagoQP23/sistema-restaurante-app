@@ -9,32 +9,56 @@ import {
   IconButton,
   Divider,
   FormControlLabel,
-  Checkbox,
   Radio,
   FormGroup,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMenu, setActiveCategory } from "../../../../../../redux";
+import {
+  selectAuth,
+  selectMenu,
+  setActiveCategory,
+} from "../../../../../../redux";
 import { ICategory } from "../../../../../../models";
+import { useMemo } from "react";
 
 export const DrawerProductsFilter = NiceModal.create(() => {
   const drawer = useModal();
 
   const theme = useTheme();
 
-  const { sections, activeCategory } = useSelector(selectMenu);
+  const { sections, activeCategory, categories } = useSelector(selectMenu);
+
+  const {user} = useSelector(selectAuth);
+
   const dispatch = useDispatch();
 
   const closeDrawer = () => {
     drawer.hide();
   };
 
-  const sectionsWithCategories = sections.filter(
-    (section) => section.categories.length > 0
-  );
+  const findPublicSections = () =>
+    sections.filter((section) => section.isPublic);
+
+  const availableSections = useMemo(() => {
+    let filteredSections = sections;
+
+    if (!user) {
+      filteredSections = findPublicSections();
+    }
+
+    return filteredSections.filter((section) => section.categories.length > 0);
+  }, [user, sections]);
+
+  const getCategory = (categoryId: string) => {
+    return categories.find((category) => category.id === categoryId);
+  };
 
   const changeCategory = (category: ICategory) => {
-    dispatch(setActiveCategory(category));
+    const categorySelected = getCategory(category.id);
+
+    if (!categorySelected) return;
+
+    dispatch(setActiveCategory(categorySelected));
     closeDrawer();
   };
 
@@ -74,19 +98,22 @@ export const DrawerProductsFilter = NiceModal.create(() => {
           <Divider />
 
           <Stack direction="column" spacing={2} width="100%">
-            {sectionsWithCategories.map((section) => (
+            {availableSections.map((section) => (
               <Box key={section.id}>
                 <Typography variant="h5">{section.name}</Typography>
                 <FormGroup>
-                  {section.categories.map((category) => (
-                    <FormControlLabel
-                      key={category.id}
-                      control={<Radio />}
-                      label={category.name}
-                      checked={activeCategory?.id === category.id}
-                      onChange={() => changeCategory(category)}
-                    />
-                  ))}
+                  {section.categories.map(
+                    (category) =>
+                      category.isPublic && (
+                        <FormControlLabel
+                          key={category.id}
+                          control={<Radio />}
+                          label={category.name}
+                          checked={activeCategory?.id === category.id}
+                          onChange={() => changeCategory(category)}
+                        />
+                      )
+                  )}
                 </FormGroup>
               </Box>
             ))}

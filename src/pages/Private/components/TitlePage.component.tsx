@@ -20,6 +20,11 @@ const breadcrumbNameMap: { [key: string]: string } = {
   "/orders/menu": "Nuevo pedido",
   "/drafts": "Drafts",
   "/menu": "Menú",
+  "/menu/products": "Productos",
+  "/menu/products/edit": "Editar",
+  "/menu/products/add": "Nuevo producto",
+  "/menu/categories": "Categorías",
+  "/menu/sections": "Secciones",
   "/menu/edit": "Editar",
   "/menu/edit/seccion": "Seccion",
   "/menu/edit/category": "Categoría",
@@ -37,7 +42,6 @@ const breadcrumbNameMap: { [key: string]: string } = {
 
   "/shop/menu": "Menú",
   "/shop": "Menú",
-  
 
   "/reports": "Dashboard",
   "/reports/products": "Productos",

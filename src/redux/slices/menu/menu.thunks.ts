@@ -5,154 +5,134 @@ import { ICategory, IProduct, ISection } from "../../../models";
 import { AppThunk } from "../../store";
 import { setActiveCategory, updateSection } from "./menu.slice";
 
-
-
-
-export const addCategory = (category: ICategory): AppThunk => async (
-  dispatch,
-  getState) => {
-
-  const { activeSection, sections } = getState().menu;
-
-  //Find section
-  const section = sections.find(sec => sec.id === category.section.id);
-
-  let newSection = { ...section, categories: [...activeSection?.categories!, category] }! as ISection;
-
-  dispatch(updateSection(newSection));
-
-
-};
-
-export const updateCategory = (category: ICategory): AppThunk => async (
-  dispatch,
-  getState) => {
-
-  const { section } = category;
-
-  const { activeSection } = getState().menu;
-
-  if (activeSection!.id !== category.section.id) {
-
-    dispatch(addCategory(category));
-    dispatch(deleteCategory(category));
-
-  } else {
-
-    const newCategories = activeSection?.categories.map(cate => {
-      if (cate.id === category.id)
-        return { ...cate, ...category }
-      return cate
-    })
-  
-    let newSection = { ...activeSection, categories: newCategories }! as ISection;
-  
-    dispatch(updateSection(newSection));
-  }
-
-
-
-};
-
-export const deleteCategory = (category: ICategory): AppThunk => async (
-  dispatch,
-  getState) => {
-
+export const addCategory =
+  (category: ICategory): AppThunk =>
+  async (dispatch, getState) => {
     const { activeSection, sections } = getState().menu;
 
-  const section = sections.find(sec => sec.id === category.section.id);
+    //Find section
+    const section = sections.find((sec) => sec.id === category.section.id);
 
+    let newSection = {
+      ...section,
+      categories: [...activeSection?.categories!, category],
+    }! as ISection;
 
-  const newCategories = section?.categories.filter(cate => cate.id !== category.id)
+    dispatch(updateSection(newSection));
+  };
 
-  let newSection = { ...section, categories: newCategories } as ISection;
+export const updateCategory =
+  (category: ICategory): AppThunk =>
+  async (dispatch, getState) => {
+    const { section } = category;
 
-  dispatch(updateSection(newSection));
+    const { activeSection } = getState().menu;
 
-};
+    if (activeSection!.id !== category.section.id) {
+      dispatch(addCategory(category));
+      dispatch(deleteCategory(category));
+    } else {
+      const newCategories = activeSection?.categories.map((cate) => {
+        if (cate.id === category.id) return { ...cate, ...category };
+        return cate;
+      });
 
+      let newSection = {
+        ...activeSection,
+        categories: newCategories,
+      }! as ISection;
 
-export const addProduct = (product: IProduct): AppThunk => async (
-  dispatch,
-  getState) => {
+      dispatch(updateSection(newSection));
+    }
+  };
 
-  const { category } = product;
+export const deleteCategory =
+  (category: ICategory): AppThunk =>
+  async (dispatch, getState) => {
+    const { activeSection, sections } = getState().menu;
 
-  const { activeCategory, activeSection } = getState().menu;
+    const section = sections.find((sec) => sec.id === category.section.id);
 
-  let newCategory = activeSection?.categories.find(cate => cate.id === category.id)!;
+    const newCategories = section?.categories.filter(
+      (cate) => cate.id !== category.id
+    );
 
-  newCategory! = { ...newCategory, products: [...newCategory?.products!, product] };
+    let newSection = { ...section, categories: newCategories } as ISection;
 
-  dispatch(updateCategory(newCategory))
-  dispatch(setActiveCategory(newCategory))
+    dispatch(updateSection(newSection));
+  };
 
-};
+export const addProduct =
+  (product: IProduct): AppThunk =>
+  async (dispatch, getState) => {
+    const { category } = product;
 
-export const updateProduct = (product: IProduct): AppThunk => async (
-  dispatch,
-  getState) => {
+    const { activeCategory, activeSection } = getState().menu;
 
-  const { category } = product;
+    let newCategory = activeSection?.categories.find(
+      (cate) => cate.id === category.id
+    )!;
 
-  const { activeCategory, activeSection } = getState().menu;
+    newCategory! = {
+      ...newCategory,
+      products: [...newCategory?.products!, product],
+    };
 
-  let newCategory = activeSection?.categories.find(cate => cate.id === category.id)!;
+    dispatch(updateCategory(newCategory));
+    dispatch(setActiveCategory(newCategory));
+  };
 
-  const isProduct = newCategory.products.find(p => p.id === product.id)
+export const updateProduct =
+  (product: IProduct): AppThunk =>
+  async (dispatch, getState) => {
+    const { category } = product;
 
-  if (!isProduct) {
-    dispatch(addProduct(product));
-    const product2 = activeCategory!.products.find(p => p.id === product.id);
-    product2 && dispatch(deleteProduct(product2));
-    return;
-  }
+    const { activeCategory, activeSection } = getState().menu;
 
-  let newProducts = newCategory?.products.map(p => {
-    if (p.id === product.id)
-      return { ...p, ...product }
-    return p
-  })!
+    let newCategory = activeSection?.categories.find(
+      (cate) => cate.id === category.id
+    )!;
 
-  newCategory! = { ...newCategory, products: newProducts };
+    const isProduct = newCategory.products.find((p) => p.id === product.id);
 
-  dispatch(updateCategory(newCategory))
-  dispatch(setActiveCategory(newCategory))
+    if (!isProduct) {
+      dispatch(addProduct(product));
+      const product2 = activeCategory!.products.find(
+        (p) => p.id === product.id
+      );
+      product2 && dispatch(deleteProduct(product2));
+      return;
+    }
 
-};
+    let newProducts = newCategory?.products.map((p) => {
+      if (p.id === product.id) return { ...p, ...product };
+      return p;
+    })!;
 
+    newCategory! = { ...newCategory, products: newProducts };
 
-export const deleteProduct = (product: IProduct): AppThunk => async (
-  dispatch,
-  getState) => {
+    dispatch(updateCategory(newCategory));
+    dispatch(setActiveCategory(newCategory));
+  };
 
-  const { category } = product;
+export const deleteProduct =
+  (product: IProduct): AppThunk =>
+  async (dispatch, getState) => {
+    const { category } = product;
 
-  const { activeCategory, activeSection } = getState().menu;
+    const { activeCategory, activeSection } = getState().menu;
 
-  let newCategory = activeSection?.categories.find(cate => cate.id === category.id)!;
+    let newCategory = activeSection?.categories.find(
+      (cate) => cate.id === category.id
+    )!;
 
-  let newProducts = newCategory.products.filter(
-    p => p.id !== product.id
-  )
+    let newProducts = newCategory.products.filter((p) => p.id !== product.id);
 
-  newCategory! = { ...newCategory, products: newProducts };
+    newCategory! = { ...newCategory, products: newProducts };
 
-  dispatch(updateCategory(newCategory))
-  dispatch(setActiveCategory(newCategory))
-
-
-
-
-
-
-}
-
-
-
-
-
-
+    dispatch(updateCategory(newCategory));
+    dispatch(setActiveCategory(newCategory));
+  };
 
 // Crear una nueva seccion
 /*
@@ -208,10 +188,6 @@ export const deleteProduct = (product: IProduct): AppThunk => async (
   }
 
 }; */
-
-
-
-
 
 // Cargar todas las secciones
 /* export const seccionStartLoad = (): AppThunk => async (

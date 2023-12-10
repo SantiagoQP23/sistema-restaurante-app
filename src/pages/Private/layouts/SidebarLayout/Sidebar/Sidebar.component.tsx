@@ -16,8 +16,6 @@ import { useSelector } from "react-redux";
 import { selectAuth } from "../../../../../redux";
 
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import SidebarMenuMobile from "./SidebarMenuMobile/SidebarMenuMobile.component";
-import { Label } from "../../../../../components/ui";
 import { useRestaurantStore } from "../../../Common/store/restaurantStore";
 
 const SidebarWrapper = styled(Box)(
@@ -73,12 +71,10 @@ const DrawerPersistent = styled(MuiDrawer, {
 }));
 
 const Title = ({ open }: { open: boolean }) => {
-
-  const {restaurant } = useRestaurantStore((state) => state);
+  const { restaurant } = useRestaurantStore((state) => state);
 
   return (
     <>
-      {/* Logo del restaurante */}
       <Box
         display="flex"
         alignItems="center"
@@ -87,14 +83,14 @@ const Title = ({ open }: { open: boolean }) => {
           ml: open ? 3 : 0.75,
         }}
       >
-        <img src={logo} alt="logo" width="60px" style={{ borderRadius: 8 }} />
+        <img src={restaurant!.logo} alt="logo" width="60px" style={{ borderRadius: 8 }} />
 
         <Box>
-          <Typography variant="subtitle1" color="text.primary" >
+          <Typography variant="subtitle1" color="text.primary">
             Restaurante
           </Typography>
           <Typography variant="h4" color="text.primary">
-            {restaurant?.name} <Label color="info">v2</Label>
+            {restaurant?.name}
           </Typography>
         </Box>
       </Box>
@@ -166,24 +162,16 @@ function Sidebar() {
           display: {
             xs: "none",
             lg: "inline-block",
-
           },
-    
         }}
         open={open}
       >
-     
-
-        <DrawerHeader
-          
-        >
-          <IconButton onClick={handleDrawerClose}>
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose} disabled>
             <ChevronLeft />
           </IconButton>
         </DrawerHeader>
-        <Scrollbar height={"100%"}
-          
-        >
+        <Scrollbar height={"100%"}>
           <Box mt={1}>
             <Title open={open} />
           </Box>
@@ -194,7 +182,7 @@ function Sidebar() {
           sx={{
             background: theme.colors.alpha.trueWhite[10],
           }}
-          />
+        />
 
         {open && (
           <Box p={2} textAlign="center">
@@ -202,7 +190,6 @@ function Sidebar() {
             <Typography variant="h5">Santiago Quirumbay</Typography>
           </Box>
         )}
-      
       </DrawerPersistent>
 
       {/* </SidebarWrapper> */}
@@ -210,13 +197,13 @@ function Sidebar() {
         sx={{
           // boxShadow: `${theme.sidebar.boxShadow}`,
           zIndex: theme.zIndex.drawer + 3,
-          
         }}
         anchor={theme.direction === "rtl" ? "right" : "left"}
         open={sidebarToggle}
         onClose={closeSidebar}
         variant="temporary"
         elevation={10}
+        color="inherit"
       >
         <SidebarWrapper>
           <Scrollbar height={"100%"}>
@@ -224,7 +211,7 @@ function Sidebar() {
               <Title open={open} />
             </Box>
 
-            <SidebarMenuMobile />
+            <SidebarMenu />
           </Scrollbar>
 
           <Divider />

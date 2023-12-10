@@ -1,7 +1,15 @@
+export interface Menu {
+  sections: ISection[];
+  categories: ICategory[];
+  products: IProduct[];
+}
+
 export interface ISection {
   id: string;
   name: string;
   categories: ICategory[];
+  order: number;
+  isPublic: boolean;
   isActive: boolean;
 }
 
@@ -10,20 +18,13 @@ export interface ISectionCategory {
   name: string;
 }
 
-export interface ICreateSection {
-  name: string;
-}
-
-export interface IUpdateSection {
-  name?: string;
-}
-
 export interface ICategory {
   id: string;
   name: string;
   products: IProduct[];
   section: ISectionCategory;
   isActive: boolean;
+  isPublic: boolean;
 }
 
 export interface ICategoryProduct {

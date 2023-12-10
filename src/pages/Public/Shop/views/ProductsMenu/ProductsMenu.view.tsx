@@ -4,46 +4,51 @@ import NiceModal from "@ebay/nice-modal-react";
 
 import { ComboBoxProducts } from "../../../../Private/EditMenu/components/products/ComboBoxProducts.component";
 import { TitlePage } from "../../../../Private/components";
-import { Filter, FilterList } from "@mui/icons-material";
-import { CartWidget, Product } from "../../../../Private/Orders/views";
-import { getMenu } from "../../../../../services";
-import { useDispatch, useSelector } from "react-redux";
-import { IProduct, ISection } from "../../../../../models";
-import { loadMenu, selectMenu, setActiveCategory } from "../../../../../redux";
-import { useAsync, useFetchAndLoad } from "../../../../../hooks";
+import { FilterList } from "@mui/icons-material";
+import { Product } from "../../../../Private/Orders/views";
+import { useSelector } from "react-redux";
+import { IProduct } from "../../../../../models";
+import { selectMenu } from "../../../../../redux";
+import { useMenu } from "../../../../../hooks";
 import { useNavigate } from "react-router-dom";
 import { RegisteredModals } from "../../../../Private/modals";
+import { useMemo } from "react";
 
 export const ProductsMenu = () => {
-  const { loading, callEndpoint } = useFetchAndLoad();
-
-  const { activeCategory } = useSelector(selectMenu);
+  const { activeCategory, products } = useSelector(selectMenu);
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  useMenu();
 
-  const loadMenuState = (sections: ISection[]) => {
-    dispatch(loadMenu(sections));
-    dispatch(setActiveCategory(sections[0].categories[0]));
+  const findPublicProducts = () =>
+    products.filter((product) => product.isPublic && product.isActive);
+
+  const findPublicProductsByCategory = (categoryId: string) => {
+    return findPublicProducts()
+      .filter((product) => product.category.id === categoryId)
+      .filter((product) => product.isPublic && product.isActive);
   };
 
-  const getMenuCall = async () => await callEndpoint(getMenu());
+  const availableProducts = useMemo(() => {
+    if (activeCategory) {
+      return findPublicProductsByCategory(activeCategory.id);
+    }
+
+    return findPublicProducts();
+  }, [products, activeCategory]);
 
   const showProduct = (productId: string) => {
     navigate(`/shop/product/${productId}`);
   };
 
-  
   const navigateToProduct = (product: IProduct) => {
     navigate(`/shop/product/${product.id}`);
   };
-  
+
   const openDrawerProductsFilter = () => {
     NiceModal.show(RegisteredModals.DrawerProductsFilter);
   };
-  
-  useAsync(getMenuCall, loadMenuState, () => {}, []);
 
   return (
     <>
@@ -78,11 +83,17 @@ export const ProductsMenu = () => {
       </Box>
 
       <Grid container spacing={2}>
-        {activeCategory?.products.map((product) => (
-          <Grid item key={product.id} xs={6} sm={3} lg={3} xl={2}>
-            <Product product={product} onClick={showProduct} />
-          </Grid>
-        ))}
+        {activeCategory
+          ? availableProducts.map((product) => (
+              <Grid item key={product.id} xs={6} sm={3} lg={3} xl={2}>
+                <Product product={product} onClick={showProduct} />
+              </Grid>
+            ))
+          : availableProducts.slice(0, 10).map((product) => (
+              <Grid item key={product.id} xs={6} sm={3} lg={3} xl={2}>
+                <Product product={product} onClick={showProduct} />
+              </Grid>
+            ))}
       </Grid>
 
       {/* <CartWidget badge={1} /> */}

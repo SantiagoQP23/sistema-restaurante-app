@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { UpdateRestaurantDto } from "../Reports/dto/update-restaurant.dto";
 import { useUpdateRestaurant } from "./hooks/useRestaurant";
 import { LoadingButton } from "@mui/lab";
+import { FormRestaurantLogo } from "./components/FormRestaurantLogo.component";
 
 const Restaurant = () => {
   const { restaurant } = useRestaurantStore((state) => state);
@@ -45,58 +46,65 @@ const Restaurant = () => {
         <TitlePage title="Restaurante" />
 
         {restaurant ? (
-          <Card>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <CardHeader title="Información" />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <FormRestaurantLogo restaurant={restaurant} />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Card>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <CardHeader title="Información" />
 
-              <CardContent>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Nombre"
-                      type="text"
-                      fullWidth
-                      required
-                      {...register("name", {
-                        required: "Este es un campo requerido",
-                      })}
-                      helperText={errors.name?.message}
-                      error={!!errors.name}
-                    />
-                  </Grid>
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Nombre"
+                          type="text"
+                          fullWidth
+                          required
+                          {...register("name", {
+                            required: "Este es un campo requerido",
+                          })}
+                          helperText={errors.name?.message}
+                          error={!!errors.name}
+                        />
+                      </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Capacidad"
-                      type="number"
-                      fullWidth
-                      required
-                      {...register("capacity", {
-                        required: "Este es un campo requerido",
-                        min: {
-                          value: 1,
-                          message: "La capacidad debe ser mayor a 0",
-                        },
-                        valueAsNumber: true,
-                      })}
-                      helperText={errors.capacity?.message}
-                      error={!!errors.capacity}
-                    />
-                  </Grid>
-                </Grid>
-              </CardContent>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Capacidad"
+                          type="number"
+                          fullWidth
+                          required
+                          {...register("capacity", {
+                            required: "Este es un campo requerido",
+                            min: {
+                              value: 1,
+                              message: "La capacidad debe ser mayor a 0",
+                            },
+                            valueAsNumber: true,
+                          })}
+                          helperText={errors.capacity?.message}
+                          error={!!errors.capacity}
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
 
-              <CardActions>
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  loading={updateRestaurantMutation.isLoading}
-                >
-                  Guardar
-                </LoadingButton>
-              </CardActions>
-            </form>
-          </Card>
+                  <CardActions>
+                    <LoadingButton
+                      type="submit"
+                      variant="contained"
+                      loading={updateRestaurantMutation.isLoading}
+                    >
+                      Guardar
+                    </LoadingButton>
+                  </CardActions>
+                </form>
+              </Card>
+            </Grid>
+          </Grid>
         ) : (
           <>
             <Typography variant="h5" gutterBottom>

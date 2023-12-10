@@ -75,8 +75,6 @@ export const useCashRegister = (term: string) => {
 };
 
 export const useCashRegisterActive = () => {
-  const { enqueueSnackbar } = useSnackbar();
-
   const { setActiveCashRegister } = useCashRegisterStore((state) => state);
 
   const cashRegisterQuery = useQuery<ActiveCashRegister>(
@@ -85,7 +83,6 @@ export const useCashRegisterActive = () => {
     {
       // enabled: false,
       onSuccess: (data) => {
-        enqueueSnackbar("Caja activa", { variant: "success" });
         setActiveCashRegister(data);
       },
       onError: (error) => {

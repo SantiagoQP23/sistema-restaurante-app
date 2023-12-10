@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-
+import { useContext } from "react";
 
 import {
   Box,
@@ -9,19 +8,18 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Menu,
-  MenuItem
-} from '@mui/material';
-import { useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import { ListItemButton, IconButton } from '@mui/material';
-import { SidebarContext } from '../../../../Common/contexts/SidebarContext';
+  MenuItem,
+} from "@mui/material";
+import { useRef, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
+import ExpandMoreTwoToneIcon from "@mui/icons-material/ExpandMoreTwoTone";
+import { ListItemButton, IconButton } from "@mui/material";
+import { SidebarContext } from "../../../../Common/contexts/SidebarContext";
 
-import MenuIcon from '@mui/icons-material/Menu';
-import { PointOfSale } from '@mui/icons-material';
-import { useCashRegisterStore } from '../../../../Common/store/cashRegisterStore';
-
+import MenuIcon from "@mui/icons-material/Menu";
+import { PointOfSale } from "@mui/icons-material";
+import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -30,7 +28,7 @@ const ListWrapper = styled(Box)(
         }
         
         .MuiListItem-root {
-            transition: ${theme.transitions.create(['color', 'fill'])};
+            transition: ${theme.transitions.create(["color", "fill"])};
             
             &.MuiListItem-indicators {
                 padding: ${theme.spacing(1, 2)};
@@ -79,8 +77,7 @@ function HeaderMenu() {
 
   const { open, handleDrawerOpen } = useContext(SidebarContext);
 
-  const {activeCashRegister} = useCashRegisterStore(state => state);
-
+  const { activeCashRegister } = useCashRegisterStore((state) => state);
 
   return (
     <>
@@ -92,32 +89,31 @@ function HeaderMenu() {
           }
         }}
       > */}
-      <List disablePadding component={Box}
+      <List
+        disablePadding
+        component={Box}
         sx={{
           display: {
-            xs: 'none',
-            md: 'flex',
-          }, color: 'inherit',
-          gap: 1
-
-        }
-        }
+            xs: "none",
+            md: "flex",
+          },
+          color: "inherit",
+          gap: 1,
+         
+        }}
 
       >
-
         <ListItemButton
           onClick={handleDrawerOpen}
           sx={{
             ml: 1,
-            color: 'text.primary',
+            color: "text.primary",
             backgroundColor: (theme) => theme.header.background,
 
-            ...(open && { display: 'none' })
-
+            ...(open && { display: "none" }),
           }}
         >
           <MenuIcon />
-
         </ListItemButton>
         {/* <IconButton
             color="inherit"
@@ -127,7 +123,7 @@ function HeaderMenu() {
           >
           </IconButton> */}
 
-       {/* <ListItemButton
+        {/* <ListItemButton
 
           component={NavLink}
           to="/balance"
@@ -161,16 +157,16 @@ function HeaderMenu() {
           to="/orders"
           sx={{
             // ml: 2,
-            color: 'text.primary',
-            '&.active': {
-              color: 'text.primary',
-              bgcolor: 'action.selected',
-              fontWeight: 'fontWeightBold',
+            color: "text.primary",
+            "&.active": {
+              color: "text.primary",
+              bgcolor: "action.selected",
+              fontWeight: "fontWeightBold",
             },
           }}
         >
           <ListItemText
-            primaryTypographyProps={{ noWrap: true, variant: 'h4' }}
+            primaryTypographyProps={{ noWrap: true, variant: "h4" }}
             primary="Pedidos"
           />
         </ListItemButton>
@@ -180,16 +176,18 @@ function HeaderMenu() {
           component={NavLink}
           to="/tables"
           sx={{
-            color: 'text.primary',
-            '&.active': {
-              bgcolor: 'action.selected',
-              fontWeight: 'fontWeightBold',
+            color: "text.primary",
+            "&.active": {
+              bgcolor: "action.selected",
+              fontWeight: "fontWeightBold",
             },
           }}
         >
           <ListItemText
             primaryTypographyProps={{
-              noWrap: true, variant: 'h4', color: 'inherit'
+              noWrap: true,
+              variant: "h4",
+              color: "inherit",
             }}
             primary="Mesas"
           />

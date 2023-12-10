@@ -15,10 +15,10 @@ export const useCreateCategory = () => {
 
   return useMutation<ICategory, unknown, CreateCategoryDto>((data) => createCategory(data), {
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       enqueueSnackbar('Se creó correctamente', {variant: 'success'})
     },
-    onError: (error) => {
+    onError: () => {
       enqueueSnackbar('No se pudo crear', {variant: 'error'})
     }
   });
@@ -31,11 +31,10 @@ export const useUpdateCategory = () => {
 
   return useMutation<ICategory, unknown, UpdateCategoryDto>((data) => updateCategory(data.id, data), {
 
-
-    onSuccess: (data) => {
+    onSuccess: () => {
       enqueueSnackbar('Se actualizó correctamente', {variant: 'success'})
     },
-    onError: (error) => {
+    onError: () => {
       enqueueSnackbar('No se pudo actualizar', {variant: 'error'})
     }
 
