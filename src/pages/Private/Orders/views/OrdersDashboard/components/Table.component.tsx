@@ -6,6 +6,7 @@ import { ITable, OrderStatus } from "../../../../../../models";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
 import { Label } from "../../../../../../components/ui";
+import { LabelStatusOrder } from "../../../components";
 
 interface Props {
   table: ITable;
@@ -41,25 +42,10 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
               {ordersTable.map((order) => (
                 <Badge
                   key={order.id}
-                  // badgeContent={
-                  //   <Stack spacing={1} direction='row' >
-                  //     <Typography >
-                  //       <PersonOutline fontSize="small" color="secondary" />
-                  //     </Typography>
-                  //       {order.people}
-                  //   </Stack>
-                  // }
+                  
                 >
-                  <Assignment
-                    fontSize="small"
-                    color={
-                      order.status === OrderStatus.PENDING
-                        ? "warning"
-                        : order.status === OrderStatus.DELIVERED
-                        ? "success"
-                        : "info"
-                    }
-                  />
+                  <LabelStatusOrder status={order.status} onlyIcon/>
+                 
                 </Badge>
               ))}
             </Box>
