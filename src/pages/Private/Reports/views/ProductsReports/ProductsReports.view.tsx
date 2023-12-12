@@ -56,7 +56,7 @@ export const ProductsReports = () => {
 
   // } = useDateFilter(Period.TODAY);
 
-  const { sections } = useSelector(selectMenu);
+  const { sections, products, categories } = useSelector(selectMenu);
 
   const filters = useFilterSoldProducts(Period.DAILY);
 
@@ -137,20 +137,6 @@ export const ProductsReports = () => {
     }
   };
 
-  const counterSections = sections.length;
-  const counterCategories = sections.reduce(
-    (acc, section) => section.categories.length + acc,
-    0
-  );
-  const counterProducts = sections.reduce(
-    (acc, section) =>
-      section.categories.reduce(
-        (acc, category) => category.products.length + acc,
-        0
-      ) + acc,
-    0
-  );
-
   useEffect(() => {
     refetch();
     categoriesQuery.refetch();
@@ -205,7 +191,7 @@ export const ProductsReports = () => {
                 alignItems: "center",
               }}
             >
-              <Typography variant="h3">{counterSections}</Typography>
+              <Typography variant="h3">{sections.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -234,7 +220,7 @@ export const ProductsReports = () => {
                 alignItems: "center",
               }}
             >
-              <Typography variant="h3">{counterCategories}</Typography>
+              <Typography variant="h3">{categories.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -262,7 +248,7 @@ export const ProductsReports = () => {
                 alignItems: "center",
               }}
             >
-              <Typography variant="h3">{counterProducts}</Typography>
+              <Typography variant="h3">{products.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
