@@ -24,6 +24,7 @@ import { styled } from "@mui/material/styles";
 
 import { format, formatDistance, subDays } from "date-fns";
 import {
+  Assignment,
   Ballot,
   Close,
   CloseRounded,
@@ -59,6 +60,8 @@ import {
 } from "@mui/material";
 import { TabsStatusOrder } from "../../../../../Orders/components/TabsStatusOrder.component";
 import { useNavigate } from "react-router-dom";
+import NiceModal from "@ebay/nice-modal-react";
+import { DrawerMyOrders } from "./DrawerMyOrders.component";
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -89,6 +92,8 @@ function HeaderNotifications() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
+  
+
   const { orders } = useSelector(selectOrders);
 
   const { user } = useSelector(selectAuth);
@@ -117,6 +122,10 @@ function HeaderNotifications() {
     navigate(`/orders/list/edit/${id}`);
   };
 
+  const openDrawerMyOrders = () => {
+    NiceModal.show(DrawerMyOrders);
+  }
+
   const ordersUser = orders.filter((order) => order.user.id === user!.id);
 
   let ordersFiltered = statusOrderFilter
@@ -137,7 +146,7 @@ function HeaderNotifications() {
       <Tooltip arrow title="Mis pedidos">
         <IconButton
           ref={ref}
-          onClick={handleOpen}
+          onClick={openDrawerMyOrders}
           sx={
             {
               // border: `1px solid ${theme.palette.divider}`,
@@ -154,7 +163,7 @@ function HeaderNotifications() {
             variant="dot"
             // size="small"
           >
-            <DvrOutlined />
+            <Assignment />
           </Badge>
         </IconButton>
       </Tooltip>

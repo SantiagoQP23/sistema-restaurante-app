@@ -58,7 +58,7 @@ export const OrdersDashboard = () => {
 
         <Tabs value={view} onChange={(e, value) => setView(value)}>
           <Tab value={DashboardViews.TABLES} label="Mesas" />
-          <Tab value={DashboardViews.USERS} label="Usuarios" icon={<Label sx={{ml: 1}} color="info">new</Label>} iconPosition="end" />
+          {/* <Tab value={DashboardViews.USERS} label="Usuarios" icon={<Label sx={{ml: 1}} color="info">new</Label>} iconPosition="end" /> */}
           <Tab value={DashboardViews.TAKE_AWAY} label="Para llevar" icon={<Label sx={{ml: 1}} color="info">{ordersTakeAway}</Label>} iconPosition="end" />
         </Tabs>
 

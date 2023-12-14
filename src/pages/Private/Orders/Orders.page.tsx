@@ -26,7 +26,6 @@ import { ModalAddDetail } from "./components/modals";
 import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
 
 import { ModalDeleteOrder } from "./components/modals/ModalDeleteOrder.component";
-import { ModalCloseOrder } from "./components/modals/ModalCloseOrder.component";
 import { EventsOnSocket } from "./interfaces/events-sockets.interface";
 
 export const Orders = () => {
@@ -93,7 +92,6 @@ export const Orders = () => {
       </LocalizationProvider>
 
       <ModalDeleteOrder />
-      <ModalCloseOrder />
       <ModalEditOrderDetail />
       <ModalDeleteOrderDetail />
 

@@ -1,9 +1,7 @@
 import {
   Card,
-  CardContent,
   FormControlLabel,
   Checkbox,
-  Box,
   Grid,
   Table,
   TableBody,
@@ -13,7 +11,6 @@ import {
   TableRow,
   Typography,
   Stack,
-  IconButton,
   Button,
   TextField,
   InputAdornment,
@@ -27,7 +24,6 @@ import {
   ArrowBackIos,
   ArrowRight,
   AttachMoney,
-  Print,
 } from "@mui/icons-material";
 import { Label } from "../../../../../../components/ui";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
@@ -174,9 +170,9 @@ export const Account: FC<Props> = ({ order }) => {
     </Button>
   );
 
-  useEffect(() => {
-    handleSelectAll(true);
-  }, []);
+  // useEffect(() => {
+  //   handleSelectAll(true);
+  // }, []);
 
   return (
     <>
