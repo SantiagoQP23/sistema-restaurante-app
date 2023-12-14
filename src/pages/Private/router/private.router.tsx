@@ -7,7 +7,7 @@ import { OrderRouter } from "../Orders/router";
 import { MenuEditRouter } from "../EditMenu/router/MenuEdit.router";
 import { ClientsRouter } from "../Clients/router/Clients.router";
 import { TablesRouter } from "../Tables/router/Tables.router";
-import { UsersRouter } from "../Users/router/Users.router";
+import { UsersRouter, UserRouter } from "../Users/router/Users.router";
 import { ReportsRouter } from "../Reports/router/Reports.router";
 import { BalanceRouter } from "../Balance/router/Balance.router";
 import { SuppliersRouter } from "../Suppliers/router/Suppliers.router";
@@ -28,11 +28,13 @@ export const PrivateRouter: RouteObject[] = [
       MenuEditRouter,
       ClientsRouter,
       TablesRouter,
+      UserRouter,
       {
         path: PrivateRoutes.USERS,
         element: <Auth allowedRoles={[ValidRoles.admin]} />,
         children: [UsersRouter],
       },
+
 
       {
         path: PrivateRoutes.REPORTS,

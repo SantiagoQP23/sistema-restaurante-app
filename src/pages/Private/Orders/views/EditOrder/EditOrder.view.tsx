@@ -52,6 +52,8 @@ import { generateOrderPdf } from "../../helpers/pdf-orders";
 import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 import { LabelStatusPaid } from "../../components/LabelStatusPaid.component";
 import { format } from "date-fns";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalCloseOrder } from "../../components";
 
 export const EditOrder = () => {
   const navigate = useNavigate();
@@ -79,10 +81,10 @@ export const EditOrder = () => {
 
   let orderDelivered = false;
 
-  const { data, isLoading } = useOrder(orderId!);
+  const { isLoading } = useOrder(orderId!);
 
   const handleCloseOrder = () => {
-    if (activeOrder) statusModalPayOrder.setSubject(true, activeOrder);
+    if (activeOrder) NiceModal.show(ModalCloseOrder, { order: activeOrder });
   };
 
   const openPDF = async () => {
@@ -258,21 +260,20 @@ export const EditOrder = () => {
               </Stepper>
             }
 
-            
-              {activeStep === 0 && <OrderSummary order={activeOrder} />}
+            {activeStep === 0 && <OrderSummary order={activeOrder} />}
 
-              {activeStep === 1 && <Account order={activeOrder} />}
+            {activeStep === 1 && <Account order={activeOrder} />}
 
-              {activeStep === 2 && (
-                <>
-                  <PayOrder order={activeOrder} />
+            {activeStep === 2 && (
+              <>
+                <PayOrder order={activeOrder} />
 
-                  <Stack direction="row">
-                    <BtnBack />
-                  </Stack>
-                </>
-              )}
-            
+                <Stack direction="row">
+                  <BtnBack />
+                </Stack>
+              </>
+            )}
+
             {/* <Grid item xs={12} md={4}>
               </Grid> */}
           </>
