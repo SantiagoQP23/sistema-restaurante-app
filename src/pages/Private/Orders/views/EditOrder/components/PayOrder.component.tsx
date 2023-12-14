@@ -280,7 +280,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
 
                 <Stack direction="row" justifyContent="center">
                   <TextField
-                    label="Cantidad pagada"
+                    label="Cantidad recibida"
                     variant="outlined"
                     type="number"
                     value={amountPaid || ""}
