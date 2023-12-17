@@ -170,9 +170,9 @@ export const Account: FC<Props> = ({ order }) => {
     </Button>
   );
 
-  // useEffect(() => {
-  //   handleSelectAll(true);
-  // }, []);
+   useEffect(() => {
+     handleSelectAll(true);
+   }, []);
 
   return (
     <>
