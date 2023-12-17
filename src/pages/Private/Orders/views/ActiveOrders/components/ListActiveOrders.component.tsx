@@ -81,7 +81,7 @@ export const ListActiveOrders = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          
           overflowX: "auto",
         }}
       >
