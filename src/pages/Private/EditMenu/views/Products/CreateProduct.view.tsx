@@ -25,6 +25,7 @@ import { LoadingButton } from "@mui/lab";
 import { useCreateProduct } from "../../hooks/useProducts";
 import { useNavigate } from "react-router-dom";
 import { useEditMenuStore } from "../../hooks/useEditMenuStore";
+import { useProductionAreasStore } from "../../../Common/store/production-areas-store";
 
 const initialForm: CreateProductDto = {
   name: "",
@@ -32,10 +33,12 @@ const initialForm: CreateProductDto = {
   price: 0,
   status: ProductStatus.AVAILABLE,
   categoryId: "",
+  productionAreaId: 0,
 };
 
 export const CreateProduct = () => {
   const { sections, activeCategory } = useSelector(selectMenu);
+  const { productionAreas } = useProductionAreasStore();
 
   const { mutateAsync, isLoading } = useCreateProduct();
   const navigate = useNavigate();
@@ -170,6 +173,41 @@ export const CreateProduct = () => {
                                       </MenuItem>
                                     )),
                                   ])}
+                                </Select>
+                              </FormControl>
+                            </>
+                          )}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Controller
+                          name="productionAreaId"
+                          control={control}
+                          rules={{ required: "Este campo es requerido" }}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                            <>
+                              <FormControl fullWidth>
+                                <InputLabel id="select-area">
+                                  Área de producción
+                                </InputLabel>
+                                <Select
+                                  labelId="select-area"
+                                  label="Seccion"
+                                  margin="dense"
+                                  // disabled
+                                  value={value}
+                                  onChange={onChange}
+                                  onBlur={onBlur}
+                                  error={!!errors.productionAreaId}
+                                >
+                                  {productionAreas.map((area) => (
+                                    <MenuItem
+                                      key={area.id}
+                                      value={area.id}
+                                    >
+                                      {area.name}
+                                    </MenuItem>
+                                  ))}
                                 </Select>
                               </FormControl>
                             </>

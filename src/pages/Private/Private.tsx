@@ -22,14 +22,12 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useCashRegisterActive } from "./Balance/hooks/useCashRegister";
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component";
 import { useActiveOrders } from "./Orders/hooks";
+import { useProductionAreas } from "./Restaurant/hooks/useProductionArea";
 
 /**
  * Component that contains the private routes of the application
- *
  * @author Santiago Quirumbay
- *
  * @version 1.1 28/11/2023 Adding the useMenu hook to load the menu
- *
  * @returns JSX.Element
  */
 export const Private = () => {
@@ -44,6 +42,8 @@ export const Private = () => {
   useActiveOrders();
 
   useMenu();
+
+  useProductionAreas();
 
   const getTablesCall = async () => await callEndpoint(getTables());
 

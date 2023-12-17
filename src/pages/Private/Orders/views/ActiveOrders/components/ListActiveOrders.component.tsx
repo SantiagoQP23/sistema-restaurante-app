@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 
 import { useSelector } from "react-redux";
 
@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 
 import { selectOrders } from "../../../../../../redux/slices/orders/orders.slice";
-import { OrderStatus } from "../../../../../../models/orders.model";
+import { IOrder, OrderStatus } from "../../../../../../models/orders.model";
 
 import { ActiveOrder } from "./ActiveOrder.component";
 
@@ -27,9 +27,17 @@ import {
 } from "@mui/icons-material";
 
 import { ModalStartOrder } from "./ModalStartOrder.component";
+import { useProductionAreasStore } from "../../../../Common/store/production-areas-store";
+import { ProductionArea } from "../../../../Common/models/production-area.model";
 
+/**
+ * Component to render active order
+ * @author Santiago Quirumbay
+ * @version 1.1 16/12/2023 Adds productionArea field.
+ */
 export const ListActiveOrders = () => {
-  const theme = useTheme();
+  const { productionAreaActive, productionAreas, setProductionAreaActive } =
+    useProductionAreasStore();
 
   const { orders } = useSelector(selectOrders);
 
@@ -37,31 +45,89 @@ export const ListActiveOrders = () => {
     OrderStatus.PENDING
   );
 
-  const ordersFiltered = statusOrderFilter
-    ? orders.filter((order) => order.status === statusOrderFilter)
+  const filterOrdersByProductionArea = (productionArea: ProductionArea) => {
+    return orders.filter((order) => {
+      const details = productionArea
+        ? order.details.filter(
+            (detail) => detail.product.productionArea.id === productionArea.id
+          )
+        : order.details;
+
+      return details.length >= 1;
+    });
+  };
+
+  const ordersFilteredByProductionArea = productionAreaActive
+    ? filterOrdersByProductionArea(productionAreaActive)
     : orders;
+
+  const ordersFiltered = ordersFilteredByProductionArea.filter(
+    (order) => order.status === statusOrderFilter
+  );
+
+  const handleChangeArea = (_: SyntheticEvent, newValue: number) => {
+    const productionArea = productionAreas.find(
+      (productionArea) => productionArea.id === newValue
+    );
+
+    if (productionArea) {
+      setProductionAreaActive(productionArea);
+    }
+  };
 
   return (
     <>
       <ModalStartOrder />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Tabs
+          value={productionAreaActive?.id || ""}
+          variant="scrollable"
+          onChange={handleChangeArea}
+        >
+          {productionAreas.map((productionArea) => (
+            <Tab
+              key={productionArea.id}
+              label={productionArea.name}
+              value={productionArea.id}
+              icon={
+                <Chip
+                  label={filterOrdersByProductionArea(productionArea).length}
+                  size="small"
+                />
+              }
+              iconPosition="end"
+            />
+          ))}
+        </Tabs>
+      </Box>
 
       <Box
         sx={{
           py: 0.5,
-          mt: 1,
+          mt: 2,
 
-          overflowX: "auto",
-          // flexGrow: 1,
-          bgcolor: "background.paper",
-          border: `1px solid ${theme.colors.alpha.black[10]}`,
-          borderRadius: "10px",
+          // overflowX: "auto",
+          // // flexGrow: 1,
+          // bgcolor: "background.paper",
+          // border: `1px solid ${theme.colors.alpha.black[10]}`,
+          // borderRadius: "10px",
           display: {
             xs: "none",
             sm: "none",
             md: "flex",
           },
+          flexDirection: "column",
+          gap: "0.5rem",
+          alignItems: "center",
+
         }}
       >
+        
         <Tabs
           value={statusOrderFilter}
           variant="scrollable"
@@ -89,7 +155,7 @@ export const ListActiveOrders = () => {
                 </Typography>
                 <Chip
                   label={
-                    orders.filter(
+                    ordersFilteredByProductionArea.filter(
                       (order) => order.status === OrderStatus.PENDING
                     ).length
                   }
@@ -113,7 +179,7 @@ export const ListActiveOrders = () => {
                 </Typography>
                 <Chip
                   label={
-                    orders.filter(
+                    ordersFilteredByProductionArea.filter(
                       (order) => order.status === OrderStatus.IN_PROGRESS
                     ).length
                   }
@@ -137,7 +203,7 @@ export const ListActiveOrders = () => {
                 </Typography>
                 <Chip
                   label={
-                    orders.filter(
+                    ordersFilteredByProductionArea.filter(
                       (order) => order.status === OrderStatus.DELIVERED
                     ).length
                   }
@@ -162,21 +228,33 @@ export const ListActiveOrders = () => {
           </Typography>
         ) : (
           <Grid container spacing={2}>
-            {ordersFiltered.map((order, index) => (
-              <Grid item xs={12} sm={6} md={4} key={order.id}>
-                <ActiveOrder
-                  order={order}
-                  index={index}
-                  color={
-                    order.status === OrderStatus.PENDING
-                      ? "warning"
-                      : order.status === OrderStatus.IN_PROGRESS
-                      ? "info"
-                      : "success"
-                  }
-                />
-              </Grid>
-            ))}
+            {ordersFiltered.map((order, index) => {
+              const details = productionAreaActive
+                ? order.details.filter(
+                    (detail) =>
+                      detail.product.productionArea.id ===
+                      productionAreaActive?.id
+                  )
+                : order.details;
+
+              if (details.length >= 1)
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={order.id}>
+                    <ActiveOrder
+                      order={order}
+                      index={index}
+                      color={
+                        order.status === OrderStatus.PENDING
+                          ? "warning"
+                          : order.status === OrderStatus.IN_PROGRESS
+                          ? "info"
+                          : "success"
+                      }
+                      productionArea={productionAreaActive || undefined}
+                    />
+                  </Grid>
+                );
+            })}
           </Grid>
         )}
       </Box>
@@ -185,8 +263,8 @@ export const ListActiveOrders = () => {
         sx={{
           position: "fixed",
           bottom: 0,
-          left: 0,
           right: 0,
+          left: 0,
           display: {
             xs: "block",
             sm: "block",
@@ -218,8 +296,9 @@ export const ListActiveOrders = () => {
             icon={
               <Chip
                 label={
-                  orders.filter((order) => order.status === OrderStatus.PENDING)
-                    .length
+                  ordersFilteredByProductionArea.filter(
+                    (order) => order.status === OrderStatus.PENDING
+                  ).length
                 }
                 color="warning"
                 size="small"
@@ -239,7 +318,7 @@ export const ListActiveOrders = () => {
             icon={
               <Chip
                 label={
-                  orders.filter(
+                  ordersFilteredByProductionArea.filter(
                     (order) => order.status === OrderStatus.IN_PROGRESS
                   ).length
                 }
@@ -262,9 +341,8 @@ export const ListActiveOrders = () => {
             icon={
               <Chip
                 label={
-                  orders.filter(
-                    (order) =>
-                      order.status === OrderStatus.DELIVERED && !order.isPaid
+                  ordersFilteredByProductionArea.filter(
+                    (order) => order.status === OrderStatus.DELIVERED
                   ).length
                 }
                 color="success"
