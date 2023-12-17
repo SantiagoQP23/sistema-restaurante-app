@@ -28,6 +28,7 @@ import { selectMenu, updateProduct } from "../../../../../../redux";
 import { FormProductImage } from "./";
 import { useUpdateProduct } from "../../../hooks/useProducts";
 import { useEditMenuStore } from "../../../hooks/useEditMenuStore";
+import { useProductionAreasStore } from "../../../../Common/store/production-areas-store";
 
 interface Props {
   product: IProduct;
@@ -42,12 +43,15 @@ const initialForm: UpdateProductDto = {
   isPublic: false,
   status: ProductStatus.AVAILABLE,
   categoryId: "",
+  productionAreaId: 0,
 };
 
 export const FormProduct: FC<Props> = ({ product }) => {
   const [selectedProduct, setSelectedProduct] = useState<IProduct>(product);
 
-  const { category, images, ...restProduct } = selectedProduct;
+  const { productionAreas } = useProductionAreasStore();
+
+  const { category, productionArea, images, ...restProduct } = selectedProduct;
 
   const { sections } = useSelector(selectMenu);
 
@@ -61,6 +65,7 @@ export const FormProduct: FC<Props> = ({ product }) => {
     const updateProductDto = {
       ...restProduct,
       categoryId: product.category.id,
+      productionAreaId: product.productionArea.id,
     };
     return updateProductDto;
   };
@@ -199,6 +204,39 @@ export const FormProduct: FC<Props> = ({ product }) => {
                       />
                     </Grid>
                   )}
+
+                  <Grid item xs={12} sm={6}>
+                    <Controller
+                      name="productionAreaId"
+                      control={control}
+                      rules={{ required: "Este campo es requerido" }}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <>
+                          <FormControl fullWidth>
+                            <InputLabel id="select-area">
+                              Área de producción
+                            </InputLabel>
+                            <Select
+                              labelId="select-area"
+                              label="Seccion"
+                              margin="dense"
+                              // disabled
+                              value={value}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              error={!!errors.productionAreaId}
+                            >
+                              {productionAreas.map((area) => (
+                                <MenuItem key={area.id} value={area.id}>
+                                  {area.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </>
+                      )}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </CardContent>

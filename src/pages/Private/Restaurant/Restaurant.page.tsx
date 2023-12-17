@@ -8,7 +8,6 @@ import {
   CardContent,
   Grid,
   TextField,
-  Button,
   Typography,
 } from "@mui/material";
 import { useRestaurantStore } from "../Common/store/restaurantStore";
@@ -17,6 +16,8 @@ import { UpdateRestaurantDto } from "../Reports/dto/update-restaurant.dto";
 import { useUpdateRestaurant } from "./hooks/useRestaurant";
 import { LoadingButton } from "@mui/lab";
 import { FormRestaurantLogo } from "./components/FormRestaurantLogo.component";
+import { ProductionAreas } from "./views/ProductionAreas/ProductionAreas.view";
+import { ProductionAreasList } from "./components/ProductionAreasList.component";
 
 const Restaurant = () => {
   const { restaurant } = useRestaurantStore((state) => state);
@@ -112,6 +113,12 @@ const Restaurant = () => {
             </Typography>
           </>
         )}
+
+        <Grid container spacing={2} mt={2}>
+          <Grid item xs={12} md={6}>
+            <ProductionAreasList />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

@@ -17,6 +17,7 @@ import TableRestaurantOutlinedIcon from "@mui/icons-material/TableRestaurantOutl
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+
 import { ValidRoles } from "../../../Common/models/valid-roles.model";
 
 const generalSection = {
@@ -45,7 +46,7 @@ const ordersSection = {
       to: "/orders/",
     },
     {
-      title: "Cocina",
+      title: "Producción",
       icon: <SoupKitchen />,
       to: "/orders/actives",
       // allowedRoles: [ValidRoles.mesero],

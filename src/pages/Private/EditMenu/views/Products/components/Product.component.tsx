@@ -97,6 +97,8 @@ export const Product: FC<Props> = ({ producto }) => {
             <Typography variant="subtitle1" mt={1}>
               {producto.category.name}
             </Typography>
+            <Typography variant="subtitle1">{producto.productionArea.name}</Typography>
+
           </Stack>
         </CardContent>
       </Card>

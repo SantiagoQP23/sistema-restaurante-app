@@ -1,3 +1,5 @@
+import { ProductionArea } from "../pages/Private/Common/models/production-area.model";
+
 export interface Menu {
   sections: ISection[];
   categories: ICategory[];
@@ -60,6 +62,7 @@ export interface IProduct {
   isPublic: boolean;
 
   category: ICategoryProduct;
+  productionArea: ProductionArea;
 }
 
 export interface ICreateProduct {

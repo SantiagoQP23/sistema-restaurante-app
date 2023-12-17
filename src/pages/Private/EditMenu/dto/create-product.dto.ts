@@ -6,4 +6,5 @@ export interface CreateProductDto {
   categoryId: string;
   description?: string;
   status?: ProductStatus;
+  productionAreaId: number;
 }

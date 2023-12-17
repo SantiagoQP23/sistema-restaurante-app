@@ -44,23 +44,35 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useOrderHelper } from "../../../hooks/useOrders";
+import { ProductionArea } from "../../../../Common/models/production-area.model";
 
 interface Props {
   order: IOrder;
   setStatusFilter?: (status: OrderStatus) => void;
   color: "success" | "error" | "warning" | "info" | "primary" | "secondary";
   index: number;
+  productionArea?: ProductionArea;
 }
 
+/**
+ * Component to render active order
+ * @author Santiago Quirumbay
+ * @version 1.1 16/12/2023 Adds productionArea field.
+ */
 export const ActiveOrder: FC<Props> = ({
   order,
   setStatusFilter,
   color,
   index,
+  productionArea,
 }) => {
   // const color= "primary";
 
-  const { details } = order;
+  const details = productionArea
+    ? order.details.filter(
+        (detail) => detail.product.productionArea.id === productionArea?.id
+      )
+    : order.details;
 
   const { getFirstPendingOrder } = useOrderHelper();
 
@@ -79,20 +91,11 @@ export const ActiveOrder: FC<Props> = ({
   const { updateOrder } = useUpdateOrder();
 
   const handleStartOrder = (order: IOrder) => {
-    // TODO
-    // Obtener el primer pedido pendiente
     const firstOrder = getFirstPendingOrder();
 
     if (firstOrder.id === order.id) {
-      // Si el pedido es el primero en la lista de pedidos pendientes
-      // se puede iniciar
       changeStatusOrder(OrderStatus.IN_PROGRESS);
-
-      console.log("es el primero");
     } else {
-      // Si el pedido no es el primero en la lista de pedidos pendientes
-      console.log("hay un pedido pendiente");
-
       statusModalStartOrder.setSubject({ value: true, order });
     }
   };
@@ -105,6 +108,8 @@ export const ActiveOrder: FC<Props> = ({
 
     updateOrder(data);
   };
+
+  if (details.length === 0) return null;
 
   return (
     <>
@@ -409,7 +414,8 @@ export const ActiveOrder: FC<Props> = ({
 
         <CardActions
           sx={{
-            justifyContent: "center",
+            justifyContent:
+              order.status === OrderStatus.PENDING ? "center" : "space-between",
           }}
         >
           {order.status === OrderStatus.PENDING ? (
@@ -433,7 +439,6 @@ export const ActiveOrder: FC<Props> = ({
                   }}
                   color="warning"
                   startIcon={<Undo />}
-                  variant="outlined"
                 >
                   Pendiente
                 </Button>
@@ -441,7 +446,6 @@ export const ActiveOrder: FC<Props> = ({
                 <Button
                   color="success"
                   startIcon={<Check />}
-                  variant="outlined"
                   onClick={() => changeStatusOrder(OrderStatus.DELIVERED)}
                 >
                   Entregado
