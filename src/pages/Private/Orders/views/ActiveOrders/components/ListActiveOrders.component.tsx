@@ -82,11 +82,13 @@ export const ListActiveOrders = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
+          overflowX: "auto",
         }}
       >
         <Tabs
           value={productionAreaActive?.id || ""}
           onChange={handleChangeArea}
+          variant="scrollable"
         >
           {productionAreas.map((productionArea) => (
             <Tab
