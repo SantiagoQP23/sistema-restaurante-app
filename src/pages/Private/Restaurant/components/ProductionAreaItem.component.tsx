@@ -5,14 +5,26 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Switch,
   TextField,
-  CircularProgress,
   ListItemIcon,
+  MenuItem,
+  Popover,
 } from "@mui/material";
-import { DonutSmall, Edit, Save } from "@mui/icons-material";
+import {
+  Close,
+  DeleteOutlined,
+  DonutSmall,
+  EditOutlined,
+  MoreVert,
+  Reply,
+} from "@mui/icons-material";
 import { useUpdateProductionArea } from "../hooks/useProductionArea";
 import { UpdateProductionAreaDto } from "../dto/update-production-area.dto";
+import {
+  bindPopover,
+  bindTrigger,
+  usePopupState,
+} from "material-ui-popup-state/hooks";
 
 interface Props {
   area: ProductionArea;
@@ -20,45 +32,67 @@ interface Props {
 
 export const ProductionAreaItem: FC<Props> = ({ area }) => {
   const [name, setName] = useState(area.name);
-  const [isActive, setIsActive] = useState(area.isActive);
-
-  const { isLoading, mutateAsync } = useUpdateProductionArea();
+  const { mutateAsync } = useUpdateProductionArea();
 
   const [isEditing, setIsEditing] = useState(false);
 
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: "areaMenu",
+  });
+
+  const submitUpdateArea = async (productionArea: UpdateProductionAreaDto) => {
+    await mutateAsync({ id: area.id, productionArea });
+  };
+
   const handleEdit = () => {
     setIsEditing(true);
+    popupState.close();
   };
 
   const handleChangeStatus = () => {
-    setIsActive(!isActive);
+    popupState.close();
+    submitUpdateArea({
+      isActive: !area.isActive,
+    });
   };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
-  const updateArea = async () => {
-    const productionArea: UpdateProductionAreaDto = {
-      name,
-      isActive,
-    };
-
-    await mutateAsync({ id: area.id, productionArea });
-    toggleEdit();
-  };
-
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       // Enter key is pressed, execute your update logic
-      updateArea();
+      updateNameArea();
     }
   };
 
-  const disableSave = area.name === name && isActive === area.isActive;
+  const updateNameArea = async () => {
+    toggleEdit();
+    if (name !== area.name) {
+      await submitUpdateArea({
+        name,
+      });
+    }
+  };
 
   return (
-    <ListItem>
+    <ListItem
+      secondaryAction={
+        <>
+          {!isEditing ? (
+            <IconButton {...bindTrigger(popupState)}>
+              <MoreVert />
+            </IconButton>
+          ) : (
+            <IconButton onClick={toggleEdit}>
+              <Close />
+            </IconButton>
+          )}
+        </>
+      }
+    >
       <ListItemIcon>
         <DonutSmall />
       </ListItemIcon>
@@ -69,6 +103,7 @@ export const ProductionAreaItem: FC<Props> = ({ area }) => {
           onChange={(e) => setName(e.target.value)}
           size="small"
           onKeyDown={handleKeyDown}
+          onBlur={updateNameArea}
         />
       ) : (
         <ListItemText
@@ -80,21 +115,36 @@ export const ProductionAreaItem: FC<Props> = ({ area }) => {
           }}
         />
       )}
-      <ListItemSecondaryAction>
-        {isEditing && (
-          <Switch checked={isActive} onChange={handleChangeStatus} />
-        )}
 
-        {isEditing ? (
-          <IconButton onClick={updateArea} disabled={disableSave}>
-            {isLoading ? <CircularProgress sx={{ fontSize: 14 }} /> : <Save />}
-          </IconButton>
+      <Popover
+        {...bindPopover(popupState)}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 170,
+            },
+          },
+        }}
+      >
+        <MenuItem onClick={handleEdit}>
+          <EditOutlined fontSize="small" sx={{ mr: 2 }} />
+          Renombrar
+        </MenuItem>
+
+        {area.isActive ? (
+          <MenuItem sx={{ color: "error.main" }} onClick={handleChangeStatus}>
+            <DeleteOutlined fontSize="small" sx={{ mr: 2 }} />
+            Desactivar
+          </MenuItem>
         ) : (
-          <IconButton onClick={handleEdit}>
-            <Edit />
-          </IconButton>
+          <MenuItem onClick={handleChangeStatus}>
+            <Reply fontSize="small" sx={{ mr: 2 }} />
+            Habilitar
+          </MenuItem>
         )}
-      </ListItemSecondaryAction>
+      </Popover>
     </ListItem>
   );
 };
