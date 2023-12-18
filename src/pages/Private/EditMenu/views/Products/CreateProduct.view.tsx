@@ -34,6 +34,8 @@ const initialForm: CreateProductDto = {
   status: ProductStatus.AVAILABLE,
   categoryId: "",
   productionAreaId: 0,
+  unitCost: 0,
+  quantity: 0,
 };
 
 export const CreateProduct = () => {
@@ -97,11 +99,11 @@ export const CreateProduct = () => {
                 <CardHeader title="Información del producto" />
                 <CardContent>
                   <Grid item xs={12}>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <TextField
                           autoFocus
-                          margin="dense"
+                         
                           label="Nombre del producto"
                           type="text"
                           fullWidth
@@ -119,7 +121,7 @@ export const CreateProduct = () => {
                       <Grid item xs={12}>
                         <TextField
                           label="Descripcion del producto"
-                          margin="dense"
+                         
                           multiline
                           rows={4}
                           fullWidth
@@ -192,7 +194,7 @@ export const CreateProduct = () => {
                                 </InputLabel>
                                 <Select
                                   labelId="select-area"
-                                  label="Seccion"
+                                  label="Área de producción"
                                   margin="dense"
                                   // disabled
                                   value={value}
@@ -201,10 +203,7 @@ export const CreateProduct = () => {
                                   error={!!errors.productionAreaId}
                                 >
                                   {productionAreas.map((area) => (
-                                    <MenuItem
-                                      key={area.id}
-                                      value={area.id}
-                                    >
+                                    <MenuItem key={area.id} value={area.id}>
                                       {area.name}
                                     </MenuItem>
                                   ))}
@@ -222,40 +221,64 @@ export const CreateProduct = () => {
 
             <Grid item xs={12} md={6}>
               <Card>
-                <CardHeader title="Estados" />
+                <CardHeader title="Inventario" />
                 <CardContent>
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <>
-                        <FormControl fullWidth>
-                          <InputLabel id="select-estado">Estado</InputLabel>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                      <Controller
+                        name="status"
+                        control={control}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <>
+                            <FormControl fullWidth>
+                              <InputLabel id="select-estado">Estado</InputLabel>
 
-                          <Select
-                            labelId="select-estado"
-                            label="Estado"
-                            fullWidth
-                            margin="dense"
-                            value={value}
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            error={!!errors.status?.type}
-                          >
-                            <MenuItem value={ProductStatus.AVAILABLE}>
-                              Disponible
-                            </MenuItem>
-                            <MenuItem value={ProductStatus.OUT_OF_SEASON}>
-                              Fuera de temporada
-                            </MenuItem>
-                            <MenuItem value={ProductStatus.OUT_OF_STOCK}>
-                              Fuera de stock
-                            </MenuItem>
-                          </Select>
-                        </FormControl>
-                      </>
-                    )}
-                  />
+                              <Select
+                                labelId="select-estado"
+                                label="Estado"
+                                fullWidth
+                                margin="dense"
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                error={!!errors.status?.type}
+                              >
+                                <MenuItem value={ProductStatus.AVAILABLE}>
+                                  Disponible
+                                </MenuItem>
+                                <MenuItem value={ProductStatus.OUT_OF_SEASON}>
+                                  Fuera de temporada
+                                </MenuItem>
+                                <MenuItem value={ProductStatus.OUT_OF_STOCK}>
+                                  Fuera de stock
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </>
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Cantidad disponible"
+                        fullWidth
+                        type="number"
+                        inputProps={{
+                          min: 0,
+                          step: 1,
+                        }}
+                        {...register("quantity", {
+                          min: {
+                            value: 0,
+                            message: "El valor debe ser mayor a 0",
+                          },
+                          valueAsNumber: true,
+                        })}
+                        helperText={errors.quantity?.message}
+                        error={!!errors.quantity}
+                      />
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
             </Grid>
@@ -264,31 +287,62 @@ export const CreateProduct = () => {
               <Card>
                 <CardHeader title="Precios" />
                 <CardContent>
-                  <TextField
-                    label="Precio"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AttachMoney />
-                        </InputAdornment>
-                      ),
-                    }}
-                    fullWidth
-                    type="number"
-                    inputProps={{
-                      step: 0.05,
-                    }}
-                    {...register("price", {
-                      required: "Este campo es requerido",
-                      min: {
-                        value: 0.25,
-                        message: "El valor debe ser mayor a $0.25",
-                      },
-                      valueAsNumber: true,
-                    })}
-                    helperText={errors.price?.message}
-                    error={!!errors.price}
-                  />
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Precio"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AttachMoney />
+                            </InputAdornment>
+                          ),
+                        }}
+                        fullWidth
+                        type="number"
+                        inputProps={{
+                          step: 0.05,
+                        }}
+                        {...register("price", {
+                          required: "Este campo es requerido",
+                          min: {
+                            value: 0.25,
+                            message: "El valor debe ser mayor a $0.25",
+                          },
+                          valueAsNumber: true,
+                        })}
+                        helperText={errors.price?.message}
+                        error={!!errors.price}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        label="Costo unitario"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AttachMoney />
+                            </InputAdornment>
+                          ),
+                        }}
+                        fullWidth
+                        type="number"
+                        inputProps={{
+                          step: 0.05,
+                        }}
+                        {...register("unitCost", {
+                          min: {
+                            value: 0,
+                            message: "El valor debe ser mayor a $0",
+                          },
+                          valueAsNumber: true,
+                        })}
+                        helperText={errors.unitCost?.message}
+                        error={!!errors.unitCost}
+                      />
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </Card>
             </Grid>

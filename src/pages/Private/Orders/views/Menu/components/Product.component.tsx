@@ -53,6 +53,7 @@ export const Product: FC<Props> = ({ product, onClick }) => {
         </Box>
 
         <Stack spacing={1} sx={{ p: 2 }}>
+          <Typography fontSize={'0.8rem'} color='text.secondary'>{product.quantity} disponibles</Typography>
           <Link
             color="inherit"
             underline="hover"
