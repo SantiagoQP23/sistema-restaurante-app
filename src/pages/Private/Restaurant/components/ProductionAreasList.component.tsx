@@ -5,9 +5,8 @@ import { ModalCreateProductionArea } from "./ModalCreateProductionArea.component
 import { ProductionAreaItem } from "./ProductionAreaItem.component";
 import { useProductionAreasStore } from "../../Common/store/production-areas-store";
 
-
 /**
- * Component to list the production areas 
+ * Component to list the production areas
  * @author Santiago Quirumbay
  * @version 1.0 16/12/2023.
  */

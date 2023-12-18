@@ -46,7 +46,7 @@ const ordersSection = {
       to: "/orders/",
     },
     {
-      title: "Producción",
+      title: "Preparación de pedidos",
       icon: <SoupKitchen />,
       to: "/orders/actives",
       // allowedRoles: [ValidRoles.mesero],
