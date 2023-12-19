@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { useState } from "react";
 
 import {
   TextField,
@@ -13,7 +13,6 @@ import {
 } from "@mui/material/";
 
 import { ICreateOrderDetail, IOrder } from "../../../../../models/orders.model";
-import { sharingInformationService } from "../../services/sharing-information.service";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../redux/slices/orders/orders.slice";
@@ -27,21 +26,27 @@ import { CounterInput } from "../CounterInput.component";
 import { ProductStatus } from "../../../../../models";
 import { Label } from "../../../../../components/ui";
 import { useNewOrderStore } from "../../store/newOrderStore";
+import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
 
-interface Props {}
+interface Props {
+  detail?: ICreateOrderDetail;
+}
 
-export const ModalAddDetail: FC<Props> = () => {
-  const [detail, setDetail] = useState<ICreateOrderDetail>();
+/**
+ * Modal to add a product to the active order or to the new order
+ * @author Santiago Quirumbay
+ * @version 1.1 18/12/2023 Adds NiceModal and remove rxjs
+ */
+export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
+  const modal = useModal();
+
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(detail?.quantity || 1);
-  const [open, setOpen] = useState(false);
 
   const { addDetail, details, updateDetail } = useNewOrderStore(
     (state) => state
   );
   const { activeOrder } = useSelector(selectOrders);
-
-  const subscription$ = sharingInformationService.getSubject();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,6 +54,11 @@ export const ModalAddDetail: FC<Props> = () => {
 
   const handleQuantityChange = (value: number) => {
     setQuantity(value);
+  };
+
+  const closeModal = () => {
+    modal.hide();
+    setDescription("");
   };
 
   const addProductoToOrder = (order: IOrder) => {
@@ -70,11 +80,6 @@ export const ModalAddDetail: FC<Props> = () => {
     if (activeOrder) {
       addProductoToOrder(activeOrder);
     } else {
-      // dispatch({
-      //   type: OrderActionType.ADD_DETAIL,
-      //   payload: { ...detail!, quantity, description },
-      // });
-
       const detailExists = details.find(
         (currentDetail) => currentDetail.product.id === detail!.product.id
       );
@@ -83,52 +88,19 @@ export const ModalAddDetail: FC<Props> = () => {
         updateDetail({ ...detail!, quantity, description });
       } else {
         addDetail({ ...detail!, quantity, description });
-
         enqueueSnackbar(`${detail?.product.name} agregado`, {
           variant: "success",
         });
       }
     }
 
-    // updateDetail({...detail!, description})
-
     setDescription("");
-    setOpen(false);
+    closeModal();
   };
-
-  useEffect(() => {
-    subscription$.subscribe((data) => {
-      const { value, detalle } = data;
-
-      const detail = details.find(
-        (detail) => detail.product.id === detalle.product.id
-      );
-
-      if (detail) {
-        setQuantity(detail.quantity);
-        setDetail(detail);
-        setDescription(detail.description || "");
-      } else {
-        setDetail(detalle);
-        setDescription(data.detalle?.description || "");
-      }
-
-      setOpen(!!value);
-      // setCounter(data.detalle?.quantity || 1);
-    });
-  }, [detail]);
 
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setDescription("");
-        }}
-      >
-        {/* <DialogTitle>Añadir Producto</DialogTitle> */}
-
+      <Dialog {...muiDialogV5(modal)}>
         <DialogContent
           sx={{
             width: 300,
@@ -145,14 +117,11 @@ export const ModalAddDetail: FC<Props> = () => {
 
             {detail?.product.description && (
               <Box>
-                {/* <Typography variant="subtitle1" >Descripción</Typography> */}
                 <Typography variant="body1" style={{ whiteSpace: "pre-wrap" }}>
                   {detail?.product.description}
                 </Typography>
               </Box>
             )}
-
-            {/* <Divider /> */}
 
             {detail?.product.status !== ProductStatus.AVAILABLE ? (
               <>
@@ -166,13 +135,10 @@ export const ModalAddDetail: FC<Props> = () => {
                   justifyContent="flex-end"
                   my={2}
                 >
-                  {/* <Typography variant="h5" >Cantidad</Typography> */}
-
                   <CounterInput
                     value={detail?.quantity || 1}
                     onChange={handleQuantityChange}
                   />
-                  {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
                 </Stack>
 
                 <FormControl fullWidth>
@@ -195,14 +161,7 @@ export const ModalAddDetail: FC<Props> = () => {
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: "center" }}>
-          <Button
-            onClick={() => {
-              setOpen(false);
-              setDescription("");
-            }}
-          >
-            Cancelar
-          </Button>
+          <Button onClick={closeModal}>Cancelar</Button>
 
           {detail?.product.status === ProductStatus.AVAILABLE && (
             <LoadingButton
@@ -218,4 +177,4 @@ export const ModalAddDetail: FC<Props> = () => {
       </Dialog>
     </>
   );
-};
+});

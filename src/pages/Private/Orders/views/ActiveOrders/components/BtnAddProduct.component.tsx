@@ -6,7 +6,8 @@ import { ComboBoxProducts } from "../../../../EditMenu/components/products/Combo
 import { IOrder, IProduct } from "../../../../../../models";
 import { useDispatch } from "react-redux";
 import { setActiveOrder } from "../../../../../../redux";
-import { sharingInformationService } from "../../../services/sharing-information.service";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalAddDetail } from "../../../components";
 
 interface Props {
   order: IOrder;
@@ -36,12 +37,8 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
   };
 
   const addProductoToOrder = (product: IProduct) => {
-    sharingInformationService.setSubject(true, {
-      product,
-      quantity: 1,
-    });
+    NiceModal.show(ModalAddDetail, { detail: { product, quantity: 1 } });
   };
-
 
   return (
     <>
@@ -55,13 +52,15 @@ export const BtnAddProduct: FC<Props> = ({ order }) => {
           <>
             <CardContent>
               <Stack spacing={1}>
-                <ComboBoxProducts onFocus={handleActiveOrder} selectProduct={addProductoToOrder} />
+                <ComboBoxProducts
+                  onFocus={handleActiveOrder}
+                  selectProduct={addProductoToOrder}
+                />
                 <Button
                   color="inherit"
                   startIcon={<CancelOutlined />}
                   onClick={handleCancel}
                   size="small"
-                  
                 >
                   Cancelar
                 </Button>

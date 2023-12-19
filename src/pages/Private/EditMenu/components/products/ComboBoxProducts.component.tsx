@@ -9,12 +9,7 @@ import {
 } from "@mui/material";
 import { IProduct } from "../../../../../models";
 import { FC, useState } from "react";
-import {
-  findProductsByName,
-  getCategories,
-  getProducts,
-} from "../../../../../helpers";
-import { sharingInformationService } from "../../../Orders/services/sharing-information.service";
+import { findProductsByName } from "../../../../../helpers";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",

@@ -5,10 +5,10 @@ import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { ICreateOrderDetail } from "../../../../../../models";
 
-import { sharingInformationService } from "../../../services/sharing-information.service";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { useNewOrderStore } from "../../../store/newOrderStore";
-import { CounterInput } from "../../../components";
+import { CounterInput, ModalAddDetail } from "../../../components";
+import NiceModal from "@ebay/nice-modal-react";
 
 interface Props {
   detalle: ICreateOrderDetail;
@@ -30,9 +30,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   };
 
   const editDescription = () => {
-    console.log(detalle);
-
-    sharingInformationService.setSubject(true, detalle);
+    NiceModal.show(ModalAddDetail, { detail: detalle });
   };
 
   useEffect(() => {
