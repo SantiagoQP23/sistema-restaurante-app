@@ -10,6 +10,7 @@ import {
   Typography,
   Box,
   Stack,
+  Chip,
 } from "@mui/material/";
 
 import { ICreateOrderDetail, IOrder } from "../../../../../models/orders.model";
@@ -23,25 +24,35 @@ import { useCreateOrderDetail } from "../../hooks/useCreateOrderDetail";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { CounterInput } from "../CounterInput.component";
-import { ProductStatus } from "../../../../../models";
+import { ProductOption, ProductStatus } from "../../../../../models";
 import { Label } from "../../../../../components/ui";
 import { useNewOrderStore } from "../../store/newOrderStore";
 import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
+import { Scrollbar } from "../../../components";
+import { formatMoney } from "../../../Common/helpers/format-money.helper";
 
 interface Props {
-  detail?: ICreateOrderDetail;
+  detail: ICreateOrderDetail;
 }
 
 /**
  * Modal to add a product to the active order or to the new order
  * @author Santiago Quirumbay
  * @version 1.1 18/12/2023 Adds NiceModal and remove rxjs
+ * @version 1.2 19/12/2023 Adds product options chip
  */
 export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
   const modal = useModal();
+  const product = detail?.product;
+  const availableOptions = product?.options
+    ? product?.options.filter((option) => option.isAvailable)
+    : [];
 
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(detail?.quantity || 1);
+  const [selectedOption, setSelectedOption] = useState<
+    ProductOption | undefined
+  >(detail.productOption ? detail.productOption : undefined);
 
   const { addDetail, details, updateDetail } = useNewOrderStore(
     (state) => state
@@ -61,6 +72,9 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
     setDescription("");
   };
 
+  /**
+   * @version 1.1 20/12/2023 Adds product option
+   */
   const addProductoToOrder = (order: IOrder) => {
     const data: CreateOrderDetailDto = {
       orderId: order.id,
@@ -72,7 +86,10 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
     if (description) {
       data.description = description;
     }
-
+    if (selectedOption) {
+      data.productOptionId = selectedOption.id;
+    }
+    console.log(data);
     createOrderDetail(data);
   };
 
@@ -81,13 +98,25 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
       addProductoToOrder(activeOrder);
     } else {
       const detailExists = details.find(
-        (currentDetail) => currentDetail.product.id === detail!.product.id
+        (currentDetail) =>
+          currentDetail.product.id === detail!.product.id &&
+          currentDetail.productOption?.id === selectedOption?.id
       );
 
       if (detailExists) {
-        updateDetail({ ...detail!, quantity, description });
+        updateDetail({
+          ...detail!,
+          quantity,
+          description,
+          productOption: selectedOption,
+        });
       } else {
-        addDetail({ ...detail!, quantity, description });
+        addDetail({
+          ...detail!,
+          quantity,
+          description,
+          productOption: selectedOption,
+        });
         enqueueSnackbar(`${detail?.product.name} agregado`, {
           variant: "success",
         });
@@ -114,6 +143,67 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
               <Typography variant="h4">{detail?.product.name}</Typography>
             </Box>
             <Typography variant="h4">${detail?.product.price}</Typography>
+
+            {/* <List sx={{ p: 0 }} dense>
+              {detail?.product.options.map((option) => (
+                <ListItem key={option.id}>
+                  <Checkbox icon={icon} checkedIcon={checkedIcon} />
+                  <ListItemText primary={option.name} />
+                </ListItem>
+              ))}
+            </List> */}
+
+            {availableOptions.length > 0 && (
+              <Scrollbar autoHeight height="auto">
+                <Box
+                  sx={{
+                    // overflowX: "auto",
+                    display: "flex",
+                    gap: 1,
+                  }}
+                >
+                  {availableOptions.map((option) => (
+                    <Chip
+                      key={option.id}
+                      label={`${option?.name} (${formatMoney(option?.price)})`}
+                      variant={
+                        option === selectedOption ? "filled" : "outlined"
+                      }
+                      onClick={() => setSelectedOption(option)}
+                      color={option === selectedOption ? "primary" : "default"}
+                    />
+                  ))}
+                </Box>
+              </Scrollbar>
+            )}
+
+            <Box>
+              {/* <Autocomplete
+                id="checkboxes-tags-demo"
+                options={product.options}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Opciones"
+                    placeholder="Opción"
+                    variant="standard"
+                  />
+                )}
+              /> */}
+            </Box>
 
             {detail?.product.description && (
               <Box>

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { IProduct, ProductStatus } from "../../../../../../models";
-import { AttachMoney, Save } from "@mui/icons-material";
+import { Add, AttachMoney, Save } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import {
   Card,
@@ -19,6 +19,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { UpdateProductDto } from "../../../dto";
@@ -29,6 +30,9 @@ import { FormProductImage } from "./";
 import { useUpdateProduct } from "../../../hooks/useProducts";
 import { useEditMenuStore } from "../../../hooks/useEditMenuStore";
 import { useProductionAreasStore } from "../../../../Common/store/production-areas-store";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalCreateProductOption } from "./ModalCreateProductOption.component";
+import { ProductOptionItem } from "./ProductOptionItem.component";
 
 interface Props {
   product: IProduct;
@@ -48,6 +52,11 @@ const initialForm: UpdateProductDto = {
   unitCost: 0,
 };
 
+/**
+ * Component to edit a product
+ * @author Santiago Quirumbay
+ * @version 1.1 19/12/2023 Adds Product Options and use activeProduct
+ */
 export const FormProduct: FC<Props> = ({ product }) => {
   const [selectedProduct, setSelectedProduct] = useState<IProduct>(product);
 
@@ -109,6 +118,10 @@ export const FormProduct: FC<Props> = ({ product }) => {
   useEffect(() => {
     reset(getUpdateProductDto(selectedProduct));
   }, []);
+
+  function showModalCreateOption(): void {
+    NiceModal.show(ModalCreateProductOption, { product });
+  }
 
   return (
     <>
@@ -373,6 +386,28 @@ export const FormProduct: FC<Props> = ({ product }) => {
                   </Grid>
                 </Grid>
               </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardHeader
+                title="Opciones"
+                action={
+                  <Button startIcon={<Add />} onClick={showModalCreateOption}>
+                    Añadir
+                  </Button>
+                }
+              />
+              <List>
+                {product.options.map((option) => (
+                  <ProductOptionItem
+                    key={option.id}
+                    productOption={option}
+                    productId={selectedProduct.id}
+                  />
+                ))}
+              </List>
             </Card>
           </Grid>
 

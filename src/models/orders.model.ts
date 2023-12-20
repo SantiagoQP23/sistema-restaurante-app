@@ -1,4 +1,4 @@
-import { IUser, IProduct } from ".";
+import { IUser, IProduct, ProductOption } from ".";
 import { ITable } from "./table.model";
 import { Invoice } from "../pages/Private/Orders/models/Invoice.model";
 
@@ -78,10 +78,13 @@ export interface IOrderDetail {
   isActive: boolean;
 
   price: number;
+
+  productOption?: ProductOption;
 }
 
 export interface ICreateOrderDetail {
   quantity: number;
   product: IProduct;
   description?: string;
+  productOption?: ProductOption;
 }

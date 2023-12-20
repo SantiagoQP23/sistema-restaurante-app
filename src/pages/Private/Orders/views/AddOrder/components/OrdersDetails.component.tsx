@@ -50,7 +50,7 @@ export const OrderDetails = () => {
         <Stack spacing={1} divider={<Divider />}>
           {details.length > 0 ? (
             details.map((detail) => (
-              <NewOrderDetail detalle={detail} key={detail.product.id} />
+              <NewOrderDetail detalle={detail} key={detail.product.id + detail.productOption?.id} />
             ))
           ) : (
             <Box my={5}>

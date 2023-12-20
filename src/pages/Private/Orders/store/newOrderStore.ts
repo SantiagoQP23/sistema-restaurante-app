@@ -2,8 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { ICreateOrderDetail, ITable, TypeOrder } from "../../../../models";
 
-
-
 interface NewOrderState {
   table: ITable | null;
   amount: number;
@@ -13,11 +11,9 @@ interface NewOrderState {
   totalProducts: number;
   notes: string;
   deliveryTime: Date | null;
-
 }
 
 interface NewOrderActions {
-  
   setTable: (table: ITable | null) => void;
   setAmount: (amount: number) => void;
   setDetails: (details: ICreateOrderDetail[]) => void;
@@ -29,7 +25,7 @@ interface NewOrderActions {
   addDetail: (detail: ICreateOrderDetail) => void;
   removeDetail: (detail: ICreateOrderDetail) => void;
   updateDetail: (detail: ICreateOrderDetail) => void;
-  
+
   reset: () => void;
 }
 
@@ -42,8 +38,7 @@ const initialState: NewOrderState = {
   totalProducts: 0,
   notes: "",
   deliveryTime: new Date(),
-}
-
+};
 
 export const useNewOrderStore = create<NewOrderState & NewOrderActions>()(
   persist(
@@ -57,15 +52,18 @@ export const useNewOrderStore = create<NewOrderState & NewOrderActions>()(
 
       addDetail: (detail: ICreateOrderDetail) => {
         const details = get().details;
-        const index = details.findIndex(
-          (d) => d.product.id === detail.product.id
-        );
-        if (index === -1) {
-          set({ details: [...details, detail] });
-        } else {
-          details[index].quantity += detail.quantity;
-          set({ details });
-        }
+        // const index = details.findIndex(
+        //   (d) => d.product.id === detail.product.id
+        // );
+        // if (index === -1) {
+        //   set({ details: [...details, detail] });
+        // } else {
+        //   details[index].quantity += detail.quantity;
+        //   set({ details });
+        // }
+
+        set({ details: [...details, detail] });
+
       },
 
       removeDetail: (detail: ICreateOrderDetail) => {
@@ -83,15 +81,18 @@ export const useNewOrderStore = create<NewOrderState & NewOrderActions>()(
         const details = get().details;
 
         const index = details.findIndex(
-          (d) => d.product.id === detail.product.id
+          (d) => d.product.id === detail.product.id && d.productOption?.id === detail.productOption?.id
         );
 
         if (index !== -1) {
-          details[index] = {
+          const updatedDetail = {
             ...details[index],
             quantity: detail.quantity,
             description: detail.description,
+            productOption: detail.productOption,
           };
+
+          details[index] = updatedDetail;
           set({ details });
         }
       },
