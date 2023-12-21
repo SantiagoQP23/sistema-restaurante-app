@@ -7,6 +7,5 @@ export interface UpdateOrderDetailDto {
   description?: string;
   orderId: string;
   price?: number;
-
-
+  productOptionId?: number;
 }

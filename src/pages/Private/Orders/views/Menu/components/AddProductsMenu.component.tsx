@@ -6,18 +6,15 @@ import { selectMenu } from "../../../../../../redux";
 import { ComboBoxProducts } from "../../../../EditMenu/components/products/ComboBoxProducts.component";
 import { AllMenu } from "../../../../Menu/components";
 import { IProduct } from "../../../../../../models";
-import { sharingInformationService } from "../../../services/sharing-information.service";
 import { FilterList } from "@mui/icons-material";
 import { RegisteredModals } from "../../../../modals";
+import { ModalAddDetail } from "../../../components";
 
 export const AddProductsMenu = () => {
   const { activeCategory } = useSelector(selectMenu);
 
   const addProductoToOrder = (product: IProduct) => {
-    sharingInformationService.setSubject(true, {
-      product,
-      quantity: 1,
-    });
+    NiceModal.show(ModalAddDetail, { detail: { product, quantity: 1 } });
   };
 
   const openDrawerProductsFilter = () => {

@@ -94,11 +94,15 @@ export const Product: FC<Props> = ({ producto }) => {
               {formatMoney(producto.price)}
             </Typography>
 
-            <Typography variant="subtitle1" mt={1}>
+            <Typography fontSize='0.8rem' color='text.secondary' mt={1}>
               {producto.category.name}
             </Typography>
-            <Typography variant="subtitle1">{producto.productionArea.name}</Typography>
-
+            <Typography fontSize='0.8rem' color='text.secondary'>
+              {producto.productionArea.name}
+            </Typography>
+            <Typography fontSize='0.8rem' color='text.secondary'>
+              {producto.quantity} disponibles
+            </Typography>
           </Stack>
         </CardContent>
       </Card>

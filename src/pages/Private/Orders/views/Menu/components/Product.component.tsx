@@ -4,8 +4,9 @@ import { IProduct } from "../../../../../../models";
 import { ProductStatus } from "../../../../../../models/menu.model";
 import { IconButton, Stack } from "@mui/material";
 import { AddShoppingCart } from "@mui/icons-material";
-import { sharingInformationService } from "../../../services/sharing-information.service";
 import { LabelProductStatus } from "../../../../../../components/ui/LabelProductStatus.component";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalAddDetail } from "../../../components";
 
 interface Props {
   product: IProduct;
@@ -23,10 +24,7 @@ const StyledProductImg = styled("img")({
 
 export const Product: FC<Props> = ({ product, onClick }) => {
   const addProductoToOrder = () => {
-    sharingInformationService.setSubject(true, {
-      product,
-      quantity: 1,
-    });
+    NiceModal.show(ModalAddDetail, { detail: { product, quantity: 1 } });
   };
 
   return (
@@ -53,6 +51,9 @@ export const Product: FC<Props> = ({ product, onClick }) => {
         </Box>
 
         <Stack spacing={1} sx={{ p: 2 }}>
+          <Typography fontSize={"0.8rem"} color="text.secondary">
+            {product.quantity} disponibles
+          </Typography>
           <Link
             color="inherit"
             underline="hover"

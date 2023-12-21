@@ -20,9 +20,8 @@ import {
 } from "../../../redux";
 
 import { SocketResponseOrder } from "./interfaces/responses-sockets.interface";
-import { ModalClientOrder, ModalEditOrderDetail } from "./components";
+import { ModalClientOrder } from "./components";
 
-import { ModalAddDetail } from "./components/modals";
 import { ModalDeleteOrderDetail } from "./components/modals/ModalDeleteOrderDetail.component";
 
 import { ModalDeleteOrder } from "./components/modals/ModalDeleteOrder.component";
@@ -92,10 +91,7 @@ export const Orders = () => {
       </LocalizationProvider>
 
       <ModalDeleteOrder />
-      <ModalEditOrderDetail />
       <ModalDeleteOrderDetail />
-
-      <ModalAddDetail />
     </>
   );
 };

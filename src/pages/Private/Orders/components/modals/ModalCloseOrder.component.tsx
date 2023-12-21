@@ -28,7 +28,6 @@ interface Props {
 
 /**
  * Modal to close order
- * 
  * @version 1.1 13/12/2023 Add NiceModal
  */
 export const ModalCloseOrder = NiceModal.create<Props>(({ order }) => {

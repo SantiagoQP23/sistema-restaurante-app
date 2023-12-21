@@ -17,14 +17,10 @@ import {
 } from "@mui/material";
 import { useInvoiceStore } from "../../../store/invoiceStore";
 import { FC, useEffect, useState } from "react";
-import { IOrder } from "../../../../../../models";
+import { IOrder, IOrderDetail } from "../../../../../../models";
 import { CounterInput } from "../../../components";
 import { CardHeader } from "@mui/material/";
-import {
-  ArrowBackIos,
-  ArrowRight,
-  AttachMoney,
-} from "@mui/icons-material";
+import { ArrowBackIos, ArrowRight, AttachMoney } from "@mui/icons-material";
 import { Label } from "../../../../../../components/ui";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 
@@ -170,9 +166,26 @@ export const Account: FC<Props> = ({ order }) => {
     </Button>
   );
 
-   useEffect(() => {
-     handleSelectAll(true);
-   }, []);
+  useEffect(() => {
+    handleSelectAll(true);
+  }, []);
+
+  function getDescription(orderDetail: IOrderDetail) {
+    return (
+      <>
+        <Label color="warning">
+          {orderDetail.quantity - orderDetail.qtyPaid}
+        </Label>{" "}
+        <b>
+          {`${orderDetail.product.name} `}
+          {orderDetail.productOption
+            ? `(${orderDetail.productOption.name})`
+            : ""}
+        </b>{" "}
+        de <b>{orderDetail.quantity}</b>
+      </>
+    );
+  }
 
   return (
     <>
@@ -237,14 +250,7 @@ export const Account: FC<Props> = ({ order }) => {
                         />
                       </TableCell>
                     )}
-                    <TableCell>
-                      <Label color="warning">
-                        {detail.orderDetail.quantity -
-                          detail.orderDetail.qtyPaid}
-                      </Label>{" "}
-                      <b>{detail.orderDetail.product.name}</b> de{" "}
-                      <b>{detail.orderDetail.quantity}</b>
-                    </TableCell>
+                    <TableCell>{getDescription(detail.orderDetail)}</TableCell>
                     <TableCell>
                       {formatMoney(detail.orderDetail.price)}
                     </TableCell>

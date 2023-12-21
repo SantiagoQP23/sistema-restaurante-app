@@ -49,6 +49,7 @@ export const NewOrderSummary: FC<Props> = () => {
           quantity: detail.quantity,
           description: detail.description,
           price: detail.product.price,
+          productOptionId: detail.productOption?.id,
         };
         return orderDetail;
       }),

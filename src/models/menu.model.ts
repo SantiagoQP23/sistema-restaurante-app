@@ -51,6 +51,13 @@ export enum ProductStatusSpanish {
   OUT_OF_SEASON = "Fuera de temporada",
 }
 
+/**
+ * Product interface.
+ * @author Santiago Quirumbay
+ * @version 1.1 16/12/2023 Adds productionArea field.
+ * @version 1.2 17/12/2023 Adds unitCost and quantity fields.
+ * @version 1.3 18/12/2023 Adds options field.
+ */
 export interface IProduct {
   id: string;
   name: string;
@@ -60,9 +67,25 @@ export interface IProduct {
   status: ProductStatus;
   isActive: boolean;
   isPublic: boolean;
-
   category: ICategoryProduct;
   productionArea: ProductionArea;
+  unitCost: number;
+  quantity: number;
+  options: ProductOption[];
+}
+
+/**
+ * Product option interface.
+ * @author Santiago Quirumbay
+ * @version 1.0 18/12/2023
+ */
+export interface ProductOption {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  isActive: boolean;
+  isAvailable: boolean;
 }
 
 export interface ICreateProduct {

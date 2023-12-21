@@ -1,11 +1,10 @@
-import { FC, useContext, useEffect, useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useContext, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 // Material UI
 import {
   IconButton,
-  Grid,
   Container,
   CircularProgress,
   Stepper,
@@ -22,8 +21,7 @@ import { selectOrders, setActiveOrder } from "../../../../../redux";
 
 import { OrderActionType, OrderContext } from "../../context/Order.context";
 
-import { OrderSummary, OrderDetails } from "./components";
-import { TitlePage } from "../../../components/TitlePage.component";
+import { OrderSummary } from "./components";
 import { useOrder } from "../../hooks";
 import { PayOrder } from "./components/PayOrder.component";
 import { useInvoiceStore } from "../../store/invoiceStore";
@@ -36,14 +34,10 @@ import {
   DeleteOutline,
   RemoveCircle,
   ChevronLeft,
-  Clear,
 } from "@mui/icons-material";
 import { DrawerInvoice } from "./components/DrawerInvoice.component";
 import { useDrawerInvoiceStore } from "../../store/drawerInvoiceStore";
-import {
-  statusModalDeleteOrder,
-  statusModalPayOrder,
-} from "../../services/orders.service";
+import { statusModalDeleteOrder } from "../../services/orders.service";
 
 import { OrderStatus } from "../../../../../models";
 import { ModalDeleteInvoice } from "../../components/modals/ModalDeleteInvoice.component";
@@ -51,7 +45,6 @@ import { ModalDeleteInvoice } from "../../components/modals/ModalDeleteInvoice.c
 import { generateOrderPdf } from "../../helpers/pdf-orders";
 import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 import { LabelStatusPaid } from "../../components/LabelStatusPaid.component";
-import { format } from "date-fns";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalCloseOrder } from "../../components";
 
@@ -134,6 +127,8 @@ export const EditOrder = () => {
       reset();
     };
   }, []);
+
+  if (isLoading) return <CircularProgress />;
 
   if (!activeOrder) return <></>;
 

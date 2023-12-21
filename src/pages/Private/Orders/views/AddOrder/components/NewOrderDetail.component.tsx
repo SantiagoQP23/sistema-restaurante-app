@@ -1,19 +1,23 @@
 import { FC, useEffect, useState } from "react";
 
-import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Chip, IconButton, Stack, Typography } from "@mui/material";
 
 import { DeleteOutline, EditOutlined } from "@mui/icons-material";
 import { ICreateOrderDetail } from "../../../../../../models";
 
-import { sharingInformationService } from "../../../services/sharing-information.service";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { useNewOrderStore } from "../../../store/newOrderStore";
-import { CounterInput } from "../../../components";
+import { CounterInput, ModalAddDetail } from "../../../components";
+import NiceModal from "@ebay/nice-modal-react";
 
 interface Props {
   detalle: ICreateOrderDetail;
 }
 
+/**
+ * Component to show the details of the new order, it is used in the modal to add a new detail and in the order details component
+ * @version 1.1 20/12/2023 Adds product options chip
+ */
 export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   const [quantity, setQuantity] = useState<number>(detalle.quantity);
 
@@ -30,9 +34,7 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
   };
 
   const editDescription = () => {
-    console.log(detalle);
-
-    sharingInformationService.setSubject(true, detalle);
+    NiceModal.show(ModalAddDetail, { detail: detalle });
   };
 
   useEffect(() => {
@@ -59,6 +61,15 @@ export const NewOrderDetail: FC<Props> = ({ detalle }) => {
           <Stack>
             <Typography variant="h4" whiteSpace={"normal"}>
               {detalle.quantity} - {detalle.product.name}
+              {detalle.productOption && (
+                <Chip
+                  sx={{ ml: 1 }}
+                  label={`${detalle.productOption?.name} (${formatMoney(
+                    detalle.productOption?.price
+                  )})`}
+                  size="small"
+                />
+              )}
             </Typography>
 
             <Typography variant="subtitle1" whiteSpace="pre-wrap">

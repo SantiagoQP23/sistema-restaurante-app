@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 
 import { IOrderDetail } from "../../../../../../models";
-import { statusModalEditOrderDetail } from "../../../services/orders.service";
 import {
   CheckCircle,
   CheckCircleOutline,
@@ -22,6 +21,8 @@ import {
 } from "@mui/icons-material";
 import { UpdateOrderDetailDto } from "../../../dto";
 import { useUpdateOrderDetail } from "../../../hooks/useUpdateOrderDetail";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalEditOrderDetail } from "../../../components";
 
 const LinearProgressWrapper = styled(LinearProgress)(
   ({ theme }) => `
@@ -42,6 +43,10 @@ interface Props {
   orderId: string;
 }
 
+/**
+ * Component to show the details of the order in progress
+ * @version 1.1 20/12/2023 Adds product options chip
+ */
 export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
   const { update } = useUpdateOrderDetail();
 
@@ -50,7 +55,7 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
   );
 
   const editDetail = () => {
-    statusModalEditOrderDetail.setSubject(true, detail, orderId);
+    NiceModal.show(ModalEditOrderDetail, { detail: detail, orderId: orderId });
   };
 
   const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +110,18 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
         </ListItemIcon>
 
         <ListItemText
-          primary={`${detail.product.name}`}
+          primary={
+            <>
+              {detail.product.name}
+              {detail.productOption && (
+                <Chip
+                  sx={{ ml: 1 }}
+                  label={`${detail.productOption?.name} `}
+                  size="small"
+                />
+              )}
+            </>
+          }
           primaryTypographyProps={{
             variant: "h4",
             color:

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { useState } from "react";
 
 import {
   TextField,
@@ -10,10 +10,10 @@ import {
   Typography,
   Box,
   Stack,
+  Chip,
 } from "@mui/material/";
 
 import { ICreateOrderDetail, IOrder } from "../../../../../models/orders.model";
-import { sharingInformationService } from "../../services/sharing-information.service";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../redux/slices/orders/orders.slice";
@@ -24,24 +24,40 @@ import { useCreateOrderDetail } from "../../hooks/useCreateOrderDetail";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { CounterInput } from "../CounterInput.component";
-import { ProductStatus } from "../../../../../models";
+import { ProductOption, ProductStatus } from "../../../../../models";
 import { Label } from "../../../../../components/ui";
 import { useNewOrderStore } from "../../store/newOrderStore";
+import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
+import { Scrollbar } from "../../../components";
+import { formatMoney } from "../../../Common/helpers/format-money.helper";
 
-interface Props {}
+interface Props {
+  detail: ICreateOrderDetail;
+}
 
-export const ModalAddDetail: FC<Props> = () => {
-  const [detail, setDetail] = useState<ICreateOrderDetail>();
+/**
+ * Modal to add a product to the active order or to the new order
+ * @author Santiago Quirumbay
+ * @version 1.1 18/12/2023 Adds NiceModal and remove rxjs
+ * @version 1.2 19/12/2023 Adds product options chip
+ */
+export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
+  const modal = useModal();
+  const product = detail?.product;
+  const availableOptions = product?.options
+    ? product?.options.filter((option) => option.isAvailable)
+    : [];
+
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(detail?.quantity || 1);
-  const [open, setOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<
+    ProductOption | undefined
+  >(detail.productOption ? detail.productOption : undefined);
 
   const { addDetail, details, updateDetail } = useNewOrderStore(
     (state) => state
   );
   const { activeOrder } = useSelector(selectOrders);
-
-  const subscription$ = sharingInformationService.getSubject();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -51,6 +67,14 @@ export const ModalAddDetail: FC<Props> = () => {
     setQuantity(value);
   };
 
+  const closeModal = () => {
+    modal.hide();
+    setDescription("");
+  };
+
+  /**
+   * @version 1.1 20/12/2023 Adds product option
+   */
   const addProductoToOrder = (order: IOrder) => {
     const data: CreateOrderDetailDto = {
       orderId: order.id,
@@ -62,7 +86,10 @@ export const ModalAddDetail: FC<Props> = () => {
     if (description) {
       data.description = description;
     }
-
+    if (selectedOption) {
+      data.productOptionId = selectedOption.id;
+    }
+    console.log(data);
     createOrderDetail(data);
   };
 
@@ -70,65 +97,39 @@ export const ModalAddDetail: FC<Props> = () => {
     if (activeOrder) {
       addProductoToOrder(activeOrder);
     } else {
-      // dispatch({
-      //   type: OrderActionType.ADD_DETAIL,
-      //   payload: { ...detail!, quantity, description },
-      // });
-
       const detailExists = details.find(
-        (currentDetail) => currentDetail.product.id === detail!.product.id
+        (currentDetail) =>
+          currentDetail.product.id === detail!.product.id &&
+          currentDetail.productOption?.id === selectedOption?.id
       );
 
       if (detailExists) {
-        updateDetail({ ...detail!, quantity, description });
+        updateDetail({
+          ...detail!,
+          quantity,
+          description,
+          productOption: selectedOption,
+        });
       } else {
-        addDetail({ ...detail!, quantity, description });
-
+        addDetail({
+          ...detail!,
+          quantity,
+          description,
+          productOption: selectedOption,
+        });
         enqueueSnackbar(`${detail?.product.name} agregado`, {
           variant: "success",
         });
       }
     }
 
-    // updateDetail({...detail!, description})
-
     setDescription("");
-    setOpen(false);
+    closeModal();
   };
-
-  useEffect(() => {
-    subscription$.subscribe((data) => {
-      const { value, detalle } = data;
-
-      const detail = details.find(
-        (detail) => detail.product.id === detalle.product.id
-      );
-
-      if (detail) {
-        setQuantity(detail.quantity);
-        setDetail(detail);
-        setDescription(detail.description || "");
-      } else {
-        setDetail(detalle);
-        setDescription(data.detalle?.description || "");
-      }
-
-      setOpen(!!value);
-      // setCounter(data.detalle?.quantity || 1);
-    });
-  }, [detail]);
 
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setDescription("");
-        }}
-      >
-        {/* <DialogTitle>Añadir Producto</DialogTitle> */}
-
+      <Dialog {...muiDialogV5(modal)}>
         <DialogContent
           sx={{
             width: 300,
@@ -143,16 +144,74 @@ export const ModalAddDetail: FC<Props> = () => {
             </Box>
             <Typography variant="h4">${detail?.product.price}</Typography>
 
+            {/* <List sx={{ p: 0 }} dense>
+              {detail?.product.options.map((option) => (
+                <ListItem key={option.id}>
+                  <Checkbox icon={icon} checkedIcon={checkedIcon} />
+                  <ListItemText primary={option.name} />
+                </ListItem>
+              ))}
+            </List> */}
+
+            {availableOptions.length > 0 && (
+              <Scrollbar autoHeight height="auto">
+                <Box
+                  sx={{
+                    // overflowX: "auto",
+                    display: "flex",
+                    gap: 1,
+                  }}
+                >
+                  {availableOptions.map((option) => (
+                    <Chip
+                      key={option.id}
+                      label={`${option?.name} (${formatMoney(option?.price)})`}
+                      variant={
+                        option === selectedOption ? "filled" : "outlined"
+                      }
+                      onClick={() => setSelectedOption(option)}
+                      color={option === selectedOption ? "primary" : "default"}
+                    />
+                  ))}
+                </Box>
+              </Scrollbar>
+            )}
+
+            <Box>
+              {/* <Autocomplete
+                id="checkboxes-tags-demo"
+                options={product.options}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Opciones"
+                    placeholder="Opción"
+                    variant="standard"
+                  />
+                )}
+              /> */}
+            </Box>
+
             {detail?.product.description && (
               <Box>
-                {/* <Typography variant="subtitle1" >Descripción</Typography> */}
                 <Typography variant="body1" style={{ whiteSpace: "pre-wrap" }}>
                   {detail?.product.description}
                 </Typography>
               </Box>
             )}
-
-            {/* <Divider /> */}
 
             {detail?.product.status !== ProductStatus.AVAILABLE ? (
               <>
@@ -166,13 +225,10 @@ export const ModalAddDetail: FC<Props> = () => {
                   justifyContent="flex-end"
                   my={2}
                 >
-                  {/* <Typography variant="h5" >Cantidad</Typography> */}
-
                   <CounterInput
                     value={detail?.quantity || 1}
                     onChange={handleQuantityChange}
                   />
-                  {/* <Typography sx={{ width: 40, textAlign: 'center' }}>{counter}</Typography> */}
                 </Stack>
 
                 <FormControl fullWidth>
@@ -195,14 +251,7 @@ export const ModalAddDetail: FC<Props> = () => {
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: "center" }}>
-          <Button
-            onClick={() => {
-              setOpen(false);
-              setDescription("");
-            }}
-          >
-            Cancelar
-          </Button>
+          <Button onClick={closeModal}>Cancelar</Button>
 
           {detail?.product.status === ProductStatus.AVAILABLE && (
             <LoadingButton
@@ -218,4 +267,4 @@ export const ModalAddDetail: FC<Props> = () => {
       </Dialog>
     </>
   );
-};
+});
