@@ -6,7 +6,7 @@ import { SocketResponse } from "../../../../models/socket-response.dto";
 import { EventsEmitSocket } from "../../Orders/interfaces/events-sockets.interface";
 import { CreateBillDto, RemoveBillDto, UpdateBillDto } from "../dto";
 import { useQuery } from "@tanstack/react-query";
-import { getBill } from "../services/bills.service";
+import { getBill, getBills } from "../services/bills.service";
 import { useWebSocket } from "../../../../hooks/useWebSockets";
 
 export const useCreateBill = () => {
@@ -29,6 +29,10 @@ export const useBill = (term: number) => {
   return useQuery(["bill", term], () => getBill(term), {
     enabled: !!term,
   });
+};
+
+export const useBills = () => {
+  return useQuery(["bills"], () => getBills());
 };
 
 export const useDeleteBill = () => {

@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useBill, useUpdateBill } from "../../hooks/useBills";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -40,7 +40,9 @@ export const PaymentBill = () => {
 
   if (!id) return <Navigate to="/bills" replace />;
 
-  const { isLoading, data: bill, refetch } = useBill(+id);
+  const { isLoading, data: bill } = useBill(+id);
+
+  const navigate = useNavigate();
 
   const { mutate: updateBill, isLoading: isUpdating } = useUpdateBill();
 
@@ -91,6 +93,11 @@ export const PaymentBill = () => {
   const handleChangeAmountPaid = (event: React.ChangeEvent<HTMLInputElement>) =>
     setReceivedAmount(+event.target.value);
 
+  const navigateToBill = () => {
+    if (!bill) return;
+    navigate(`/bills/${bill.id}`);
+  };
+
   const submitPayment = () => {
     if (
       !bill ||
@@ -116,11 +123,15 @@ export const PaymentBill = () => {
     }
 
     updateBill(data, {
-      onSuccess: ({data}) => {
-        refetch();
+      onSuccess: () => {
+        navigateToBill();
       },
     });
   };
+
+  useEffect(() => {
+    if (bill && bill.isPaid) navigateToBill();
+  }, [bill]);
 
   if (isLoading) return <>Loading...</>;
 

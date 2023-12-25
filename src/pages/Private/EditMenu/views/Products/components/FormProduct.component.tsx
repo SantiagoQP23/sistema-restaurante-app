@@ -62,7 +62,7 @@ export const FormProduct: FC<Props> = ({ product }) => {
 
   const { productionAreas } = useProductionAreasStore();
 
-  const { category, productionArea, images, ...restProduct } = selectedProduct;
+  const { category, productionArea, images, options, ...restProduct } = selectedProduct;
 
   const { sections } = useSelector(selectMenu);
 

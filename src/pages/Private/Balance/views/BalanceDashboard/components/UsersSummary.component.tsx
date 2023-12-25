@@ -20,6 +20,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  CardActions,
 } from "@mui/material";
 import { Person, Print } from "@mui/icons-material";
 import { Pie } from "react-chartjs-2";
@@ -39,6 +40,7 @@ import { generateRandomColor } from "../../../../Common/helpers/randomColor.help
 import { generateWaiterReportPdf } from "../../../../Reports/helpers/pdf-reports.helper";
 import html2canvas from "html2canvas";
 import { ValidRoles } from "../../../../Common/models/valid-roles.model";
+import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -55,9 +57,7 @@ export const UsersSummary = () => {
     handleChangeStartDate,
   } = useDateFilter(Period.TODAY);
 
-  const { data, refetch } = useQuery<
-    ResponseIncomesByUser[]
-  >(
+  const { data, refetch } = useQuery<ResponseIncomesByUser[]>(
     ["best-selling-products", { period, startDate, endDate }],
     () => {
       return getIncomesByUser({
@@ -312,6 +312,22 @@ export const UsersSummary = () => {
 
         */}
         </List>
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            p: 2,
+          }}
+        >
+          <Typography>
+            Total:{" "}
+            <Typography variant="h4" component="span">
+              {formatMoney(
+                data?.reduce((acc, user) => acc + Number(user.total), 0) || 0
+              )}
+            </Typography>
+          </Typography>
+        </CardActions>
       </Card>
     </>
   );

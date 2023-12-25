@@ -165,10 +165,8 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
                   {availableOptions.map((option) => (
                     <Chip
                       key={option.id}
-                      label={`${option?.name} (${formatMoney(option?.price)})`}
-                      variant={
-                        option === selectedOption ? "filled" : "outlined"
-                      }
+                      label={`${option?.name} ${formatMoney(option?.price)}`}
+                      variant="filled"
                       onClick={() => setSelectedOption(option)}
                       color={option === selectedOption ? "primary" : "default"}
                     />

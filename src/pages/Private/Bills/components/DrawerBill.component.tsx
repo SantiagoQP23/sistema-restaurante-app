@@ -35,9 +35,14 @@ export const DrawerBill = NiceModal.create<Props>(({ bill }) => {
     NiceModal.show(DeleteBillModal, { bill });
   };
 
-  const navitateToBill = () => {
+  const navitateToEditBill = () => {
     closeDrawer();
     navigate(`/bills/${bill.id}/edit`);
+  };
+
+  const navigateToBill = () => {
+    closeDrawer();
+    navigate(`/bills/${bill.id}`);
   };
 
   const handleDeleteBill = () => {
@@ -116,15 +121,25 @@ export const DrawerBill = NiceModal.create<Props>(({ bill }) => {
               Total: {formatMoney(bill.total)}
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
             <Button
               variant="contained"
               color="primary"
-              onClick={navitateToBill}
-              disabled={bill.isPaid || !bill.isActive}
+              onClick={navigateToBill}
             >
-              Cobrar
+              Ver
             </Button>
+
+            {!bill.isPaid && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={navitateToEditBill}
+                disabled={bill.isPaid || !bill.isActive}
+              >
+                Cobrar
+              </Button>
+            )}
           </Box>
         </Stack>
       </Drawer>
