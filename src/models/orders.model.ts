@@ -1,6 +1,7 @@
 import { IUser, IProduct, ProductOption } from ".";
 import { ITable } from "./table.model";
-import { Invoice } from "../pages/Private/Orders/models/Invoice.model";
+// import { Invoice } from "../pages/Private/Orders/models/Invoice.model";
+import { Bill } from "./bill.model";
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -36,6 +37,10 @@ export enum OrderStatusSpanish {
   CANCELLED = "CANCELADO",
 }
 
+/**
+ * Order Model
+ * @version v1.1 22-12-2023 Adds the field bills and remove invoices
+ */
 export interface IOrder {
   notes: string;
   deliveryTime: Date;
@@ -52,8 +57,7 @@ export interface IOrder {
   updatedAt: Date;
   user: IUser;
   isClosed: boolean;
-
-  invoices: Invoice[];
+  bills: Bill[];
 }
 
 export interface IOrderDetail {

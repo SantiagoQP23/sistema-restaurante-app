@@ -12,148 +12,125 @@ import {
   Typography,
   Stack,
   Button,
-  TextField,
-  InputAdornment,
 } from "@mui/material";
 import { useInvoiceStore } from "../../../store/invoiceStore";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { IOrder, IOrderDetail } from "../../../../../../models";
 import { CounterInput } from "../../../components";
 import { CardHeader } from "@mui/material/";
-import { ArrowBackIos, ArrowRight, AttachMoney } from "@mui/icons-material";
+import { ArrowBackIos, Send } from "@mui/icons-material";
 import { Label } from "../../../../../../components/ui";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
+import { useCreateBill } from "../../../../Bills/hooks/useBills";
+import { CreateBillDto } from "../../../../Bills/dto";
+import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { LoadingButton } from "@mui/lab";
+import { useDispatch } from "react-redux";
+import { setActiveOrder } from "../../../../../../redux";
+
+interface SelectedDetails {
+  [id: string]: {
+    detail: IOrderDetail;
+    quantity: number;
+  };
+}
 
 interface Props {
   order: IOrder;
 }
 
+/**
+ * Componente for create bills
+ * @version v1.1 22-12-2023 Adds create bills
+ */
 export const Account: FC<Props> = ({ order }) => {
-  const {
-    details,
-    addDetail,
-    updateDetail,
-    removeDetail,
-    resetDetails,
-    discount,
-    handleBackStep,
-    handleNextStep,
-    setDiscount,
-    amount,
-    total,
-  } = useInvoiceStore((state) => state);
-
-  const [selectedDetails, setSelectedDetails] = useState<string[]>(
-    details.map((detail) => detail.orderDetail.id)
+  const details = order.details.filter(
+    (detail) => detail.qtyPaid !== detail.quantity
   );
-  const [selectAll, setSelectAll] = useState(true);
 
-  const handleUpdateDetail = (detailId: string, quantity: number) => {
-    const orderDetail = order.details.find((detail) => detail.id === detailId)!;
-    updateDetail({ orderDetail, quantity });
+  const { handleBackStep } = useInvoiceStore((state) => state);
+
+  const dispatch = useDispatch();
+
+  const [selectedDetails, setSelectedDetails] = useState<SelectedDetails>({});
+
+  const [selectAll, setSelectAll] = useState(false);
+
+  const [total, setTotal] = useState(0);
+
+  const { activeCashRegister } = useCashRegisterStore((state) => state);
+
+  const { mutate: createBill, isLoading } = useCreateBill();
+
+  const getTotal = (selectedDetails: SelectedDetails) => {
+    let total = 0;
+    Object.keys(selectedDetails).forEach((id) => {
+      const selectedDetail = selectedDetails[id];
+      total += selectedDetail.quantity * selectedDetail.detail.price;
+    });
+    return total;
   };
 
-  const handleChangeDiscount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
+  const handleToggleSelectAll = (allDetails: boolean) => {
+    // if (allDetails) {
+    //   console.log("total" + order.total);
+    //   setTotal(order.total);
+    // }
+    // {
+    //   setTotal(getTotal());
+    // }
+    setSelectAll(() => {
+      setTotal(allDetails ? order.total : getTotal(selectedDetails));
 
-    if (isNaN(value)) setDiscount(0);
-
-    if (value < 0) {
-      setDiscount(0);
-      return;
-    }
-
-    if (value > order!.total) {
-      return;
-    }
-
-    setDiscount(value);
+      return allDetails;
+    });
   };
 
-  const handleDetailToggle = (detailId: string) => () => {
-    const selectedIndex = selectedDetails.indexOf(detailId);
-    let newSelectedDetails = [];
+  const handleUpdateDetail = (orderDetail: IOrderDetail, quantity: number) => {
+    setSelectedDetails((prev) => {
+      const newSelectedDetails: SelectedDetails = { ...prev };
 
-    if (selectedIndex === -1) {
-      // Agregar detalle seleccionado
-      newSelectedDetails = [...selectedDetails, detailId];
+      newSelectedDetails[orderDetail.id] = {
+        detail: orderDetail,
+        quantity,
+      };
+      setTotal(getTotal(newSelectedDetails));
+      return newSelectedDetails;
+    });
+  };
 
-      const orderDetail = order.details.find(
-        (detail) => detail.id === detailId
-      )!;
+  const onSubmit = () => {
+    if (!activeCashRegister) return;
 
-      addDetail({
-        orderDetail,
-        quantity: orderDetail.quantity - orderDetail.qtyPaid,
-      });
+    const data: CreateBillDto = {
+      orderId: order.id,
+      cashRegisterId: activeCashRegister.id,
+      details: [],
+    };
+
+    if (selectAll) {
+      data.details = details.map((detail) => ({
+        orderDetailId: detail.id,
+        quantity: detail.quantity - detail.qtyPaid,
+      }));
     } else {
-      // Eliminar detalle seleccionado
-      newSelectedDetails = selectedDetails.filter((id) => id !== detailId);
-
-      removeDetail(detailId);
-    }
-
-    setSelectedDetails(newSelectedDetails);
-  };
-
-  const handleSelectAll = (all: boolean) => {
-    resetDetails();
-
-    console.log({ all });
-
-    const allDetails = order.details
-      .filter((detail) => detail.qtyPaid !== detail.quantity)
-      .map((detail) => detail.id);
-
-    allDetails.forEach((detailId) => {
-      const orderDetail = order.details.find(
-        (detail) => detail.id === detailId
-      )!;
-
-      addDetail({
-        orderDetail,
-        quantity: all ? orderDetail.quantity - orderDetail.qtyPaid : 0,
+      // Enviar solo los seleccionados
+      data.details = Object.keys(selectedDetails).map((id) => {
+        const selectedDetail = selectedDetails[id];
+        return {
+          orderDetailId: selectedDetail.detail.id,
+          quantity: selectedDetail.quantity,
+        };
       });
+    }
+    console.log(data);
+    createBill(data, {
+      onSuccess: ({ data }) => {
+        const order = data!.order;
+        dispatch(setActiveOrder(order));
+      },
     });
-
-    setSelectedDetails(allDetails);
-
-    console.log({ details });
   };
-  const handleUpdateAll = (all: boolean) => {
-    console.log({ all });
-
-    const allDetails = order.details
-      .filter((detail) => detail.qtyPaid !== detail.quantity)
-      .map((detail) => detail.id);
-
-    allDetails.forEach((detailId) => {
-      const orderDetail = order.details.find(
-        (detail) => detail.id === detailId
-      )!;
-
-      handleUpdateDetail(
-        detailId,
-        all ? orderDetail.quantity - orderDetail.qtyPaid : 0
-      );
-    });
-
-    setSelectedDetails(allDetails);
-
-    console.log({ details });
-  };
-
-  const BtnNext = () => (
-    <Button
-      color="primary"
-      onClick={handleNextStep}
-      endIcon={<ArrowRight fontSize="small" />}
-      size="small"
-      variant="contained"
-    >
-      Siguiente
-    </Button>
-  );
 
   const BtnBack = () => (
     <Button
@@ -166,26 +143,18 @@ export const Account: FC<Props> = ({ order }) => {
     </Button>
   );
 
-  useEffect(() => {
-    handleSelectAll(true);
-  }, []);
-
-  function getDescription(orderDetail: IOrderDetail) {
-    return (
-      <>
-        <Label color="warning">
-          {orderDetail.quantity - orderDetail.qtyPaid}
-        </Label>{" "}
-        <b>
-          {`${orderDetail.product.name} `}
-          {orderDetail.productOption
-            ? `(${orderDetail.productOption.name})`
-            : ""}
-        </b>{" "}
-        de <b>{orderDetail.quantity}</b>
-      </>
-    );
-  }
+  const getDescription = (orderDetail: IOrderDetail) => (
+    <>
+      <Label color="warning">
+        {orderDetail.quantity - orderDetail.qtyPaid}
+      </Label>{" "}
+      <b>
+        {`${orderDetail.product.name} `}
+        {orderDetail.productOption ? `(${orderDetail.productOption.name})` : ""}
+      </b>{" "}
+      de <b>{orderDetail.quantity}</b>
+    </>
+  );
 
   return (
     <>
@@ -201,8 +170,7 @@ export const Account: FC<Props> = ({ order }) => {
                     <Checkbox
                       checked={selectAll}
                       onChange={(e) => {
-                        setSelectAll(e.target.checked);
-                        handleUpdateAll(e.target.checked);
+                        handleToggleSelectAll(e.target.checked);
                       }}
                     />
                   }
@@ -228,7 +196,7 @@ export const Account: FC<Props> = ({ order }) => {
                   <TableCell>Producto</TableCell>
                   <TableCell>Precio</TableCell>
 
-                  <TableCell>Subtotal</TableCell>
+                  <TableCell align="right">Subtotal</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -238,33 +206,22 @@ export const Account: FC<Props> = ({ order }) => {
                     {!selectAll && (
                       <TableCell>
                         <CounterInput
-                          value={detail.quantity}
+                          value={selectedDetails[detail.id]?.quantity || 0}
                           onChange={(value: number) => {
-                            handleUpdateDetail(detail.orderDetail.id, value);
+                            handleUpdateDetail(detail, value);
                           }}
-                          max={
-                            detail.orderDetail.quantity -
-                            detail.orderDetail.qtyPaid
-                          }
+                          max={detail.quantity - detail.qtyPaid}
                           min={0}
                         />
                       </TableCell>
                     )}
-                    <TableCell>{getDescription(detail.orderDetail)}</TableCell>
-                    <TableCell>
-                      {formatMoney(detail.orderDetail.price)}
+                    <TableCell>{getDescription(detail)}</TableCell>
+                    <TableCell>{formatMoney(detail.price)}</TableCell>
+                    <TableCell align="right">
+                      {formatMoney(
+                        detail.price * selectedDetails[detail.id]?.quantity || 0
+                      )}
                     </TableCell>
-                    <TableCell>
-                      {formatMoney(detail.orderDetail.price * detail.quantity)}
-                    </TableCell>
-                    {/* <TableCell align='center'>
-                            <IconButton
-                              color='primary'
-                              onClick={() => { }}
-                            >
-                              <DetailsOutlined />
-                            </IconButton>
-                          </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>
@@ -281,7 +238,7 @@ export const Account: FC<Props> = ({ order }) => {
               </Typography>
             ) : (
               <Grid container spacing={3} p={2} width="auto">
-                <Grid item xs={8}>
+                {/* <Grid item xs={8}>
                   <Typography
                     variant="subtitle1"
                     color="textSecondary"
@@ -303,8 +260,8 @@ export const Account: FC<Props> = ({ order }) => {
                   >
                     Descuento
                   </Typography>
-                </Grid>
-                <Grid item xs={4} display="flex" justifyContent="right">
+                </Grid> */}
+                {/* <Grid item xs={4} display="flex" justifyContent="right">
                   <TextField
                     id="precio-producto"
                     type="number"
@@ -327,7 +284,7 @@ export const Account: FC<Props> = ({ order }) => {
                       step: 0.25,
                     }}
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={8}>
                   <Typography
                     variant="h6"
@@ -339,7 +296,7 @@ export const Account: FC<Props> = ({ order }) => {
                 </Grid>
                 <Grid item xs={4}>
                   <Typography variant="h4" textAlign="right">
-                    {formatMoney(amount - discount)}
+                    {formatMoney(total)}
                   </Typography>
                 </Grid>
               </Grid>
@@ -349,7 +306,16 @@ export const Account: FC<Props> = ({ order }) => {
 
         <Stack direction="row" spacing={1} justifyContent="space-between">
           <BtnBack />
-          <BtnNext />
+          {/* <BtnNext /> */}
+          <LoadingButton
+            variant="contained"
+            endIcon={<Send />}
+            onClick={onSubmit}
+            loading={isLoading}
+            disabled={!activeCashRegister || total === 0}
+          >
+            Crear cuenta
+          </LoadingButton>
         </Stack>
       </Stack>
     </>

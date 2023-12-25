@@ -16,6 +16,7 @@ import { RestaurantRouter } from "../Restaurant/router";
 import { UnauthorizedPage } from "../../Status/Unauthorized.page";
 import Auth from "../components/Auth.component";
 import { ValidRoles } from "../Common/models/valid-roles.model";
+import { BillsRouter } from "../Bills/routers/Bills.router";
 
 export const PrivateRouter: RouteObject[] = [
   {
@@ -29,6 +30,7 @@ export const PrivateRouter: RouteObject[] = [
       ClientsRouter,
       TablesRouter,
       UserRouter,
+      BillsRouter,
       {
         path: PrivateRoutes.USERS,
         element: <Auth allowedRoles={[ValidRoles.admin]} />,

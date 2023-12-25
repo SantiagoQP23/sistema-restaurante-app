@@ -146,7 +146,7 @@ export const PayOrder: FC<Props> = ({ order }) => {
                         p: 1,
                       }}
                     >
-                      <BtnFinalConsumer />
+                      {/* <BtnFinalConsumer /> */}
                     </Card>
                   </Grid>
 

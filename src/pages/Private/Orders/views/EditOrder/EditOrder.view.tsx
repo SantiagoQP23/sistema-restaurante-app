@@ -48,6 +48,10 @@ import { LabelStatusPaid } from "../../components/LabelStatusPaid.component";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalCloseOrder } from "../../components";
 
+/**
+ * Componente for edit order
+ * @version v1.1 22-12-2023 Adds bills
+ */
 export const EditOrder = () => {
   const navigate = useNavigate();
 
@@ -205,7 +209,7 @@ export const EditOrder = () => {
                   size="small"
                   onClick={() => changeStep(1)}
                 >
-                  Cobrar
+                  Crear cuentas
                 </Button>
               )}
               {activeOrder.isPaid &&
@@ -249,9 +253,9 @@ export const EditOrder = () => {
                 <Step>
                   <StepLabel>Cuenta</StepLabel>
                 </Step>
-                <Step>
+                {/* <Step>
                   <StepLabel>Pago</StepLabel>
-                </Step>
+                </Step> */}
               </Stepper>
             }
 

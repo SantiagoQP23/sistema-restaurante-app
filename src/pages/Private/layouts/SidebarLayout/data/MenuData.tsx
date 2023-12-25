@@ -37,6 +37,10 @@ const generalSection = {
   ],
 };
 
+/**
+ * Routes for orders
+ * @version v1.1 22-12-2023 Change invoices for bills
+ */
 const ordersSection = {
   title: "PEDIDOS",
   items: [
@@ -57,9 +61,9 @@ const ordersSection = {
       to: "/orders/list",
     },
     {
-      title: "Comprobantes",
+      title: "Cuentas",
       icon: <ReceiptLong />,
-      to: "/invoices",
+      to: "/bills",
     },
   ],
 };

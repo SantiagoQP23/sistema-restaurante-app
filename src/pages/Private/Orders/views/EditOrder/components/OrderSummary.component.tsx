@@ -23,7 +23,7 @@ import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
 import { ComboBoxUser } from "../../../components/ComboBoxUser.component";
 
 import { useInvoiceStore } from "../../../store/invoiceStore";
-import { InvoicesList } from "./InvoicesList.component";
+import { BillsList } from "./BillsList.component";
 import { useModal } from "../../../../../../hooks";
 import { ModalEditOrder } from "./ModalEditOrder.component";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
@@ -33,6 +33,10 @@ interface PropsOrder {
   order: IOrder;
 }
 
+/**
+ * Componente to show order summary
+ * @version v1.1 22-12-2023 Adds bills
+ */
 export const OrderSummary: FC<PropsOrder> = ({ order }) => {
   const { handleClose, handleOpen, isOpen } = useModal();
 
@@ -225,9 +229,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               </Stack>
             </Card>
 
-            {order.invoices.length > 0 && (
-              <InvoicesList invoices={order.invoices} />
-            )}
+            {order.bills.length > 0 && <BillsList bills={order.bills} />}
           </Stack>
         </Grid>
       </Grid>
