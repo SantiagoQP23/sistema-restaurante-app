@@ -159,11 +159,7 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
                       <Chip
                         key={option.id}
                         label={`${option?.name} ${formatMoney(option?.price)}`}
-                        variant={
-                          option.id === selectedOption?.id
-                            ? "filled"
-                            : "outlined"
-                        }
+                        variant="filled"
                         onClick={() => setSelectedOption(option)}
                         color={
                           option.id === selectedOption?.id

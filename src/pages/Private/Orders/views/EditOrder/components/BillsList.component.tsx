@@ -18,17 +18,18 @@ import { useDrawerInvoiceStore } from "../../../store/drawerInvoiceStore";
 import { CardHeader, CardActions } from "@mui/material/";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { LabelInvoiceStatus } from "../../../../components/LabelInvoiceStatus.component";
+import { Bill } from "../../../../../../models/bill.model";
+import { Label } from "../../../../../../components/ui";
+import NiceModal from "@ebay/nice-modal-react";
+import { DrawerBill } from "../../../../Bills/components/DrawerBill.component";
 
 interface Props {
-  invoices: Invoice[];
+  bills: Bill[];
 }
 
-export const InvoicesList: FC<Props> = ({ invoices }) => {
-  const { setActiveInvoice, setOpen } = useDrawerInvoiceStore((state) => state);
-
-  const handleOpenDrawer = (invoice: Invoice) => {
-    setActiveInvoice(invoice);
-    setOpen(true);
+export const BillsList: FC<Props> = ({ bills }) => {
+  const showDrawerBill = (bill: Bill) => {
+    NiceModal.show(DrawerBill, { bill });
   };
 
   return (
@@ -37,15 +38,15 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
         <CardHeader title={"Pagos"} />
         <CardContent>
           <Stack>
-            {invoices.map((invoice) => (
+            {bills.map((bill) => (
               <>
                 <ListItemButton
-                  onClick={() => handleOpenDrawer(invoice)}
-                  key={invoice.id}
+                  onClick={() => showDrawerBill(bill)}
+                  key={bill.id}
                 >
                   <ListItemAvatar>
                     <Avatar>
-                      <Receipt color={invoice.isActive ? "inherit" : "error"} />
+                      <Receipt color={bill.isActive ? "inherit" : "error"} />
                     </Avatar>
                   </ListItemAvatar>
 
@@ -53,22 +54,23 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
                     primary={
                       <>
                         <Typography variant="h5" fontWeight="bold">
-                          Factura N° {invoice.transactionNumber}{" "}
-                          <LabelInvoiceStatus status={invoice.status} />
+                          Cuenta N° {bill.num}{" "}
+                          {bill.isPaid && (
+                            <Label color="success" sx={{ ml: 1 }}>
+                              Pagado
+                            </Label>
+                          )}
                         </Typography>
                       </>
                     }
                     secondary={
                       <>
                         <Typography>
-                          {invoice.client &&
-                            `${invoice.client.person.firstName} ${invoice.client.person.lastName}`}
+                          {bill.client &&
+                            `${bill.client.person.firstName} ${bill.client.person.lastName}`}
                         </Typography>
                         <Typography fontSize={11}>
-                          {format(
-                            new Date(invoice.createdAt),
-                            "dd/MM/yyy HH:mm"
-                          )}
+                          {format(new Date(bill.createdAt), "dd/MM/yyy HH:mm")}
                         </Typography>
                       </>
                     }
@@ -76,7 +78,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
                   <ListItemSecondaryAction>
                     <Typography variant="h5">
-                      {formatMoney(invoice.amount || 0)}
+                      {formatMoney(bill.total || 0)}
                     </Typography>
                   </ListItemSecondaryAction>
                 </ListItemButton>
@@ -92,7 +94,7 @@ export const InvoicesList: FC<Props> = ({ invoices }) => {
 
           <Typography variant="h5">
             {formatMoney(
-              invoices.reduce((acc, d) => acc + (d.amount || 0), 0) || 0
+              bills.reduce((acc, d) => acc + (d.total || 0), 0) || 0
             )}
           </Typography>
         </CardActions>

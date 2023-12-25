@@ -3,7 +3,7 @@ export * from './BtnFinalConsumer.component';
 export * from './DraftInvoice.component';
 export * from './DraftInvoiceSelect.component';
 export * from './DrawerInvoice.component';
-export * from './InvoicesList.component';
+export * from './BillsList.component';
 export * from './ModalEditOrder.component';
 export * from './ModalInvoice.component';
 export * from './NewDraftInvoice.component';
