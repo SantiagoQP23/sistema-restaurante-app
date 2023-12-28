@@ -1,11 +1,5 @@
-import { useContext, useState, useEffect } from "react";
+import { useEffect } from "react";
 
-import { useSnackbar } from "notistack";
-import { SocketContext } from "../../../../context";
-import { UpdateOrderDetailDto } from "../dto/update-order-detail.dto";
-import { EventsEmitSocket } from "../interfaces/events-sockets.interface";
-import { SocketResponseOrder } from "../interfaces/responses-sockets.interface";
-import { CreateOrderDetailDto } from "../dto/create-order.dto";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loadOrders,
@@ -21,7 +15,6 @@ import {
   getOrders,
 } from "../services/orders.service";
 import { IOrder, OrderStatus } from "../../../../models";
-import { useNavigate } from "react-router-dom";
 import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 import { Period } from "../../../../models/period.model";
 import { useFilterOrders } from "./useFilterOrders";
@@ -44,7 +37,7 @@ export const useOrders = () => {
       }),
 
     {
-      onSuccess: (data) => {},
+      onSuccess: () => {},
     }
   );
 
@@ -114,8 +107,6 @@ export const useActiveOrders = () => {
 
 export const useOrder = (id: string) => {
   const dispatch = useDispatch();
-
-  const navigate = useNavigate();
 
   return useQuery<IOrder>(["order", id], () => getOrder(id), {
     enabled: !!id,

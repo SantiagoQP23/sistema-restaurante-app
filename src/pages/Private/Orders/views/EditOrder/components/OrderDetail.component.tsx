@@ -1,6 +1,6 @@
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
   Box,
@@ -22,22 +22,13 @@ import {
   CheckCircleOutline,
 } from "@mui/icons-material";
 import { IOrderDetail } from "../../../../../../models";
-import { useCounter } from "../../../hooks";
-
-import { SocketContext } from "../../../../../../context/SocketContext";
 
 import { UpdateOrderDetailDto } from "../../../dto/update-order-detail.dto";
-import { useSnackbar } from "notistack";
 import { selectOrders } from "../../../../../../redux/slices/orders/orders.slice";
-import {
-  statusModalDeleteOrderDetail,
-  statusModalDescriptionDetail,
-  statusModalEditOrderDetail,
-} from "../../../services/orders.service";
-import { styled, useTheme } from "@mui/material/styles";
-import { useUpdateOrderDetail } from "../../../hooks/useUpdateOrderDetail";
+import { statusModalDeleteOrderDetail } from "../../../services/orders.service";
+import { styled } from "@mui/material/styles";
+import { useUpdateOrderDetail } from "../../../hooks";
 import { CounterInput } from "../../../components/CounterInput.component";
-import { useDeleteOrderDetail } from "../../../hooks/useDeleteOrderDetail";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalEditOrderDetail } from "../../../components";
@@ -64,35 +55,15 @@ export const LinearProgressWrapper = styled(LinearProgress)(
  * @version 1.1 20/12/2023 Adds product option
  */
 export const OrderDetail: FC<Props> = ({ detail }) => {
-  const {
-    state: counter,
-    increment,
-    decrement,
-  } = useCounter(detail.quantity, 1, 500, detail.qtyDelivered);
-
   const [quantity, setQuantity] = useState(detail.quantity);
 
   const handleChangeQuantity = (value: number) => {
     setQuantity(value);
   };
 
-  const dispatch = useDispatch();
-
-  const theme = useTheme();
-
-  const { socket } = useContext(SocketContext);
-
   const { activeOrder } = useSelector(selectOrders);
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { update, loading } = useUpdateOrderDetail();
-
-  const editDescription = () => {
-    statusModalDescriptionDetail.setSubject(true, detail);
-  };
-
-  const { loading: loadingDelete, deleteOrderDetail } = useDeleteOrderDetail();
+  const { mutate: update } = useUpdateOrderDetail();
 
   const [checked, setChecked] = useState(
     detail.qtyDelivered === detail.quantity

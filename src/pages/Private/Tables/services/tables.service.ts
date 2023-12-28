@@ -6,13 +6,10 @@ import { SubjectDeleteTable } from "../helpers/subjects-tables.helper";
 
 export const statusModalDeleteTable = new SubjectDeleteTable();
 
-export const getTables = () => {
-  const controller = loadAbort();
+export const getTables = async (): Promise<ITable[]> => {
+  const resp = await restauranteApi.get<ITable[]>("/tables");
 
-  return {
-    call: restauranteApi.get<ITable>("/tables", { signal: controller.signal }),
-    controller,
-  };
+  return resp.data;
 };
 
 export const createTable = (data: ICreateTable) => {

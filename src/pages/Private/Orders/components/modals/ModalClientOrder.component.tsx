@@ -23,7 +23,7 @@ import {
 import { FormClient } from "../../../Clients/components/FormClient.component";
 import { TypeIdentification } from "../../../../../models/common.model";
 import { CreateClientDto } from "../../../Clients/dto/create-client.dto";
-import { useUpdateOrder } from "../../hooks/useUpdateOrder";
+import { useUpdateOrder } from "../../hooks";
 
 interface Props {
   client?: IClient;
@@ -58,7 +58,7 @@ export const ModalClientOrder: FC<Props> = () => {
     setOpen(false);
   };
 
-  const { updateOrder } = useUpdateOrder();
+  const { mutate: updateOrder } = useUpdateOrder();
 
   const clientAddMutation = useCreateCliente();
 

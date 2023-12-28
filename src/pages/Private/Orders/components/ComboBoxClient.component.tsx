@@ -1,11 +1,7 @@
-import { useContext, FC, useEffect } from "react";
+import { FC } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { useClients } from "../../Clients/hooks/useClients";
-import { OrderContext } from "../context/Order.context";
 import { IClient } from "../../../../models";
-import { useSelector } from "react-redux";
-import { selectOrders } from "../../../../redux";
-import { useUpdateOrder } from "../hooks/useUpdateOrder";
 
 interface Props {
   client: IClient | null;

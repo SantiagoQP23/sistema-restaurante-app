@@ -18,7 +18,7 @@ import {
   CreateOrderDto,
 } from "../../../dto/create-order.dto";
 
-import { useCreateOrder } from "../../../hooks/useCreateOrder";
+import { useCreateOrder } from "../../../hooks";
 import { LoadingButton } from "@mui/lab";
 
 import { PeopleCounter } from "./PeopleCounter.component";
@@ -30,11 +30,15 @@ interface Props {
   step: number;
 }
 
+/**
+ * Component that shows the summary of the new order
+ * @version 1.1 28/12/2023 Adds useCreateOrder hook
+ */
 export const NewOrderSummary: FC<Props> = () => {
   const { table, people, details, orderType, notes, setNotes } =
     useNewOrderStore((state) => state);
 
-  const { createOrder, loading } = useCreateOrder();
+  const { mutate: createOrder, isLoading, isOnline } = useCreateOrder();
 
   const handleChangeNotes = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNotes(e.target.value);
@@ -132,13 +136,14 @@ export const NewOrderSummary: FC<Props> = () => {
         <LoadingButton
           variant="contained"
           disabled={
+            !isOnline ||
             details.length <= 0 ||
             (!table && orderType === TypeOrder.IN_PLACE) ||
             people <= 0
           }
           onClick={submitAddOrder}
           fullWidth
-          loading={loading}
+          loading={isLoading}
         >
           Crear pedido
         </LoadingButton>

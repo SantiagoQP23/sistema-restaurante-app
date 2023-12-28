@@ -1,18 +1,15 @@
 import { useSnackbar } from "notistack";
-import { useState, useContext } from "react";
-import { SocketContext } from "../../../../context";
 import { IOrder } from "../../../../models";
-import { SocketResponse } from "../../../../models/socket-response.dto";
 import { EventsEmitSocket } from "../../Orders/interfaces/events-sockets.interface";
 import { CreateBillDto, RemoveBillDto, UpdateBillDto } from "../dto";
 import { useQuery } from "@tanstack/react-query";
 import { getBill, getBills } from "../services/bills.service";
-import { useWebSocket } from "../../../../hooks/useWebSockets";
+import { useEmitWebSocketsEvent } from "../../../../hooks/useEmitWebSocketsEvent";
 
 export const useCreateBill = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  return useWebSocket<{ order: IOrder }, CreateBillDto>(
+  return useEmitWebSocketsEvent<{ order: IOrder }, CreateBillDto>(
     EventsEmitSocket.createBill,
     {
       onSuccess: (resp) => {
@@ -36,40 +33,25 @@ export const useBills = () => {
 };
 
 export const useDeleteBill = () => {
-  const [loading, setLoading] = useState(false);
-
-  const { socket } = useContext(SocketContext);
-
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteBill = async (order: RemoveBillDto) => {
-    setLoading(true);
-
-    socket?.emit(
-      EventsEmitSocket.deleteBill,
-      order,
-      (resp: SocketResponse<{ order: IOrder }>) => {
-        setLoading(false);
-        if (resp.ok) {
-          enqueueSnackbar(resp.msg, { variant: "success" });
-        } else {
-          console.log(resp);
-          enqueueSnackbar(resp.msg, { variant: "error" });
-        }
-      }
-    );
-  };
-
-  return {
-    isLoading: loading,
-    deleteBill,
-  };
+  return useEmitWebSocketsEvent<{ order: IOrder }, RemoveBillDto>(
+    EventsEmitSocket.deleteBill,
+    {
+      onSuccess: (resp) => {
+        enqueueSnackbar(resp.msg, { variant: "success" });
+      },
+      onError: (resp) => {
+        enqueueSnackbar(resp.msg, { variant: "error" });
+      },
+    }
+  );
 };
 
 export const useUpdateBill = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  return useWebSocket<{ order: IOrder }, UpdateBillDto>(
+  return useEmitWebSocketsEvent<{ order: IOrder }, UpdateBillDto>(
     EventsEmitSocket.updateBill,
     {
       onSuccess: (resp) => {

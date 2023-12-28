@@ -18,7 +18,7 @@ import { IUser } from "../../../../../../models";
 
 import { IOrder, TypeOrder } from "../../../../../../models/orders.model";
 
-import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { useUpdateOrder } from "../../../hooks";
 
 import { ComboBoxUser } from "../../../components/ComboBoxUser.component";
 
@@ -42,7 +42,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
 
   const { step: activeStep } = useInvoiceStore((state) => state);
 
-  const { updateOrder } = useUpdateOrder();
+  const { mutate: updateOrder } = useUpdateOrder();
 
   const [showUser, setShowUser] = useState<boolean>(!!order.user);
 

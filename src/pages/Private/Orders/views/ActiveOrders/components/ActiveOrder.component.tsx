@@ -41,7 +41,7 @@ import { IOrder } from "../../../../../../models";
 import { statusModalStartOrder } from "../../../services/orders.service";
 import { BtnAddProduct } from "./BtnAddProduct.component";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { useUpdateOrder } from "../../../hooks";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useOrderHelper } from "../../../hooks/useOrders";
 import { ProductionArea } from "../../../../Common/models/production-area.model";
@@ -58,6 +58,7 @@ interface Props {
  * Component to render active order
  * @author Santiago Quirumbay
  * @version 1.1 16/12/2023 Adds productionArea field.
+ * @version 1.2 28/12/2023 Updates useUpdateOrder hook.
  */
 export const ActiveOrder: FC<Props> = ({
   order,
@@ -88,7 +89,7 @@ export const ActiveOrder: FC<Props> = ({
     setExpanded(!expanded);
   };
 
-  const { updateOrder } = useUpdateOrder();
+  const { mutate: updateOrder } = useUpdateOrder();
 
   const handleStartOrder = (order: IOrder) => {
     const firstOrder = getFirstPendingOrder();

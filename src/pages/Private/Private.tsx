@@ -1,19 +1,11 @@
-import { useContext, useEffect } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { useFetchAndLoad, useAsync, useMenu } from "../../hooks";
+import { useMenu } from "../../hooks";
 
-import { useDispatch } from "react-redux";
-import { loadTables, updateTable } from "../../redux";
 import { PrivateRouter } from "./router";
 import { SidebarProvider } from "./Common/contexts/SidebarContext";
 
 import { CircularProgress } from "@mui/material";
-import { getTables } from "./Tables/services";
-import { ITable } from "../../models/table.model";
-import { SocketContext } from "../../context/SocketContext";
-import { EventsOnSocket } from "./Orders/interfaces/events-sockets.interface";
-import { SocketResponseTable } from "./Orders/interfaces/responses-sockets.interface";
 import { OrderProvider } from "./Orders/context/Order.context";
 import { useRestaurant } from "./Restaurant/hooks/useRestaurant";
 
@@ -23,56 +15,50 @@ import { useCashRegisterActive } from "./Balance/hooks/useCashRegister";
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component";
 import { useActiveOrders } from "./Orders/hooks";
 import { useProductionAreas } from "./Restaurant/hooks/useProductionArea";
+import { useTables } from "./Tables/hooks/useTables";
+import { useOnTableUpdated } from "./Tables/hooks/useOnWebSocketsEventsTables";
 
 /**
  * Component that contains the private routes of the application
  * @author Santiago Quirumbay
  * @version 1.1 28/11/2023 Adding the useMenu hook to load the menu
+ * @version 1.2 26/12/2023 Adds socket event interface and tablesQuery
+ * @version 1.3 27/12/2023 Refactoring the code to use the useTahbles and useOnTableUpdated hooks
+ *
  * @returns JSX.Element
  */
 export const Private = () => {
   const content = useRoutes(PrivateRouter);
 
-  const dispatch = useDispatch();
+  // Load all menu
+  const menuQuery = useMenu();
 
-  const { loading, callEndpoint } = useFetchAndLoad();
+  // Load production areas
+  const areasQuery = useProductionAreas();
 
-  const { socket } = useContext(SocketContext);
+  // Load active orders
+  const { activeOrdersQuery } = useActiveOrders();
 
-  useActiveOrders();
+  // Load tables
+  const { tablesQuery } = useTables();
 
-  useMenu();
-
-  useProductionAreas();
-
-  const getTablesCall = async () => await callEndpoint(getTables());
-
-  const loadTablesState = (data: ITable[]) => {
-    dispatch(loadTables(data));
-  };
-
+  // Load cash register active
   const { cashRegisterQuery } = useCashRegisterActive();
 
-  useAsync(getTablesCall, loadTablesState, () => {}, []);
+  // listener update table
+  useOnTableUpdated();
 
-  useEffect(() => {
-    socket?.on(EventsOnSocket.updateTable, ({ table }: SocketResponseTable) => {
-      console.log("Se ha actualizado una mesa", table);
-      dispatch(updateTable(table!));
-    });
+  const restaurantQuery = useRestaurant();
 
-    return () => {
-      socket?.off(EventsOnSocket.updateTable);
-    };
-  }, [socket]);
+  const isLoading =
+    activeOrdersQuery.isLoading ||
+    restaurantQuery.isLoading ||
+    menuQuery.isLoading ||
+    areasQuery.isLoading ||
+    tablesQuery.isLoading ||
+    cashRegisterQuery.isLoading;
 
-  useEffect(() => {
-    cashRegisterQuery.refetch();
-  }, []);
-
-  const { isLoading } = useRestaurant();
-
-  if (loading && isLoading) return <CircularProgress />;
+  if (isLoading) return <CircularProgress />;
 
   return (
     <>

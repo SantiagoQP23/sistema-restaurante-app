@@ -20,7 +20,6 @@ import { selectOrders } from "../../../../../redux/slices/orders/orders.slice";
 
 import { CreateOrderDetailDto } from "../../dto/create-order-detail.dto";
 import { LoadingButton } from "@mui/lab";
-import { useCreateOrderDetail } from "../../hooks/useCreateOrderDetail";
 
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { CounterInput } from "../CounterInput.component";
@@ -30,6 +29,7 @@ import { useNewOrderStore } from "../../store/newOrderStore";
 import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
 import { Scrollbar } from "../../../components";
 import { formatMoney } from "../../../Common/helpers/format-money.helper";
+import { useCreateOrderDetail } from "../../hooks";
 
 interface Props {
   detail: ICreateOrderDetail;
@@ -40,6 +40,7 @@ interface Props {
  * @author Santiago Quirumbay
  * @version 1.1 18/12/2023 Adds NiceModal and remove rxjs
  * @version 1.2 19/12/2023 Adds product options chip
+ * @version 1.3 28/12/2023 Adds useCreateOrderDetail hook
  */
 export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
   const modal = useModal();
@@ -61,7 +62,11 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { createOrderDetail, loading } = useCreateOrderDetail();
+  const {
+    mutate: createOrderDetail,
+    isLoading,
+    isOnline,
+  } = useCreateOrderDetail();
 
   const handleQuantityChange = (value: number) => {
     setQuantity(value);
@@ -255,8 +260,9 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
             <LoadingButton
               onClick={handleCreateDetail}
               variant="contained"
-              loading={loading}
+              loading={isLoading}
               startIcon={<ShoppingCartIcon />}
+              disabled={!isOnline}
             >
               Añadir
             </LoadingButton>

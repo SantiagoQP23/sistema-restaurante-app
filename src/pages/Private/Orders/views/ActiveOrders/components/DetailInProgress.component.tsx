@@ -20,7 +20,7 @@ import {
   MoreVertOutlined,
 } from "@mui/icons-material";
 import { UpdateOrderDetailDto } from "../../../dto";
-import { useUpdateOrderDetail } from "../../../hooks/useUpdateOrderDetail";
+import { useUpdateOrderDetail } from "../../../hooks";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalEditOrderDetail } from "../../../components";
 
@@ -46,9 +46,10 @@ interface Props {
 /**
  * Component to show the details of the order in progress
  * @version 1.1 20/12/2023 Adds product options chip
+ * @version 1.2 28/12/2023 Adds useUpdateOrderDetail hook
  */
 export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
-  const { update } = useUpdateOrderDetail();
+  const { mutate: update } = useUpdateOrderDetail();
 
   const [checked, setChecked] = useState(
     detail.qtyDelivered === detail.quantity

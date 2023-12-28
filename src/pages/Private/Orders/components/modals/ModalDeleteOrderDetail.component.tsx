@@ -15,8 +15,13 @@ import {
 
 import { DeleteOrderDetailDto } from "../../dto/delete-order-detail.dto";
 import { statusModalDeleteOrderDetail } from "../../services/orders.service";
-import { useDeleteOrderDetail } from "../../hooks/useDeleteOrderDetail";
+import { useDeleteOrderDetail } from "../../hooks/";
+import { LoadingButton } from "@mui/lab";
 
+/**
+ * Component that shows a modal to delete an order detail
+ * @version 1.1 28/12/2023 Adds useDeleteOrderDetail hook
+ */
 export const ModalDeleteOrderDetail = () => {
   const [detail, setDetail] = useState<IOrderDetail>();
 
@@ -30,7 +35,11 @@ export const ModalDeleteOrderDetail = () => {
     setOpen(false);
   };
 
-  const { deleteOrderDetail } = useDeleteOrderDetail();
+  const {
+    mutate: deleteOrderDetail,
+    isLoading,
+    isOnline,
+  } = useDeleteOrderDetail();
 
   const deleteDetail = () => {
     const data: DeleteOrderDetailDto = {
@@ -84,9 +93,15 @@ export const ModalDeleteOrderDetail = () => {
           Cancelar
         </Button>
 
-        <Button variant="contained" color="error" onClick={deleteDetail}>
+        <LoadingButton
+          variant="contained"
+          color="error"
+          onClick={deleteDetail}
+          loading={isLoading}
+          disabled={!isOnline}
+        >
           Eliminar
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );
