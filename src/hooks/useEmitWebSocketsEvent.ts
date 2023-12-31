@@ -1,30 +1,33 @@
 import { useContext, useState } from "react";
 import { SocketContext } from "../context";
-import { SocketResponse } from "../models/socket-response.dto";
+import {
+  SocketResponse,
+  SocketResponseData,
+} from "../models/socket-response.dto";
 
 interface WebSocketOptions<TData> {
   onSuccess?: (resp: TData) => void;
-  onError?: (resp: SocketResponse<unknown>) => void;
+  onError?: (resp: SocketResponse) => void;
 }
 
 /**
  * Hook to use websockets
  * @version v1.0 24-12-2023
  */
-export function useWebSocket<TData, TVariables>(
+export function useEmitWebSocketsEvent<TData, TVariables>(
   eventMessage: string,
-  options?: WebSocketOptions<SocketResponse<TData>>
+  options?: WebSocketOptions<SocketResponseData<TData>>
 ) {
-  const { socket } = useContext(SocketContext);
+  const { socket, online } = useContext(SocketContext);
   const [loading, setLoading] = useState(false);
 
   const mutate = async (
     data: TVariables,
-    secondaryOptions?: WebSocketOptions<SocketResponse<TData>>
+    secondaryOptions?: WebSocketOptions<SocketResponseData<TData>>
   ) => {
     setLoading(true);
 
-    socket?.emit(eventMessage, data, (resp: SocketResponse<TData>) => {
+    socket?.emit(eventMessage, data, (resp: SocketResponseData<TData>) => {
       setLoading(false);
 
       if (resp.ok) {
@@ -40,5 +43,6 @@ export function useWebSocket<TData, TVariables>(
   return {
     mutate,
     isLoading: loading,
+    isOnline: online,
   };
 }

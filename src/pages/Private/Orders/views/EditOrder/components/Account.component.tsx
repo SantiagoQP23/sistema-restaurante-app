@@ -14,7 +14,7 @@ import {
   Button,
 } from "@mui/material";
 import { useInvoiceStore } from "../../../store/invoiceStore";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { IOrder, IOrderDetail } from "../../../../../../models";
 import { CounterInput } from "../../../components";
 import { CardHeader } from "@mui/material/";
@@ -125,9 +125,9 @@ export const Account: FC<Props> = ({ order }) => {
     }
     console.log(data);
     createBill(data, {
-      onSuccess: ({ data }) => {
-        const order = data!.order;
-        dispatch(setActiveOrder(order));
+      onSuccess: ({ data: order }) => {
+        dispatch(setActiveOrder(order!));
+        handleBackStep();
       },
     });
   };

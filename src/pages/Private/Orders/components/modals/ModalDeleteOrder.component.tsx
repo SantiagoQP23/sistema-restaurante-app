@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 
@@ -14,12 +14,13 @@ import {
 } from "@mui/material";
 import { IOrder, TypeOrder } from "../../../../../models/orders.model";
 import { statusModalDeleteOrder } from "../../services/orders.service";
-import { EventsEmitSocket } from "../../interfaces/events-sockets.interface";
-import { SocketResponseOrder } from "../../interfaces/responses-sockets.interface";
 import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
-import { SocketContext } from "../../../../../context/SocketContext";
+import { useDeleteOrder } from "../../hooks";
 
+/**
+ * Component that shows a modal to delete an order
+ * @version 1.1 28/12/2023 Adds useDeleteOrder hook
+ */
 export const ModalDeleteOrder: FC = () => {
   const [order, setOrder] = useState<IOrder>();
 
@@ -27,30 +28,22 @@ export const ModalDeleteOrder: FC = () => {
 
   const subscription$ = statusModalDeleteOrder.getSubject();
 
-  const { socket } = useContext(SocketContext);
-
-  const { enqueueSnackbar } = useSnackbar();
-
   const navigate = useNavigate();
+
+  const { mutate, isLoading, isOnline } = useDeleteOrder();
 
   const closeModal = () => {
     setOpen(false);
   };
 
   const submitDeleteOrder = () => {
-    socket?.emit(
-      EventsEmitSocket.deleteOrder,
-      order!.id,
-      (response: SocketResponseOrder) => {
-        if (response.ok) {
-          navigate("/orders");
-        } else {
-          enqueueSnackbar(response.msg, { variant: "error" });
-        }
-      }
-    );
+    mutate(order!.id, {
+      onSuccess: () => {
+        navigate("/orders");
+      },
+    });
 
-    setOpen(false);
+    closeModal();
   };
 
   useEffect(() => {
@@ -92,6 +85,8 @@ export const ModalDeleteOrder: FC = () => {
           variant="contained"
           color="error"
           onClick={submitDeleteOrder}
+          loading={isLoading}
+          disabled={!isOnline}
         >
           Eliminar
         </LoadingButton>

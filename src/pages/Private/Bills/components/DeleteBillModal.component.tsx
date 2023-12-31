@@ -14,18 +14,28 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { useDeleteBill } from "../hooks/useBills";
+import { useDispatch } from "react-redux";
+import { setActiveOrder } from "../../../../redux";
 
 interface Props {
   bill: Bill;
 }
 
 export const DeleteBillModal = NiceModal.create<Props>(({ bill }) => {
-  const { deleteBill, isLoading } = useDeleteBill();
+  const { mutate: deleteBill, isLoading, isOnline } = useDeleteBill();
+  const dispatch = useDispatch();
 
   const modal = useModal();
   const closeModal = () => modal.hide();
   const submitDeleteBill = () => {
-    deleteBill({ id: bill.id });
+    deleteBill(
+      { id: bill.id },
+      {
+        onSuccess: ({ data: order }) => {
+          if (order) dispatch(setActiveOrder(order));
+        },
+      }
+    );
     closeModal();
   };
 
@@ -81,6 +91,7 @@ export const DeleteBillModal = NiceModal.create<Props>(({ bill }) => {
           color="error"
           onClick={submitDeleteBill}
           loading={isLoading}
+          disabled={!isOnline}
         >
           Eliminar
         </LoadingButton>

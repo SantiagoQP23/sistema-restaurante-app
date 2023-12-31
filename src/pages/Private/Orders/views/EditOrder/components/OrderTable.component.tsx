@@ -1,70 +1,36 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import { ITable } from '../../../../../../models/table.model';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectTables } from '../../../../../../redux/slices/tables/tables.slice';
-import { selectOrders, setActiveOrder } from '../../../../../../redux/slices/orders/orders.slice';
-import { useSnackbar } from 'notistack';
-import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, FormControl, InputLabel, LinearProgress, MenuItem, Select, Typography } from '@mui/material';
-import { DriveFileRenameOutlineOutlined } from '@mui/icons-material';
-import { UpdateOrderDto } from '../../../dto/update-order.dto';
-import { SocketContext } from '../../../../../../context/SocketContext';
-import { EventsEmitSocket } from '../../../interfaces/events-sockets.interface';
-import { SocketResponseOrder } from '../../../interfaces/responses-sockets.interface';
-import { TypeOrder } from '../../../../../../models/orders.model';
-import { useUpdateOrder } from '../../../hooks/useUpdateOrder';
+import { FC } from "react";
+import { useSelector } from "react-redux";
+import { selectTables } from "../../../../../../redux/slices/tables/tables.slice";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 
 interface Props {
-
   tableId: string;
   setTable: (tableId: string) => void;
-
 }
 
-interface ChangeTableDto {
-  previousTableId?: string,
-  newTableId: string
-}
-
-
-
-export const OrderTable: FC<Props> = (
-  { tableId, setTable }
-) => {
-
-  const { activeOrder } = useSelector(selectOrders);
+export const OrderTable: FC<Props> = ({tableId, setTable}) => {
 
   const { tables } = useSelector(selectTables);
-
-  const { socket } = useContext(SocketContext);
-
-  const dispatch = useDispatch();
-
-  const { loading, updateOrder } = useUpdateOrder();
-
-  const { enqueueSnackbar } = useSnackbar();
-
-
-
-  const changeTable = (tableId: string) => {
-
 
 
     // const updateOrderDto: UpdateOrderDto = {
     //   id: activeOrder!.id,
     //   tableId,
     // }
-
     // const changeTableDto: ChangeTableDto = {
     //   previousTableId: activeOrder?.table?.id,
     //   newTableId: tableId
     // }
-
     // updateOrder(updateOrderDto)
     // //console.log('Actualizando mesas')
-
     // emitChangeTable(changeTableDto);
-
-  }
+  
 
   // const emitChangeTable = (tablesId: ChangeTableDto) => {
   //   socket?.emit(EventsEmitSocket.changeTable, tablesId, ({ ok, msg, order }: SocketResponseOrder) => {
@@ -73,7 +39,6 @@ export const OrderTable: FC<Props> = (
 
   //     if (ok) {
 
-
   //     }
 
   //     else {
@@ -81,10 +46,7 @@ export const OrderTable: FC<Props> = (
   //     }
   //   })
 
-
-
   // }
-
 
   // useEffect(() => {
 
@@ -92,50 +54,35 @@ export const OrderTable: FC<Props> = (
 
   // }, [activeOrder]);
 
-
-
-
   return (
     <>
-      {
-        tables.length === 0
-          ? (<Typography variant='body1' color='gray' align='center'>No hay mesas disponibles</Typography>)
-          : <>
-            {
-              loading ? <CircularProgress size={20} />
-                :
-                (<FormControl fullWidth >
-                  <InputLabel id='table-order-id'>Mesa</InputLabel>
-                  <Select
+      {tables.length === 0 ? (
+        <Typography variant="body1" color="gray" align="center">
+          No hay mesas disponibles
+        </Typography>
+      ) : (
+        <>
+          <FormControl fullWidth>
+            <InputLabel id="table-order-id">Mesa</InputLabel>
+            <Select
+              labelId="table-order-id"
+              label="Mesa"
+              value={tableId}
+              onChange={(e) => setTable(e.target.value)}
+              // disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
 
-                    labelId='table-order-id'
-                    label='Mesa'
-                    value={tableId}
-
-
-                    onChange={(e) => setTable(e.target.value)}
-                    // disabled={activeOrder!.type !== TypeOrder.IN_PLACE}
-
-                    // error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
-
-                  >
-                    <MenuItem value=''>Ninguna</MenuItem>
-                    {
-                      tables.map(table => (
-
-                        <MenuItem key={table.id} value={table.id}>Mesa {table.name}</MenuItem>
-
-                      ))
-                    }
-
-                  </Select>
-                  
-                </FormControl>)}
-          </>
-      }
-
+              // error={activeOrder!.type === TypeOrder.IN_PLACE && !table}
+            >
+              <MenuItem value="">Ninguna</MenuItem>
+              {tables.map((table) => (
+                <MenuItem key={table.id} value={table.id}>
+                  Mesa {table.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </>
+      )}
     </>
-
-
-  )
-}
+  );
+};

@@ -1,48 +1,44 @@
 import { useEffect, useState } from "react";
-import { statusModalStartOrder } from "../../../services/orders.service"
+import { statusModalStartOrder } from "../../../services/orders.service";
 import { IOrder, OrderStatus } from "../../../../../../models";
 import { useModal } from "../../../../../../hooks";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
-import { Button } from '@mui/material/';
-import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
+import { Button } from "@mui/material/";
+import { useUpdateOrder } from "../../../hooks";
 import { UpdateOrderDto } from "../../../dto";
 import { LoadingButton } from "@mui/lab";
 
-
-
+/**
+ * Component that shows a modal to start an order if there are pending orders
+ * @version 1.1 28/12/2023 Updates useUpdateOrder hook.
+ */
 export const ModalStartOrder = () => {
-
-
   const [order, setOrder] = useState<IOrder | null>(null);
 
-  const { isOpen, handleClose, handleOpen, setOpen } = useModal();
+  const { isOpen, handleClose, setOpen } = useModal();
 
   const suspcription$ = statusModalStartOrder.getSubject();
 
-
-  const {updateOrder, loading} = useUpdateOrder();
-
+  const { mutate: updateOrder, isLoading } = useUpdateOrder();
 
   const handleStartOrder = () => {
-
     const data: UpdateOrderDto = {
       id: order!.id,
-      status: OrderStatus.IN_PROGRESS
-    }
+      status: OrderStatus.IN_PROGRESS,
+    };
 
     updateOrder(data);
 
     handleClose();
-
-
-  }
-
-
-
-
+  };
 
   useEffect(() => {
-
     const subscription = suspcription$.subscribe((data) => {
       console.log(data);
       setOrder(data.order);
@@ -51,49 +47,30 @@ export const ModalStartOrder = () => {
 
     return () => {
       subscription.unsubscribe();
-    }
-
+    };
   }, []);
 
   return (
-
-    <Dialog
-
-      open={isOpen}
-      onClose={handleClose}
-    >
-      <DialogTitle variant="h4" textAlign='center' color='warning.main'>
+    <Dialog open={isOpen} onClose={handleClose}>
+      <DialogTitle variant="h4" textAlign="center" color="warning.main">
         Advertencia
-
       </DialogTitle>
 
-
       <DialogContent>
-
-        <Typography color='warning.main' variant="h5" textAlign='center' >
+        <Typography color="warning.main" variant="h5" textAlign="center">
           Hay pedidos pendientes que deben ser entregados antes que este pedido.
-
         </Typography>
 
-        <Typography variant='h6' textAlign='center' mt={2}>
-
+        <Typography variant="h6" textAlign="center" mt={2}>
           ¿Desea iniciar el pedido?
-
         </Typography>
-
-
       </DialogContent>
       <DialogActions
-
         sx={{
-          justifyContent: 'center'
+          justifyContent: "center",
         }}
-
       >
-        <Button
-          color="inherit"
-          onClick={handleClose}
-        >
+        <Button color="inherit" onClick={handleClose}>
           Cancelar
         </Button>
 
@@ -101,10 +78,11 @@ export const ModalStartOrder = () => {
           variant="contained"
           color="secondary"
           onClick={handleStartOrder}
-          loading={loading}
-
-        >Iniciar pedido</LoadingButton>
+          loading={isLoading}
+        >
+          Iniciar pedido
+        </LoadingButton>
       </DialogActions>
     </Dialog>
-  )
-}
+  );
+};

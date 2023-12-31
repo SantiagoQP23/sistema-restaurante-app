@@ -48,6 +48,7 @@ import { formatMoney } from "../../Common/helpers/format-money.helper";
 import { Label } from "../../../../components/ui";
 import { useUpdateTable } from "../hooks/useUpdateTable";
 import { useNewOrderStore } from "../store/newOrderStore";
+import { Scrollbar } from "../../components";
 
 export const DrawerOrder = NiceModal.create(() => {
   const theme = useTheme();
@@ -70,7 +71,7 @@ export const DrawerOrder = NiceModal.create(() => {
     (order) => order.table?.id === activeTable?.id
   );
 
-  const closeModal = () => {
+  const closeDrawer = () => {
     modal.hide();
     dispatch(setActiveTable(null));
   };
@@ -82,7 +83,7 @@ export const DrawerOrder = NiceModal.create(() => {
 
     navigate("/orders/add/menu");
 
-    closeModal();
+    closeDrawer();
   };
 
   const handleChangeStatusTable = (value: boolean) => {
@@ -92,57 +93,77 @@ export const DrawerOrder = NiceModal.create(() => {
   };
 
   const showEditOrderPage = (orderId: string) => {
-    closeModal();
+    closeDrawer();
     navigate(`/orders/list/edit/${orderId}`);
-  }
+  };
 
   return (
     <>
       <Drawer
         anchor="right"
         open={modal.visible}
-        onClose={closeModal}
+        onClose={closeDrawer}
+        PaperProps={{
+          sx: {
+            width: {
+              xs: "100vw",
+              sm: "80vw",
+              md: 500,
+            },
+            border: "none",
+            overflow: "hidden",
+          },
+        }}
         sx={{
-          width: "auto",
           zIndex: 10000,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            p: 1,
-            [theme.breakpoints.down("sm")]: { width: "100vw" },
-            [theme.breakpoints.up("sm")]: { width: 500, flexShrink: 0 },
-          }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          p={2}
         >
-          <Stack direction="column" spacing={2} width="100%">
-            <Stack
-              direction="row"
-              justifyContent="space-between"
+          <Box>
+            <Typography variant="h4">
+              Mesa {activeTable?.name}
+            </Typography>
+            <Box
               alignItems="center"
+              display="flex"
+              sx={{
+                color: `${activeTable?.isAvailable ? "success" : "error"}.main`,
+              }}
+              gap={1}
             >
-              <Typography variant="h4" textAlign="center">
-                Mesa {activeTable?.name}
+              <Circle fontSize="small" sx={{ fontSize: 10 }} />
+              <Typography fontSize="0.8rem">
+                {activeTable?.isAvailable ? "Disponible" : "Ocupada"}
               </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<Add />}
-                  onClick={handleAddOrder}
-                  size="small"
-                >
-                  Añadir Pedido
-                </Button>
-                <IconButton onClick={closeModal} size="small">
-                  <CloseOutlined fontSize="small" />
-                </IconButton>
-              </Stack>
-            </Stack>
+            </Box>
+          </Box>
+          <Stack direction="row" spacing={2} alignItems="center">
+            {ordersTable.length >= 1 && (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<Add />}
+                onClick={handleAddOrder}
+                size="small"
+              >
+                Añadir Pedido
+              </Button>
+            )}
+            <IconButton onClick={closeDrawer} size="small">
+              <CloseOutlined fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
 
-            <Divider />
-
-            <Stack spacing={2} direction="column">
+        <Divider />
+        <Scrollbar height={"100%"}>
+          {ordersTable.length >= 1 ? (
+            <Stack spacing={2} direction="column" p={1}>
               {ordersTable.map((order: IOrder) => (
                 <Card key={order.id}>
                   <CardHeader
@@ -295,7 +316,7 @@ export const DrawerOrder = NiceModal.create(() => {
                                 sx={{
                                   px: 1,
                                   py: 0.5,
-                               
+
                                   borderRadius: 1,
                                 }}
                                 avatar={<Notes color="info" />}
@@ -369,7 +390,6 @@ export const DrawerOrder = NiceModal.create(() => {
                   <CardActions sx={{ justifyContent: "right" }}>
                     <Button
                       startIcon={<Edit />}
-                      variant="outlined"
                       size="small"
                       onClick={() => showEditOrderPage(order.id)}
                     >
@@ -379,45 +399,50 @@ export const DrawerOrder = NiceModal.create(() => {
                 </Card>
               ))}
             </Stack>
+          ) : (
+            <Stack direction="column" spacing={2} width="100%">
+              <Box>
+                <Typography
+                  variant="h6"
+                  color="secondary"
+                  textAlign="center"
+                  my={5}
+                >
+                  Sin pedidos
+                </Typography>
 
-            <Box>
-              {ordersTable.length === 0 && (
-                <>
-                  <Typography
-                    variant="h4"
-                    color="secondary"
-                    textAlign="center"
-                    my={5}
-                  >
-                    Sin pedidos
-                  </Typography>
-
-                  <Stack alignItems="center" mt={2} spacing={5}>
-                    <Box>
-                      <Switch
-                        checked={activeTable?.isAvailable}
-                        onChange={(e, value) => handleChangeStatusTable(value)}
-                        inputProps={{ "aria-label": "controlled" }}
+                <Stack alignItems="center" mt={2} spacing={5}>
+                  {/* <Box>
+                    <Switch
+                      checked={activeTable?.isAvailable}
+                      onChange={(e, value) => handleChangeStatusTable(value)}
+                      inputProps={{ "aria-label": "controlled" }}
+                      color={activeTable?.isAvailable ? "success" : "error"}
+                    />
+                    <Label
+                      color={activeTable?.isAvailable ? "success" : "error"}
+                    >
+                      <Circle
+                        sx={{ fontSize: 10, mr: 1 }}
                         color={activeTable?.isAvailable ? "success" : "error"}
                       />
 
-                      <Label
-                        color={activeTable?.isAvailable ? "success" : "error"}
-                      >
-                        <Circle
-                          sx={{ fontSize: 10, mr: 1 }}
-                          color={activeTable?.isAvailable ? "success" : "error"}
-                        />
-
-                        {activeTable?.isAvailable ? "Disponible" : "Ocupada"}
-                      </Label>
-                    </Box>
-                  </Stack>
-                </>
-              )}
-            </Box>
-          </Stack>
-        </Box>
+                      {activeTable?.isAvailable ? "Disponible" : "Ocupada"}
+                    </Label>
+                  </Box> */}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<Add />}
+                    onClick={handleAddOrder}
+                  >
+                    Añadir pedido
+                  </Button>
+                </Stack>
+              </Box>
+            </Stack>
+          )}
+        </Scrollbar>
       </Drawer>
     </>
   );

@@ -1,5 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { updateManyTables, updateTable as updateTableS } from "../services";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getTables,
+  updateManyTables,
+  updateTable as updateTableS,
+} from "../services";
 import { ITable } from "../../../../models";
 import { UpdateUserDto } from "../../Users/dto";
 import { useSnackbar } from "notistack";
@@ -7,7 +11,17 @@ import { useDispatch } from "react-redux";
 import { loadTables, updateTable } from "../../../../redux";
 import { UpdateTableDto } from "../dto/table.dto";
 
-export const useTables = () => {};
+export const useTables = () => {
+  const dispatch = useDispatch();
+  const tablesQuery = useQuery(["tables"], () => getTables(), {
+    onSuccess: (data) => {
+      dispatch(loadTables(data));
+    },
+  });
+  return {
+    tablesQuery,
+  };
+};
 
 export const useUpdateTable = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -51,5 +65,4 @@ export const useUpdateManyTables = () => {
       },
     }
   );
-}
-
+};

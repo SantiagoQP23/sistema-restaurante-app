@@ -18,12 +18,13 @@ import {
   Chip,
 } from "@mui/material";
 
-import { useCounter } from "../../hooks";
+import {
+  useCounter,
+  useUpdateOrderDetail,
+} from "../../hooks";
 import { Close, Delete, AttachMoney, Save } from "@mui/icons-material";
 import { UpdateOrderDetailDto } from "../../dto/update-order-detail.dto";
 import { LoadingButton } from "@mui/lab";
-import { useDeleteOrderDetail } from "../../hooks/useDeleteOrderDetail";
-import { useUpdateOrderDetail } from "../../hooks/useUpdateOrderDetail";
 import { CounterInput } from "../CounterInput.component";
 import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
 import { formatMoney } from "../../../Common/helpers/format-money.helper";
@@ -37,6 +38,7 @@ interface Props {
 /**
  * Modal to edit a product to the active order
  * @version 1.1 20/12/2023 Adds product options chip and NiceModal
+ * @version 1.3 28/12/2023 Adds useUpdateOrderDetail hook
  */
 export const ModalEditOrderDetail = NiceModal.create<Props>(
   ({ detail, orderId }) => {
@@ -58,13 +60,11 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
       ProductOption | undefined
     >(detail.productOption ? detail.productOption : undefined);
 
-    const { loading: loadingDelete } = useDeleteOrderDetail();
-
     const qtyCounter = useCounter(0, 1, 100, detail?.qtyDelivered);
 
     const qtyDeliveredCounter = useCounter(0, 1, detail?.quantity);
 
-    const { update, loading } = useUpdateOrderDetail();
+    const { mutate: update, isLoading, isOnline } = useUpdateOrderDetail();
 
     const updateDetail = () => {
       const data: UpdateOrderDetailDto = {
@@ -97,21 +97,6 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
     const handleChangeQuantity = (value: number) => {
       setQuantity(value);
     };
-
-    // useEffect(() => {
-    //   subscription$.subscribe((data) => {
-    //     // setDetail(data.detalle);
-    //     // setOpen(data.value);
-    //     setOrderId(data.orderId);
-    //     setQuantity(data.detalle.quantity);
-    //     setQtyDelivered(data.detalle.qtyDelivered);
-    //     qtyDeliveredCounter.setCounter(data.detalle.qtyDelivered);
-
-    //     qtyCounter.setCounter(data.detalle.quantity);
-    //     setDescription(data.detalle.description);
-    //     setPrice(data.detalle.price);
-    //   });
-    // }, []);
 
     return (
       <Dialog {...muiDialogV5(modal)}>
@@ -269,22 +254,21 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
           }}
         >
           {detail?.qtyDelivered === 0 && (
-            <LoadingButton
+            <IconButton
               color="error"
               // startIcon={<DeleteOutline />}
               onClick={showModalDeleteDetail}
-              loading={loadingDelete}
-              variant="text"
             >
               <Delete />
-            </LoadingButton>
+            </IconButton>
           )}
 
           <LoadingButton
             variant="contained"
             onClick={updateDetail}
-            loading={loading}
+            loading={isLoading}
             startIcon={<Save />}
+            disabled={!isOnline}
           >
             Actualizar
           </LoadingButton>

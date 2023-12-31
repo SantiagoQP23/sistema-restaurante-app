@@ -17,10 +17,10 @@ import { IOrder, TypeOrder } from "../../../../../../models";
 import { OrderTable } from "./OrderTable.component";
 import { OrderTypeSelector } from "./OrderTypeSelector.component";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
-import { useUpdateOrder } from "../../../hooks/useUpdateOrder";
+import { useUpdateOrder } from "../../../hooks";
 import { UpdateOrderDto } from "../../../dto";
 
-import { Pagination } from "@mui/lab";
+import { LoadingButton, Pagination } from "@mui/lab";
 import { useModal } from "../../../../../../hooks";
 
 interface Props {
@@ -46,7 +46,7 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
     order.deliveryTime || null
   );
 
-  const { updateOrder } = useUpdateOrder();
+  const { mutate: updateOrder, isLoading, isOnline } = useUpdateOrder();
 
   const handleChangeDeliveryTime = (date: Date | null) => {
     setDeliveryTime(date);
@@ -220,13 +220,15 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
         <Button variant="outlined" onClick={closeModal}>
           Cancelar
         </Button>
-        <Button
+        <LoadingButton
           variant="contained"
           onClick={submitUpdateOrder}
           startIcon={<Save />}
+          loading={isLoading}
+          disabled={!isOnline}
         >
           Actualizar
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

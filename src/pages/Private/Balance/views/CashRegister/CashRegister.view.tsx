@@ -53,7 +53,7 @@ export const CashRegister = () => {
   }, [data])
 
 
-  if (isLoading) return <div>Loading...</div>
+  // if (isLoading) return <div>Loading...</div>
 
 
   if (!data) return <div>Not found</div>
