@@ -9,7 +9,7 @@ import { useEmitWebSocketsEvent } from "../../../../hooks/useEmitWebSocketsEvent
 export const useCreateBill = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  return useEmitWebSocketsEvent<{ order: IOrder }, CreateBillDto>(
+  return useEmitWebSocketsEvent<IOrder, CreateBillDto>(
     EventsEmitSocket.createBill,
     {
       onSuccess: (resp) => {
@@ -35,7 +35,7 @@ export const useBills = () => {
 export const useDeleteBill = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  return useEmitWebSocketsEvent<{ order: IOrder }, RemoveBillDto>(
+  return useEmitWebSocketsEvent<IOrder, RemoveBillDto>(
     EventsEmitSocket.deleteBill,
     {
       onSuccess: (resp) => {
@@ -51,7 +51,7 @@ export const useDeleteBill = () => {
 export const useUpdateBill = () => {
   const { enqueueSnackbar } = useSnackbar();
 
-  return useEmitWebSocketsEvent<{ order: IOrder }, UpdateBillDto>(
+  return useEmitWebSocketsEvent<IOrder, UpdateBillDto>(
     EventsEmitSocket.updateBill,
     {
       onSuccess: (resp) => {

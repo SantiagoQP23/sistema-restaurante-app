@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useBill, useUpdateBill } from "../../hooks/useBills";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -44,7 +45,11 @@ export const PaymentBill = () => {
 
   const navigate = useNavigate();
 
-  const { mutate: updateBill, isLoading: isUpdating } = useUpdateBill();
+  const {
+    mutate: updateBill,
+    isLoading: isUpdating,
+    isOnline,
+  } = useUpdateBill();
 
   const { activeCashRegister } = useCashRegisterStore((state) => state);
 
@@ -144,6 +149,9 @@ export const PaymentBill = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Stack direction="column" spacing={2}>
+              {!activeCashRegister && (
+                <Alert severity="error">No hay una caja activa</Alert>
+              )}
               <Card>
                 <CardHeader
                   avatar={
@@ -421,7 +429,11 @@ export const PaymentBill = () => {
                             <CreditCard />
                           )
                         }
-                        disabled={receivedAmount < bill.total}
+                        disabled={
+                          receivedAmount < bill.total - discount ||
+                          !activeCashRegister ||
+                          !isOnline
+                        }
                       >
                         Registrar pago
                       </LoadingButton>

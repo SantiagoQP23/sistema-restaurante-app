@@ -35,7 +35,7 @@ interface Props {
  * @version 1.1 28/12/2023 Adds useCreateOrder hook
  */
 export const NewOrderSummary: FC<Props> = () => {
-  const { table, people, details, orderType, notes, setNotes } =
+  const { table, people, details, orderType, notes, setNotes, reset } =
     useNewOrderStore((state) => state);
 
   const { mutate: createOrder, isLoading, isOnline } = useCreateOrder();
@@ -65,7 +65,11 @@ export const NewOrderSummary: FC<Props> = () => {
 
     if (orderType === TypeOrder.TAKE_AWAY) delete order.tableId;
 
-    createOrder(order);
+    createOrder(order, {
+      onSuccess: () => {
+        reset();
+      },
+    });
   };
 
   return (

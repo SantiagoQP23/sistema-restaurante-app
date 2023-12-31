@@ -31,8 +31,8 @@ export const DeleteBillModal = NiceModal.create<Props>(({ bill }) => {
     deleteBill(
       { id: bill.id },
       {
-        onSuccess: ({ data }) => {
-          if (data?.order) dispatch(setActiveOrder(data?.order));
+        onSuccess: ({ data: order }) => {
+          if (order) dispatch(setActiveOrder(order));
         },
       }
     );

@@ -43,7 +43,7 @@ export const Private = () => {
   const { tablesQuery } = useTables();
 
   // Load cash register active
-  const { cashRegisterQuery } = useCashRegisterActive();
+  useCashRegisterActive();
 
   // listener update table
   useOnTableUpdated();
@@ -55,8 +55,8 @@ export const Private = () => {
     restaurantQuery.isLoading ||
     menuQuery.isLoading ||
     areasQuery.isLoading ||
-    tablesQuery.isLoading ||
-    cashRegisterQuery.isLoading;
+    tablesQuery.isLoading;
+  // cashRegisterQuery.isLoading;
 
   if (isLoading) return <CircularProgress />;
 

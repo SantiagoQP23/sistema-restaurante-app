@@ -14,6 +14,7 @@ import { selectAuth, selectOrders } from "../../../../../../../redux";
 import { useMemo } from "react";
 import { Scrollbar } from "../../../../../components";
 import { CardOrder } from "./CardOrder.component";
+import { OrderTakeAway } from "../../../../../Orders/views";
 
 export const DrawerMyOrders = NiceModal.create(() => {
   const modal = useModal();
@@ -71,7 +72,11 @@ export const DrawerMyOrders = NiceModal.create(() => {
         <Scrollbar height={"100%"}>
           <Stack direction="column" spacing={1} p={1}>
             {myOrders.map((order) => (
-              <CardOrder order={order} key={order.id} onEdit={closeDrawer} />
+              <OrderTakeAway
+                order={order}
+                key={order.id}
+                onClick={closeDrawer}
+              />
             ))}
           </Stack>
         </Scrollbar>

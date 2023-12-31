@@ -1,4 +1,11 @@
-import { TimerOutlined, Person, Paid } from "@mui/icons-material";
+import {
+  TimerOutlined,
+  Person,
+  Paid,
+  People,
+  DocumentScanner,
+  Receipt,
+} from "@mui/icons-material";
 import {
   Card,
   CardActionArea,
@@ -7,31 +14,42 @@ import {
   Grid,
   Chip,
   Stack,
+  Box,
+  Divider,
 } from "@mui/material";
 import { format } from "date-fns";
-import { IOrder } from "../../../../../../models";
+import { IOrder, TypeOrder } from "../../../../../../models";
 import { FC } from "react";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useNavigate } from "react-router-dom";
+import { formatMoney } from "../../../../Common/helpers/format-money.helper";
+import { getTypeOrder } from "../../../../Common/helpers/get-type-order.helper";
+import { LabelStatusPaid } from "../../../components";
 
 interface Props {
   order: IOrder;
+  onClick?: () => void;
 }
 
-export const OrderTakeAway: FC<Props> = ({ order }) => {
+export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
   const navigate = useNavigate();
 
   return (
     <Card>
       <CardActionArea
         onClick={() => {
+          onClick && onClick();
           navigate(`/orders/list/edit/${order.id}`);
         }}
       >
         <CardHeader
-          title={`Pedido #${order.num}`}
-          subheader={`Mesero: ${order.user.username}`}
-          action={<LabelStatusOrder status={order.status} />}
+          title={
+            order.type === TypeOrder.TAKE_AWAY
+              ? getTypeOrder(order.type)
+              : `Mesa ${order.table?.name}`
+          }
+          subheader={`${order.user.person.firstName} ${order.user.person.lastName} `}
+          action={<LabelStatusOrder status={order.status} simple />}
         />
         <Stack spacing={1} px={1} mb={1}>
           <Stack
@@ -52,35 +70,46 @@ export const OrderTakeAway: FC<Props> = ({ order }) => {
               </Typography>
             ))}
           </Stack>
-
-          <Grid container spacing={1} alignItems="center">
-            <Grid item xs={12}>
-              <Chip
-                label={`${format(
-                  new Date(order.deliveryTime),
-                  "dd/MM/yyyy HH:mm"
-                )}`}
-                size="small"
-                icon={<TimerOutlined />}
+          <Box display="flex" alignItems="center">
+            <TimerOutlined
+              fontSize="small"
+              sx={{ fontSize: 18, mr: 0.5 }}
+              color="info"
+            />
+            <Typography fontSize="0.8rem" fontWeight="bold">
+              {format(new Date(order.deliveryTime), "dd/MM/yyyy HH:mm")}
+            </Typography>
+            <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+            <People
+              fontSize="small"
+              sx={{ fontSize: 18, mr: 0.5 }}
+              color="info"
+            />
+            <Typography fontSize="0.8rem" fontWeight="bold">
+              {order.people}
+            </Typography>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Receipt
+                fontSize="small"
+                sx={{ fontSize: 18, mr: 0.5 }}
+                color="info"
               />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Chip
-                label={`Personas: ${order.people}`}
-                size="small"
-                icon={<Person />}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Chip
-                label={`Total: $${order.total}`}
-                size="small"
-                icon={<Paid />}
-              />
-            </Grid>
-          </Grid>
+              <Typography>Pedido N° {order.num}</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <LabelStatusPaid isPaid={order.isPaid} />
+              <Divider orientation="vertical" flexItem />
+              <Typography align="right" variant="h4">
+                {formatMoney(order.total)}
+              </Typography>
+            </Box>
+          </Box>
         </Stack>
       </CardActionArea>
     </Card>

@@ -1,15 +1,20 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Close, Delete, DeleteOutline } from "@mui/icons-material";
 import {
+  AppBar,
   Box,
   Button,
   Card,
   CardHeader,
+  Divider,
   Drawer,
   IconButton,
   Stack,
+  TableContainer,
+  Toolbar,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import { Bill } from "../../../../models/bill.model";
@@ -18,14 +23,18 @@ import { Label } from "../../../../components/ui";
 import { formatMoney } from "../../Common/helpers/format-money.helper";
 import { useNavigate } from "react-router-dom";
 import { DeleteBillModal } from "./DeleteBillModal.component";
+import { Scrollbar } from "../../components";
 
 interface Props {
   bill: Bill;
 }
 
+const headerHeight = "64px";
+
 export const DrawerBill = NiceModal.create<Props>(({ bill }) => {
   const modal = useModal();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const closeDrawer = () => {
     modal.hide();
@@ -101,47 +110,52 @@ export const DrawerBill = NiceModal.create<Props>(({ bill }) => {
             </Tooltip>
           </Stack>
         </Box>
+        <Divider sx={{ borderStyle: "dashed" }} />
+        <Scrollbar height={"100%"}>
+          <Stack direction="column" spacing={2} px={2} mt={1}>
+            <Box>
+              <Typography color="text.secondary" fontSize="0.8rem">
+                Creado por
+              </Typography>
+              <Typography variant="h6">
+                {bill.createdBy.person.firstName}{" "}
+                {bill.createdBy.person.lastName}
+              </Typography>
+            </Box>
+            <Card>
+              <CardHeader title="Detalle" />
+              <TableContainer>
+                <BillDetailsTable details={bill.details} />
+              </TableContainer>
+            </Card>
 
-        <Stack direction="column" spacing={2} px={2}>
-          <Box>
-            <Typography color="text.secondary" fontSize="0.8rem">
-              Creado por
-            </Typography>
-            <Typography variant="h6">
-              {bill.createdBy.person.firstName} {bill.createdBy.person.lastName}
-            </Typography>
-          </Box>
-          <Card>
-            <CardHeader title="Detalle" />
-            <BillDetailsTable details={bill.details} />
-          </Card>
-
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Typography variant="h5" fontWeight="bold">
-              Total: {formatMoney(bill.total)}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={navigateToBill}
-            >
-              Ver
-            </Button>
-
-            {!bill.isPaid && (
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Typography variant="h5" fontWeight="bold">
+                Total: {formatMoney(bill.total)}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={navitateToEditBill}
-                disabled={bill.isPaid || !bill.isActive}
+                onClick={navigateToBill}
               >
-                Cobrar
+                Ver
               </Button>
-            )}
-          </Box>
-        </Stack>
+
+              {!bill.isPaid && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={navitateToEditBill}
+                  disabled={bill.isPaid || !bill.isActive}
+                >
+                  Cobrar
+                </Button>
+              )}
+            </Box>
+          </Stack>
+        </Scrollbar>
       </Drawer>
     </>
   );

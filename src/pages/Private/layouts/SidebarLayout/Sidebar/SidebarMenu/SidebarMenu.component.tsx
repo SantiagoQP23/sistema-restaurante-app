@@ -13,14 +13,14 @@ const MenuWrapper = styled(Box)(
     }
   }
 
-    .MuiListSubheader-root {
-      text-transform: uppercase;
-      font-weight: bold;
-      font-size: ${theme.typography.pxToRem(12)};
-      color: ${theme.colors.alpha.trueWhite[50]};
-      padding: ${theme.spacing(0, 2.5)};
-      line-height: 1.4;
-    }
+  .MuiListSubheader-root {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: ${theme.typography.pxToRem(12)};
+    color: ${theme.colors.alpha.trueWhite[50]};
+    padding: ${theme.spacing(0, 2.5)};
+    line-height: 1.4;
+  }
 `
 );
 
