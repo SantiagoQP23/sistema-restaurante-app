@@ -5,6 +5,7 @@ import {
   People,
   DocumentScanner,
   Receipt,
+  MoreVert,
 } from "@mui/icons-material";
 import {
   Card,
@@ -16,6 +17,7 @@ import {
   Stack,
   Box,
   Divider,
+  IconButton,
 } from "@mui/material";
 import { format } from "date-fns";
 import { IOrder, TypeOrder } from "../../../../../../models";
@@ -49,7 +51,20 @@ export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
               : `Mesa ${order.table?.name}`
           }
           subheader={`${order.user.person.firstName} ${order.user.person.lastName} `}
-          action={<LabelStatusOrder status={order.status} simple />}
+          action={
+            <>
+              <Stack direction="row" spacing={1}>
+                <LabelStatusOrder status={order.status} simple />
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <MoreVert />
+                </IconButton>
+              </Stack>
+            </>
+          }
         />
         <Stack spacing={1} px={1} mb={1}>
           <Stack

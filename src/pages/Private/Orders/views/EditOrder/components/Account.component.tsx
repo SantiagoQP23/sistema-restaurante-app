@@ -42,6 +42,7 @@ interface Props {
 /**
  * Componente for create bills
  * @version v1.1 22-12-2023 Adds create bills
+ * @version v1.2 02-01-2024 Fix bug: total order to pay
  */
 export const Account: FC<Props> = ({ order }) => {
   const details = order.details.filter(
@@ -62,7 +63,7 @@ export const Account: FC<Props> = ({ order }) => {
 
   const { mutate: createBill, isLoading } = useCreateBill();
 
-  const getTotal = (selectedDetails: SelectedDetails) => {
+  const getTotalSelectedDetails = (selectedDetails: SelectedDetails) => {
     let total = 0;
     Object.keys(selectedDetails).forEach((id) => {
       const selectedDetail = selectedDetails[id];
@@ -70,6 +71,14 @@ export const Account: FC<Props> = ({ order }) => {
     });
     return total;
   };
+
+  const getTotalToPay = () => {
+    let total = 0;
+    details.forEach((detail) => {
+      total += (detail.quantity - detail.qtyPaid) * detail.price;
+    });
+    return total;
+  }
 
   const handleToggleSelectAll = (allDetails: boolean) => {
     // if (allDetails) {
@@ -80,7 +89,7 @@ export const Account: FC<Props> = ({ order }) => {
     //   setTotal(getTotal());
     // }
     setSelectAll(() => {
-      setTotal(allDetails ? order.total : getTotal(selectedDetails));
+      setTotal(allDetails ? getTotalToPay() : getTotalSelectedDetails(selectedDetails));
 
       return allDetails;
     });
@@ -94,7 +103,7 @@ export const Account: FC<Props> = ({ order }) => {
         detail: orderDetail,
         quantity,
       };
-      setTotal(getTotal(newSelectedDetails));
+      setTotal(getTotalSelectedDetails(newSelectedDetails));
       return newSelectedDetails;
     });
   };
@@ -218,9 +227,14 @@ export const Account: FC<Props> = ({ order }) => {
                     <TableCell>{getDescription(detail)}</TableCell>
                     <TableCell>{formatMoney(detail.price)}</TableCell>
                     <TableCell align="right">
-                      {formatMoney(
-                        detail.price * selectedDetails[detail.id]?.quantity || 0
-                      )}
+                      {selectAll
+                        ? formatMoney(
+                            detail.price * (detail.quantity - detail.qtyPaid)
+                          )
+                        : formatMoney(
+                            detail.price *
+                              selectedDetails[detail.id]?.quantity || 0
+                          )}
                     </TableCell>
                   </TableRow>
                 ))}
