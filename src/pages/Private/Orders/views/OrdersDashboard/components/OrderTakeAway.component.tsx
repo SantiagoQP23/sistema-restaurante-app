@@ -1,19 +1,9 @@
-import {
-  TimerOutlined,
-  Person,
-  Paid,
-  People,
-  DocumentScanner,
-  Receipt,
-  MoreVert,
-} from "@mui/icons-material";
+import { TimerOutlined, People, Receipt, MoreVert } from "@mui/icons-material";
 import {
   Card,
   CardActionArea,
   CardHeader,
   Typography,
-  Grid,
-  Chip,
   Stack,
   Box,
   Divider,
@@ -53,7 +43,7 @@ export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
           subheader={`${order.user.person.firstName} ${order.user.person.lastName} `}
           action={
             <>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} alignItems="center">
                 <LabelStatusOrder status={order.status} simple />
                 <IconButton
                   onClick={(e) => {

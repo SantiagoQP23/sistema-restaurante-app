@@ -1,5 +1,5 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import { Close } from "@mui/icons-material";
+import { Cached, Close } from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -15,11 +15,15 @@ import { useMemo } from "react";
 import { Scrollbar } from "../../../../../components";
 import { CardOrder } from "./CardOrder.component";
 import { OrderTakeAway } from "../../../../../Orders/views";
+import { LoadingButton } from "@mui/lab";
+import { useActiveOrders } from "../../../../../Orders/hooks";
 
 export const DrawerMyOrders = NiceModal.create(() => {
   const modal = useModal();
 
   const { orders } = useSelector(selectOrders);
+
+  const { activeOrdersQuery } = useActiveOrders();
 
   const { user } = useSelector(selectAuth);
 
@@ -60,11 +64,21 @@ export const DrawerMyOrders = NiceModal.create(() => {
             </Typography>
           </Box>
 
-          <Tooltip title="Cerrar">
-            <IconButton color="primary" onClick={closeDrawer}>
-              <Close />
-            </IconButton>
-          </Tooltip>
+          <Stack direction='row' >
+            <LoadingButton
+              variant="text"
+              loading={activeOrdersQuery.isFetching}
+              onClick={() => activeOrdersQuery.refetch()}
+              size="small"
+            >
+              <Cached />
+            </LoadingButton>
+            <Tooltip title="Cerrar">
+              <IconButton color="primary" onClick={closeDrawer}>
+                <Close />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </Box>
 
         <Divider sx={{ borderStyle: "dashed" }} />
