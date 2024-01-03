@@ -13,7 +13,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useCashRegisterActive } from "./Balance/hooks/useCashRegister";
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component";
-import { useActiveOrders } from "./Orders/hooks";
+import {
+  useActiveOrders,
+  useOnOrderCreated,
+  useOnOrderDeleted,
+  useOnOrderUpdated,
+} from "./Orders/hooks";
 import { useProductionAreas } from "./Restaurant/hooks/useProductionArea";
 import { useTables } from "./Tables/hooks/useTables";
 import { useOnTableUpdated } from "./Tables/hooks/useOnWebSocketsEventsTables";
@@ -24,6 +29,7 @@ import { useOnTableUpdated } from "./Tables/hooks/useOnWebSocketsEventsTables";
  * @version 1.1 28/11/2023 Adding the useMenu hook to load the menu
  * @version 1.2 26/12/2023 Adds socket event interface and tablesQuery
  * @version 1.3 27/12/2023 Refactoring the code to use the useTahbles and useOnTableUpdated hooks
+ * @version 1.4 02/01/2024 Adding the useOnOrderCreated, useOnOrderUpdated and useOnOrderDeleted hooks 
  *
  * @returns JSX.Element
  */
@@ -56,7 +62,15 @@ export const Private = () => {
     menuQuery.isLoading ||
     areasQuery.isLoading ||
     tablesQuery.isLoading;
-  // cashRegisterQuery.isLoading;
+
+  // listener new order
+  useOnOrderCreated();
+
+  // listener update order
+  useOnOrderUpdated();
+
+  // listener delete order
+  useOnOrderDeleted();
 
   if (isLoading) return <CircularProgress />;
 
