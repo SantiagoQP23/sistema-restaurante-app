@@ -23,7 +23,7 @@ import { Label } from "../../../../../../components/ui";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { useCreateBill } from "../../../../Bills/hooks/useBills";
 import { CreateBillDto } from "../../../../Bills/dto";
-import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 import { LoadingButton } from "@mui/lab";
 import { useDispatch } from "react-redux";
 import { setActiveOrder } from "../../../../../../redux";
@@ -78,7 +78,7 @@ export const Account: FC<Props> = ({ order }) => {
       total += (detail.quantity - detail.qtyPaid) * detail.price;
     });
     return total;
-  }
+  };
 
   const handleToggleSelectAll = (allDetails: boolean) => {
     // if (allDetails) {
@@ -89,7 +89,9 @@ export const Account: FC<Props> = ({ order }) => {
     //   setTotal(getTotal());
     // }
     setSelectAll(() => {
-      setTotal(allDetails ? getTotalToPay() : getTotalSelectedDetails(selectedDetails));
+      setTotal(
+        allDetails ? getTotalToPay() : getTotalSelectedDetails(selectedDetails)
+      );
 
       return allDetails;
     });
@@ -113,7 +115,6 @@ export const Account: FC<Props> = ({ order }) => {
 
     const data: CreateBillDto = {
       orderId: order.id,
-      cashRegisterId: activeCashRegister.id,
       details: [],
     };
 

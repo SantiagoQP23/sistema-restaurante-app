@@ -33,15 +33,12 @@ import { useSelector } from "react-redux";
 import { selectMenu } from "../../../../../redux";
 import { Chip } from "@mui/material";
 import { TitlePage } from "../../../components/TitlePage.component";
-import {
-  GroupBy,
-  Period,
-  useFilterSoldProducts,
-} from "../../hooks/useFilterSoldProducts";
+import { useFilterSoldProducts } from "../../hooks/useFilterSoldProducts";
 import { CategoriesBestSelling } from "../IncomesReports/components/CategoriesBestSelling.component";
 import { NavLink as RouterLink } from "react-router-dom";
 import { formatMoney } from "../../../Common/helpers/format-money.helper";
 import { generateProductsReport } from "../../helpers/pdf-products-reports";
+import { Period, GroupBy } from "../../../Common/dto/period.model";
 
 export const ProductsReports = () => {
   // const {

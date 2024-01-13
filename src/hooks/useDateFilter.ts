@@ -1,14 +1,8 @@
 import { SelectChangeEvent } from "@mui/material";
 import { useState } from "react";
-import { Period } from "../models/period.model";
+import { Period } from "../pages/Private/Common/dto/period.model";
 
-
-
-
-export const useDateFilter = (periodo : Period) => {
-
-
-
+export const useDateFilter = (periodo: Period) => {
   const [period, setPeriod] = useState<Period>(periodo);
 
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -17,11 +11,11 @@ export const useDateFilter = (periodo : Period) => {
 
   const [endDateChecked, setEndDateChecked] = useState(false);
 
-  const handleChangeEndDateChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeEndDateChecked = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setEndDateChecked(event.target.checked);
-
   };
-
 
   const handleChangePeriod = (event: SelectChangeEvent) => {
     setPeriod(event.target.value as Period);
@@ -33,17 +27,9 @@ export const useDateFilter = (periodo : Period) => {
 
   const handleChangeEndDate = (newValue: Date | null) => {
     setEndDate(newValue);
-    
   };
 
-  
-
-
-
-
-
   return {
-
     // Getters
     period,
     startDate,
@@ -61,8 +47,5 @@ export const useDateFilter = (periodo : Period) => {
     handleChangeStartDate,
     handleChangeEndDate,
     handleChangeEndDateChecked,
-    
-
-
-  }
-}
+  };
+};

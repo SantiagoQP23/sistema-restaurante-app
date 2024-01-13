@@ -1,18 +1,21 @@
-import { loadAbort } from '../../../../helpers/load-abort-axios.helper';
-import restauranteApi from '../../../../api/restauranteApi';
-import { IOrder } from '../../../../models/orders.model';
-import { SubjectDescriptionDetail, SubjectDispatchDetail, SubjectModalDeleteOrder, SubjectModalPayOrder, SubjectEditOrderDetail } from '../helpers/subject-orders.helper';
-import { PaginationDto } from '../../Clients/dto/pagination.dto';
-import { FilterDto } from '../../Reports/services/dashboard.service';
-import { DateFiltePaginationDto } from '../../Common/dto';
-import { FilterOrdersDto } from '../dto/filter-orders.dto';
-import { SubjectGenerator } from '../../Common/helpers/subject-generator.helper';
+import { loadAbort } from "../../../../helpers/load-abort-axios.helper";
+import restauranteApi from "../../../../api/restauranteApi";
+import { IOrder } from "../../../../models/orders.model";
+import {
+  SubjectDescriptionDetail,
+  SubjectDispatchDetail,
+  SubjectModalDeleteOrder,
+  SubjectModalPayOrder,
+  SubjectEditOrderDetail,
+} from "../helpers/subject-orders.helper";
+import { DateFiltePaginationDto } from "../../Common/dto";
+import { FilterOrdersDto } from "../dto/filter-orders.dto";
+import { SubjectGenerator } from "../../Common/helpers/subject-generator.helper";
 
-interface ModalOrder{
-  value: boolean  ;
+interface ModalOrder {
+  value: boolean;
   order: IOrder | null;
 }
-
 
 export const statusModalDescriptionDetail = new SubjectDescriptionDetail();
 export const statusModalDispatchDetail = new SubjectDispatchDetail();
@@ -26,66 +29,53 @@ export const statusModalDeleteOrderDetail = new SubjectEditOrderDetail();
 
 export const statusModalStartOrder = new SubjectGenerator<ModalOrder>();
 
-
 export interface OrdersResponse {
-  orders: IOrder[] ;
+  orders: IOrder[];
   count: number;
 }
 
-
 export const getOrders = async (filterDto: FilterOrdersDto) => {
+  const { limit = 10, offset = 0, ...restFilter } = filterDto;
 
-  const { limit=10, offset = 0, ...restFilter } = filterDto;
-
-  console.log(filterDto)
- 
-  const {data} = await  restauranteApi.get<OrdersResponse>(`orders`,
-    {
-      params: {
-        ...restFilter,
-        offset: limit * offset,
-        limit
-      }
-
-    }
-  );
+  const { data } = await restauranteApi.get<OrdersResponse>(`orders`, {
+    params: {
+      ...restFilter,
+      offset: limit * offset,
+      limit,
+    },
+  });
 
   return data;
-}
+};
 
 export const getActiveOrders = async (filterDto: DateFiltePaginationDto) => {
+  const { period, startDate, endDate, limit = 10, offset = 0 } = filterDto;
 
-  const { period, startDate, endDate, limit=10, offset = 0 } = filterDto;
- 
-  const {data} = await  restauranteApi.get<IOrder[]>(`orders/actives`,
-    {
-      params: {
-        period,
-        startDate,
-        endDate,
-        offset: limit * offset,
-        limit
-      }
-    }
-  );
+  const { data } = await restauranteApi.get<IOrder[]>(`orders/actives`, {
+    params: {
+      period,
+      startDate,
+      endDate,
+      offset: limit * offset,
+      limit,
+    },
+  });
 
   return data;
-}
-
+};
 
 export const getOrdersToday = () => {
-
   const controller = loadAbort();
 
   return {
-    call: restauranteApi.get<IOrder[]>(`orders`,
+    call: restauranteApi.get<IOrder[]>(
+      `orders`,
 
-      { signal: controller.signal }),
-    controller
-
-  }
-
-}
+      { signal: controller.signal }
+    ),
+    controller,
+  };
+};
 
 export interface FindOrderByDate {
   startDate?: string;
@@ -93,38 +83,32 @@ export interface FindOrderByDate {
 }
 
 export const getOrdersByDate = (find?: FindOrderByDate) => {
-
   const controller = loadAbort();
-
 
   let call;
 
   if (find) {
-    call = restauranteApi.get<IOrder[]>(`orders/${find.startDate ? `?startDate=${find.startDate}` : ''}`,
-      { signal: controller.signal });
+    call = restauranteApi.get<IOrder[]>(
+      `orders/${find.startDate ? `?startDate=${find.startDate}` : ""}`,
+      { signal: controller.signal }
+    );
   } else {
-    call = restauranteApi.get<IOrder[]>(`orders`,
-      { signal: controller.signal });
-
+    call = restauranteApi.get<IOrder[]>(`orders`, {
+      signal: controller.signal,
+    });
   }
 
   return {
     call,
-    controller
-
-  }
-
-}
-
+    controller,
+  };
+};
 
 export const getOrder = async (orderId: string): Promise<IOrder> => {
-
-  const {data} = await restauranteApi.get<IOrder>(`orders/${orderId}`);
+  const { data } = await restauranteApi.get<IOrder>(`orders/${orderId}`);
 
   return data;
-
-
-}
+};
 
 // export const getOrder = (orderId: string) => {
 

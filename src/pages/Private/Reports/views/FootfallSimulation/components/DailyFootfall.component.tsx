@@ -1,7 +1,7 @@
 import { Print, PeopleOutline } from "@mui/icons-material";
 import { TextField, Button, Grid, Card, CardHeader, CardContent, List, ListItem, ListItemText, ListItemSecondaryAction, Chip, Typography, Stack } from '@mui/material';
 import { useDateFilter } from "../../../../../../hooks/useDateFilter";
-import { GroupBy, Period } from "../../../../../../models/period.model";
+import { GroupBy, Period } from "../../../../Common/dto/period.model";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useSimulatedFootfall } from "../../../hooks/useFootfall";
 import { Line } from "react-chartjs-2";
@@ -18,7 +18,7 @@ export const DailyFootfall = () => {
 
   const chartRef = useRef<ChartJS>(null);
 
-  const filters  = useSimulatedFootfall(Period.MONTH, GroupBy.DAY);
+  const filters  = useSimulatedFootfall(Period.MONTHLY, GroupBy.DAY);
 
   const {
     startDate,

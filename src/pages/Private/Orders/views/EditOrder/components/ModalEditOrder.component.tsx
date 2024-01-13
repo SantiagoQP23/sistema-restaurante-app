@@ -89,8 +89,6 @@ export const ModalEditOrder: FC<Props> = ({ open, closeModal, order }) => {
       data.deliveryTime = deliveryTime;
     }
 
-    console.log(data);
-
     updateOrder(data);
 
     closeModal();

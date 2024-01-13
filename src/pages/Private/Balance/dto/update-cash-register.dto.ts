@@ -1,16 +1,5 @@
-import { CreateCashRegisterDto } from "./create-cash-register.dto";
-
-
 export interface UpdateCashRegisterDto {
-
-  id: string;
-  
-
+  id: number;
   finalAmount: number;
-
-
-
   closingNote?: string;
-
-
 }

@@ -24,7 +24,6 @@ import { formatMoney } from "../../../Common/helpers/format-money.helper";
 import { useBill } from "../../hooks/useBills";
 // import { generateInvoicePdf } from "../../helpers/generateInvoicePdf.helper";
 
-
 /**
  * View to display the bill
  * @version v1.0 24-12-2023
@@ -167,31 +166,27 @@ export const Bill = () => {
                 <TableBody>
                   {bill.details.map((detail) => {
                     return (
-                      <>
-                        <TableRow
-                          key={detail.id}
+                      <TableRow
+                        key={detail.id}
+                        sx={{
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <TableCell align="center">{detail.quantity}</TableCell>
+                        <TableCell
                           sx={{
-                            whiteSpace: "nowrap",
+                            fontWeight: "bold",
                           }}
                         >
-                          <TableCell align="center">
-                            {detail.quantity}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {detail.orderDetail.product.name}
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMoney(detail.price)}
-                          </TableCell>
-                          <TableCell align="right">
-                            {formatMoney(detail.total)}
-                          </TableCell>
-                        </TableRow>
-                      </>
+                          {detail.orderDetail.product.name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatMoney(detail.price)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatMoney(detail.total)}
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
 

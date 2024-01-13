@@ -83,7 +83,6 @@ export const EditTable = () => {
       await callEndpoint(createTable(form))
         .then((resp) => {
           const { data } = resp;
-          console.log(data);
           dispatch(addTable(data));
           enqueueSnackbar("Mesa añadida", { variant: "success" });
         })

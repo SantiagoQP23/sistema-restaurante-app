@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useCashRegisterStore } from "../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../Common/store/useCashRegisterStore";
 import { LoadingButton } from "@mui/lab";
 
 export const ModalCreateCashRegister = () => {

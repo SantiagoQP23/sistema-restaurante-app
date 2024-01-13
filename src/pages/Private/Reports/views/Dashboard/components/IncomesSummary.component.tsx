@@ -10,13 +10,12 @@ import { NavLink as RouterLink } from "react-router-dom";
 import { useState } from "react";
 import { MonetizationOn } from "@mui/icons-material";
 import { DateIncome } from "../../../models/date-orders.interface";
-import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 import { Label } from "../../../../../../components/ui";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 
 export const IncomesSummary = () => {
   const { activeCashRegister } = useCashRegisterStore();
-
 
   return (
     <>
@@ -43,16 +42,11 @@ export const IncomesSummary = () => {
             <Typography variant="h3" component="div">
               {activeCashRegister && formatMoney(activeCashRegister.balance)}
               <Label sx={{ ml: 1 }} color="success">
-                +{" "}
-                {formatMoney(
-                  activeCashRegister.totalIncomes +
-                    activeCashRegister.totalInvoices +
-                    activeCashRegister.initialAmount
-                )}
+                + {formatMoney(0)}
               </Label>
 
               <Label sx={{ ml: 1 }} color="error">
-                - {formatMoney(activeCashRegister.totalExpenses)}
+                - {formatMoney(0)}
               </Label>
             </Typography>
           )}

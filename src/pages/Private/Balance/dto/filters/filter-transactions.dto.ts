@@ -1,11 +1,5 @@
-
-
-
 export interface FilterTransactionsDto {
+  cashRegisterId?: number;
 
-
-  cashRegisterId?: string;
-
-  userId?: string
-
+  userId?: string;
 }

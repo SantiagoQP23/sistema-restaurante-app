@@ -27,7 +27,7 @@ import { Pie } from "react-chartjs-2";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useDateFilter } from "../../../../../../hooks/useDateFilter";
-import { Period } from "../../../../../../models/period.model";
+import { Period } from "../../../../Common/dto/period.model";
 import { groupBy } from "rxjs";
 import { DesktopDatePicker, DesktopDateTimePicker } from "@mui/x-date-pickers";
 import {
@@ -55,7 +55,7 @@ export const UsersSummary = () => {
     handleChangeEndDate,
     handleChangePeriod,
     handleChangeStartDate,
-  } = useDateFilter(Period.TODAY);
+  } = useDateFilter(Period.DAILY);
 
   const { data, refetch } = useQuery<ResponseIncomesByUser[]>(
     ["best-selling-products", { period, startDate, endDate }],
@@ -160,9 +160,9 @@ export const UsersSummary = () => {
                 label="Periodo"
                 size="medium"
               >
-                <MenuItem value={Period.TODAY}>Diario</MenuItem>
-                <MenuItem value={Period.MONTH}>Mensual</MenuItem>
-                <MenuItem value={Period.YEAR}>Anual</MenuItem>
+                <MenuItem value={Period.DAILY}>Diario</MenuItem>
+                <MenuItem value={Period.MONTHLY}>Mensual</MenuItem>
+                <MenuItem value={Period.YEARLY}>Anual</MenuItem>
 
                 <MenuItem value={Period.CUSTOM}>Personalizado</MenuItem>
               </Select>
@@ -173,9 +173,9 @@ export const UsersSummary = () => {
             <DesktopDatePicker
               label="Fecha de inicio"
               inputFormat={
-                period === Period.MONTH
+                period === Period.MONTHLY
                   ? "yyyy MMMM"
-                  : period === Period.YEAR
+                  : period === Period.YEARLY
                   ? "yyyy"
                   : "yyyy-MM-dd"
               }
@@ -185,9 +185,9 @@ export const UsersSummary = () => {
               disableFuture
               maxDate={endDate ? endDate : undefined}
               views={
-                period === Period.MONTH
+                period === Period.MONTHLY
                   ? ["month", "year"]
-                  : period === Period.YEAR
+                  : period === Period.YEARLY
                   ? ["year"]
                   : ["day"]
               }

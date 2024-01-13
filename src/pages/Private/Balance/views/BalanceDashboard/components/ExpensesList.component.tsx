@@ -2,7 +2,6 @@ import { useState, FC, useEffect } from 'react';
 
 import { ArrowDownward, CreditCard, Edit, Paid, Print } from '@mui/icons-material';
 import { Card, CardHeader, Button, CardContent, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Typography, IconButton, TablePagination, Avatar, ListItem, ListItemAvatar, ListItemText, List, ListItemSecondaryAction, Stack } from '@mui/material';
-import { useExpenses } from '../../../hooks/useExpenses';
 import { format } from 'date-fns';
 import { PaymentMethod } from '../../../../Orders/models/Invoice.model';
 import { Expense } from '../../../models/expense.model';
@@ -20,7 +19,7 @@ interface Props {
 
 export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
 
-  const { expensesQuery, ...filterExpenses } = useExpenses();
+
 
 
   const [activeExpense, setActiveExpense] = useState<Expense | null>(null);
@@ -42,14 +41,6 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
     pdf.open();
 
   }
-
-
-
-
-  useEffect(() => {
-    filterExpenses.handleChangeCashRegister(cashRegister)
-  }, [])
-
 
 
 
@@ -122,79 +113,79 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
             <TableBody>
 
               {
-                expensesQuery.data?.expenses.map((expense) => (
-                  <TableRow key={expense.id}>
-                    <TableCell
+                // .map((expense) => (
+                //   <TableRow key={expense.id}>
+                //     <TableCell
 
-                    >
+                //     >
 
-                      <ListItem>
-                        <ListItemAvatar>
-                          {
-                            expense.transaction.paymentMethod === PaymentMethod.CASH
-                              ? (
-                                <Paid color='success' />
-                              ) : (
+                //       <ListItem>
+                //         <ListItemAvatar>
+                //           {
+                //             expense.transaction.paymentMethod === PaymentMethod.CASH
+                //               ? (
+                //                 <Paid color='success' />
+                //               ) : (
 
-                                <CreditCard color='warning' />
-                              )
-                          }
+                //                 <CreditCard color='warning' />
+                //               )
+                //           }
 
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={expense.transaction.description}
-                          secondary={format(new Date(expense.createdAt), 'dd/MM/yyyy HH:mm')}
-                          primaryTypographyProps={{
-                            variant: 'h4'
-                          }}
-                        />
-                      </ListItem>
-
-
-                    </TableCell>
+                //         </ListItemAvatar>
+                //         <ListItemText
+                //           primary={expense.transaction.description}
+                //           secondary={format(new Date(expense.createdAt), 'dd/MM/yyyy HH:mm')}
+                //           primaryTypographyProps={{
+                //             variant: 'h4'
+                //           }}
+                //         />
+                //       </ListItem>
 
 
-                    <TableCell>
-                      <Typography
-                        color='error.main'
-                      >
-                        - {formatMoney(expense.transaction.amount)}
-                      </Typography>
+                //     </TableCell>
 
 
-                    </TableCell>
-                    <TableCell
-                      align='center'
-                    >
+                //     <TableCell>
+                //       <Typography
+                //         color='error.main'
+                //       >
+                //         - {formatMoney(expense.transaction.amount)}
+                //       </Typography>
 
-                      <Stack direction='row' spacing={2}  justifyContent='center'>
-                        <IconButton
-                          color='primary'
-                          onClick={() => handlePrint(expense)}
-                        >
-                          <Print />
-                        </IconButton>
 
-                        {
-                          editable && (
-                            <Button
+                //     </TableCell>
+                //     <TableCell
+                //       align='center'
+                //     >
+
+                //       <Stack direction='row' spacing={2}  justifyContent='center'>
+                //         <IconButton
+                //           color='primary'
+                //           onClick={() => handlePrint(expense)}
+                //         >
+                //           <Print />
+                //         </IconButton>
+
+                //         {
+                //           editable && (
+                //             <Button
                               
-                              startIcon={<Edit />}
-                              size='small'
-                              onClick={() => handleOpenDrawer(expense)}
-                            >
-                              Editar
-                            </Button>
-                          )
-                        }
-                      </Stack>
+                //               startIcon={<Edit />}
+                //               size='small'
+                //               onClick={() => handleOpenDrawer(expense)}
+                //             >
+                //               Editar
+                //             </Button>
+                //           )
+                //         }
+                //       </Stack>
 
-                    </TableCell>
+                //     </TableCell>
 
-                  </TableRow>
+                //   </TableRow>
 
 
-                ))
+                // ))
               }
 
 
@@ -204,7 +195,7 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
 
 
         </TableContainer>
-        <TablePagination
+        {/* <TablePagination
 
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -214,7 +205,7 @@ export const ExpensesList: FC<Props> = ({ cashRegister, editable = false }) => {
           onPageChange={() => { }}
           onRowsPerPageChange={() => { }}
 
-        />
+        /> */}
 
 
 

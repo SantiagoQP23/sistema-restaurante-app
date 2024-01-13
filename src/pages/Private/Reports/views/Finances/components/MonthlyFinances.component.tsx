@@ -8,7 +8,7 @@ import { endOfYear, startOfWeek } from 'date-fns';
 import { Bar } from "react-chartjs-2";
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
 import { FinanceResponse, getFinances } from '../../../services/finances.service';
-import { Period, GroupBy } from '../../../../../../models/period.model';
+import { Period, GroupBy } from '../../../../Common/dto/period.model';
 import { Chart as ChartJS } from 'chart.js';
 import html2canvas from 'html2canvas';
 import { generateFinancialsReportPdf } from '../../../helpers/pdf-financials-report';
@@ -22,7 +22,7 @@ export const MonthlyFinances = () => {
   const chartRef = useRef<ChartJS>(null);
 
 
-  const filters = useDateFilter(Period.YEAR);
+  const filters = useDateFilter(Period.YEARLY);
 
   const {
     startDate,
@@ -35,7 +35,7 @@ export const MonthlyFinances = () => {
     () => {
 
       return getFinances({
-        period: Period.YEAR,
+        period: Period.YEARLY,
         startDate,
         endDate: endDate, 
         groupBy: GroupBy.MONTH,
@@ -84,9 +84,9 @@ export const MonthlyFinances = () => {
       const canvas = await html2canvas(chartRef.current.canvas);
 
       urlImage = canvas.toDataURL('image/png');
-    };
+    }
 
-    const pdf = await generateFinancialsReportPdf(data, { ...filters, period: Period.YEAR, }, urlImage);
+    const pdf = await generateFinancialsReportPdf(data, { ...filters, period: Period.YEARLY, }, urlImage);
 
     pdf.open();
 

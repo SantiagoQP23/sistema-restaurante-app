@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { EditOutlined } from "@mui/icons-material";
 import { useEffect } from "react";
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
-import { Period } from "../../../../../../models/period.model";
+import { Period } from "../../../../Common/dto/period.model";
 
 
 export const CardIncomesByUser = () => {

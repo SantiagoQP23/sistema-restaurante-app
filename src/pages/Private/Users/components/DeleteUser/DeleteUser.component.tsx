@@ -48,7 +48,6 @@ export const DeleteUser:FC = () => {
 
   useEffect(() => {
     subscription$.subscribe((data) => {
-      console.log(data)
       setUser(data.user)
       setOpen(!!data.value);
 

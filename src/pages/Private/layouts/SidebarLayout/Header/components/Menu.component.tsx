@@ -19,7 +19,7 @@ import { SidebarContext } from "../../../../Common/contexts/SidebarContext";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import { PointOfSale } from "@mui/icons-material";
-import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `

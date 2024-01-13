@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { NavLink as RouterLink } from "react-router-dom";
-import { GroupBy, Period } from "../../../../../../models/period.model";
+import { GroupBy, Period } from "../../../../Common/dto/period.model";
 import { useQuery } from "@tanstack/react-query";
 import {
   getForecastByDate,
@@ -16,7 +16,7 @@ import {
 } from "../../../services/footfall.service";
 
 export const FootfallSummary = () => {
-  const period = Period.TODAY;
+  const period = Period.DAILY;
 
   const groupBy = GroupBy.DAY;
 

@@ -7,10 +7,10 @@ import {
   ResponseIncomesByUser,
   getIncomesByUser,
 } from "../../../../Reports/services/dashboard.service";
-import { Period } from "../../../../../../models/period.model";
+import { Period } from "../../../../Common/dto/period.model";
 
 export const Users = () => {
-  const { period, startDate, endDate } = useDateFilter(Period.MONTH);
+  const { period, startDate, endDate } = useDateFilter(Period.MONTHLY);
 
   const { data } = useQuery<ResponseIncomesByUser[]>(
     ["best-selling-products", { period, startDate, endDate }],
@@ -19,7 +19,7 @@ export const Users = () => {
         period,
         startDate,
       });
-    },
+    }
   );
 
   return (

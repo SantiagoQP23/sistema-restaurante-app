@@ -1,6 +1,6 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useDateFilter } from "../../../../../../hooks/useDateFilter";
-import { GroupBy, Period } from "../../../../../../models/period.model";
+import { GroupBy, Period } from "../../../../Common/dto/period.model";
 import { PeopleOutline, PersonOutline, Print } from "@mui/icons-material";
 import { TextField, Button, Stack, Grid, Card, CardContent, CardHeader, List, ListItem, ListItemText, ListItemSecondaryAction, Chip, Box } from '@mui/material';
 import { Line } from "react-chartjs-2";
@@ -18,7 +18,7 @@ export const MonthlyFootfall = () => {
 
   const chartRef = useRef<ChartJS>(null);
 
-  const filters = useSimulatedFootfall(Period.YEAR, GroupBy.MONTH);
+  const filters = useSimulatedFootfall(Period.YEARLY, GroupBy.MONTH);
 
   const {
     startDate,
@@ -58,7 +58,7 @@ export const MonthlyFootfall = () => {
       const canvas = await html2canvas(chartRef.current.canvas);
 
       urlImage = canvas.toDataURL('image/png');
-    };
+    }
 
     if(!simulatedFootfallQuery.data) return;
 

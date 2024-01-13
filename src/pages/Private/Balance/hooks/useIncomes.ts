@@ -63,7 +63,6 @@ export const useCreateIncome = () => {
       queryClient.invalidateQueries(["incomes"]);
     },
     onError: () => {
-      console.log("onError");
       enqueueSnackbar("Error al crear el ingreso", { variant: "error" });
     },
   });
@@ -85,7 +84,6 @@ export const useUpdateIncome = () => {
       // queryClient.invalidateQueries(['cashRegisterActive']);
     },
     onError: () => {
-      console.log("onError");
       enqueueSnackbar("Error al actualizar el ingreso", { variant: "error" });
     },
   });

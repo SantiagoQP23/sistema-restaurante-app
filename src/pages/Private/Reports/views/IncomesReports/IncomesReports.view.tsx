@@ -1,32 +1,49 @@
+import { useState, useEffect } from "react";
 
-
-import { useState, useEffect } from 'react';
-
-
-import { useFetchAndLoad } from '../../../../../hooks/useFetchAndLoad';
-import { getOrdersEachDate, getIncomes, getIncomesDate } from '../../services/dashboard.service';
-import { DateIncome } from '../../models/date-orders.interface';
-import { useAsync } from '../../../../../hooks/useAsync';
-import { ArrowBack, Download, PictureAsPdf } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
-import { Grid, Box, Button, Typography, Stack, CardContent, Card, CardHeader, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField, CircularProgress, IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { Bar } from 'react-chartjs-2';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PDFIncomesReports } from './pdf/PDFIncomesReports.component';
-import { CardIncomesByUser } from './components/CardIncomesByUser.component';
-import { usePaginationAsync } from '../../../../../hooks/usePaginationAsync';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { useQuery } from '@tanstack/react-query';
-import { Period } from '../../../../../models/period.model';
-import { TitlePage } from '../../../components/TitlePage.component';
-import { useDateFilter } from '../../../../../hooks/useDateFilter';
-
+import { useFetchAndLoad } from "../../../../../hooks/useFetchAndLoad";
+import {
+  getOrdersEachDate,
+  getIncomes,
+  getIncomesDate,
+} from "../../services/dashboard.service";
+import { DateIncome } from "../../models/date-orders.interface";
+import { useAsync } from "../../../../../hooks/useAsync";
+import { ArrowBack, Download, PictureAsPdf } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import {
+  Grid,
+  Box,
+  Button,
+  Typography,
+  Stack,
+  CardContent,
+  Card,
+  CardHeader,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  CircularProgress,
+  IconButton,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Bar } from "react-chartjs-2";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFIncomesReports } from "./pdf/PDFIncomesReports.component";
+import { CardIncomesByUser } from "./components/CardIncomesByUser.component";
+import { usePaginationAsync } from "../../../../../hooks/usePaginationAsync";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { useQuery } from "@tanstack/react-query";
+import { Period } from "../../../Common/dto/period.model";
+import { TitlePage } from "../../../components/TitlePage.component";
+import { useDateFilter } from "../../../../../hooks/useDateFilter";
 
 export const IncomesReports = () => {
-
   const {
     period,
     startDate,
@@ -36,25 +53,23 @@ export const IncomesReports = () => {
     handleChangeEndDateChecked,
     handleChangePeriod,
     handleChangeStartDate,
-    
-
-  } = useDateFilter(Period.WEEK);
+  } = useDateFilter(Period.WEEKLY);
 
   const {
-   page, nextPage, prevPage, rowsPerPage,
-   
+    page,
+    nextPage,
+    prevPage,
+    rowsPerPage,
+
     handleChangePage,
     handleChangeRowsPerPage,
-  
-
-     } = usePaginationAsync();
+  } = usePaginationAsync();
 
   // const { data, isFetching, refetch, isLoading } = useQuery<DateIncome[]>(['incomes', { period, startDate, endDate, offset: page, limit: rowsPerPage }], () => {
   //   return getIncomesDate({ period, startDate, endDate: endDateChecked ? endDate : null, offset: page, limit: rowsPerPage })
   // })
 
   const navigate = useNavigate();
-
 
   // const dataChart = {
   //   labels: data?.map(date => format(new Date(date.date), 'dd/MM/yyyy')),
@@ -84,16 +99,12 @@ export const IncomesReports = () => {
   //   }
   // };
 
-
   // useEffect(() => {
   //   refetch()
   // }, [period, startDate, endDate, endDateChecked, page, rowsPerPage])
 
-
-
   return (
     <>
-
       {/* <TitlePage
 
         title="Ingresos"
@@ -113,7 +124,6 @@ export const IncomesReports = () => {
        */}
 
       <Grid container spacing={1}>
-
         {/* <Grid item xs={12} md={6}>
 
           <CardIncomesByUser />
@@ -269,5 +279,5 @@ export const IncomesReports = () => {
         </Grid> */}
       </Grid>
     </>
-  )
-}
+  );
+};

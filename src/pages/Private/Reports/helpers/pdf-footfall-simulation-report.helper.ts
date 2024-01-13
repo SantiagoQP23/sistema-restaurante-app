@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { ComparisonFootfallResponse, FootfallResponse } from "../services/footfall.service";
 import { DateFiltePaginationDto } from "../../Common/dto";
-import { Period } from "../../../../models/period.model";
+import { Period } from "../../Common/dto/period.model";
 
 import img from '../../../../assets/logo3.png';
 
@@ -43,7 +43,7 @@ export const generateFootfallSimulationReport = async (data: FootfallResponse, f
     );
 
 
-    if(period === Period.TODAY){
+    if(period === Period.DAILY){
       pdf.add(
         new Txt(`Fecha: ${format(new Date(startDate!), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
       )
@@ -51,12 +51,12 @@ export const generateFootfallSimulationReport = async (data: FootfallResponse, f
       pdf.add(
         new Txt(`Desde: ${format(startDate!, 'eeee dd MMMM yyyy', { locale: es })} Hasta: ${format(endDate || new Date(), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
       )
-    } else if (period === Period.MONTH) {
+    } else if (period === Period.MONTHLY) {
       pdf.add(
         new Txt(`Mes: ${format(startDate!, 'MMMM', {locale: es})}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
       )
   
-    } else if (period === Period.YEAR) {
+    } else if (period === Period.YEARLY) {
       pdf.add(
         new Txt(`Año: ${format(startDate!, 'yyyy')}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
       )
@@ -97,7 +97,7 @@ export const generateFootfallSimulationReport = async (data: FootfallResponse, f
     const body = data.footfall.map((item) => {
       // return [item.date, item.quantity]
       // return [format(new Date(item.date), 'eeee dd MMMM yyyy', {locale: es}), item.real, item.forecast, item.difference]
-      return period === Period.YEAR
+      return period === Period.YEARLY
        ? [item.date, item.quantity]
        : [format(new Date(item.date), 'eeee dd MMMM yyyy', {locale: es}), item.quantity]
 

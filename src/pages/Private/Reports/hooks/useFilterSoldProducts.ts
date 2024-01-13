@@ -1,21 +1,7 @@
 import {useState} from 'react';
 import { SelectChangeEvent } from '@mui/material/';
+import { GroupBy, Period } from '../../Common/dto/period.model';
 
-export enum Period {
-  DAILY = 'daily',
-  WEEKLY = 'weekly',
-  MONTHLY = 'monthly',
-  YEARLY = 'yearly',
-  CUSTOM = 'custom',
-}
-
-export enum GroupBy {
-  DAY = 'day',
-  WEEK = 'week',
-  MONTH = 'month',
-  YEAR = 'year',
-
-}
 
 export enum CustomGroupBy {
   PRODUCT = 'product',

@@ -4,7 +4,7 @@ import { LinearProgressWrapper } from "./ComparisonFootfall.component";
 import { DatePicker } from '@mui/x-date-pickers';
 import { Print } from '@mui/icons-material';
 import { useComparisonFootfall } from '../../../hooks/useFootfall';
-import { GroupBy, Period } from '../../../../../../models/period.model';
+import { GroupBy, Period } from '../../../../Common/dto/period.model';
 import { generateFootfallComparisonReport } from '../../../helpers/pdf-footfall-comparison-report.helper';
 import { useRef } from 'react';
 import { Chart as ChartJS } from 'chart.js';
@@ -16,7 +16,7 @@ export const ComparisonFootfallMonthly = () => {
 
   const chartRef = useRef<ChartJS>(null);
 
-  const filters = useComparisonFootfall(Period.YEAR, GroupBy.MONTH);
+  const filters = useComparisonFootfall(Period.YEARLY, GroupBy.MONTH);
   const { startDate, handleChangeStartDate, comparisonFootfallQuery } = filters;
   
   const data = {

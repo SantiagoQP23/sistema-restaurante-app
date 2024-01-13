@@ -16,7 +16,7 @@ import {
 } from "../services/orders.service";
 import { IOrder, OrderStatus } from "../../../../models";
 import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
-import { Period } from "../../../../models/period.model";
+import { Period } from "../../Common/dto/period.model";
 import { useFilterOrders } from "./useFilterOrders";
 import { useDateFilter } from "../../../../hooks/useDateFilter";
 
@@ -70,7 +70,7 @@ export const useOrders = () => {
 export const useActiveOrders = () => {
   const pagination = usePaginationAsync();
 
-  const dateFilter = useDateFilter(Period.YEAR);
+  const dateFilter = useDateFilter(Period.YEARLY);
 
   const dispatch = useDispatch();
 

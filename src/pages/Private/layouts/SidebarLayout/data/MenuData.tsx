@@ -20,7 +20,7 @@ import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 import { ValidRoles } from "../../../Common/models/valid-roles.model";
 
-const generalSection = {
+const generalSection: MenuSection = {
   title: "GENERAL",
   allowedRoles: [ValidRoles.admin],
   items: [
@@ -30,9 +30,26 @@ const generalSection = {
       to: "/reports",
     },
     {
-      title: "Balance",
+      title: "Finanzas",
       icon: <AccountBalanceWallet />,
-      to: "/balance",
+      to: "/financial",
+      subItems: [
+        {
+          title: "Transacciones",
+          to: "/financial/transactions",
+          icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+        },
+        {
+          title: "Caja",
+          to: "/financial/cash-register/actives",
+          icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+        },
+        {
+          title: "Cuentas",
+          to: "/financial/accounts",
+          icon: <FiberManualRecord sx={{ fontSize: 8 }} />,
+        },
+      ],
     },
   ],
 };

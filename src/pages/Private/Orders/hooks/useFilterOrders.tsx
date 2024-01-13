@@ -1,6 +1,6 @@
 import { usePagination } from "@mui/lab";
 import { useDateFilter } from "../../../../hooks/useDateFilter"
-import { Period } from "../../../../models/period.model";
+import { Period } from "../../Common/dto/period.model";
 import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 import { useState } from "react";
 import { IClient, ITable, IUser, OrderStatus } from "../../../../models";

@@ -16,8 +16,6 @@ export const startLogin =
         password,
       });
 
-      console.log({ data });
-
       localStorage.setItem("token", data.token);
       localStorage.setItem("token-init-date", String(new Date().getTime()));
 

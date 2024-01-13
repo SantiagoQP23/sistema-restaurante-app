@@ -61,9 +61,9 @@ export const generatePdfIncome = async (income: Income): Promise<ICreatePDF> => 
     new Txt(`Método de pago: ${getPaymentMethod(income.transaction.paymentMethod)}`).margin([0, 0, 0, 5]).end
   );
 
-  pdf.add(
-    new Txt(`Responsable: ${income.transaction.responsible.person.firstName} ${income.transaction.responsible.person.lastName}`).margin([0, 0, 0, 5]).end
-  );
+  // pdf.add(
+  //   new Txt(`Responsable: ${income.transaction.responsible.person.firstName} ${income.transaction.responsible.person.lastName}`).margin([0, 0, 0, 5]).end
+  // );
 
   pdf.add(
     new Txt(`Registrado por: ${income.transaction.user.person.firstName} ${income.transaction.user.person.lastName}`).margin([0, 0, 0, 5]).end

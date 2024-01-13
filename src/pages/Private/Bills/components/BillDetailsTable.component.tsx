@@ -18,10 +18,12 @@ export const BillDetailsTable: FC<Props> = ({ details }) => {
     <>
       <Table>
         <TableHead>
-          <TableCell>Cantidad</TableCell>
-          <TableCell>Producto</TableCell>
-          <TableCell>Precio</TableCell>
-          <TableCell>Total</TableCell>
+          <TableRow>
+            <TableCell>Cantidad</TableCell>
+            <TableCell>Producto</TableCell>
+            <TableCell>Precio</TableCell>
+            <TableCell>Total</TableCell>
+          </TableRow>
         </TableHead>
 
         <TableBody>
