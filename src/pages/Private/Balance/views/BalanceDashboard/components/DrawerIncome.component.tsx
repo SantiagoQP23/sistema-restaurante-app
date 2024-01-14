@@ -40,7 +40,7 @@ export const DrawerIncome: FC<Props> = ({
 
   const deleteMutation = useDeleteIncome(income.id);
 
-  const [responsibleUser, setResponsibleUser] = useState<IUser | null>(income.transaction.responsible);
+  const [responsibleUser, setResponsibleUser] = useState<IUser | null>(null);
 
 
   const { handleClose, isOpen, handleOpen } = useModal();
@@ -78,9 +78,6 @@ export const DrawerIncome: FC<Props> = ({
     //   form.clientId = client.id;
     // }
 
-    if (responsibleUser) {
-      form.responsibleId = responsibleUser.id;
-    }
 
     mutateAsync({ ...form, id: income.id });
 
@@ -88,7 +85,7 @@ export const DrawerIncome: FC<Props> = ({
 
   useEffect(() => {
     setClient(income.client || null);
-    setResponsibleUser(income.transaction.responsible || null);
+    setResponsibleUser( null);
     setValue('description', income.transaction.description);
     setValue('amount', income.transaction.amount);
     setValue('paymentMethod', income.transaction.paymentMethod);
@@ -106,6 +103,7 @@ export const DrawerIncome: FC<Props> = ({
         open={isOpen}
         onClose={handleClose}
         onChange={handleChangeResponsible}
+        value={responsibleUser}
       />
 
       {/* <ModalSelectClient open={isOpen} onClose={handleClose} onChange={handleChangeClient} /> */}

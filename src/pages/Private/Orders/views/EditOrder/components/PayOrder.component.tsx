@@ -30,7 +30,7 @@ import { useInvoiceStore } from "../../../store/invoiceStore";
 import { BtnFinalConsumer } from "./BtnFinalConsumer.component";
 import { statusModalClientOrder } from "../../../services/sharing-information.service";
 import { PaymentMethod } from "../../../models/Invoice.model";
-import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 import { useCreateInvoiceOrder } from "../../../hooks/useInvocesOrder";
 import { LoadingButton } from "@mui/lab";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
@@ -93,13 +93,13 @@ export const PayOrder: FC<Props> = ({ order }) => {
     const invoice = getInvoice();
     console.log(invoice);
 
-    if (activeCashRegister) {
-      invoice.cashRegisterId = activeCashRegister.id;
+    // if (activeCashRegister) {
+    //   invoice.cashRegisterId = activeCashRegister.id;
 
-      createInvoiceOrder(invoice);
-    } else {
-      alert("No hay caja activa");
-    }
+    //   createInvoiceOrder(invoice);
+    // } else {
+    //   alert("No hay caja activa");
+    // }
   };
 
   return (

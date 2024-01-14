@@ -36,15 +36,13 @@ export const PrivateRouter: RouteObject[] = [
         element: <Auth allowedRoles={[ValidRoles.admin]} />,
         children: [UsersRouter],
       },
-
-
       {
         path: PrivateRoutes.REPORTS,
         element: <Auth allowedRoles={[ValidRoles.admin]} />,
         children: [ReportsRouter],
       },
       {
-        path: PrivateRoutes.BALANCE,
+        path: '/financial',
         element: <Auth allowedRoles={[ValidRoles.admin]} />,
         children: [BalanceRouter],
       },

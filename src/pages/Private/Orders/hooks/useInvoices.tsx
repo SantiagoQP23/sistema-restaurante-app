@@ -45,7 +45,7 @@ export const useInvoices = () => {
       paymentMethod: filter.paymentMethod || undefined,
       transactionNumber: filter.transactionNumber || undefined,
       notaDeVenta: filter.notaDeVenta || undefined,
-      cashRegisterId: filter.cashRegister ? filter.cashRegister.id : undefined,
+      // cashRegisterId: filter.cashRegister ? filter.cashRegister.id : undefined,
 
 
     }), {

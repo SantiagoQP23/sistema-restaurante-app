@@ -1,10 +1,16 @@
 import { PaymentMethod } from "../../../../models";
+import { TransactionType } from "../../Common/enums/transaction-type.enum";
 
 
 export interface CreateTransactionDto {
+  title: string;
   description: string;
   amount: number;
   paymentMethod: PaymentMethod;
-  responsibleId: string;
-  cashRegisterId: string;
+  type: TransactionType;
+  categoryId: number;
+  cashRegisterId?: number;
+  accountId?: number;
+  performedById?: string;
+  isEditable?: boolean;
 }

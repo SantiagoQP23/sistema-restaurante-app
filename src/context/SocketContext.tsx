@@ -26,11 +26,7 @@ export const SocketProvider: FC<Props> = ({ children }) => {
 
   const { status } = useSelector(selectAuth);
 
-  //const {usuario, status} = useAppSelector(selectAuth);
-
   useEffect(() => {
-    //console.log(usuario?.online)
-
     if (status === "not-authenticated") {
       console.log("Desconectando socket");
       desconectarSocket();

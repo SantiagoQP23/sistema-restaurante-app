@@ -11,6 +11,8 @@ import {
   Box,
   Stack,
   Chip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material/";
 
 import { ICreateOrderDetail, IOrder } from "../../../../../models/orders.model";
@@ -94,7 +96,6 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
     if (selectedOption) {
       data.productOptionId = selectedOption.id;
     }
-    console.log(data);
     createOrderDetail(data);
   };
 

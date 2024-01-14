@@ -1,17 +1,11 @@
-import { TypeTransaction } from "../models/cash-transaction.model";
-
-
+import { TransactionType } from "../../Common/enums/transaction-type.enum";
 
 export interface CreateCashTransactionDto {
-
-  reason: string;
-
-  responsible: string;
-
-  type: TypeTransaction;
-
+  description: string;
+  type: TransactionType;
   amount: number;
-
-  cashRegisterId: string;
-
-} 
+  cashRegisterId: number;
+  performedById: string;
+  categoryId: number;
+  isEditable?: boolean;
+}

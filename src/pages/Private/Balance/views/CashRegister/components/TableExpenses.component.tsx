@@ -1,9 +1,6 @@
-import { Edit } from "@mui/icons-material"
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Typography, IconButton, TablePagination } from "@mui/material"
-import { format } from "date-fns"
-import { PaymentMethod } from "../../../../Orders/models/Invoice.model"
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination } from "@mui/material"
 import { CashRegister } from '../../../models/cash-register.model';
-import { useExpenses } from "../../../hooks/useExpenses";
+
 import { FC, useEffect } from "react";
 
 interface Props {
@@ -12,12 +9,12 @@ interface Props {
 
 export const TableExpenses: FC<Props> = ({cashRegister}) => {
 
-  const { expensesQuery, ...filterExpenses } = useExpenses();
+  // const { expensesQuery, ...filterExpenses } = useExpenses();
 
 
-  useEffect(() => {
-    filterExpenses.handleChangeCashRegister(cashRegister)
-  }, [])
+  // useEffect(() => {
+  //   filterExpenses.handleChangeCashRegister(cashRegister)
+  // }, [])
 
 
 
@@ -43,47 +40,43 @@ export const TableExpenses: FC<Props> = ({cashRegister}) => {
           <TableBody>
 
             {
-              expensesQuery.data?.expenses.map((expense) => (
-                <TableRow key={expense.id}>
-                  <TableCell>
-                    <Typography variant='h5'>
-                      {expense.transaction.description}
-                    </Typography>
+              // expensesQuery.data?.expenses.map((expense) => (
+              //   <TableRow key={expense.id}>
+              //     <TableCell>
+              //       <Typography variant='h5'>
+              //         {expense.transaction.description}
+              //       </Typography>
 
-                    {
-                      expense.supplier && (
-                        <Typography variant='body2'>
-                          {expense.supplier.person.firstName} {expense.supplier.person.lastName}
-                        </Typography>
-                      )
-                    }
-                  </TableCell>
-                  <TableCell>
-                    <Typography>
-                      {format(new Date(expense.createdAt), 'dd/MM/yyyy')}
+              //       {
+              //         expense.supplier && (
+              //           <Typography variant='body2'>
+              //             {expense.supplier.person.firstName} {expense.supplier.person.lastName}
+              //           </Typography>
+              //         )
+              //       }
+              //     </TableCell>
+              //     <TableCell>
+              //       <Typography>
+              //         {format(new Date(expense.createdAt), 'dd/MM/yyyy')}
 
-                    </Typography>
-                    <Typography>
-                      {format(new Date(expense.createdAt), 'HH:mm')}
+              //       </Typography>
+              //       <Typography>
+              //         {format(new Date(expense.createdAt), 'HH:mm')}
 
-                    </Typography>
-                  </TableCell>
+              //       </Typography>
+              //     </TableCell>
 
-                  <TableCell>$ {expense.transaction.amount}</TableCell>
-                  <TableCell>{expense.transaction.paymentMethod === PaymentMethod.CASH ? 'Efectivo' : 'Transferencia'}</TableCell>
-                  <TableCell>
-                    {/* <IconButton
-                      color='primary'
-                      onClick={() => handleOpenDrawer(expense)}
-                    >
-                      <Edit />
-                    </IconButton> */}
-                  </TableCell>
+              //     <TableCell>$ {expense.transaction.amount}</TableCell>
+              //     <TableCell>{expense.transaction.paymentMethod === PaymentMethod.CASH ? 'Efectivo' : 'Transferencia'}</TableCell>
+              //     <TableCell>
+                    
 
-                </TableRow>
+              //     </TableCell>
+
+              //   </TableRow>
 
 
-              ))
+              // ))
             }
 
 
@@ -93,7 +86,7 @@ export const TableExpenses: FC<Props> = ({cashRegister}) => {
 
 
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
 
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
@@ -103,7 +96,7 @@ export const TableExpenses: FC<Props> = ({cashRegister}) => {
         onPageChange={() => { }}
         onRowsPerPageChange={() => { }}
 
-      />
+      /> */}
     </>
   )
 }

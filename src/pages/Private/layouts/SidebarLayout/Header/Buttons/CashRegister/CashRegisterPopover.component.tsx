@@ -1,16 +1,19 @@
 import { ExpandLess, PointOfSale } from "@mui/icons-material";
-import { Box, IconButton, Stack, Typography, useTheme, ListItemText, ListItemSecondaryAction, List, ListItem } from '@mui/material';
+import {
+  Box,
+  Divider,
+  IconButton,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useCashRegisterStore } from '../../../../../Common/store/cashRegisterStore';
-import { Popover, Button } from '@mui/material/';
-import { useRef, useState } from 'react';
-import { formatMoney } from '../../../../../Common/helpers/format-money.helper';
-import { Label } from "../../../../../../../components/ui";
-
-
+import { useCashRegisterStore } from "../../../../../Common/store/useCashRegisterStore";
+import { Popover, Button } from "@mui/material/";
+import { useRef, useState } from "react";
+import { CashRegisterSummary } from "./CashRegisterSummary.component";
 
 export const CashRegisterPopover = () => {
-
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -22,54 +25,30 @@ export const CashRegisterPopover = () => {
     setOpen(false);
   };
 
-  const { activeCashRegister } = useCashRegisterStore();
-
+  const { cashRegisters } = useCashRegisterStore();
 
   const navigate = useNavigate();
   const theme = useTheme();
 
-
   return (
     <>
-
-      <IconButton
-        ref={ref} onClick={handleOpen}
-        sx={{
-          // display: {
-          //   xs: 'flex',
-          //   md: 'none',
-
-          // },
-          // border: `1px solid ${theme.palette.divider}`,
-        }}
-
-      // onClick={() => {
-      //   navigate('/balance');
-      // }}
-
-      >
-        <PointOfSale
-          color={activeCashRegister ? 'success' : 'error'}
-
-        />
-
+      <IconButton ref={ref} onClick={handleOpen}>
+        <PointOfSale color={cashRegisters.length > 0 ? "success" : "error"} />
       </IconButton>
-
 
       <Popover
         anchorEl={ref.current}
         onClose={handleClose}
         open={isOpen}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
+          vertical: "top",
+          horizontal: "right",
         }}
       >
-
         <Box
           sx={{
             p: 2,
@@ -78,136 +57,51 @@ export const CashRegisterPopover = () => {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-
         >
-          <Typography variant="h4">Caja </Typography>
-          <Stack direction='row' spacing={1} alignItems='center'>
-
-            <IconButton
-              onClick={handleClose}
-            >
+          <Typography variant="h4">Cajas </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <IconButton onClick={handleClose}>
               <ExpandLess />
             </IconButton>
-
           </Stack>
         </Box>
 
-        {
-          activeCashRegister ? (
-            <>
-              <Box>
-
-                <Typography variant="h3" textAlign='center'
-                  color={activeCashRegister ? 'success.main' : 'error.main'}
-                >
-                  {formatMoney(activeCashRegister.balance)}
-                </Typography>
-
-                <List>
-                  <ListItem>
-                    <ListItemText>
-                      Monto inicial
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <Typography>
-                        {formatMoney(activeCashRegister.initialAmount)}
-                      </Typography>
-
-
-                    </ListItemSecondaryAction>
-                  </ListItem>
-
-                  <ListItem>
-                    <ListItemText>
-                      Ventas
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-
-                      <Label color="success">
-                        {formatMoney(activeCashRegister.totalInvoicesCash)}
-
-                      </Label>
-                      <Typography>
-                      </Typography>
-
-                      </ListItemSecondaryAction>
-
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText>
-                      Ingresos
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-
-                      <Label color="success">
-                        {formatMoney(activeCashRegister.totalIncomesCash)}
-
-                      </Label>
-                      <Typography>
-                      </Typography>
-
-                      </ListItemSecondaryAction>
-
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText>
-                      Gastos
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-
-                      <Label color="error">
-                        {formatMoney(activeCashRegister.totalExpensesCash)}
-
-                      </Label>
-                      <Typography>
-                      </Typography>
-
-                      </ListItemSecondaryAction>
-
-                  </ListItem>
-
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    size="small"
-                    sx={{
-                      mt: 2,
-                    }}
-                    startIcon={<PointOfSale />}
-                    onClick={() => {
-                      navigate('/balance');
-                    }}
-                  >
-                    Ver detalle
-                  </Button>
-
-                </List>
-
-
-             
-
-              </Box>
-            </>
-          ) : (
-            <>
-              <Box>
-
-                <Typography>
-                  No hay caja abierta
-                </Typography>
-
-
-
-              </Box>
-            </>
-          )
-
-
-
-        }
-
+        {cashRegisters.length > 0 ? (
+          <>
+            <Stack spacing={1} px={1} mb={1} divider={<Divider />}>
+              {cashRegisters.map((cashRegister) => (
+                <CashRegisterSummary
+                  cashRegister={cashRegister}
+                  key={cashRegister.id}
+                />
+              ))}
+            </Stack>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+              mb={1}
+            >
+              <Button
+                size="small"
+                startIcon={<PointOfSale />}
+                onClick={() => {
+                  navigate("/balance");
+                }}
+              >
+                Ver más
+              </Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Box m={2}>
+              <Typography textAlign="center">No hay cajas activas</Typography>
+            </Box>
+          </>
+        )}
       </Popover>
-
     </>
-  )
-}
+  );
+};

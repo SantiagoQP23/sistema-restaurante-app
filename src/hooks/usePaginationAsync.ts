@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Period } from "../models/period.model";
+import { Period } from "../pages/Private/Common/dto/period.model";
 import { SelectChangeEvent } from "@mui/material";
 
 

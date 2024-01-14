@@ -48,7 +48,6 @@ export const OrdersByDate = () => {
 
     const dateStr = formatDate(newValue);
 
-    console.log('dateStr', dateStr)
 
     await callEndpoint(getOrdersByDate({ startDate: dateStr }))
       .then(resp => {

@@ -5,7 +5,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { Print } from '@mui/icons-material';
 import { useComparisonFootfall } from '../../../hooks/useFootfall';
 import { format } from 'date-fns';
-import { GroupBy, Period } from '../../../../../../models/period.model';
+import { GroupBy, Period } from '../../../../Common/dto/period.model';
 import { es } from 'date-fns/locale';
 import { useRef } from 'react';
 import { Chart as ChartJS } from 'chart.js';
@@ -18,7 +18,7 @@ export const ComparisonFottfallDaily = () => {
 
   const chartRef = useRef<ChartJS>(null);
 
-  const filters = useComparisonFootfall(Period.MONTH, GroupBy.DAY);
+  const filters = useComparisonFootfall(Period.MONTHLY, GroupBy.DAY);
 
   const {startDate, handleChangeStartDate, comparisonFootfallQuery} = filters;
   

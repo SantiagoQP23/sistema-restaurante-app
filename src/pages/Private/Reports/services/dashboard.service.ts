@@ -1,7 +1,8 @@
 import { restauranteApi } from "../../../../api";
 import { DateIncome } from "../models/date-orders.interface";
-import { CustomGroupBy, GroupBy, Period } from "../hooks/useFilterSoldProducts";
+import { CustomGroupBy, } from "../hooks/useFilterSoldProducts";
 import { DateFilterDto } from "../../Common/dto";
+import { Period, GroupBy } from "../../Common/dto/period.model";
 
 export interface FilterDto {
   period: Period;

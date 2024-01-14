@@ -14,7 +14,7 @@ import {
   FinanceResponse,
   getFinances,
 } from "../../../services/finances.service";
-import { GroupBy, Period } from "../../../../../../models/period.model";
+import { GroupBy, Period } from "../../../../Common/dto/period.model";
 import { startOfWeek } from "date-fns";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 

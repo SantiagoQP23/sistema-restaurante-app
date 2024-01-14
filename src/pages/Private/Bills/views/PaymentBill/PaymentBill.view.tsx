@@ -34,7 +34,8 @@ import { LoadingButton } from "@mui/lab";
 import { Label } from "../../../../../components/ui";
 import { format } from "date-fns";
 import { UpdateBillDto } from "../../dto";
-import { useCashRegisterStore } from "../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../Common/store/useCashRegisterStore";
+import { CashRegisterItem } from "./components/CashRegisterItem.component";
 
 export const PaymentBill = () => {
   const { id } = useParams();
@@ -44,7 +45,7 @@ export const PaymentBill = () => {
   const { isLoading, data: bill } = useBill(+id);
 
   const navigate = useNavigate();
-
+  const { cashRegisters } = useCashRegisterStore((state) => state);
   const {
     mutate: updateBill,
     isLoading: isUpdating,
@@ -80,7 +81,7 @@ export const PaymentBill = () => {
   const handleChangeClient = (client: IClient | null) => setClient(client);
   const [receivedAmount, setReceivedAmount] = useState<number>(0);
 
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.CASH);
 
   const handleChangePaymentMethod = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -149,9 +150,6 @@ export const PaymentBill = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Stack direction="column" spacing={2}>
-              {!activeCashRegister && (
-                <Alert severity="error">No hay una caja activa</Alert>
-              )}
               <Card>
                 <CardHeader
                   avatar={
@@ -213,21 +211,6 @@ export const PaymentBill = () => {
                           />
                         )}
                       </Box>
-
-                      {/* <BtnFinalConsumer setClient={handleChangeClient} /> */}
-                      {/* <Card
-                          sx={{
-                            p: 1,
-                          }}
-                        >
-                        </Card> */}
-
-                      {/* <Card
-                          sx={{
-                            p: 1,
-                          }}
-                        > */}
-                      {/* </Card> */}
                     </>
                     <Box
                       sx={{
@@ -276,7 +259,7 @@ export const PaymentBill = () => {
                   subheader={
                     step !== 2 && paymentMethod
                       ? paymentMethod === PaymentMethod.CASH
-                        ? "Efectivo"
+                        ? "Efectivo en " + `Caja N° ${activeCashRegister?.id}`
                         : "Transferencia"
                       : ""
                   }
@@ -288,42 +271,61 @@ export const PaymentBill = () => {
                       value={paymentMethod}
                       onChange={handleChangePaymentMethod}
                     >
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                          <Card
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              p: 1,
-                            }}
-                          >
-                            <FormControlLabel
-                              value={PaymentMethod.CASH}
-                              label={"Efectivo"}
-                              control={<Radio />}
-                            />
-                            <MonetizationOnOutlined color="success" />
-                          </Card>
+                      <Stack spacing={2}>
+                        <FormControlLabel
+                          value={PaymentMethod.CASH}
+                          label={
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              justifyContent="space-between"
+                              spacing={1}
+                            >
+                              <MonetizationOnOutlined color="success" />
+                              <Typography variant="h6">Efectivo</Typography>
+                            </Stack>
+                          }
+                          control={<Radio />}
+                        />
+
+                        {paymentMethod === PaymentMethod.CASH && (
+                          <Grid container spacing={1}>
+                            {cashRegisters.length > 0 ? (
+                              cashRegisters.map((cashRegister) => (
+                                <Grid item xs={6} md={3} key={cashRegister.id}>
+                                  <CashRegisterItem
+                                    cashRegister={cashRegister}
+                                  />
+                                </Grid>
+                              ))
+                            ) : (
+                              <Alert severity="error">
+                                No hay cajas registradas
+                              </Alert>
+                            )}
+                          </Grid>
+                        )}
+                        <Grid item xs={12}>
+                          <FormControlLabel
+                            value={PaymentMethod.TRANSFER}
+                            label={
+                              <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                spacing={1}
+                              >
+                                <CreditCard color="warning" />
+                                <Typography variant="h6">
+                                  Transferencia
+                                </Typography>
+                              </Stack>
+                            }
+                            disabled
+                            control={<Radio />}
+                          />
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                          <Card
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              p: 1,
-                            }}
-                          >
-                            <FormControlLabel
-                              value={PaymentMethod.TRANSFER}
-                              label={"Transferencia"}
-                              control={<Radio />}
-                            />
-                            <CreditCard color="warning" />
-                          </Card>
-                        </Grid>
-                      </Grid>
+                      </Stack>
                     </RadioGroup>
                     <Box
                       sx={{
@@ -335,7 +337,11 @@ export const PaymentBill = () => {
                       <Button
                         onClick={handleChangeStep(3)}
                         variant="contained"
-                        disabled={!paymentMethod}
+                        disabled={
+                          !paymentMethod ||
+                          (paymentMethod === PaymentMethod.CASH &&
+                            !activeCashRegister)
+                        }
                       >
                         Siguiente
                       </Button>

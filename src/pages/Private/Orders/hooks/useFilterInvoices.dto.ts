@@ -3,7 +3,7 @@ import {useState} from 'react';
 import { useDateFilter } from "../../../../hooks/useDateFilter";
 import { usePaginationAsync } from "../../../../hooks/usePaginationAsync";
 import { IClient, IUser } from "../../../../models";
-import { Period } from "../../../../models/period.model";
+import { Period } from "../../Common/dto/period.model";
 import { PaymentMethod } from '../models/Invoice.model';
 import { CashRegister } from '../../Balance/models/cash-register.model';
 

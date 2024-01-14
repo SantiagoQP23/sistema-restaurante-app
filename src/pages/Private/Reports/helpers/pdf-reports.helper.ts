@@ -2,7 +2,7 @@ import { ICreatePDF, Img, PdfMakeWrapper, Table, Txt } from "pdfmake-wrapper";
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { DateFilterDto } from "../../Common/dto";
 import { ResponseIncomesByUser } from "../services/dashboard.service";
-import { Period } from "../../../../models/period.model";
+import { Period } from "../../Common/dto/period.model";
 import { format } from "date-fns";
 import { Chart as ChartJS } from 'chart.js';
 import { formatMoney } from "../../Common/helpers/format-money.helper";
@@ -81,7 +81,7 @@ export const generateWaiterReportPdf = async (data: ResponseIncomesByUser[], fil
     new Txt(`Generado en: ${format(new Date(), 'dd MMMM yyyy HH:mm', { locale: es })}`).margin([0, 0, 0, 10]).alignment('center').fontSize(8).end
   );
 
-  if(period === Period.TODAY){
+  if(period === Period.DAILY){
     pdf.add(
       new Txt(`Fecha: ${format(new Date(startDate!), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
@@ -89,12 +89,12 @@ export const generateWaiterReportPdf = async (data: ResponseIncomesByUser[], fil
     pdf.add(
       new Txt(`Desde: ${format(startDate!, 'eeee dd MMMM yyyy', { locale: es })} Hasta: ${format(endDate || new Date(), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
-  } else if (period === Period.MONTH) {
+  } else if (period === Period.MONTHLY) {
     pdf.add(
       new Txt(`Mes: ${format(startDate!, 'MMMM', {locale: es})}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
 
-  } else if (period === Period.YEAR) {
+  } else if (period === Period.YEARLY) {
     pdf.add(
       new Txt(`Año: ${format(startDate!, 'yyyy')}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )

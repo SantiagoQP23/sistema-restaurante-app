@@ -19,11 +19,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import {
   CustomGroupBy,
-  GroupBy,
-  Period,
 } from "../../../hooks/useFilterSoldProducts";
 import { ArrowRight } from "@mui/icons-material";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
+import { GroupBy, Period } from "../../../../Common/dto/period.model";
 
 export const BestSellingProductsSummary = () => {
   const { data } = useQuery<ResultBestSellingProducts>(

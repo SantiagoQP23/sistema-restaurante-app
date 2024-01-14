@@ -21,7 +21,7 @@ import { Close, DeleteOutline, MoreVert } from "@mui/icons-material";
 import { CreateInvoiceDto } from "../../../dto";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
-import { useCashRegisterStore } from "../../../../Common/store/cashRegisterStore";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 import { LoadingButton } from "@mui/lab";
 import { useCreateInvoiceOrder } from "../../../hooks/useInvocesOrder";
 import { Invoice } from "../../../models/Invoice.model";

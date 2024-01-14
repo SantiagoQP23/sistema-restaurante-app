@@ -95,8 +95,6 @@ export const EditUser = () => {
       userId: activeUser!.id,
     }
 
-    console.log({ data })
-
     resetPasswordMutation.mutateAsync(data).then((resp) => {
       enqueueSnackbar('Contraseña reseteada', { variant: 'success' });
     }).catch((err) => {

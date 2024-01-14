@@ -11,7 +11,7 @@ import { useRestaurant } from "./Restaurant/hooks/useRestaurant";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { useCashRegisterActive } from "./Balance/hooks/useCashRegister";
+import { useAllActiveCashRegisters, useCashRegisterActive } from "./Balance/hooks/useCashRegister";
 import { ModalCreateCashRegister } from "./Balance/components/ModalCreateCashRegister.component";
 import {
   useActiveOrders,
@@ -49,7 +49,9 @@ export const Private = () => {
   const { tablesQuery } = useTables();
 
   // Load cash register active
-  useCashRegisterActive();
+  // useCashRegisterActive();
+
+  useAllActiveCashRegisters();
 
   // listener update table
   useOnTableUpdated();

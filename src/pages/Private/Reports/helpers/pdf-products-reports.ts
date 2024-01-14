@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { formatMoney } from '../../Common/helpers/format-money.helper';
 import { DateFilterDto } from '../../Common/dto';
-import { Period } from '../../../../models/period.model';
+import { Period } from '../../Common/dto/period.model';
 
 import logo from '../../../../assets/logo3.png';
 
@@ -52,7 +52,7 @@ export const generateProductsReport = async (
   //   new Txt(`Filtros aplicados`).bold().margin([0, 10, 0, 10]).end
   // )
 
-  if (period === Period.TODAY) {
+  if (period === Period.DAILY) {
     pdf.add(
       new Txt(`Fecha: ${format(new Date(startDate!), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
@@ -60,12 +60,12 @@ export const generateProductsReport = async (
     pdf.add(
       new Txt(`Desde: ${format(startDate!, 'eeee dd MMMM yyyy', { locale: es })} Hasta: ${format(endDate || new Date(), 'eeee dd MMMM yyyy', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
-  } else if (period === Period.MONTH) {
+  } else if (period === Period.MONTHLY) {
     pdf.add(
       new Txt(`Mes: ${format(startDate!, 'MMMM', { locale: es })}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )
 
-  } else if (period === Period.YEAR) {
+  } else if (period === Period.YEARLY) {
     pdf.add(
       new Txt(`Año: ${format(startDate!, 'yyyy')}`).alignment('center').bold().fontSize(10).margin([0, 10, 0, 10]).end
     )

@@ -1,18 +1,4 @@
-import { TypeTransaction } from "../models/cash-transaction.model";
+import { CreateCashTransactionDto } from "./create-cash-transaction.dto";
 
-
-export interface UpdateCashTransactionDto {
-  id: string;
-  amount?: number;
-
-  reason?: string;
-
-  responsible?: string;
-
-  type?: TypeTransaction;
-
-  cashRegisterId?: string;
-
-
-
-}
+export interface UpdateCashTransactionDto
+  extends Partial<CreateCashTransactionDto> {}

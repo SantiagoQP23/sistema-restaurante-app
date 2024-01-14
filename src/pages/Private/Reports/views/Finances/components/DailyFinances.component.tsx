@@ -4,7 +4,7 @@ import { Print } from '@mui/icons-material';
 import { Card, CardContent, CardHeader, List, ListItem, ListItemText, Grid, TextField, Button, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Bar, Line } from "react-chartjs-2";
-import { Period, GroupBy } from '../../../../../../models/period.model';
+import { Period, GroupBy } from '../../../../Common/dto/period.model';
 import { useDateFilter } from '../../../../../../hooks/useDateFilter';
 import { FinanceResponse, getFinances } from '../../../services/finances.service';
 import { useQuery } from '@tanstack/react-query';
@@ -34,7 +34,7 @@ export const DailyFinances = () => {
     () => {
 
       return getFinances({
-        period: Period.MONTH,
+        period: Period.MONTHLY,
         startDate,
         // endDate: new Date(), 
         groupBy: GroupBy.DAY,
@@ -87,9 +87,9 @@ export const DailyFinances = () => {
       const canvas = await html2canvas(chartRef.current.canvas);
 
       urlImage = canvas.toDataURL('image/png');
-    };
+    }
 
-    const pdf = await generateFinancialsReportPdf(data, { ...filters, period: Period.MONTH, }, urlImage);
+    const pdf = await generateFinancialsReportPdf(data, { ...filters, period: Period.MONTHLY, }, urlImage);
 
     pdf.open();
 

@@ -1,32 +1,19 @@
 import { IUser } from "../../../../models";
-// import { CashIncome } from "./cash-transaction.model";
-
+import { CashTransaction } from "./cash-transaction.model";
 
 export interface CashRegister {
-    id: string;
-
-    initialAmount: number;
-
-    finalAmount: number;
-
-    isClosed: boolean;
-
-    closingDate: Date;
-
-    balance: number;
-
-
-    createdAt: Date;
-    updatedAt: Date;
-    user: IUser;
-    closingUser: IUser;
-
-    discrepancy: number;
-
-    
-
-    // cashIncomes: CashIncome[];
-
-
-
+  id: number;
+  initialAmount: number;
+  totalIncome: number;
+  totalExpense: number;
+  finalAmount: number;
+  isClosed: boolean;
+  closedAt?: Date;
+  balance: number;
+  createdAt: string;
+  updatedAt: Date;
+  closedBy: IUser;
+  createdBy: IUser;
+  discrepancy: number;
+  cashTransactions: CashTransaction[];
 }

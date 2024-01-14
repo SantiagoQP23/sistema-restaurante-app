@@ -1,147 +1,121 @@
-import { Box, Button, Card, CardContent, CardHeader, InputLabel, Stack, TextField, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  InputLabel,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ChangeEvent, FC, useState } from "react";
 import { UpdateCashRegisterDto } from "../../../dto/update-cash-register.dto";
 import { useUpdateCashRegister } from "../../../hooks/useCashRegister";
-import { ActiveCashRegister } from "../../../services/cash-register.service";
-import { formatMoney } from '../../../../Common/helpers/format-money.helper';
+import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { useNavigate } from "react-router-dom";
-
-
+import { CashRegister } from "../../../models/cash-register.model";
+import { useCashRegisterStore } from "../../../../Common/store/useCashRegisterStore";
 
 interface Props {
-  cashRegister: ActiveCashRegister
+  cashRegister: CashRegister;
+  onSuccess: () => void;
 }
 
-
-export const FormCloseCashRegister: FC<Props> = ({ cashRegister }) => {
-
+export const FormCloseCashRegister: FC<Props> = ({
+  cashRegister,
+  onSuccess,
+}) => {
   const [finalAmount, setFinalAmount] = useState<number>(0);
+  const [closingNote, setClosingNote] = useState<string>("");
 
-  const [closingNote, setClosingNote] = useState<string>('');
+  const {removeCashRegister} = useCashRegisterStore((state) => state);
 
   const updateCashMutation = useUpdateCashRegister();
-
-
 
   const navigate = useNavigate();
 
   const handleChangeFinalAmount = (e: ChangeEvent<HTMLInputElement>) => {
-
     let value = Number(e.target.value);
 
     if (Number.isNaN(value)) value = 0;
 
-    setFinalAmount(value)
-
-  }
+    setFinalAmount(value);
+  };
 
   const handleChangeClosingNote = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
 
-    const value = e.target.value
-
-    setClosingNote(value)
-
-  }
-
+    setClosingNote(value);
+  };
 
   const handleSubmit = () => {
-
     const data: UpdateCashRegisterDto = {
       id: cashRegister.id,
       finalAmount,
-      closingNote
-    }
+      closingNote,
+    };
 
-    updateCashMutation.mutateAsync(data)
-    .then(() => {
-      navigate('/balance')
-  
-      }
-    )
+    updateCashMutation.mutateAsync(data).then(() => {
+      removeCashRegister(cashRegister.id);
+      onSuccess();
+      navigate("/financial/cash-register");
+    });
+  };
 
-
-  }
-
-
-  const discrepancyAmount = cashRegister.balance - finalAmount
-
-
+  const discrepancyAmount = cashRegister.balance - finalAmount;
 
   return (
-
     <>
       <Card>
-        <CardHeader
-          title='Cerrar caja'
-        />
+        <CardHeader title="Cerrar caja" />
         <CardContent>
           <Stack spacing={2}>
-
-
-            <InputLabel id="amount">¿Cuánto dinero tiene en efectivo?</InputLabel>
+            <InputLabel id="amount">
+              ¿Cuánto dinero tiene en efectivo?
+            </InputLabel>
             <TextField
-
               type="number"
-
               value={finalAmount}
-
               onChange={handleChangeFinalAmount}
-
               inputProps={{
-                lang: 'en', 
-
+                lang: "en",
               }}
             />
 
-            {
-              finalAmount > 0 && discrepancyAmount !== 0 && (
-                <>
-                  <Box
-                    sx={{
-                      backgroundColor: discrepancyAmount === 0 ? 'success.main' : 'warning.main',
-                      padding: '1rem',
-                      borderRadius: '1rem',
-                      color: 'black'
+            {finalAmount > 0 && discrepancyAmount !== 0 && (
+              <>
+                <Box
+                  sx={{
+                    backgroundColor:
+                      discrepancyAmount === 0 ? "success.main" : "warning.main",
+                    padding: "1rem",
+                    borderRadius: "1rem",
+                    color: "black",
+                  }}
+                >
+                  <Typography variant="body1">
+                    Tienes un descuadre.{" "}
+                    {discrepancyAmount < 0 ? "Te sobran " : "Te faltan"}{" "}
+                    {formatMoney(Math.abs(discrepancyAmount))}
+                  </Typography>
+                </Box>
+                <TextField
+                  value={closingNote}
+                  onChange={handleChangeClosingNote}
+                  multiline
+                  label="Notas de cierre"
+                  rows={3}
+                />
+              </>
+            )}
 
-
-                    }}
-                  >
-                    <Typography variant='body1'>
-                      Tienes un descuadre. {discrepancyAmount < 0 ? 'Te sobran ' : 'Te faltan'} {formatMoney(Math.abs(discrepancyAmount))}
-                      </Typography>
-
-                  </Box>
-                  <TextField
-
-
-                    value={closingNote}
-
-                    onChange={handleChangeClosingNote}
-                    multiline
-
-                    label='Notas de cierre'
-
-                    rows={3}
-
-                  />
-                </>
-
-              )
-            }
-
-            <Button
-              variant='contained'
-              onClick={handleSubmit}
-            >
+            <Button variant="contained" onClick={handleSubmit}>
               Cerrar caja
             </Button>
           </Stack>
-
-
-
-
         </CardContent>
       </Card>
     </>
-  )
-}
+  );
+};

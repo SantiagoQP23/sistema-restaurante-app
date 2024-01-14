@@ -1,23 +1,17 @@
-import { create } from 'zustand';
-
-export enum TypeTransaction {
-
-  INCOME = 'INCOME',
-  EXPENSE = 'EXPENSE'
-}
+import { IUser } from "../../../../models";
+import { TransactionType } from "../../Common/enums/transaction-type.enum";
+import { TransactionCategory } from "./transaction-category.model";
 
 export interface CashTransaction {
-
-  id: string;
-
-  reason: string;
-
-  responsible: string;
-
+  id: number;
+  description: string;
+  performedBy: IUser;
+  type: TransactionType;
   amount: number;
-  user: string;
+  createdBy: IUser;
   createdAt: Date;
   updatedAt: Date;
-
-
+  category: TransactionCategory;
+  isEditable: boolean;
+  isActive: boolean;
 }

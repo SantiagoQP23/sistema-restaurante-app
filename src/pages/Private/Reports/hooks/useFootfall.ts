@@ -9,7 +9,7 @@ import {
   updateForecastFootfall,
 } from "../services/footfall.service";
 import { useDateFilter } from "../../../../hooks/useDateFilter";
-import { Period, GroupBy } from "../../../../models/period.model";
+import { Period, GroupBy } from "../../Common/dto/period.model";
 import { useEffect } from "react";
 import { queryClient } from "../../../../api/query-client";
 

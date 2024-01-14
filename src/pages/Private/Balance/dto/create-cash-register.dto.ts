@@ -1,11 +1,3 @@
-
-
-
-
-
 export interface CreateCashRegisterDto {
-
-    initialAmount: number;
-
-
+  initialAmount: number;
 }

@@ -1,95 +1,66 @@
-import { LoadingButton } from "@mui/lab"
-import { Grid, Typography, TextField, InputLabel } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import { Grid, Typography, TextField } from "@mui/material";
 import { CreateCashRegisterDto } from "../../../dto/create-cash-register.dto";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useCreateCashRegister } from "../../../hooks/useCashRegister";
 import { format } from "date-fns";
 
+interface Props{
+  onSuccess: () => void;
+}
 
-export const FormAddCashRegister = () => {
-
+export const FormAddCashRegister:FC<Props> = ({onSuccess}) => {
   const [initialAmount, setInitialAmount] = useState<number>(0);
-
 
   const { mutateAsync, isLoading } = useCreateCashRegister();
 
-
-  const handleChangeInitialAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-    const value = Number(event.target.value)
-
-
-
-    setInitialAmount(Number(event.target.value))
-
-  }
-
-
-
-  // const handleChangeDate = async (date: Date | null) => {
-  //   setDate(date)
-
-  //   await cashRegisterQuery.refetch().then((resp) => {
-  //     console.log(resp.data)
-  //     setCashRegister(resp.data || null)
-  //   }
-  //   )
-  // }
+  const handleChangeInitialAmount = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setInitialAmount(Number(event.target.value));
+  };
 
   const onSubmitCreate = async () => {
-
     const data: CreateCashRegisterDto = {
-      initialAmount
-    }
-
-    console.log(data)
-
-    await mutateAsync(data)
-      .then((data) => {
-
-        // setCashRegister(data);
-        
-      })
-
+      initialAmount,
+    };
+    await mutateAsync(data).then(() => {
+      setInitialAmount(0);
+      onSuccess();
+    });
   }
-
 
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={12} display='flex' justifyContent='space-between' >
-          <InputLabel >Hora de apertura</InputLabel>
-          <Typography variant='h6' >{format(new Date(), 'dd/MM/yyyy HH:mm')}</Typography>
+        <Grid item xs={12} display="flex" justifyContent="space-between">
+          <Typography>Hora de apertura</Typography>
+          <Typography variant="h6">
+            {format(new Date(), "dd/MM/yyyy HH:mm")}
+          </Typography>
         </Grid>
 
-
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <TextField
-            label='Monto inicial'
-            type='number'
-            variant='outlined'
+            label="Monto inicial"
+            type="number"
+            variant="outlined"
             fullWidth
             // size='small'
             value={initialAmount}
-
             onChange={handleChangeInitialAmount}
-
             InputProps={{
-              startAdornment: <Typography variant='h6' >$   </Typography>,
+              startAdornment: <Typography variant="h6">$ </Typography>,
               inputProps: {
-                min: 0
-              }
-
+                min: 0,
+              },
             }}
-
-
           />
-
         </Grid>
 
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           <LoadingButton
-            variant='contained'
+            variant="contained"
             fullWidth
             loading={isLoading}
             onClick={onSubmitCreate}
@@ -97,9 +68,7 @@ export const FormAddCashRegister = () => {
             Añadir
           </LoadingButton>
         </Grid>
-
-
       </Grid>
     </>
-  )
-}
+  );
+};
