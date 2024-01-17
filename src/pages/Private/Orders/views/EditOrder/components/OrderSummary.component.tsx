@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { Edit, Notes, Visibility } from "@mui/icons-material";
+import { CircleRounded, Edit, Notes, Visibility } from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -12,11 +12,22 @@ import {
   Stack,
   Divider,
   Grid,
+  Stepper,
+  Step,
+  StepLabel,
+  StepConnector,
+  styled,
+  stepConnectorClasses,
+  StepIcon,
 } from "@mui/material";
 import { format } from "date-fns";
 import { IUser } from "../../../../../../models";
 
-import { IOrder, TypeOrder } from "../../../../../../models/orders.model";
+import {
+  IOrder,
+  OrderStatus,
+  TypeOrder,
+} from "../../../../../../models/orders.model";
 
 import { useUpdateOrder } from "../../../hooks";
 
@@ -28,6 +39,40 @@ import { useModal } from "../../../../../../hooks";
 import { ModalEditOrder } from "./ModalEditOrder.component";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { OrderDetails } from "./OrderDetails.component";
+import { LabelStatusOrder } from "../../../components";
+import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineSeparator,
+  timelineItemClasses,
+} from "@mui/lab";
+
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#784af4",
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#784af4",
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor:
+      theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+}));
 
 interface PropsOrder {
   order: IOrder;
@@ -39,6 +84,29 @@ interface PropsOrder {
  */
 export const OrderSummary: FC<PropsOrder> = ({ order }) => {
   const { handleClose, handleOpen, isOpen } = useModal();
+
+  const [activeStatus, setActiveStatus] = useState(getStepIndex(order.status));
+
+  const handleNext = () => {
+    setActiveStatus((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStatus((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  function getStepIndex(status: OrderStatus) {
+    switch (status) {
+      case OrderStatus.PENDING:
+        return 0;
+      case OrderStatus.IN_PROGRESS:
+        return 1;
+      case OrderStatus.DELIVERED:
+        return 2;
+      default:
+        return 0;
+    }
+  }
 
   const { step: activeStep } = useInvoiceStore((state) => state);
 
@@ -71,7 +139,55 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
         </Grid>
 
         <Grid item xs={12} md={4}>
+            <Timeline
+              // sx={{
+              //   m: 0,
+              //   p: 3,
+              //   [`& .${timelineItemClasses.root}:before`]: {
+              //     flex: 0,
+              //     padding: 0,
+              //   },
+              // }}
+            >
+              <TimelineItem>
+                <TimelineSeparator>
+                  <TimelineDot color="primary"  />
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <LabelStatusOrder status={OrderStatus.PENDING} />
+                </TimelineContent>
+              </TimelineItem>
+              <TimelineItem>
+                <TimelineSeparator>
+                  <TimelineConnector />
+                  <TimelineDot color="primary"  />
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent>
+                  {activeStatus >= 1 ? (
+                    <LabelStatusOrder status={OrderStatus.IN_PROGRESS} />
+                    ) : (
+                      "En preparación"
+                      )}
+                </TimelineContent>
+              </TimelineItem>
+              <TimelineItem>
+                <TimelineSeparator>
+                      <TimelineConnector />
+                  <TimelineDot color="primary"/>
+                </TimelineSeparator>
+                <TimelineContent>
+                  {activeStatus >= 2 ? (
+                    <LabelStatusOrder status={OrderStatus.DELIVERED} />
+                  ) : (
+                    "Entregado"
+                  )}
+                </TimelineContent>
+              </TimelineItem>
+            </Timeline>
           <Stack spacing={2}>
+
             <Card>
               <CardHeader
                 titleTypographyProps={{ variant: "h3" }}

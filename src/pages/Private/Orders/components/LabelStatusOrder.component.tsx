@@ -48,6 +48,11 @@ colorStatusMap.set(OrderStatus.IN_PROGRESS, "info");
 colorStatusMap.set(OrderStatus.DELIVERED, "success");
 colorStatusMap.set(OrderStatus.CANCELLED, "error");
 
+export const orderStatusIconMap = new Map<OrderStatus, JSX.Element>();
+orderStatusIconMap.set(OrderStatus.PENDING, <PendingActions fontSize="small" color="warning" />);
+orderStatusIconMap.set(OrderStatus.IN_PROGRESS, <SoupKitchen fontSize="small" color="info" />);
+orderStatusIconMap.set(OrderStatus.DELIVERED, <LocalDining fontSize="small" color="success" />);
+
 
 export const LabelStatusOrder: FC<Props> = ({
   status,
@@ -56,18 +61,7 @@ export const LabelStatusOrder: FC<Props> = ({
 }) => {
   return (
     <>
-      {/* // //   color={colorStatusOrderMap[status]}
-    // //   label={textStatusOrderMap[status]}
-    // //   icon={status === OrderStatus.PENDING
-    // //     ? <Pending />
-    // //     : status === OrderStatus.IN_PROGRESS
-    // //       ? <SoupKitchen />
-    // //       : <LocalDining />
-    // //   }
-
-    // //   size="small"
-    // // /> */}
-      {simple ? (
+    {simple ? (
         <>
           <Typography
             alignItems="center"
@@ -83,13 +77,7 @@ export const LabelStatusOrder: FC<Props> = ({
         <Typography variant="h4" fontWeight="bold">
           <Label color={colorStatusOrderMap[status]}>
             <Box mr={onlyIcon ? 0 : 1}>
-              {status === OrderStatus.PENDING ? (
-                <PendingActions fontSize="small" />
-              ) : status === OrderStatus.IN_PROGRESS ? (
-                <SoupKitchen fontSize="small" />
-              ) : (
-                <LocalDining fontSize="small" />
-              )}
+              {orderStatusIconMap.get(status)}
             </Box>
 
             {!onlyIcon && textStatusOrderMap[status]}

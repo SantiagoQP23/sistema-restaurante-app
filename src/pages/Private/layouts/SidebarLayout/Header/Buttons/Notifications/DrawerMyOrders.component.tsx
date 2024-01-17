@@ -1,9 +1,10 @@
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
-import { Cached, Close } from "@mui/icons-material";
+import { Cached, Circle, Close } from "@mui/icons-material";
 import {
   Box,
   Divider,
   Drawer,
+  Grid,
   IconButton,
   Stack,
   Tooltip,
@@ -13,10 +14,10 @@ import { useSelector } from "react-redux";
 import { selectAuth, selectOrders } from "../../../../../../../redux";
 import { useMemo } from "react";
 import { Scrollbar } from "../../../../../components";
-import { CardOrder } from "./CardOrder.component";
 import { OrderTakeAway } from "../../../../../Orders/views";
 import { LoadingButton } from "@mui/lab";
 import { useActiveOrders } from "../../../../../Orders/hooks";
+import { OrderStatus } from "../../../../../../../models";
 
 export const DrawerMyOrders = NiceModal.create(() => {
   const modal = useModal();
@@ -64,7 +65,7 @@ export const DrawerMyOrders = NiceModal.create(() => {
             </Typography>
           </Box>
 
-          <Stack direction='row' >
+          <Stack direction="row">
             <LoadingButton
               variant="text"
               loading={activeOrdersQuery.isFetching}
@@ -84,6 +85,48 @@ export const DrawerMyOrders = NiceModal.create(() => {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <Scrollbar height={"100%"}>
+          <Grid container spacing={1} my={1}>
+            <Grid item xs={4}>
+              <Typography textAlign='center'>
+                <Circle sx={{ color: "warning.main", fontSize: 12, mr: 1 }} />
+                Pendientes
+              </Typography>
+              <Typography textAlign='center' variant="h5">
+                {
+                  myOrders?.filter(
+                    (order) => order.status === OrderStatus.PENDING
+                  ).length
+                }
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography textAlign='center'>
+                <Circle sx={{ color: "info.main", fontSize: 12, mr: 1 }} />
+                En proceso
+              </Typography>
+              <Typography textAlign='center' variant="h5">
+                {
+                  myOrders?.filter(
+                    (order) => order.status === OrderStatus.IN_PROGRESS
+                  ).length
+                }
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography textAlign='center'>
+                <Circle sx={{ color: "success.main", fontSize: 12, mr: 1 }} />
+                Entregados
+              </Typography>
+              <Typography textAlign='center' variant="h5">
+                {
+                  myOrders?.filter(
+                    (order) => order.status === OrderStatus.DELIVERED
+                  ).length
+                }
+              </Typography>
+            </Grid>
+          </Grid>
+
           <Stack direction="column" spacing={1} p={1}>
             {myOrders.map((order) => (
               <OrderTakeAway

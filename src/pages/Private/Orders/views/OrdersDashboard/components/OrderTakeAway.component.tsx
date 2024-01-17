@@ -1,4 +1,4 @@
-import { TimerOutlined, People, Receipt, MoreVert } from "@mui/icons-material";
+import { TimerOutlined, People, Receipt, MoreVert, Assignment } from "@mui/icons-material";
 import {
   Card,
   CardActionArea,
@@ -9,7 +9,7 @@ import {
   Divider,
   IconButton,
 } from "@mui/material";
-import { format } from "date-fns";
+import { format, formatDistance, formatRelative } from "date-fns";
 import { IOrder, TypeOrder } from "../../../../../../models";
 import { FC } from "react";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { getTypeOrder } from "../../../../Common/helpers/get-type-order.helper";
 import { LabelStatusPaid } from "../../../components";
+import { es } from "date-fns/locale";
 
 interface Props {
   order: IOrder;
@@ -25,6 +26,8 @@ interface Props {
 
 export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
   const navigate = useNavigate();
+
+  const date = formatDistance(new Date(order.createdAt), new Date(), {locale: es});
 
   return (
     <Card>
@@ -56,7 +59,7 @@ export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
             </>
           }
         />
-        <Stack spacing={1} px={1} mb={1}>
+        <Stack spacing={2} px={1} mb={1}>
           <Stack
             direction="row"
             spacing={1}
@@ -81,8 +84,8 @@ export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
               sx={{ fontSize: 18, mr: 0.5 }}
               color="info"
             />
-            <Typography fontSize="0.8rem" fontWeight="bold">
-              {format(new Date(order.deliveryTime), "dd/MM/yyyy HH:mm")}
+            <Typography fontSize="0.8rem" >
+              {date}
             </Typography>
             <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
             <People
@@ -100,12 +103,12 @@ export const OrderTakeAway: FC<Props> = ({ order, onClick }) => {
             alignItems="center"
           >
             <Box display="flex" alignItems="center" gap={0.5}>
-              <Receipt
+              <Assignment
                 fontSize="small"
                 sx={{ fontSize: 18, mr: 0.5 }}
                 color="info"
               />
-              <Typography>Pedido N° {order.num}</Typography>
+              <Typography>N° {order.num}</Typography>
             </Box>
             <Box display="flex" alignItems="center" gap={0.5}>
               <LabelStatusPaid isPaid={order.isPaid} />

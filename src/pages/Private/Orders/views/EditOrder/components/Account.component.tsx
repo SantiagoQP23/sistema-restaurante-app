@@ -253,53 +253,7 @@ export const Account: FC<Props> = ({ order }) => {
               </Typography>
             ) : (
               <Grid container spacing={3} p={2} width="auto">
-                {/* <Grid item xs={8}>
-                  <Typography
-                    variant="subtitle1"
-                    color="textSecondary"
-                    textAlign="right"
-                  >
-                    Subtotal
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="h6" textAlign="right">
-                    {formatMoney(amount)}
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography
-                    variant="subtitle1"
-                    color="textSecondary"
-                    textAlign="right"
-                  >
-                    Descuento
-                  </Typography>
-                </Grid> */}
-                {/* <Grid item xs={4} display="flex" justifyContent="right">
-                  <TextField
-                    id="precio-producto"
-                    type="number"
-                    value={discount || ""}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AttachMoney />
-                        </InputAdornment>
-                      ),
-                    }}
-                    onChange={(e) => {
-                      console.log(e.target.value);
-                      setDiscount(Number(e.target.value));
-                    }}
-                    size="small"
-                    inputProps={{
-                      min: 0,
-
-                      step: 0.25,
-                    }}
-                  />
-                </Grid> */}
+               
                 <Grid item xs={8}>
                   <Typography
                     variant="h6"
@@ -321,13 +275,12 @@ export const Account: FC<Props> = ({ order }) => {
 
         <Stack direction="row" spacing={1} justifyContent="space-between">
           <BtnBack />
-          {/* <BtnNext /> */}
           <LoadingButton
             variant="contained"
             endIcon={<Send />}
             onClick={onSubmit}
             loading={isLoading}
-            disabled={!activeCashRegister || total === 0}
+            disabled={ total === 0}
           >
             Crear cuenta
           </LoadingButton>

@@ -1,12 +1,20 @@
 import { FC } from "react";
 
-import { Assignment } from "@mui/icons-material";
-import { Card, CardActionArea, Box, Typography, Badge } from "@mui/material";
+import { Assignment, People } from "@mui/icons-material";
+import {
+  Card,
+  CardActionArea,
+  Box,
+  Typography,
+  Badge,
+  Stack,
+  CardHeader,
+} from "@mui/material";
 import { ITable, OrderStatus } from "../../../../../../models";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
 import { Label } from "../../../../../../components/ui";
-import { LabelStatusOrder } from "../../../components";
+import { LabelStatusOrder, orderStatusIconMap } from "../../../components";
 
 interface Props {
   table: ITable;
@@ -18,40 +26,39 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
 
   const ordersTable = orders.filter((order) => order.table?.id === table.id);
 
+  const people = ordersTable.reduce((acc, order) => {
+    return acc + order.people;
+  }, 0);
+
   return (
     <Card>
       <CardActionArea onClick={() => handleClickTable(table)}>
+        <CardHeader title={`Mesa ${table.name}`} />
         <Box
           sx={{
-            p: 2,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            justifyContent: "center",
-            alignItems: "center",
+            p: 1,
+          //   display: "flex",
+          //   flexDirection: "column",
+          //   gap: 1,
+          //   justifyContent: "center",
+          //   alignItems: "center",
           }}
         >
-          <Typography variant="h4">Mesa {table.name}</Typography>
-
-          {!table.isAvailable && (
-            <Box display="flex" gap={3}>
-              {/* <Badge badgeContent={people} color="default">
-                <PersonOutline fontSize="small" color="secondary" />
-              </Badge> */}
-
-              {ordersTable.map((order) => (
-                <Badge
-                  key={order.id}
-                  
-                >
-                  <LabelStatusOrder status={order.status} onlyIcon/>
-                 
-                </Badge>
-              ))}
+          {ordersTable.length > 0 ? (
+            <Box display="flex" justifyContent="space-between">
+              <Box display="flex" gap={1}>
+                {ordersTable.map((order) => (
+                  <Badge key={order.id}>
+                    {orderStatusIconMap.get(order.status)}
+                  </Badge>
+                ))}
+              </Box>
+              <Box display="flex" gap={1} alignItems="center">
+                <People fontSize="small" />
+                <Typography fontSize="0.8rem">{people}</Typography>
+              </Box>
             </Box>
-          )}
-
-          {table.isAvailable && (
+          ) : (
             <Label color={table.isAvailable ? "secondary" : "secondary"}>
               {table.isAvailable ? "Disponible" : "Ocupada"}
             </Label>
