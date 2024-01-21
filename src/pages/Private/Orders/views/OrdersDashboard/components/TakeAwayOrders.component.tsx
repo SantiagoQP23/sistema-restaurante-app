@@ -1,6 +1,6 @@
 import { Typography, Grid } from "@mui/material";
 import { TypeOrder } from "../../../../../../models";
-import { OrderTakeAway } from "./OrderTakeAway.component";
+import { OrderCard } from "./OrderCard.component";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
 
@@ -17,7 +17,7 @@ export const TakeAwayOrders = () => {
           <Grid container my={2} spacing={1}>
             {ordersTakeAway.map((order) => (
               <Grid key={order.id} item xs={12} md={6} lg={4}>
-                <OrderTakeAway order={order} />
+                <OrderCard order={order} />
               </Grid>
             ))}
           </Grid>

@@ -1,58 +1,86 @@
-import { FC, useContext } from 'react';
-import { Box, Typography, Grid, Divider, Button, Card, CardHeader, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Stack, IconButton } from '@mui/material';
-import { LinearProgressWrapper, OrderDetail } from "./OrderDetail.component"
-import { useNavigate } from 'react-router-dom';
-import { OrderContext } from '../../../context/Order.context';
-import { IOrder, IOrderDetail } from '../../../../../../models';
-import { ModalUpdateDetail } from '../../../components/EditOrder/ModalUpdateDescriptionDetail.component';
-import { AddShoppingCartOutlined, MoreVert } from '@mui/icons-material';
-import { formatMoney } from '../../../../Common/helpers/format-money.helper';
-import { CounterInput } from '../../../components';
-
-
-
+import { FC, useContext, useState } from "react";
+import {
+  Box,
+  Typography,
+  Grid,
+  Divider,
+  Button,
+  Card,
+  CardHeader,
+  TableContainer,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Stack,
+  IconButton,
+  CardContent,
+  Chip,
+} from "@mui/material";
+import { LinearProgressWrapper, OrderDetail } from "./OrderDetail.component";
+import { useNavigate } from "react-router-dom";
+import { OrderContext } from "../../../context/Order.context";
+import { IOrder, IOrderDetail } from "../../../../../../models";
+import { ModalUpdateDetail } from "../../../components/EditOrder/ModalUpdateDescriptionDetail.component";
+import { AddShoppingCartOutlined, MoreVert } from "@mui/icons-material";
+import { formatMoney } from "../../../../Common/helpers/format-money.helper";
+import { CounterInput } from "../../../components";
+import { OrderDetailCard } from "./OrderDetailCard.component";
 
 interface Props {
-  order: IOrder
+  order: IOrder;
 }
 
-
 export const OrderDetails: FC<Props> = ({ order }) => {
-
-
   const navigate = useNavigate();
 
   const { details } = order;
 
+  const [quantity, setQuantity] = useState(0);
+
+  const handleChangeQuantity = (value: number) => {
+    setQuantity(value);
+  };
 
   return (
-
     <>
+      <CardHeader
+        title={`${details.length} productos`}
+        action={
+          <Button
+            color="primary"
+            onClick={() => navigate("products")}
+            // variant='contained'
+            startIcon={<AddShoppingCartOutlined />}
+          >
+            Agregar
+          </Button>
+        }
+      />
+
+      <Stack spacing={1}>
+        {details.map((detail) => (
+          <OrderDetailCard detail={detail} key={detail.id} />
+        ))}
+      </Stack>
 
       <Card>
-
-        <CardHeader
-
-          title='Productos'
+        {/* <CardHeader
+          title="Productos"
           action={
             <Button
-
               color="primary"
-              onClick={() => navigate('products')}
+              onClick={() => navigate("products")}
               // variant='contained'
-              startIcon={
-                <AddShoppingCartOutlined />
-              }
-
+              startIcon={<AddShoppingCartOutlined />}
             >
               Agregar
             </Button>
-
           }
-        />
+        /> */}
 
-
-        <Divider />
+        {/* <Divider /> */}
 
         {/* {
           details.map((detail) => {
@@ -114,96 +142,65 @@ export const OrderDetails: FC<Props> = ({ order }) => {
               )
           })
         } */}
+<TableContainer>
 
-
-
-
-
-        <TableContainer>
+        {/*
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  Cantidad
-                </TableCell>
-                <TableCell>
-                  Producto
-                </TableCell>
-                <TableCell>
-                  Precio
-                </TableCell>
-                <TableCell>
-                  Estado
-                </TableCell>
-                <TableCell>
-                  Subtotal
-                </TableCell>
-                <TableCell align='center'>
-                  Acciones
-                </TableCell>
+                <TableCell>Cantidad</TableCell>
+                <TableCell>Producto</TableCell>
+                <TableCell>Precio</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell>Subtotal</TableCell>
+                <TableCell align="center">Acciones</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {
-                details.length === 0
-                  ? (<TableRow>
-                    <TableCell colSpan={5}>
-
-                      <Typography variant='body1' align='center' my={5}>No se han añadido productos</Typography>
-                    </TableCell>
-                  </TableRow>)
-                  :
-
-
-                  details.map((detail) => {
-
-                    if (detail.isActive)
-                      return (
-
-                        <OrderDetail key={detail.id} detail={detail} />
-
-
-
-                      )
-                  })
-
-
-              }
-
-
-
+              {details.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <Typography variant="body1" align="center" my={5}>
+                      No se han añadido productos
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                details.map((detail) => {
+                  if (detail.isActive)
+                    return <OrderDetail key={detail.id} detail={detail} />;
+                })
+              )}
 
               <TableRow
                 sx={{
-                  border: 'none'
+                  border: "none",
                 }}
-
               >
                 <TableCell
-
-                  colSpan={4} align='right'
+                  colSpan={4}
+                  align="right"
                   sx={{
-                    border: 'none'
+                    border: "none",
                   }}
-
-                  size='small'
-
+                  size="small"
                 >
-                  <Typography variant='subtitle1' color='textSecondary'>Subtotal</Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Subtotal
+                  </Typography>
                 </TableCell>
                 <TableCell
-                  align='right'
+                  align="right"
                   sx={{
-                    border: 'none'
+                    border: "none",
                   }}
-
-
                 >
-                  <Typography variant='h6' >{formatMoney(order.total)}</Typography>
+                  <Typography variant="h6">
+                    {formatMoney(order.total)}
+                  </Typography>
                 </TableCell>
-
-              </TableRow>
+              </TableRow> */}
               {/*
               <TableRow>
                 <TableCell colSpan={4} align='right'
@@ -254,8 +251,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
                 </TableCell>
 
               </TableRow> */}
-
-            </TableBody>
+            {/* </TableBody> */}
             {/* <Stack>
                 <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2}>
                   <Typography variant='subtitle1' color='textSecondary'>Subtotal</Typography>
@@ -281,7 +277,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
 
 
               </Stack> */}
-          </Table>
+          {/* </Table> */}
         </TableContainer>
         {/* <Stack m={1} mx={3} spacing={1}>
           <Stack direction='row' justifyContent='flex-end' alignItems='center' spacing={2}>
@@ -314,9 +310,7 @@ export const OrderDetails: FC<Props> = ({ order }) => {
         </Stack> */}
 
         <ModalUpdateDetail />
-
       </Card>
-
     </>
-  )
-}
+  );
+};

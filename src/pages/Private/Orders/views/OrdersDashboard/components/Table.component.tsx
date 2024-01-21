@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Assignment, People } from "@mui/icons-material";
+import { Assignment, People, TableBar } from "@mui/icons-material";
 import {
   Card,
   CardActionArea,
@@ -14,7 +14,12 @@ import { ITable, OrderStatus } from "../../../../../../models";
 import { useSelector } from "react-redux";
 import { selectOrders } from "../../../../../../redux";
 import { Label } from "../../../../../../components/ui";
-import { LabelStatusOrder, orderStatusIconMap } from "../../../components";
+import {
+  DrawerOrder,
+  LabelStatusOrder,
+  orderStatusIconMap,
+} from "../../../components";
+import NiceModal from "@ebay/nice-modal-react";
 
 interface Props {
   table: ITable;
@@ -30,18 +35,35 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
     return acc + order.people;
   }, 0);
 
+  const isAvailable = ordersTable.length === 0;
+
+  const showOrdersTableDrawer = () => NiceModal.show(DrawerOrder, { table });
+
   return (
-    <Card>
-      <CardActionArea onClick={() => handleClickTable(table)}>
-        <CardHeader title={`Mesa ${table.name}`} />
+    <Card
+      sx={{
+        // border: (theme) =>
+        //   isAvailable ? `1.5px solid ${theme.palette.success.light}` : "",
+          boxShadow: (theme) =>
+          isAvailable ? `0px 0px 4px ${theme.palette.success.light}` : "",
+      }}
+    >
+      <CardActionArea onClick={showOrdersTableDrawer}>
+        <CardHeader
+          avatar={<TableBar fontSize="small" />}
+          title={`${table.name}`}
+          titleTypographyProps={{
+            variant: "h5",
+          }}
+        />
         <Box
           sx={{
             p: 1,
-          //   display: "flex",
-          //   flexDirection: "column",
-          //   gap: 1,
-          //   justifyContent: "center",
-          //   alignItems: "center",
+            //   display: "flex",
+            //   flexDirection: "column",
+            //   gap: 1,
+            //   justifyContent: "center",
+            //   alignItems: "center",
           }}
         >
           {ordersTable.length > 0 ? (
@@ -59,7 +81,7 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
               </Box>
             </Box>
           ) : (
-            <Label color={table.isAvailable ? "secondary" : "secondary"}>
+            <Label color={table.isAvailable ? "success" : "secondary"}>
               {table.isAvailable ? "Disponible" : "Ocupada"}
             </Label>
           )}

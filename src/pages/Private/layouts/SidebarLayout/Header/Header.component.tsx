@@ -32,7 +32,7 @@ const HeaderWrapper = styled(Box)(
         color: ${theme.header.textColor};
         padding: ${theme.spacing(0, 2)};
         right: 0;
-        z-index: 6;
+        z-index: 1;
         backdrop-filter: blur(3px);
         position: fixed;
         justify-content: space-between;
@@ -51,7 +51,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
+  zIndex: 1000,
   boxShadow: "none",
   backdropFilter: "blur(5px)",
   transition: theme.transitions.create(["width", "margin"], {

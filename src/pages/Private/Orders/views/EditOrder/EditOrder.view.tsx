@@ -141,7 +141,7 @@ export const EditOrder = () => {
       <DrawerInvoice open={openDrawer} handleClose={handleCloseDrawer} />
       <ModalDeleteInvoice />
 
-      <Container maxWidth="xl">
+      <Container maxWidth="md">
         <Stack
           spacing={2}
           my={2}
@@ -239,24 +239,22 @@ export const EditOrder = () => {
         ) : (
           <>
             {
-              <Stepper
-                activeStep={activeStep}
-                alternativeLabel
-                sx={{
-                  background: "transparent",
-                }}
-              >
-                <Step>
-                  <StepLabel>Carrito</StepLabel>
-                </Step>
+              // <Stepper
+              //   activeStep={activeStep}
+              //   alternativeLabel
+              //   sx={{
+              //     background: "transparent",
+              //   }}
+              // >
+              //   <Step>
+              //     <StepLabel>Carrito</StepLabel>
+              //   </Step>
 
-                <Step>
-                  <StepLabel>Cuenta</StepLabel>
-                </Step>
-                {/* <Step>
-                  <StepLabel>Pago</StepLabel>
-                </Step> */}
-              </Stepper>
+              //   <Step>
+              //     <StepLabel>Cuenta</StepLabel>
+              //   </Step>
+               
+              // </Stepper>
             }
 
             {activeStep === 0 && <OrderSummary order={activeOrder} />}

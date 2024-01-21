@@ -111,8 +111,6 @@ export const Account: FC<Props> = ({ order }) => {
   };
 
   const onSubmit = () => {
-    if (!activeCashRegister) return;
-
     const data: CreateBillDto = {
       orderId: order.id,
       details: [],

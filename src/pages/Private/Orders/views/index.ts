@@ -12,5 +12,5 @@ export * from './OrdersDashboard/OrdersDashboard.view';
 export * from './OrdersList/OrdersList.view';
 export * from './OrdersList/components';
 export * from './OrdersDashboard/components/Tables.component';
-export * from './OrdersDashboard/components/OrderTakeAway.component';
+export * from './OrdersDashboard/components/OrderCard.component';
 export * from './OrdersDashboard/components/Table.component';

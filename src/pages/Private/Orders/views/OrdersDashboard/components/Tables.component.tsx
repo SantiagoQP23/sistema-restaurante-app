@@ -54,7 +54,6 @@ export const Tables = () => {
 
   const handleOpenDrawer = (table: ITable) => {
     dispatchRedux(setActiveTable(table));
-    NiceModal.show(RegisteredModals.DrawerOrder);
   };
 
   useEffect(() => {
@@ -89,7 +88,7 @@ export const Tables = () => {
         </Stack>
       </Stack>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         {filteredTables.map((table) => (
           <Grid key={table.id} item xs={6} md={3} lg={2} p={1}>
             <Table table={table} handleClickTable={handleClickTable} />

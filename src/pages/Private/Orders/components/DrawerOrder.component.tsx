@@ -1,4 +1,4 @@
-import { IOrder, TypeOrder } from "../../../../models";
+import { IOrder, ITable, TypeOrder } from "../../../../models";
 
 import NiceModal from "@ebay/nice-modal-react";
 
@@ -9,50 +9,23 @@ import {
   useTheme,
   Typography,
   IconButton,
-  Card,
-  CardHeader,
-  CardContent,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Button,
-  Switch,
-  CardActions,
-  ListItemSecondaryAction,
   Divider,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOrders, selectTables, setActiveTable } from "../../../../redux";
-import {
-  CloseOutlined,
-  Edit,
-  Add,
-  TimerOutlined,
-  Notes,
-  People,
-  Person,
-  Restaurant,
-  TableRestaurant,
-  TakeoutDining,
-  Circle,
-} from "@mui/icons-material";
-import { LinearProgressWrapper } from "./";
-import { formatDistance } from "date-fns";
-import { LabelStatusOrder } from "./LabelStatusOrder.component";
+import { CloseOutlined, Add, Circle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { es } from "date-fns/locale";
-import { LabelStatusPaid } from "./";
-import { formatMoney } from "../../Common/helpers/format-money.helper";
-import { Label } from "../../../../components/ui";
 import { useUpdateTable } from "../hooks/useUpdateTable";
 import { useNewOrderStore } from "../store/newOrderStore";
 import { Scrollbar } from "../../components";
+import { OrderCard } from "../views";
 
-export const DrawerOrder = NiceModal.create(() => {
-  const theme = useTheme();
+interface Props {
+  table: ITable;
+}
 
+export const DrawerOrder = NiceModal.create<Props>(({ table }) => {
   const modal = NiceModal.useModal();
 
   const dispatch = useDispatch();
@@ -61,15 +34,11 @@ export const DrawerOrder = NiceModal.create(() => {
 
   const { orders } = useSelector(selectOrders);
 
-  const { activeTable } = useSelector(selectTables);
-
   const { updateTable } = useUpdateTable();
 
   const navigate = useNavigate();
 
-  const ordersTable = orders.filter(
-    (order) => order.table?.id === activeTable?.id
-  );
+  const ordersTable = orders.filter((order) => order.table?.id === table?.id);
 
   const closeDrawer = () => {
     modal.hide();
@@ -77,7 +46,7 @@ export const DrawerOrder = NiceModal.create(() => {
   };
 
   const handleAddOrder = () => {
-    setTable(activeTable!);
+    setTable(table!);
 
     setOrderType(TypeOrder.IN_PLACE);
 
@@ -87,8 +56,8 @@ export const DrawerOrder = NiceModal.create(() => {
   };
 
   const handleChangeStatusTable = (value: boolean) => {
-    if (activeTable) {
-      updateTable({ tableId: activeTable.id, isAvailable: value });
+    if (table) {
+      updateTable({ tableId: table.id, isAvailable: value });
     }
   };
 
@@ -115,7 +84,7 @@ export const DrawerOrder = NiceModal.create(() => {
           },
         }}
         sx={{
-          zIndex: 10000,
+          zIndex: 1000,
         }}
       >
         <Stack
@@ -125,20 +94,18 @@ export const DrawerOrder = NiceModal.create(() => {
           p={2}
         >
           <Box>
-            <Typography variant="h4">
-              Mesa {activeTable?.name}
-            </Typography>
+            <Typography variant="h4">Mesa {table?.name}</Typography>
             <Box
               alignItems="center"
               display="flex"
               sx={{
-                color: `${activeTable?.isAvailable ? "success" : "error"}.main`,
+                color: `${table?.isAvailable ? "success" : "error"}.main`,
               }}
               gap={1}
             >
               <Circle fontSize="small" sx={{ fontSize: 10 }} />
               <Typography fontSize="0.8rem">
-                {activeTable?.isAvailable ? "Disponible" : "Ocupada"}
+                {table?.isAvailable ? "Disponible" : "Ocupada"}
               </Typography>
             </Box>
           </Box>
@@ -165,238 +132,7 @@ export const DrawerOrder = NiceModal.create(() => {
           {ordersTable.length >= 1 ? (
             <Stack spacing={2} direction="column" p={1}>
               {ordersTable.map((order: IOrder) => (
-                <Card key={order.id}>
-                  <CardHeader
-                    title={`Pedido N° ${order.num}`}
-                    titleTypographyProps={{ variant: "h4" }}
-                    // subheader={
-                    // }
-
-                    subheaderTypographyProps={{
-                      variant: "h6",
-                      textAlign: "center",
-                    }}
-                    action={
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <LabelStatusOrder status={order.status} />
-                        <LabelStatusPaid isPaid={order.isPaid} />
-                      </Stack>
-                    }
-                  />
-
-                  <CardContent>
-                    <Grid container spacing={1}>
-                      <Grid container spacing={1} alignItems="center" px={1}>
-                        <Grid item xs={12}>
-                          <CardHeader
-                            sx={{
-                              px: 1,
-                              py: 0.5,
-                            }}
-                            avatar={<TimerOutlined />}
-                            // title='Hora de entrega'
-                            titleTypographyProps={{
-                              variant: "subtitle2",
-                            }}
-                            subheaderTypographyProps={{
-                              variant: "h5",
-                              color: "inherith",
-                            }}
-                            subheader={`${formatDistance(
-                              new Date(order.deliveryTime),
-                              new Date(),
-                              {
-                                addSuffix: true,
-                                includeSeconds: true,
-                                locale: es,
-                              }
-                            )}`}
-                          />
-                        </Grid>
-
-                        <Grid item xs={6}>
-                          <CardHeader
-                            sx={{
-                              px: 1,
-                              py: 0.5,
-                            }}
-                            avatar={
-                              order.type === TypeOrder.IN_PLACE ? (
-                                <Restaurant />
-                              ) : (
-                                <TakeoutDining />
-                              )
-                            }
-                            // title='Orden'
-                            titleTypographyProps={{
-                              variant: "subtitle2",
-                            }}
-                            subheaderTypographyProps={{
-                              variant: "h5",
-                              color: "inherith",
-                            }}
-                            subheader={
-                              order.type === TypeOrder.IN_PLACE
-                                ? "Para servir"
-                                : "Para llevar"
-                            }
-                          />
-                        </Grid>
-
-                        <Grid item xs={6}>
-                          <CardHeader
-                            sx={{
-                              px: 1,
-                              py: 0.5,
-                            }}
-                            avatar={<People />}
-                            // title='Personas'
-                            titleTypographyProps={{
-                              variant: "subtitle2",
-                            }}
-                            subheaderTypographyProps={{
-                              variant: "h5",
-                              color: "inherith",
-                            }}
-                            subheader={`${order.people}`}
-                          />
-                          <Card></Card>
-                        </Grid>
-
-                        {order.type === TypeOrder.IN_PLACE && (
-                          <>
-                            <Grid item xs={12}>
-                              <CardHeader
-                                sx={{
-                                  px: 1,
-                                  py: 0.5,
-                                }}
-                                avatar={<TableRestaurant />}
-                                // title='Mesa'
-                                titleTypographyProps={{
-                                  variant: "subtitle2",
-                                }}
-                                subheaderTypographyProps={{
-                                  variant: "h5",
-                                  color: "inherith",
-                                }}
-                                subheader={
-                                  `Mesa ${order.table?.name}` ||
-                                  "No seleccionada"
-                                }
-                              />
-                            </Grid>
-                          </>
-                        )}
-
-                        <Grid item xs={12}>
-                          <CardHeader
-                            sx={{
-                              px: 1,
-                              py: 0.5,
-                            }}
-                            avatar={<Person />}
-                            // title='Mesero'
-                            titleTypographyProps={{
-                              variant: "subtitle2",
-                            }}
-                            subheaderTypographyProps={{
-                              variant: "h5",
-                              color: "inherith",
-                            }}
-                            subheader={`${order.user.person.firstName} ${order.user.person.lastName}`}
-                          />
-                          <Card></Card>
-                        </Grid>
-
-                        {order.notes && (
-                          <>
-                            <Grid item xs={12}>
-                              <CardHeader
-                                sx={{
-                                  px: 1,
-                                  py: 0.5,
-
-                                  borderRadius: 1,
-                                }}
-                                avatar={<Notes color="info" />}
-                                title={order.notes}
-                                titleTypographyProps={{
-                                  variant: "h5",
-                                }}
-                              />
-                            </Grid>
-                          </>
-                        )}
-
-                        <Grid
-                          item
-                          xs={8}
-                          display="flex"
-                          flexDirection="row"
-                          gap={1}
-                          alignItems="flex-end"
-                          justifyContent="flex-end"
-                        >
-                          <Typography variant="h3">
-                            {formatMoney(order.total)}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Typography variant="h4" mt={2} textAlign="center">
-                          Productos
-                        </Typography>
-
-                        <List>
-                          {order.details?.map((detail) => (
-                            <ListItem key={detail.id}>
-                              <ListItemIcon>
-                                <Typography variant="body1">
-                                  {detail.quantity}
-                                </Typography>
-                              </ListItemIcon>
-
-                              <ListItemText primary={detail.product.name} />
-
-                              <ListItemSecondaryAction
-                                sx={{
-                                  width: 50,
-                                }}
-                              >
-                                <LinearProgressWrapper
-                                  value={
-                                    (detail.qtyDelivered * 100) /
-                                    detail.quantity
-                                  }
-                                  color="info"
-                                  variant="determinate"
-                                  sx={{
-                                    width: "100%",
-                                  }}
-                                />
-                                <Typography variant="subtitle1" fontSize={12}>
-                                  {detail.qtyDelivered} / {detail.quantity}
-                                </Typography>
-                              </ListItemSecondaryAction>
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-
-                  <CardActions sx={{ justifyContent: "right" }}>
-                    <Button
-                      startIcon={<Edit />}
-                      size="small"
-                      onClick={() => showEditOrderPage(order.id)}
-                    >
-                      Editar
-                    </Button>
-                  </CardActions>
-                </Card>
+                <OrderCard order={order} key={order.id} onClick={closeDrawer} />
               ))}
             </Stack>
           ) : (
@@ -414,7 +150,7 @@ export const DrawerOrder = NiceModal.create(() => {
                 <Stack alignItems="center" mt={2} spacing={5}>
                   {/* <Box>
                     <Switch
-                      checked={activeTable?.isAvailable}
+                      checked={table?.isAvailable}
                       onChange={(e, value) => handleChangeStatusTable(value)}
                       inputProps={{ "aria-label": "controlled" }}
                       color={activeTable?.isAvailable ? "success" : "error"}

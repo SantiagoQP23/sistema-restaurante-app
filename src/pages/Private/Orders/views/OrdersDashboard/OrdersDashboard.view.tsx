@@ -169,7 +169,7 @@ export const OrdersDashboard = () => {
 
         <Box mt={2}>
           {view === DashboardViews.TABLES && <Tables />}
-          {view === DashboardViews.USERS && <Users />}
+          {/* {view === DashboardViews.USERS && <Users />} */}
           {view === DashboardViews.TAKE_AWAY && <TakeAwayOrders />}
         </Box>
       </Container>

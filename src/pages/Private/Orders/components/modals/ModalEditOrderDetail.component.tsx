@@ -16,12 +16,11 @@ import {
   Grid,
   InputAdornment,
   Chip,
+  useMediaQuery,
+  Button,
 } from "@mui/material";
 
-import {
-  useCounter,
-  useUpdateOrderDetail,
-} from "../../hooks";
+import { useCounter, useUpdateOrderDetail } from "../../hooks";
 import { Close, Delete, AttachMoney, Save } from "@mui/icons-material";
 import { UpdateOrderDetailDto } from "../../dto/update-order-detail.dto";
 import { LoadingButton } from "@mui/lab";
@@ -29,6 +28,7 @@ import { CounterInput } from "../CounterInput.component";
 import NiceModal, { muiDialogV5, useModal } from "@ebay/nice-modal-react";
 import { formatMoney } from "../../../Common/helpers/format-money.helper";
 import { Scrollbar } from "../../../components";
+import { Theme } from "@mui/material/styles";
 
 interface Props {
   detail: IOrderDetail;
@@ -99,7 +99,7 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
     };
 
     return (
-      <Dialog {...muiDialogV5(modal)}>
+      <Dialog {...muiDialogV5(modal)} maxWidth="xs">
         <DialogTitle
           sx={{
             display: "flex",
@@ -124,11 +124,7 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
           </IconButton>
         </DialogTitle>
 
-        <DialogContent
-          sx={{
-            width: 300,
-          }}
-        >
+        <DialogContent>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={12}>
               {availableOptions.length > 0 && (
@@ -247,21 +243,18 @@ export const ModalEditOrderDetail = NiceModal.create<Props>(
         </DialogContent>
         <DialogActions
           sx={{
-            justifyContent:
-              (detail?.qtyDelivered || 0) >= 1 ? "right" : "space-between",
+            justifyContent: "right",
             gap: 1,
             px: 2,
           }}
         >
-          {detail?.qtyDelivered === 0 && (
-            <IconButton
-              color="error"
-              // startIcon={<DeleteOutline />}
-              onClick={showModalDeleteDetail}
-            >
-              <Delete />
-            </IconButton>
-          )}
+          <Button
+
+            onClick={closeModal}
+            color="secondary"
+          >
+            Cancelar
+          </Button>
 
           <LoadingButton
             variant="contained"

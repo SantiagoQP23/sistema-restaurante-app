@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { selectAuth, selectOrders } from "../../../../../../../redux";
 import { useMemo } from "react";
 import { Scrollbar } from "../../../../../components";
-import { OrderTakeAway } from "../../../../../Orders/views";
+import { OrderCard } from "../../../../../Orders/views";
 import { LoadingButton } from "@mui/lab";
 import { useActiveOrders } from "../../../../../Orders/hooks";
 import { OrderStatus } from "../../../../../../../models";
@@ -54,7 +54,7 @@ export const DrawerMyOrders = NiceModal.create(() => {
           },
         }}
         sx={{
-          zIndex: 10000,
+          zIndex: 1000,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", py: 2, px: 2.5 }}>
@@ -129,7 +129,7 @@ export const DrawerMyOrders = NiceModal.create(() => {
 
           <Stack direction="column" spacing={1} p={1}>
             {myOrders.map((order) => (
-              <OrderTakeAway
+              <OrderCard
                 order={order}
                 key={order.id}
                 onClick={closeDrawer}

@@ -1,6 +1,13 @@
 import { FC, useState } from "react";
 
-import { CircleRounded, Edit, Notes, Visibility } from "@mui/icons-material";
+import {
+  CircleRounded,
+  Edit,
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+  Notes,
+  Visibility,
+} from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -19,6 +26,9 @@ import {
   styled,
   stepConnectorClasses,
   StepIcon,
+  CardActions,
+  useTheme,
+  MobileStepper,
 } from "@mui/material";
 import { format } from "date-fns";
 import { IUser } from "../../../../../../models";
@@ -49,6 +59,7 @@ import {
   TimelineSeparator,
   timelineItemClasses,
 } from "@mui/lab";
+import { EditOrderStatus } from "./EditOrderStatus.component";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -86,14 +97,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
   const { handleClose, handleOpen, isOpen } = useModal();
 
   const [activeStatus, setActiveStatus] = useState(getStepIndex(order.status));
-
-  const handleNext = () => {
-    setActiveStatus((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStatus((prevActiveStep) => prevActiveStep - 1);
-  };
+  const theme = useTheme();
 
   function getStepIndex(status: OrderStatus) {
     switch (status) {
@@ -134,60 +138,13 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
       <ModalEditOrder open={isOpen} closeModal={handleClose} order={order} />
 
       <Grid container spacing={2}>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={7}>
           <OrderDetails order={order} />
         </Grid>
 
-        <Grid item xs={12} md={4}>
-            <Timeline
-              // sx={{
-              //   m: 0,
-              //   p: 3,
-              //   [`& .${timelineItemClasses.root}:before`]: {
-              //     flex: 0,
-              //     padding: 0,
-              //   },
-              // }}
-            >
-              <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineDot color="primary"  />
-                  <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                  <LabelStatusOrder status={OrderStatus.PENDING} />
-                </TimelineContent>
-              </TimelineItem>
-              <TimelineItem>
-                <TimelineSeparator>
-                  <TimelineConnector />
-                  <TimelineDot color="primary"  />
-                  <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                  {activeStatus >= 1 ? (
-                    <LabelStatusOrder status={OrderStatus.IN_PROGRESS} />
-                    ) : (
-                      "En preparación"
-                      )}
-                </TimelineContent>
-              </TimelineItem>
-              <TimelineItem>
-                <TimelineSeparator>
-                      <TimelineConnector />
-                  <TimelineDot color="primary"/>
-                </TimelineSeparator>
-                <TimelineContent>
-                  {activeStatus >= 2 ? (
-                    <LabelStatusOrder status={OrderStatus.DELIVERED} />
-                  ) : (
-                    "Entregado"
-                  )}
-                </TimelineContent>
-              </TimelineItem>
-            </Timeline>
+        <Grid item xs={12} md={5}>
           <Stack spacing={2}>
-
+            {/* <EditOrderStatus orderId={order.id} status={order.status} /> */}
             <Card>
               <CardHeader
                 titleTypographyProps={{ variant: "h3" }}
