@@ -5,6 +5,7 @@ import {
   MonetizationOn,
   People,
   MoreVert,
+  RemoveCircle,
 } from "@mui/icons-material";
 import {
   Card,
@@ -18,10 +19,11 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { IOrder, TypeOrder } from "../../../../../../../models";
+import { IOrder, OrderStatus, TypeOrder } from "../../../../../../../models";
 import { formatMoney } from "../../../../../Common/helpers/format-money.helper";
 import { getTypeOrder } from "../../../../../Common/helpers/get-type-order.helper";
-import { LabelStatusOrder } from "../../../../../Orders/components";
+import { LabelStatusOrder, ModalCloseOrder } from "../../../../../Orders/components";
+import NiceModal from "@ebay/nice-modal-react";
 
 interface Props {
   onEdit?: () => void;
@@ -39,6 +41,19 @@ export const CardOrder: FC<Props> = ({ onEdit, order }) => {
     onEdit && onEdit();
     navigateToOrder(id);
   };
+
+  const closeOrder = () => {
+    NiceModal.show(ModalCloseOrder, {
+      order
+    })
+  }
+
+  const handleCloseOrder = () => {
+    onEdit && onEdit();
+    closeOrder();
+  }
+
+  const isCloseableOrder = order.status === OrderStatus.DELIVERED && order.isPaid;
 
   return (
     <>
@@ -95,17 +110,21 @@ export const CardOrder: FC<Props> = ({ onEdit, order }) => {
             >
               Editar
             </Button>
-
-            {/* {order.isPaid ? (
+             
               <Button
                 size="small"
                 startIcon={<RemoveCircle />}
                 variant="outlined"
                 color="secondary"
-                onClick={closeOrder}
+                onClick={handleCloseOrder}
+                disabled={!isCloseableOrder}
               >
                 Cerrar
               </Button>
+            
+
+            {/*
+            
             ) : (
               <Button
                 size="small"

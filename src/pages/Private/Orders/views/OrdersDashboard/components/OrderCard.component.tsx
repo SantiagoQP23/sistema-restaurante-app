@@ -8,6 +8,7 @@ import {
   TakeoutDining,
   TableBar,
   EditOutlined,
+  Done,
 } from "@mui/icons-material";
 import {
   Card,
@@ -26,16 +27,21 @@ import {
   MenuItem,
 } from "@mui/material";
 import { format, formatDistance, formatRelative } from "date-fns";
-import { IOrder, TypeOrder } from "../../../../../../models";
+import { IOrder, OrderStatus, TypeOrder } from "../../../../../../models";
 import { FC } from "react";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useNavigate } from "react-router-dom";
 import { formatMoney } from "../../../../Common/helpers/format-money.helper";
 import { getTypeOrder } from "../../../../Common/helpers/get-type-order.helper";
-import { LabelStatusPaid } from "../../../components";
+import { LabelStatusPaid, ModalCloseOrder } from "../../../components";
 import { es } from "date-fns/locale";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
-import { bindTrigger, usePopupState, bindPopover } from "material-ui-popup-state/hooks";
+import {
+  bindTrigger,
+  usePopupState,
+  bindPopover,
+} from "material-ui-popup-state/hooks";
+import NiceModal from "@ebay/nice-modal-react";
 
 interface Props {
   order: IOrder;
@@ -62,6 +68,21 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
   const handleClick = () => {
     onClick && onClick();
   };
+
+  const isCloseableOrder =
+    order.status === OrderStatus.DELIVERED && order.isPaid;
+
+  const showModalCloseOrder = () => {
+    NiceModal.show(ModalCloseOrder, {
+      order
+    })
+  }
+
+  const handleClose = () => {
+    popupState.close();
+    handleClick();
+    showModalCloseOrder();
+  }
 
   return (
     <>
@@ -101,9 +122,7 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
           }
           // avatar={<TableRestaurant />}
         />
-        <Accordion
-         
-        >
+        <Accordion>
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
             aria-controls="panel1-content"
@@ -208,6 +227,10 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
         <MenuItem onClick={handleEdit}>
           <EditOutlined fontSize="small" sx={{ mr: 2 }} />
           Editar
+        </MenuItem>
+        <MenuItem onClick={handleClose} disabled={!isCloseableOrder}>
+          <Done fontSize="small" sx={{ mr: 2 }} />
+          Cerrar
         </MenuItem>
       </Popover>
     </>

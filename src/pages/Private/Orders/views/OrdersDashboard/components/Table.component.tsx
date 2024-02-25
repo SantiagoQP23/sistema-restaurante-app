@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Assignment, People, TableBar } from "@mui/icons-material";
+import { Assignment, Circle, People, TableBar } from "@mui/icons-material";
 import {
   Card,
   CardActionArea,
@@ -44,13 +44,13 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
       sx={{
         // border: (theme) =>
         //   isAvailable ? `1.5px solid ${theme.palette.success.light}` : "",
-          boxShadow: (theme) =>
-          isAvailable ? `0px 0px 4px ${theme.palette.success.light}` : "",
+          //boxShadow: (theme) =>
+          //isAvailable ? `0px 0px 4px ${theme.palette.success.light}` : "",
       }}
     >
       <CardActionArea onClick={showOrdersTableDrawer}>
         <CardHeader
-          avatar={<TableBar fontSize="small" />}
+          avatar={<TableBar fontSize="small" color={isAvailable ? 'success' : 'inherit'} />}
           title={`${table.name}`}
           titleTypographyProps={{
             variant: "h5",
@@ -81,9 +81,19 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
               </Box>
             </Box>
           ) : (
-            <Label color={table.isAvailable ? "success" : "secondary"}>
-              {table.isAvailable ? "Disponible" : "Ocupada"}
-            </Label>
+           <Box
+              alignItems="center"
+              display="flex"
+              sx={{
+                color: `${isAvailable ? "success" : "error"}.main`,
+              }}
+              gap={1}
+            >
+              <Circle fontSize="small" sx={{ fontSize: 10 }} />
+              <Typography fontSize="0.8rem">
+                {isAvailable ? "Disponible" : "Ocupada"}
+              </Typography>
+            </Box>
           )}
         </Box>
       </CardActionArea>
