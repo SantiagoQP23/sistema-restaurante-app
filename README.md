@@ -9,6 +9,18 @@ Mi sistema de restaurante es una solución completa de gestión de pedidos dise�
 ## Pedidos
 ![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/3ddcc6fa-aa23-47c6-b36d-1f3fecb0a972)
 
+### Creación de pedido
+La aplicación se adapta a diferentes tamaños de pantalla
+
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/ca463dfb-a791-4aee-97c6-fae265caca81)
+
+Resumen de nuevo pedido 
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/736bd389-7910-4cf6-9f56-dd4055ffe7a4)
+
+### Edición de pedido
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/68017dee-8bc7-4ac1-8dba-15d51d2f6696)
+
+
 ### Información de mesa
 ![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/f32c43ec-eb65-4081-837a-ba0a949d4970)
 
@@ -18,9 +30,21 @@ Mi sistema de restaurante es una solución completa de gestión de pedidos dise�
 ### Gestión de pedidos
 ![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/cbe54a27-b6a4-4f81-854a-bb5102b9d291)
 
-
 ### Gestión de cuentas por cobrar
 ![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/6732c1fc-ab01-4650-99f5-50bc319d4b7f)
+
+## Gestión de menú
+### Secciones
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/9aadbcd5-c787-4881-8415-55e3bafb38c4)
+
+### Categorías
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/ef205da2-42ac-43c3-8cd4-fa3e5c586a22)
+
+### Productos
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/10d855b1-f7d9-4f12-b466-abe6337c79f6)
+
+### Edición de producto
+![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/1549d388-d020-4fb9-9eab-648650abd75b)
 
 ## Mesas
 ![image](https://github.com/SantiagoQP23/sistema-restaurante-app/assets/44738574/79dcfd5c-dfe3-4400-bfa5-ee7674ae78b6)
