@@ -8,7 +8,6 @@ import {
   Tab,
   Tabs,
   Box,
-  useTheme,
   Paper,
   Chip,
   BottomNavigation,
@@ -16,7 +15,7 @@ import {
 } from "@mui/material";
 
 import { selectOrders } from "../../../../../../redux/slices/orders/orders.slice";
-import { IOrder, OrderStatus } from "../../../../../../models/orders.model";
+import { OrderStatus } from "../../../../../../models/orders.model";
 
 import { ActiveOrder } from "./ActiveOrder.component";
 
@@ -78,7 +77,7 @@ export const ListActiveOrders = () => {
   return (
     <>
       <ModalStartOrder />
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           
@@ -105,7 +104,7 @@ export const ListActiveOrders = () => {
             />
           ))}
         </Tabs>
-      </Box>
+      </Box> */}
 
       <Box
         sx={{

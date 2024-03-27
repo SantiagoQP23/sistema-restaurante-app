@@ -1,15 +1,12 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
 import {
   Card,
   CardHeader,
   Grid,
-  Box,
   Typography,
   Button,
   CardActions,
-  Tab,
-  Tabs,
   Chip,
   Divider,
   Stack,
@@ -31,9 +28,7 @@ import {
 import { formatDistance } from "date-fns";
 import { es } from "date-fns/locale";
 
-import { DetailInProgress } from ".";
 
-import { Label } from "../../../../../../components/ui";
 import { UpdateOrderDto } from "../../../dto/update-order.dto";
 import { OrderStatus, TypeOrder } from "../../../../../../models/orders.model";
 
@@ -45,6 +40,8 @@ import { useUpdateOrder } from "../../../hooks";
 import { LabelStatusOrder } from "../../../components/LabelStatusOrder.component";
 import { useOrderHelper } from "../../../hooks/useOrders";
 import { ProductionArea } from "../../../../Common/models/production-area.model";
+import { useProductionAreasStore } from "../../../../Common/store/production-areas-store";
+import { ProductionAreaOrder } from "./ProductionAreaOrder.component";
 
 interface Props {
   order: IOrder;
@@ -77,17 +74,11 @@ export const ActiveOrder: FC<Props> = ({
 
   const { getFirstPendingOrder } = useOrderHelper();
 
+  const { productionAreas } = useProductionAreasStore();
+
   const queryClient = useQueryClient();
 
   queryClient.prefetchQuery(["order", order.id], () => order);
-
-  const [expanded, setExpanded] = useState<boolean>(
-    order.status === OrderStatus.DELIVERED ? true : false
-  );
-
-  const handleExpanded = () => {
-    setExpanded(!expanded);
-  };
 
   const { mutate: updateOrder } = useUpdateOrder();
 
@@ -261,7 +252,6 @@ export const ActiveOrder: FC<Props> = ({
               }}
               subheader={`${order.user.person.firstName} ${order.user.person.lastName}`}
             />
-            <Card></Card>
           </Grid>
 
           {order.notes && (
@@ -288,10 +278,11 @@ export const ActiveOrder: FC<Props> = ({
           )}
         </Grid>
 
-        <Divider sx={{ mb: 0.5, mt: 1, mx: 1 }} />
+        
+        {/* <Divider sx={{ mb: 0.5, mt: 1, mx: 1 }} /> */}
 
-        <Stack spacing={1.5} sx={{ px: 1 }}>
-          {order.status !== OrderStatus.DELIVERED && (
+        <Stack spacing={1.5} sx={{ px: 1, mt: 1 }}>
+          {/* {order.status !== OrderStatus.DELIVERED && (
             <Tabs
               value={expanded ? 1 : 0}
               onChange={handleExpanded}
@@ -366,9 +357,20 @@ export const ActiveOrder: FC<Props> = ({
                 }}
               />
             </Tabs>
-          )}
+          )} */}
+          <Stack spacing={1} direction="column">
+            {productionAreas.map((area) => (
+              <ProductionAreaOrder
+                key={area.id}
+                details={order.details}
+                productionArea={area}
+                orderId={order.id}
+                order={order}
+              />
+            ))}
+          </Stack>
 
-          {!expanded ? (
+          {/* {!expanded ? (
             details
               ?.filter((detail) => detail.quantity !== detail.qtyDelivered)
               .map((detail) => (
@@ -401,7 +403,7 @@ export const ActiveOrder: FC<Props> = ({
                 No hay productos entregados
               </Typography>
             </Box>
-          )}
+          )} */}
 
           <BtnAddProduct order={order} />
         </Stack>

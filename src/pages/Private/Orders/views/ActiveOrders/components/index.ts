@@ -6,4 +6,3 @@ export * from './DespachoDetalle';
 export * from './DetailInProgress.component';
 export * from './ListActiveOrders.component';
 export * from './ModalStartOrder.component';
-export * from './index';
