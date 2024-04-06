@@ -13,6 +13,10 @@ import {
   Chip,
   useMediaQuery,
   useTheme,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material/";
 
 import { ICreateOrderDetail, IOrder } from "../../../../../models/orders.model";
@@ -159,27 +163,31 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
               ))}
             </List> */}
 
-            {availableOptions.length > 0 && (
-              <Scrollbar autoHeight height="auto">
-                <Box
-                  sx={{
-                    // overflowX: "auto",
-                    display: "flex",
-                    gap: 1,
-                  }}
-                >
-                  {availableOptions.map((option) => (
-                    <Chip
-                      key={option.id}
-                      label={`${option?.name} ${formatMoney(option?.price)}`}
-                      variant="filled"
-                      onClick={() => setSelectedOption(option)}
-                      color={option === selectedOption ? "primary" : "default"}
-                    />
-                  ))}
-                </Box>
-              </Scrollbar>
-            )}
+            <FormControl>
+              <FormLabel id="demo-radio-buttons-group-label">
+                Opciones
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="female"
+                name="radio-buttons-group"
+                onChange={(e) => {
+                  const option = availableOptions.find(
+                    (option) => `${option.id}` === e.target.value
+                  );
+                  setSelectedOption(option);
+                }}
+              >
+                {availableOptions.map((option) => (
+                  <FormControlLabel
+                    key={option.id}
+                    value={option.id}
+                    control={<Radio />}
+                    label={`${option?.name} ${formatMoney(option?.price)}`}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
 
             <Box>
               {/* <Autocomplete
@@ -263,7 +271,11 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
               variant="contained"
               loading={isLoading}
               startIcon={<ShoppingCartIcon />}
-              disabled={!isOnline}
+              disabled={
+                !isOnline ||
+                detail.product.options.length > 0 &&
+                !selectedOption
+              }
             >
               Añadir
             </LoadingButton>

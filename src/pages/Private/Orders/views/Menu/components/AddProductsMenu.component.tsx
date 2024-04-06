@@ -25,7 +25,13 @@ export const AddProductsMenu = () => {
     <>
       <Box
         sx={{
-          width: "250px",
+          width: {
+            xs: "100%",
+            sm: "50%",
+            md: "33%",
+            lg: "25%",
+            xl: "20%",
+          },
         }}
       >
         <ComboBoxProducts selectProduct={addProductoToOrder} />

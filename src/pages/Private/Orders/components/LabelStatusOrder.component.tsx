@@ -42,7 +42,7 @@ interface Props {
   simple?: boolean;
 }
 
-const colorStatusMap = new Map<OrderStatus, string>();
+export const colorStatusMap = new Map<OrderStatus, string>();
 colorStatusMap.set(OrderStatus.PENDING, "warning");
 colorStatusMap.set(OrderStatus.IN_PROGRESS, "info");
 colorStatusMap.set(OrderStatus.DELIVERED, "success");

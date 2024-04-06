@@ -18,8 +18,11 @@ import {
   DrawerOrder,
   LabelStatusOrder,
   orderStatusIconMap,
+  colorStatusMap,
 } from "../../../components";
 import NiceModal from "@ebay/nice-modal-react";
+import { format, formatDistance } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Props {
   table: ITable;
@@ -41,16 +44,23 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
 
   return (
     <Card
-      sx={{
-        // border: (theme) =>
-        //   isAvailable ? `1.5px solid ${theme.palette.success.light}` : "",
+      sx={
+        {
+          // border: (theme) =>
+          //   isAvailable ? `1.5px solid ${theme.palette.success.light}` : "",
           //boxShadow: (theme) =>
           //isAvailable ? `0px 0px 4px ${theme.palette.success.light}` : "",
-      }}
+        }
+      }
     >
       <CardActionArea onClick={showOrdersTableDrawer}>
         <CardHeader
-          avatar={<TableBar fontSize="small" color={isAvailable ? 'success' : 'inherit'} />}
+          avatar={
+            <TableBar
+              fontSize="small"
+              color={isAvailable ? "secondary" : "inherit"}
+            />
+          }
           title={`${table.name}`}
           titleTypographyProps={{
             variant: "h5",
@@ -70,8 +80,19 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
             <Box display="flex" justifyContent="space-between">
               <Box display="flex" gap={1}>
                 {ordersTable.map((order) => (
-                  <Badge key={order.id}>
-                    {orderStatusIconMap.get(order.status)}
+                  <Badge
+                    key={order.id}
+                    sx={{
+                      border: "1px solid",
+                      borderRadius: "5px",
+                      borderColor: `${colorStatusMap.get(order.status)}.main`,
+                    }}
+                  >
+                    {orderStatusIconMap.get(order.status)}{" "}
+                    <Typography>
+
+                   
+                    </Typography>
                   </Badge>
                 ))}
               </Box>
@@ -81,11 +102,11 @@ export const Table: FC<Props> = ({ table, handleClickTable }) => {
               </Box>
             </Box>
           ) : (
-           <Box
+            <Box
               alignItems="center"
               display="flex"
               sx={{
-                color: `${isAvailable ? "success" : "error"}.main`,
+                color: `${isAvailable ? "secondary" : "error"}.main`,
               }}
               gap={1}
             >

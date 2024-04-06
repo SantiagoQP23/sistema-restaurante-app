@@ -47,13 +47,13 @@ export const Menu = () => {
           title="Menú"
           action={
             <>
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<Add />}
                 onClick={showModalCreateProduct}
               >
                 Nuevo producto
-              </Button>
+              </Button> */}
             </>
           }
         />

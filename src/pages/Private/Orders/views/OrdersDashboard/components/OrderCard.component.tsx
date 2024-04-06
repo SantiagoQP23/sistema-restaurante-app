@@ -25,6 +25,7 @@ import {
   AccordionSummary,
   Popover,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import { format, formatDistance, formatRelative } from "date-fns";
 import { IOrder, OrderStatus, TypeOrder } from "../../../../../../models";
@@ -74,19 +75,23 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
 
   const showModalCloseOrder = () => {
     NiceModal.show(ModalCloseOrder, {
-      order
-    })
-  }
+      order,
+    });
+  };
 
   const handleClose = () => {
     popupState.close();
     handleClick();
     showModalCloseOrder();
-  }
+  };
 
   return (
     <>
-      <Card>
+      <Card
+        sx={{
+          border: "1px solid #e0e0e0",
+        }}
+      >
         {/* <CardActionArea
         onClick={() => {
           onClick && onClick();
@@ -122,7 +127,13 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
           }
           // avatar={<TableRestaurant />}
         />
-        <Accordion>
+        {order.notes && (
+          <Alert icon={false} severity="info">
+            {order.notes}
+          </Alert>
+        )}
+
+        <Accordion defaultExpanded>
           <AccordionSummary
             expandIcon={<GridExpandMoreIcon />}
             aria-controls="panel1-content"
@@ -141,7 +152,7 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
                     {/* {index < order.details.length - 1 ? "," : "."} */}
                   </Typography>
 
-                  <Typography>{detail.product.name}</Typography>
+                  <Typography variant="h5">{detail.product.name}</Typography>
                 </Box>
               ))}
             </Stack>
@@ -170,18 +181,10 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
             ))}
           </Stack> */}
             <Box display="flex" alignItems="center">
-              <TimerOutlined
-                fontSize="small"
-                sx={{ fontSize: 18, mr: 0.5 }}
-                color="info"
-              />
+              <TimerOutlined fontSize="small" sx={{ fontSize: 18, mr: 0.5 }} />
               <Typography fontSize="0.8rem">{date}</Typography>
               <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
-              <People
-                fontSize="small"
-                sx={{ fontSize: 18, mr: 0.5 }}
-                color="info"
-              />
+              <People fontSize="small" sx={{ fontSize: 18, mr: 0.5 }} />
               <Typography fontSize="0.8rem" fontWeight="bold">
                 {order.people}
               </Typography>
@@ -192,11 +195,7 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
               alignItems="center"
             >
               <Box display="flex" alignItems="center" gap={0.5}>
-                <Assignment
-                  fontSize="small"
-                  sx={{ fontSize: 18, mr: 0.5 }}
-                  color="info"
-                />
+                <Assignment fontSize="small" sx={{ fontSize: 18, mr: 0.5 }} />
                 <Typography>N° {order.num}</Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={0.5}>

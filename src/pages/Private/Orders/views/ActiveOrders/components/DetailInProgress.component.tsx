@@ -23,6 +23,8 @@ import { UpdateOrderDetailDto } from "../../../dto";
 import { useUpdateOrderDetail } from "../../../hooks";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalEditOrderDetail } from "../../../components";
+import { format, formatDistance } from "date-fns";
+import { es } from "date-fns/locale";
 
 const LinearProgressWrapper = styled(LinearProgress)(
   ({ theme }) => `
@@ -159,6 +161,22 @@ export const DetailInProgress: FC<Props> = ({ detail, orderId }) => {
                     </Stack>
                   </>
                 )}
+
+              <Box display="flex" justifyContent="space-between">
+                <Typography>
+                  {formatDistance(new Date(detail.createdAt), new Date(), {
+    locale: es,
+  })
+                  }
+                  {/* {detail.createtAt} */}
+                </Typography>
+                <Typography>
+                  {formatDistance(new Date(detail.updatedAt), new Date(), {
+    locale: es,
+  })}
+                  {/* {detail.updatedAt} */}
+                </Typography>
+              </Box>
             </>
           }
         />

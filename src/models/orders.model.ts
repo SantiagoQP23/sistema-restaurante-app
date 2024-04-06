@@ -73,9 +73,9 @@ export interface IOrderDetail {
 
   description: string;
 
-  createtAt: Date;
+  createdAt: string;
 
-  updatedAt: Date;
+  updatedAt: string;
 
   product: IProduct;
 
