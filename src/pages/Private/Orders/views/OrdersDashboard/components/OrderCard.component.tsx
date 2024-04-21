@@ -128,9 +128,11 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
           // avatar={<TableRestaurant />}
         />
         {order.notes && (
-          <Alert icon={false} severity="info">
-            {order.notes}
-          </Alert>
+          <Box display="flex" flexDirection="column" px={2}>
+            <Typography variant="h5">Notas</Typography>
+
+            <Typography variant="body1">{order.notes}</Typography>
+          </Box>
         )}
 
         <Accordion defaultExpanded>
@@ -140,19 +142,26 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
             id="panel1-header"
           >
             <Typography variant="body1">
-              {order.details.length} Productos
+              {order.details.length} productos
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={1} sx={{}}>
               {order.details.map((detail) => (
                 <Box key={detail.id} display="flex">
-                  <Typography variant="body1" width="10%">
+                  <Typography variant="h5" width="10%">
                     {detail.quantity}
                     {/* {index < order.details.length - 1 ? "," : "."} */}
                   </Typography>
-
-                  <Typography variant="h5">{detail.product.name}</Typography>
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="h5">
+                      {detail.product.name}
+                      {detail.productOption && `: ${detail.productOption.name}`}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {detail.description}
+                    </Typography>
+                  </Box>
                 </Box>
               ))}
             </Stack>
@@ -160,8 +169,6 @@ export const OrderCard: FC<Props> = ({ order, onClick }) => {
         </Accordion>
         <CardContent>
           <Stack spacing={2}>
-            {order.notes && <Typography>{order.notes}</Typography>}
-
             {/* <Stack
             direction="row"
             spacing={1}

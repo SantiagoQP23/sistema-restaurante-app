@@ -162,32 +162,33 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
                 </ListItem>
               ))}
             </List> */}
-
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">
-                Opciones
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="female"
-                name="radio-buttons-group"
-                onChange={(e) => {
-                  const option = availableOptions.find(
-                    (option) => `${option.id}` === e.target.value
-                  );
-                  setSelectedOption(option);
-                }}
-              >
-                {availableOptions.map((option) => (
-                  <FormControlLabel
-                    key={option.id}
-                    value={option.id}
-                    control={<Radio />}
-                    label={`${option?.name} ${formatMoney(option?.price)}`}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            {availableOptions.length > 0 && (
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  Opciones
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="female"
+                  name="radio-buttons-group"
+                  onChange={(e) => {
+                    const option = availableOptions.find(
+                      (option) => `${option.id}` === e.target.value
+                    );
+                    setSelectedOption(option);
+                  }}
+                >
+                  {availableOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.id}
+                      control={<Radio />}
+                      label={`${option?.name} ${formatMoney(option?.price)}`}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            )}
 
             <Box>
               {/* <Autocomplete
@@ -273,8 +274,7 @@ export const ModalAddDetail = NiceModal.create<Props>(({ detail }) => {
               startIcon={<ShoppingCartIcon />}
               disabled={
                 !isOnline ||
-                detail.product.options.length > 0 &&
-                !selectedOption
+                (detail.product.options.length > 0 && !selectedOption)
               }
             >
               Añadir

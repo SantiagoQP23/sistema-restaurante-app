@@ -15,6 +15,8 @@ import {
   Tooltip,
   Box,
   Typography,
+  Popover,
+  MenuItem,
 } from "@mui/material";
 
 import { selectOrders, setActiveOrder } from "../../../../../redux";
@@ -34,6 +36,10 @@ import {
   DeleteOutline,
   RemoveCircle,
   ChevronLeft,
+  MoreHoriz,
+  EditOutlined,
+  Done,
+  MoreVert,
 } from "@mui/icons-material";
 import { DrawerInvoice } from "./components/DrawerInvoice.component";
 import { useDrawerInvoiceStore } from "../../store/drawerInvoiceStore";
@@ -47,6 +53,11 @@ import { LabelStatusOrder } from "../../components/LabelStatusOrder.component";
 import { LabelStatusPaid } from "../../components/LabelStatusPaid.component";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalCloseOrder } from "../../components";
+import {
+  bindPopover,
+  bindTrigger,
+  usePopupState,
+} from "material-ui-popup-state/hooks";
 
 /**
  * Componente for edit order
@@ -54,6 +65,11 @@ import { ModalCloseOrder } from "../../components";
  */
 export const EditOrder = () => {
   const navigate = useNavigate();
+
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: "popoverOrder2",
+  });
 
   const { open: openDrawer, handleCloseDrawer } = useDrawerInvoiceStore(
     (state) => state
@@ -90,6 +106,22 @@ export const EditOrder = () => {
       pdf.open();
     }
   };
+
+  const handleEdit = () => {
+    popupState.close();
+  };
+
+  const handleClose = () => {
+    popupState.close();
+  };
+
+  const paidBills = activeOrder?.bills.filter(bill => bill.isPaid).length || 0;
+
+  const isDeleteableOrder =
+    activeOrder?.status === OrderStatus.PENDING && paidBills === 0;
+
+  const isCloseableOrder =
+    activeOrder?.status === OrderStatus.DELIVERED && activeOrder?.isPaid;
 
   const BtnNext = () => (
     <Button
@@ -140,7 +172,6 @@ export const EditOrder = () => {
     <>
       <DrawerInvoice open={openDrawer} handleClose={handleCloseDrawer} />
       <ModalDeleteInvoice />
-
       <Container maxWidth="md">
         <Stack
           spacing={2}
@@ -167,69 +198,35 @@ export const EditOrder = () => {
             </Stack>
           </Box>
 
-          {activeStep < 1 ? (
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              {activeOrder.status === OrderStatus.PENDING &&
-                !activeOrder.isPaid && (
-                  <Tooltip
-                    title={
-                      !orderDelivered
-                        ? "Eliminar pedido"
-                        : "Este pedido no se puede eliminar porque ya tiene productos entregados"
-                    }
-                  >
-                    <span>
-                      <Button
-                        startIcon={<DeleteOutline />}
-                        color="error"
-                        onClick={eliminarPedido}
-                        disabled={orderDelivered}
-                        variant="outlined"
-                        size="small"
-                      >
-                        Eliminar
-                      </Button>
-                    </span>
-                  </Tooltip>
-                )}
-
+          <Stack direction="row" justifyContent="flex-end" spacing={1}>
+            {!activeOrder.isPaid && (
               <Button
-                startIcon={<Print />}
-                variant="outlined"
+                startIcon={<PointOfSaleOutlined />}
+                variant="contained"
                 size="small"
-                onClick={openPDF}
+                onClick={() => changeStep(1)}
               >
-                Imprimir
+                Crear cuentas
               </Button>
-
-              {!activeOrder.isPaid && (
-                <Button
-                  startIcon={<PointOfSaleOutlined />}
-                  variant="contained"
-                  size="small"
-                  onClick={() => changeStep(1)}
-                >
-                  Crear cuentas
-                </Button>
-              )}
-              {activeOrder.isPaid &&
-                activeOrder.status === OrderStatus.DELIVERED &&
-                !activeOrder.isClosed && (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<RemoveCircle />}
-                    onClick={handleCloseOrder}
-                  >
-                    Cerrar pedido
-                  </Button>
-                )}
-            </Stack>
-          ) : (
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              {/* <BtnBack /> */}
-            </Stack>
-          )}
+            )}
+            {isCloseableOrder && (
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<RemoveCircle />}
+                onClick={handleCloseOrder}
+              >
+                Cerrar pedido
+              </Button>
+            )}
+            <Button
+              variant="text"
+              {...bindTrigger(popupState)}
+              size="small"
+            >
+              <MoreVert />
+            </Button>
+          </Stack>
         </Stack>
 
         {isLoading ? (
@@ -249,11 +246,9 @@ export const EditOrder = () => {
               //   <Step>
               //     <StepLabel>Carrito</StepLabel>
               //   </Step>
-
               //   <Step>
               //     <StepLabel>Cuenta</StepLabel>
               //   </Step>
-               
               // </Stepper>
             }
 
@@ -276,6 +271,34 @@ export const EditOrder = () => {
           </>
         )}
       </Container>
+      <Popover
+        {...bindPopover(popupState)}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 140,
+              zIndex: 1000,
+            },
+          },
+        }}
+      >
+        <MenuItem onClick={handleEdit}>
+          <EditOutlined fontSize="small" sx={{ mr: 2 }} />
+          Editar
+        </MenuItem>
+        <MenuItem onClick={handleEdit}>
+          <Print fontSize="small" sx={{ mr: 2 }} />
+          Imprimir
+        </MenuItem>
+        <MenuItem onClick={eliminarPedido} disabled={!isDeleteableOrder}
+          sx={{ color: "error.main" }}
+        >
+          <DeleteOutline fontSize="small" sx={{ mr: 2 }} />
+          Eliminar
+        </MenuItem>
+      </Popover>{" "}
     </>
   );
 };

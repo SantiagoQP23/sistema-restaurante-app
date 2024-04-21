@@ -81,24 +81,14 @@ const AppBar = styled(MuiAppBar, {
 function Header() {
   const { sidebarToggle, toggleSidebar, open, handleDrawerOpen } =
     useContext(SidebarContext);
-  const theme = useTheme();
 
   return (
     <AppBar position="fixed" open={false}>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        mt={1}
-      >
-        <Stack
-          direction="row"
-          divider={<Divider orientation="vertical" flexItem />}
-          alignItems="center"
-          spacing={2}
-        >
-          {/* <HeaderMenu /> */}
-        </Stack>
+      <Box display="flex" alignItems="center" justifyContent="space-between" mt={1}>
+        {/* <HeaderMenu /> */}
+      <Typography ml={{xs: 3, lg: '310px'}} variant="h4" color='text.primary'>
+        QuiEats
+      </Typography>
 
         <Stack direction="row" spacing={1} alignItems="center">
           <HeaderButtons />

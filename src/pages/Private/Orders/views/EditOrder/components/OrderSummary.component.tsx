@@ -164,11 +164,11 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
               <CardContent>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={4}>
-                    <Typography variant="subtitle1">Tipo de orden</Typography>
+                    <Typography variant="body1">Tipo de orden</Typography>
                   </Grid>
 
                   <Grid item xs={8}>
-                    <Typography variant="h6">
+                    <Typography variant="h5" textAlign="right">
                       {order.type === TypeOrder.IN_PLACE
                         ? "Para servir"
                         : "Para llevar"}
@@ -178,60 +178,42 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                   {order.type === TypeOrder.IN_PLACE && (
                     <>
                       <Grid item xs={4}>
-                        <Typography variant="body2" color="secondary">
-                          Mesa
-                        </Typography>
+                        <Typography variant="body1">Mesa</Typography>
                       </Grid>
 
                       <Grid item xs={8}>
-                        <Typography variant="h6">
+                        <Typography variant="h5" textAlign="right">
                           Mesa {order.table?.name || "No seleccionada"}
                         </Typography>
                       </Grid>
                     </>
                   )}
 
-                  <Grid item xs={4}>
-                    <Typography variant="body2" color="secondary">
-                      Hora de entrega
-                    </Typography>
+                  <Grid item xs={5}>
+                    <Typography variant="body1">Hora de entrega</Typography>
                   </Grid>
 
-                  <Grid item xs={8}>
-                    <Typography variant="body1">
+                  <Grid item xs={7}>
+                    <Typography variant="h5" textAlign="right">
                       {format(new Date(order.deliveryTime), "dd/MM/yyy HH:mm")}
                     </Typography>
                   </Grid>
 
                   <Grid item xs={4}>
-                    <Typography variant="body2" color="secondary">
-                      Personas
-                    </Typography>
+                    <Typography variant="body1">Personas</Typography>
                   </Grid>
 
                   <Grid item xs={8}>
-                    <Typography variant="h6">{order.people}</Typography>
+                    <Typography variant="h5" textAlign="right">
+                      {order.people}
+                    </Typography>
                   </Grid>
 
                   {order.notes && (
                     <>
                       <Grid item xs={12}>
-                        <CardHeader
-                          sx={{
-                            px: 1,
-                            py: 0.5,
-                          }}
-                          avatar={<Notes />}
-                          title="Notas"
-                          titleTypographyProps={{
-                            variant: "subtitle2",
-                          }}
-                          subheaderTypographyProps={{
-                            variant: "h5",
-                            color: "inherith",
-                          }}
-                          subheader={order.notes}
-                        />
+                        <Typography variant="body1">Notas</Typography>
+                        <Typography variant="h5">{order.notes}</Typography>
                       </Grid>
                     </>
                   )}
@@ -251,13 +233,7 @@ export const OrderSummary: FC<PropsOrder> = ({ order }) => {
                   </Grid>
                 </Grid>
 
-                <Stack
-                  justifyContent="center"
-                  alignItems="flex-start"
-                  mt={2}
-                  spacing={1}
-                  direction="column"
-                ></Stack>
+                
               </CardContent>
             </Card>
 

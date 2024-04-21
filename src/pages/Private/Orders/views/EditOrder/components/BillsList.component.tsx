@@ -44,11 +44,11 @@ export const BillsList: FC<Props> = ({ bills }) => {
                   onClick={() => showDrawerBill(bill)}
                   key={bill.id}
                 >
-                  <ListItemAvatar>
+                  {/* <ListItemAvatar>
                     <Avatar>
                       <Receipt color={bill.isActive ? "inherit" : "error"} />
                     </Avatar>
-                  </ListItemAvatar>
+                  </ListItemAvatar> */}
 
                   <ListItemText
                     primary={
@@ -65,11 +65,11 @@ export const BillsList: FC<Props> = ({ bills }) => {
                     }
                     secondary={
                       <>
-                        <Typography>
+                        <Typography variant="body1">
                           {bill.client &&
                             `${bill.client.person.firstName} ${bill.client.person.lastName}`}
                         </Typography>
-                        <Typography fontSize={11}>
+                        <Typography fontSize={13} >
                           {format(new Date(bill.createdAt), "dd/MM/yyy HH:mm")}
                         </Typography>
                       </>
